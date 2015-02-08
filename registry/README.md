@@ -1,0 +1,1 @@
+# Dependency injection using Guice to auto discover modules

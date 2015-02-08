@@ -1,0 +1,2 @@
+#Load the default registry implementation
+com.appe.registry.spi.GuiceRegistryImpl

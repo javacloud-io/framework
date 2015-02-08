@@ -1,0 +1,1 @@
+# Realiable SSE implementation on top of jersey-media-sse

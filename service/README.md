@@ -1,0 +1,1 @@
+# Basic java services for all applications
