@@ -38,9 +38,8 @@ public class BroadcasterTest {
 		channel.register(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
-				if(event.getType() == ChannelEvent.Type.RECEIVED) {
-					Assert.assertEquals("message", event.getMessage());
-				}
+				Assert.assertEquals(ChannelEvent.Type.RECEIVED, event.getType());
+				Assert.assertEquals("message", event.getMessage());
 			}
 		});
 		

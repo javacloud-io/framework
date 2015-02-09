@@ -40,9 +40,9 @@ public class BroadcastLocal extends BroadcastChannel {
 			return;
 		}
 		
-		//SEND MESSAGE LOCALLY
+		//DELIVERY LOCALLY 
 		for(Channel c: queue) {
-			fireChannelEvent(c, new ChannelEvent(ChannelEvent.Type.SENT, message));
+			fireChannelEvent(c, new ChannelEvent(ChannelEvent.Type.RECEIVED, message));
 		}
 	}
 	
