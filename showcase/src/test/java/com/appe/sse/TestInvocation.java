@@ -27,6 +27,7 @@ import com.appe.sse.client.BroadcastReceiver;
 import com.appe.util.Dictionary;
 
 /**
+ * Caller make remote call to callee through SSE channel without knowing who the other IS.
  * 
  * @author ho
  *
@@ -49,6 +50,7 @@ public class TestInvocation {
 		caller.register(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
+				//ECHO THE RESOLT FOR NOW
 				logger.info("{}: --> {}", event.getType(), event.getMessage());
 			}
 		});
@@ -58,6 +60,7 @@ public class TestInvocation {
 		callee.register(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
+				//DO CALCULATION & SEND BACK RESULT
 				receiver.publish("caller", event.getMessage());
 			}
 		});
