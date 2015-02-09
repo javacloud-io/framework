@@ -72,6 +72,7 @@ public class ChannelEvent {
 	/**
 	 * 
 	 */
+	@Override
 	public String toString() {
 		return String.valueOf(type);
 	}

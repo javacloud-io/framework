@@ -15,7 +15,7 @@
  */
 package com.appe.sse;
 /**
- * Listener to channel event
+ * Listener to channel event, use event.getType() to know what todo with event.getMessage()
  * 
  * @author ho
  *

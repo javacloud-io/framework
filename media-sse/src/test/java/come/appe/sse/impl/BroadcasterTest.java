@@ -33,6 +33,7 @@ public class BroadcasterTest {
 	@Test
 	public void testListener() {
 		BroadcastLocal broadcaster = new BroadcastLocal();
+		//subscribe for
 		Channel channel = broadcaster.subscribe("test", String.class);
 		channel.register(new ChannelListener() {
 			@Override
