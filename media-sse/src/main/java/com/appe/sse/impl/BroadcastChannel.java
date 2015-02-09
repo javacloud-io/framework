@@ -29,6 +29,7 @@ import com.appe.sse.Broadcaster;
 import com.appe.sse.Channel;
 import com.appe.sse.ChannelEvent;
 /**
+ * A channel can broadcast message to all subscriber. In most case, subscribers are connected through HTTP protocol.
  * 
  * @author ho
  *
