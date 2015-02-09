@@ -82,7 +82,7 @@ public final class Objects {
 	 * @param name
 	 * @param list
 	 */
-	public static String toString(String sep, Object[] list) {
+	public static String toString(String sep, Object... list) {
 		//Don't write anything
 		if(list == null || list.length == 0) {
 			return null;
