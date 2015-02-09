@@ -31,6 +31,10 @@ import com.appe.sse.impl.BroadcastChannel;
  * 2. Each group will managed it own broadcaster
  * 3. How to keep track of client & clean up (broadcast ping command?)
  * 
+ * TODO:
+ * -To be able to support guarantee EXACT ONE delivery
+ * -To be able to support guarantee at lest ONE delivery
+ * 
  * @author ho
  *
  * @param <T>
