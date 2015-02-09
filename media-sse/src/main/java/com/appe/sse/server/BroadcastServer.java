@@ -83,7 +83,7 @@ public class BroadcastServer extends BroadcastChannel {
 	protected Channel createChannel(String name, Class<?> type) {
 		return new ChannelOutput(name, type);
 	}
-
+	
 	/**
 	 * Broadcast event to all binded out bound. It's can be done in chunk, parallel....or just notify only ONE.
 	 * randomly or leader...
