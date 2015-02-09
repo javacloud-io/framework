@@ -62,12 +62,10 @@ public class BroadcastServer extends BroadcastChannel {
 	 */
 	@Override
 	public void publish(String channel, Object message) {
-		int success;
 		Queue<Channel> queue = channelQueue(channel, false);
 		if(queue == null || queue.isEmpty()) {
 			//TODO: should queue event for awhile?
 			logger.debug("Channel: {} is empty", channel);
-			success = 0;
 		} else {
 		
 			//USING FIRST CHANNEL TO BUILD MESSAGE
@@ -77,11 +75,7 @@ public class BroadcastServer extends BroadcastChannel {
 			if(message instanceof Identifiable) {
 	        	builder.id(String.valueOf(((Identifiable<?>)message).getId()));
 	        }
-			success = broadcast(builder.build(), queue);
-		}
-		
-		//TODO: GUARANTEE AT LEAST ONE DELIVERY
-		if(success < 1) {
+			broadcast(builder.build(), queue);
 		}
 	}
 	
@@ -101,14 +95,12 @@ public class BroadcastServer extends BroadcastChannel {
 	 * @param event
 	 * @param queue
 	 */
-	protected int broadcast(OutboundEvent event, Queue<Channel> queue) {
-		int success = 0;
+	protected void broadcast(OutboundEvent event, Queue<Channel> queue) {
 		for (Iterator<Channel> iterator = queue.iterator(); iterator.hasNext(); ) {
 			ChannelOutput channel = (ChannelOutput)iterator.next();
 			try {
 				if(!channel.isClosed()) {
 					channel.write(event);
-					success ++;
 					fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.SENT, event.getData()));
 				}
             } catch (Exception ex) {
@@ -121,6 +113,5 @@ public class BroadcastServer extends BroadcastChannel {
 				fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.CLOSED));
 			}
         }
-		return success;
 	}
 }
