@@ -64,8 +64,9 @@ public class ChannelEvent {
 	 * 
 	 * @return
 	 */
-	public Object getMessage() {
-		return message;
+	@SuppressWarnings("unchecked")
+	public <T> T getMessage() {
+		return (T)message;
 	}
 	
 	/**
