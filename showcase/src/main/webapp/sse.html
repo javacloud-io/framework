@@ -11,13 +11,13 @@
 		  	document.getElementById("events").appendChild(newElement);
 		}
 		source.onerror = function(e) {
-  			alert("EventSource failed.");
+  			console.log("EventSource failed.");
 		};
 	</script>
 </head>
 
 <body>
-  <div><b>SSE events:</b></div>
+  <div><b>SSE ]on channel xxxx:</b></div>
   <ol id="events">
   </ol>
 </body>
