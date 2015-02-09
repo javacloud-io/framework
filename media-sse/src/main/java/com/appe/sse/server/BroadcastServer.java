@@ -33,7 +33,7 @@ import com.appe.sse.impl.BroadcastChannel;
  * 
  * TODO:
  * -To be able to support guarantee EXACT ONE delivery
- * -To be able to support guarantee at lest ONE delivery
+ * -To be able to support guarantee at LEAST ONE delivery
  * 
  * @author ho
  *
