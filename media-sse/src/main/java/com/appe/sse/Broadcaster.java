@@ -42,12 +42,4 @@ public interface Broadcaster {
 	 * @return
 	 */
 	public Channel subscribe(String name, Class<?> type);
-	
-	/**
-	 * Unsubscribe/close channel if it doesn't make sense any more
-	 * 
-	 * @param channel
-	 * @return
-	 */
-	public boolean unsubscribe(Channel channel);
 }

@@ -61,25 +61,6 @@ public abstract class BroadcastChannel extends SimpleChannel implements Broadcas
 	}
 	
 	/**
-	 * Remove the channel of queue
-	 */
-	@Override
-	public boolean unsubscribe(Channel channel) {
-		Queue<Channel> queue = channelQueue(channel.getName(), false);
-		if(queue == null) {
-			return false;
-		}
-		
-		//TODO: CHECK TO SEE IF NEED CLEAN UP THE CHANNEL
-		boolean removed = queue.remove(channel);
-		if(queue.isEmpty()) {
-			logger.debug("Channel: {} is empty", channel.getName());
-		}
-		fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.UNSUBSCRIBED));
-		return removed;
-	}
-	
-	/**
 	 * return a broadcaster for given channel, create if not exist. It's might have multiple create but ONLY ONE WIN!!!
 	 * 
 	 * @param channel
