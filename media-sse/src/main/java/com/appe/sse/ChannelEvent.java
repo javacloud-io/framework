@@ -22,7 +22,6 @@ package com.appe.sse;
 public class ChannelEvent {
 	public enum Type {
 		SUBSCRIBED,
-		UNSUBSCRIBED,
 		
 		SENT,
 		RECEIVED,
