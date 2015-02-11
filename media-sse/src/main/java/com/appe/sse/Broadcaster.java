@@ -34,7 +34,7 @@ public interface Broadcaster {
 	public void publish(String channel, Object message);
 	
 	/**
-	 * Subscribe to a channel with given name
+	 * Subscribe to a channel with given name, might need to know lastEventId...just in case of re-delivery...
 	 * 
 	 * @param name
 	 * @param type of object will received, null to use default DICTIONARY

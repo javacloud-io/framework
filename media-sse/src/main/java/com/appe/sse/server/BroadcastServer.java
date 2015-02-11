@@ -90,7 +90,7 @@ public class BroadcastServer extends BroadcastChannel {
 	
 	/**
 	 * Broadcast event to all binded out bound. It's can be done in chunk, parallel....or just notify only ONE.
-	 * randomly or leader...
+	 * randomly or leader...depends on the strategy message might be queue, schedule for delivery...
 	 *  
 	 * @param event
 	 * @param queue
