@@ -16,7 +16,6 @@
 package com.appe.sse.server;
 
 import java.util.Iterator;
-import java.util.Queue;
 
 import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.slf4j.Logger;
@@ -26,6 +25,7 @@ import com.appe.data.Identifiable;
 import com.appe.sse.Channel;
 import com.appe.sse.ChannelEvent;
 import com.appe.sse.impl.BroadcastChannel;
+import com.appe.sse.impl.ChannelQueue;
 /**
  * 1. Channel will be automatically organize into GROUP.
  * 2. Each group will managed it own broadcaster
@@ -62,7 +62,7 @@ public class BroadcastServer extends BroadcastChannel {
 	 */
 	@Override
 	public void publish(String channel, Object message) {
-		Queue<Channel> queue = channelQueue(channel, false);
+		ChannelQueue queue = channelQueue(channel, false);
 		if(queue == null || queue.isEmpty()) {
 			//TODO: should queue event for awhile?
 			logger.debug("Channel: {} is empty", channel);
@@ -95,7 +95,7 @@ public class BroadcastServer extends BroadcastChannel {
 	 * @param event
 	 * @param queue
 	 */
-	protected void broadcast(OutboundEvent event, Queue<Channel> queue) {
+	protected void broadcast(OutboundEvent event, ChannelQueue queue) {
 		for (Iterator<Channel> iterator = queue.iterator(); iterator.hasNext(); ) {
 			ChannelOutput channel = (ChannelOutput)iterator.next();
 			try {

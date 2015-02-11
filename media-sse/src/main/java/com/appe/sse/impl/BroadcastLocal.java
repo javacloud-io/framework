@@ -15,8 +15,6 @@
  */
 package com.appe.sse.impl;
 
-import java.util.Queue;
-
 import com.appe.sse.Channel;
 import com.appe.sse.ChannelEvent;
 /**
@@ -35,7 +33,7 @@ public class BroadcastLocal extends BroadcastChannel {
 	 */
 	@Override
 	public void publish(String channel, Object message) {
-		Queue<Channel> queue = channelQueue(channel, false);
+		ChannelQueue queue = channelQueue(channel, false);
 		if(queue == null || queue.isEmpty()) {
 			return;
 		}

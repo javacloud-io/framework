@@ -17,9 +17,7 @@ package com.appe.sse.impl;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 import org.slf4j.Logger;
@@ -36,7 +34,7 @@ import com.appe.sse.ChannelEvent;
  */
 public abstract class BroadcastChannel extends SimpleChannel implements Broadcaster {
 	private static final Logger logger = LoggerFactory.getLogger(BroadcastChannel.class);
-	private final ConcurrentMap<String, Queue<Channel>> channels = new ConcurrentHashMap<String, Queue<Channel>>();
+	private final ConcurrentMap<String, ChannelQueue> channels = new ConcurrentHashMap<String, ChannelQueue>();
 	
 	/**
 	 * 
@@ -67,8 +65,8 @@ public abstract class BroadcastChannel extends SimpleChannel implements Broadcas
 	 * @param force
 	 * @return
 	 */
-	protected Queue<Channel> channelQueue(String channel, boolean force) {
-		Queue<Channel> queue = channels.get(channel);
+	protected ChannelQueue channelQueue(String channel, boolean force) {
+		ChannelQueue queue = channels.get(channel);
 		if(queue == null && force) {
 			//FIXME: a lock free but guarantee only instance created is prefer
 			synchronized(channels) {
@@ -76,7 +74,7 @@ public abstract class BroadcastChannel extends SimpleChannel implements Broadcas
 				
 				if(queue == null) {
 					logger.debug("Create channel: {}", channel);
-					channels.putIfAbsent(channel, new ConcurrentLinkedQueue<Channel>());
+					channels.putIfAbsent(channel, new ChannelQueue());
 					queue = channels.get(channel);
 				}
 			}
@@ -89,7 +87,7 @@ public abstract class BroadcastChannel extends SimpleChannel implements Broadcas
 	 */
 	@Override
 	public void close() throws IOException {
-		for(Queue<Channel> queue: channels.values()) {
+		for(ChannelQueue queue: channels.values()) {
 			for(Iterator<Channel> iterator = queue.iterator(); iterator.hasNext() ;) {
 				Channel channel = iterator.next();
 				try {
