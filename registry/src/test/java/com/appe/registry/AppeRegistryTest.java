@@ -57,7 +57,10 @@ public class AppeRegistryTest extends GuiceTestCase {
 		Assert.assertEquals(1, tconfig.numberOfCars());
 		Assert.assertEquals("lalala", tconfig.message());
 		Assert.assertNull(tconfig.notAvailable());
-		
+	}
+	
+	@Test
+	public void testI18nConfig() {
 		//LOAD I18N
 		TestI18nConfig i18nConfig = AppeRegistry.get().getConfig(TestI18nConfig.class);
 		Assert.assertEquals("Hello", i18nConfig.hello());
