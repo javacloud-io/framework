@@ -45,4 +45,13 @@ public interface TestI18nConfig {
 	 * @return
 	 */
 	public String missing();
+	
+	/**
+	 * Dynamic pass through
+	 * 
+	 * @param name
+	 * @param args
+	 * @return
+	 */
+	public String getMessage(String name, Object...args);
 }

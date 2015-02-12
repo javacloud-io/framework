@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.text.MessageFormat;
-import java.util.Arrays;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -191,7 +191,7 @@ public class AppeConfigImpl implements AppeConfig {
 						if("getMessage".equals(method.getName()) && args != null && args.length > 0) {
 							String message = resolveValue(String.valueOf(args[0]), null);
 							if(args.length > 1) {
-								message = formatValue(message, Arrays.copyOfRange(args, 1, args.length));
+								message = formatValue(message, (Object[])args[1]);
 							}
 							return message;
 						}

@@ -65,5 +65,8 @@ public class AppeRegistryTest extends GuiceTestCase {
 		
 		//MISSING WILL RETURN NULL
 		Assert.assertEquals("missing", i18nConfig.missing());
+		
+		//DYNAMIC
+		Assert.assertEquals("Hello HO", i18nConfig.getMessage("hello.1", "HO"));
 	}
 }
