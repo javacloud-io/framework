@@ -95,13 +95,15 @@ public class BroadcastServer extends BroadcastChannel {
 	 * @param event
 	 * @param queue
 	 */
-	protected void broadcast(OutboundEvent event, Iterable<Channel> queue) {
+	protected int broadcast(OutboundEvent event, Iterable<Channel> queue) {
+		int success = 0;
 		for (Iterator<Channel> iterator = queue.iterator(); iterator.hasNext(); ) {
 			ChannelOutput channel = (ChannelOutput)iterator.next();
 			try {
 				if(!channel.isClosed()) {
 					channel.write(event);
 					fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.SENT, event.getData()));
+					success ++;
 				}
             } catch (Exception ex) {
             	fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.ERROR, ex));
@@ -113,5 +115,6 @@ public class BroadcastServer extends BroadcastChannel {
 				fireChannelEvent(channel, new ChannelEvent(ChannelEvent.Type.CLOSED));
 			}
         }
+		return success;
 	}
 }
