@@ -95,7 +95,7 @@ public class BroadcastServer extends BroadcastChannel {
 	 * @param event
 	 * @param queue
 	 */
-	protected void broadcast(OutboundEvent event, ChannelQueue queue) {
+	protected void broadcast(OutboundEvent event, Iterable<Channel> queue) {
 		for (Iterator<Channel> iterator = queue.iterator(); iterator.hasNext(); ) {
 			ChannelOutput channel = (ChannelOutput)iterator.next();
 			try {
