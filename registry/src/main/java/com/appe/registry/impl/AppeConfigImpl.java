@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -43,6 +45,7 @@ import com.appe.registry.AppeLoader;
 public class AppeConfigImpl implements AppeConfig {
 	private static final Logger logger = Logger.getLogger(AppeConfigImpl.class.getName());
 	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
+	
 	/**
 	 * 
 	 */
@@ -57,8 +60,13 @@ public class AppeConfigImpl implements AppeConfig {
 	public <T> T get(Class<T> config) {
 		Object cfg = configCache.get(config);
 		if(cfg == null) {
-			cfg = loadConfig(config);
-			configCache.put(config, cfg);
+			//MAKE SURE LESS CONCURRENT LOAD AS POSSIBLE
+			synchronized(configCache) {
+				if(!configCache.containsKey(config)) {
+					cfg = loadConfig(config);
+					configCache.put(config, cfg);
+				}
+			}
 		}
 		return (T)cfg;
 	}
@@ -93,14 +101,6 @@ public class AppeConfigImpl implements AppeConfig {
 			}
 		}
 		return Proxy.newProxyInstance(AppeLoader.getClassLoader(), new Class<?>[]{ config }, configHandler);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	protected Locale getThreadLocale() {
-		return Locale.getDefault();
 	}
 	
 	/**
@@ -141,7 +141,7 @@ public class AppeConfigImpl implements AppeConfig {
 			return	new ConfigHandlerImpl() {
 						@Override
 						public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-							//ALWAYS RETURN ALL PROPERTIES
+							//DYNAMIC values() for PASS THROUGH
 							if(method.getReturnType().isAssignableFrom(Properties.class)) {
 								return properties;
 							}
@@ -163,6 +163,15 @@ public class AppeConfigImpl implements AppeConfig {
 	}
 	
 	/**
+	 * return default thread locale if any SET, TODAY just return the system default one.
+	 * 
+	 * @return
+	 */
+	protected Locale getDefaultLocale() {
+		return Locale.getDefault();
+	}
+	
+	/**
 	 * Since JDK already cache the bundle so we just pass on and lookup as NEED. We need a better way to be able to using
 	 * bundle local at RUNTIME UI? NEED LOCAL THREAD TO PASSING DOWN..SINCE Locale.getDefault() is SYSTEM LEVEL.
 	 * 
@@ -173,15 +182,35 @@ public class AppeConfigImpl implements AppeConfig {
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> config) {
 		logger.info("Bind I18n config class: " + config.getName() + " to resource: " + baseName);
 		
-		//TODO: Dynamic loading bundle to support user locale
-		final ResourceBundle bundle = ResourceBundle.getBundle(baseName, Locale.getDefault(), AppeLoader.getClassLoader());
+		//TO BE CONSISTENT, FIRST CALLER WIN!!!
+		final ClassLoader callerLoader = AppeLoader.getClassLoader();
 		return	new ConfigHandlerImpl() {
+					@Override
+					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+						//DYNAMIC getMessage(name, args)
+						if("getMessage".equals(method.getName()) && args != null && args.length > 0) {
+							String message = resolveValue(String.valueOf(args[0]), null);
+							if(args.length > 1) {
+								message = formatValue(message, Arrays.copyOfRange(args, 1, args.length));
+							}
+							return message;
+						}
+						return super.invoke(proxy, method, args);
+					}
+					
+					@Override
+					protected String formatValue(String value, Object[] args) {
+						MessageFormat mf = new MessageFormat(value, getDefaultLocale());
+						return mf.format(args);
+					}
+
 					@Override
 					protected String resolveValue(String name, String defaultValue) {
 						try {
+							ResourceBundle bundle = ResourceBundle.getBundle(baseName, getDefaultLocale(), callerLoader);
 							return	bundle.getString(name);
 						}catch(MissingResourceException ex) {
-							logger.warning("I18n bundle key: " + name + " not found, details: " + ex.getMessage());
+							logger.warning(ex.getMessage());
 						}
 						return (defaultValue == null || defaultValue.isEmpty()? name: defaultValue);
 					}

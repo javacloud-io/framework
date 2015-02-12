@@ -30,9 +30,9 @@ import java.lang.annotation.Target;
  * 		int numberOfServer();
  * }
  * 
+ * With special hack to dynamically get value using getProperty() or getMessage() for i18n
  * TODO:
  * -Need a way inject the config automatically, workaround today is to using a providers.
- * -Support multiple bundles overriding
  * 
  * @author ho
  *
