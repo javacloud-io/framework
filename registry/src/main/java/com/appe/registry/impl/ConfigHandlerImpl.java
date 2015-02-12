@@ -66,10 +66,21 @@ public class ConfigHandlerImpl implements InvocationHandler {
 		
 		//ALWAYS RETURN STRING FORMATED ?
 		if(args != null && args.length > 0) {
-			return MessageFormat.format(value, args);
+			return formatValue(value, args);
 		}
 		
 		return convertValue(value, method.getReturnType());
+	}
+	
+	/**
+	 * Format value with arguments
+	 * 
+	 * @param value
+	 * @param args
+	 * @return
+	 */
+	protected String formatValue(String value, Object[] args) {
+		return MessageFormat.format(value, args);
 	}
 	
 	/**

@@ -62,5 +62,8 @@ public class AppeRegistryTest extends GuiceTestCase {
 		TestI18nConfig i18nConfig = AppeRegistry.get().getConfig(TestI18nConfig.class);
 		Assert.assertEquals("Hello", i18nConfig.hello());
 		Assert.assertEquals("Hello HO", i18nConfig.hello("HO"));
+		
+		//MISSING WILL RETURN NULL
+		Assert.assertEquals("missing", i18nConfig.missing());
 	}
 }

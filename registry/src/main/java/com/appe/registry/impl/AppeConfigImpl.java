@@ -183,7 +183,7 @@ public class AppeConfigImpl implements AppeConfig {
 						}catch(MissingResourceException ex) {
 							logger.warning("I18n bundle key: " + name + " not found, details: " + ex.getMessage());
 						}
-						return defaultValue;
+						return (defaultValue == null || defaultValue.isEmpty()? name: defaultValue);
 					}
 				};
 	}

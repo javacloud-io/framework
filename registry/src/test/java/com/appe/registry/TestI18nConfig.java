@@ -39,4 +39,10 @@ public interface TestI18nConfig {
 	 */
 	@Entry(name="hello.1")
 	public String hello(String name);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String missing();
 }
