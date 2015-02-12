@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
@@ -95,6 +96,14 @@ public class AppeConfigImpl implements AppeConfig {
 	}
 	
 	/**
+	 * 
+	 * @return
+	 */
+	protected Locale getThreadLocale() {
+		return Locale.getDefault();
+	}
+	
+	/**
 	 * Using the system property as source to resolve value.
 	 * 
 	 * @param config
@@ -164,17 +173,17 @@ public class AppeConfigImpl implements AppeConfig {
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> config) {
 		logger.info("Bind I18n config class: " + config.getName() + " to resource: " + baseName);
 		
-		//USING I18N HANDLER
+		//TODO: Dynamic loading bundle to support user locale
 		final ResourceBundle bundle = ResourceBundle.getBundle(baseName, Locale.getDefault(), AppeLoader.getClassLoader());
 		return	new ConfigHandlerImpl() {
 					@Override
 					protected String resolveValue(String name, String defaultValue) {
-						String value = bundle.getString(name);
-						if(value == null) {
-							value = defaultValue;
+						try {
+							return	bundle.getString(name);
+						}catch(MissingResourceException ex) {
+							logger.warning("I18n bundle key: " + name + " not found, details: " + ex.getMessage());
 						}
-						//RETURN NAME IF NO VALUE
-						return (value == null || value.isEmpty()? name : value);
+						return defaultValue;
 					}
 				};
 	}

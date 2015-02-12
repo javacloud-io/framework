@@ -24,7 +24,7 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 
 /**
- * Simple utils to load thing such as class/resources...
+ * Simple utils to load thing such as class/resources...We always use current ClassLoader to allow override.
  * 
  * @author ho
  *
