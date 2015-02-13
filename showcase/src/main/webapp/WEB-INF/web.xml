@@ -21,8 +21,19 @@
                       http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   	version="3.0">
   
-	<display-name>Docker portal</display-name>
+	<display-name>Showcase portal</display-name>
+	<!-- 
+	<filter>
+		<filter-name>SecurityFilter</filter-name>
+		<filter-class>com.appe.server.filter.HttpSecurityFilter</filter-class>
+	</filter>
 	
+	<filter-mapping>
+		<filter-name>SecurityFilter</filter-name>
+		<url-pattern>/v1/*</url-pattern>
+	</filter-mapping>
+	-->
+	 
 	<!-- for 2.5 only
 	<servlet>
 		<servlet-name>com.appe.startup.ApplicationV1</servlet-name>
