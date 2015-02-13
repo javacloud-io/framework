@@ -96,7 +96,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 		this.authScheme = filterConfig.getInitParameter("auth-scheme");
 		String roles = filterConfig.getInitParameter("allow-roles");
 		if(roles != null) {
-			this.allowRoles = roles.split("\\s*,\\s*");
+			this.allowRoles = Objects.toArray(roles, ",", true);
 		}
 		
 		//RESOLVE AUTHENTICATOR
@@ -105,8 +105,8 @@ public class HttpSecurityFilter extends HttpServletFilter {
 			if(authenticator == null) {
 				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
 			} else {
-				Class<?> zclass = AppeLoader.getClassLoader().loadClass(authenticator);
-				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(zclass);
+				Class<?> type = AppeLoader.getClassLoader().loadClass(authenticator);
+				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(type);
 			}
 		} catch(Exception ex) {
 			throw new ServletException(ex);

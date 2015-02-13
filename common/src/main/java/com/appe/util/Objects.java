@@ -112,7 +112,7 @@ public final class Objects {
 		}
 		
 		//SPLIT IT UP
-		String[] list = value.toString().split(sep);
+		String[] list = value.split(sep);
 		if(trim) {
 			for(int i = 0; i < list.length; i ++) {
 				list[i] = list[i].trim();
