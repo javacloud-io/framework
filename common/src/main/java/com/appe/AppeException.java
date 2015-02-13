@@ -78,7 +78,7 @@ public class AppeException extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public final static Throwable findRootCause(Throwable t) {
+	public static final Throwable findRootCause(Throwable t) {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
 			t = cause;
@@ -96,7 +96,7 @@ public class AppeException extends RuntimeException {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public final static <T extends Throwable> T findCause(Throwable t, Class<T> causedBy) {
+	public static final <T extends Throwable> T findCause(Throwable t, Class<T> causedBy) {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
 			//OK, found it...
@@ -116,7 +116,7 @@ public class AppeException extends RuntimeException {
 	 * @param causeBy
 	 * @return
 	 */
-	public final static boolean isCausedBy(Throwable t, Class<? extends Throwable> causedBy) {
+	public static final boolean isCausedBy(Throwable t, Class<? extends Throwable> causedBy) {
 		//BASIC CHECK
 		if(t == null) {
 			return false;
@@ -131,7 +131,7 @@ public class AppeException extends RuntimeException {
 	 * Make sure to always return a single AppeException instead of stack of them.
 	 * @param t
 	 */
-	public final static AppeException wrap(Throwable t) {
+	public static final AppeException wrap(Throwable t) {
 		if(t instanceof AppeException) {
 			return	(AppeException)t;
 		}

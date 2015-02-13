@@ -13,45 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.registry;
+package com.appe.security;
 
-import com.appe.registry.AppeConfig.Bundle;
-import com.appe.registry.AppeConfig.Entry;
+import java.security.Principal;
 /**
- * A test bundle using system by default, just annotate how to get it out and you got it.
+ * Make sure to give somebody a NAME
  * 
  * @author ho
  *
  */
-@Bundle(name="i18n/testmsg", i18n=true)
-public interface TestI18nConfig {
-	/**
-	 * 
-	 * @return
-	 */
-	@Entry(name="hello")
-	public String hello();
+public class SimplePrincipal implements Principal {
+	protected String name;
+	protected SimplePrincipal() {
+	}
 	
 	/**
 	 * 
 	 * @param name
-	 * @return
 	 */
-	@Entry(name="hello.1")
-	public String hello(String name);
+	public SimplePrincipal(String name) {
+		this.name = name;
+	}
 	
 	/**
 	 * 
-	 * @return
 	 */
-	public String missing();
-	
-	/**
-	 * Dynamic pass through
-	 * 
-	 * @param name
-	 * @param args
-	 * @return
-	 */
-	public String getLocalizedMessage(String name, Object...args);
+	@Override
+	public String getName() {
+		return name;
+	}
 }

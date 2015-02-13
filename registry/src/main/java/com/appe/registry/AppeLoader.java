@@ -38,7 +38,7 @@ public final class AppeLoader {
 	 * 
 	 * @return
 	 */
-	public static final ClassLoader getClassLoader() {
+	public static ClassLoader getClassLoader() {
 		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 		if(loader == null) {
 			loader = AppeLoader.class.getClassLoader();
@@ -53,7 +53,7 @@ public final class AppeLoader {
 	 * @param service
 	 * @return
 	 */
-	public static final <T> T loadService(Class<T> service) {
+	public static <T> T loadService(Class<T> service) {
 		ServiceLoader<T> loader = ServiceLoader.load(service, getClassLoader());
 		return loader.iterator().next();
 	}
@@ -67,7 +67,7 @@ public final class AppeLoader {
 	 * @return NULL if not found any resource
 	 * @throws IOException
 	 */
-	public static final Properties loadProperties(String resource, boolean scanning) throws IOException {
+	public static Properties loadProperties(String resource, boolean scanning) throws IOException {
 		List<URL> urls = null;
 		ClassLoader loader = getClassLoader();
 		

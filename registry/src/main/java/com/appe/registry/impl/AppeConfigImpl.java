@@ -188,7 +188,7 @@ public class AppeConfigImpl implements AppeConfig {
 					@Override
 					public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 						//DYNAMIC getMessage(name, args)
-						if("getMessage".equals(method.getName()) && args != null && args.length > 0) {
+						if("getLocalizedMessage".equals(method.getName()) && args != null && args.length > 0) {
 							String message = resolveValue(String.valueOf(args[0]), null);
 							if(args.length > 1) {
 								message = formatValue(message, (Object[])args[1]);

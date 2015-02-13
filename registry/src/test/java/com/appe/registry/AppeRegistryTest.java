@@ -70,6 +70,6 @@ public class AppeRegistryTest extends GuiceTestCase {
 		Assert.assertEquals("missing", i18nConfig.missing());
 		
 		//DYNAMIC
-		Assert.assertEquals("Hello HO", i18nConfig.getMessage("hello.1", "HO"));
+		Assert.assertEquals("Hello HO", i18nConfig.getLocalizedMessage("hello.1", "HO"));
 	}
 }
