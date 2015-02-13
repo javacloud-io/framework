@@ -18,12 +18,12 @@ package com.appe.security;
 import java.security.Principal;
 
 /**
- * 
+ * To authenticate almost anything with simple credentials.
  * 
  * @author ho
  *
  */
-public interface AuthenticationProvider {
+public interface Authenticator {
 	/**
 	 * Authenticate credentials and return new one if success which contains more fine grant system wide permissions.
 	 * return null if credentials is not appropriated to handle.

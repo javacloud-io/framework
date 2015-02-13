@@ -18,7 +18,7 @@ package com.appe.showcase.security;
 import java.security.Principal;
 import java.util.Set;
 
-import com.appe.security.AuthenticationProvider;
+import com.appe.security.Authenticator;
 import com.appe.security.Authorization;
 import com.appe.security.AuthorizationException;
 import com.appe.security.InvalidCredentialsException;
@@ -28,7 +28,7 @@ import com.appe.util.Objects;
  * @author ho
  *
  */
-public class DummyAuthenticationProvider implements AuthenticationProvider {
+public class DummyAuthenticator implements Authenticator {
 
 	@Override
 	public Authorization authenticate(final Principal credentials) throws AuthorizationException {

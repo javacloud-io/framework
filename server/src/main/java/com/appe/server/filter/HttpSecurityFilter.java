@@ -28,7 +28,7 @@ import com.appe.AppeException;
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
-import com.appe.security.AuthenticationProvider;
+import com.appe.security.Authenticator;
 import com.appe.security.Authorization;
 import com.appe.security.AuthorizationException;
 import com.appe.security.InvalidCredentialsException;
@@ -58,7 +58,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	protected String   loginPage;
 	protected String   authScheme;
 	protected String[] allowRoles;
-	protected AuthenticationProvider authenticator;
+	protected Authenticator authenticator;
 	public HttpSecurityFilter() {
 	}
 	
@@ -103,10 +103,10 @@ public class HttpSecurityFilter extends HttpServletFilter {
 		try {
 			String authenticator = filterConfig.getInitParameter("authenticator");
 			if(authenticator == null) {
-				this.authenticator = AppeRegistry.get().getInstance(AuthenticationProvider.class);
+				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
 			} else {
 				Class<?> zclass = AppeLoader.getClassLoader().loadClass(authenticator);
-				this.authenticator = (AuthenticationProvider)AppeRegistry.get().getInstance(zclass);
+				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(zclass);
 			}
 		} catch(Exception ex) {
 			throw new ServletException(ex);

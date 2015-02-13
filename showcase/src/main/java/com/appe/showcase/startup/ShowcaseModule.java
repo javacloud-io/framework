@@ -15,8 +15,8 @@
  */
 package com.appe.showcase.startup;
 
-import com.appe.security.AuthenticationProvider;
-import com.appe.showcase.security.DummyAuthenticationProvider;
+import com.appe.security.Authenticator;
+import com.appe.showcase.security.DummyAuthenticator;
 import com.google.inject.AbstractModule;
 /**
  * 
@@ -26,6 +26,6 @@ import com.google.inject.AbstractModule;
 public class ShowcaseModule extends AbstractModule {
 	@Override
 	protected void configure() {
-		bind(AuthenticationProvider.class).to(DummyAuthenticationProvider.class);
+		bind(Authenticator.class).to(DummyAuthenticator.class);
 	}
 }
