@@ -38,14 +38,14 @@ import org.slf4j.LoggerFactory;
 public abstract class HttpServletFilter implements Filter {
 	//SINGLE LOGGER FOR SERVLET
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
-	private FilterConfig filterConfig;
+	protected FilterConfig filterConfig;
 	/**
 	 * 
 	 */
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
+	public final void init(FilterConfig filterConfig) throws ServletException {
 		this.filterConfig = filterConfig;
+		configure();
 	}
 	
 	/**
@@ -64,6 +64,7 @@ public abstract class HttpServletFilter implements Filter {
 	}
 	
 	/**
+	 * 
 	 * Delegate to http filter
 	 */
 	@Override
@@ -72,6 +73,14 @@ public abstract class HttpServletFilter implements Filter {
 		
 		//CREATE & PREPARE CONTEXT
 		doFilter((HttpServletRequest)req, (HttpServletResponse)resp, chain);
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @throws ServletException
+	 */
+	protected void configure() throws ServletException {
 	}
 	
 	/**

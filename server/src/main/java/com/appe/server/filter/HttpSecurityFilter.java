@@ -18,7 +18,6 @@ package com.appe.server.filter;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -40,12 +39,11 @@ import com.appe.util.Objects;
 
 /**
  * Simplest as possible security filter, we protect the WHOLE URL using FIX ROLES. Granularity will be enforce directly
- * at the resource level. Make sure to:
+ * at the resource level.
  * 
  * 1. Validate and inject authorization
  * 2. Send back the correct challenge
  * 
- * MOSTLY USE FOR WEB PAGE & BASIC REST API FILTER!
  *
  * @author tobi
  */
@@ -56,10 +54,10 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	public static final String SCHEME_BASIC 		= "Basic";	//Client Basic
 	public static final String SCHEME_BEARER		= "Bearer";	//Oauth2 Bearer
 	
-	private String   loginPage;
-	private String   authScheme;
-	private String[] allowRoles;
-	private AuthenticationProvider authenticator;
+	protected String   loginPage;
+	protected String   authScheme;
+	protected String[] allowRoles;
+	protected AuthenticationProvider authenticator;
 	public HttpSecurityFilter() {
 	}
 	
@@ -83,11 +81,12 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	 *	<param-name>authenticator</param-name>
 	 *	<param-value></param-value>		
 	 * </init-param>
+	 * 
+	 * @param filterConfig
+	 * @throws ServletException
 	 */
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		super.init(filterConfig);
-		
+	protected void configure() throws ServletException {
 		//BASIC PARAMETERS
 		this.loginPage = filterConfig.getInitParameter("login-page");
 		if(loginPage == null) {
@@ -112,7 +111,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 			throw new ServletException(ex);
 		}
 	}
-
+	
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
 	 * 

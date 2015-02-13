@@ -18,7 +18,6 @@ package com.appe.server.filter;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,9 +39,11 @@ public class HttpNamespaceFilter extends HttpServletFilter {
 	public HttpNamespaceFilter() {
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-		super.init(filterConfig);
+	protected void configure() throws ServletException {
 		this.appeNamespace = AppeRegistry.get().getInstance(AppeNamespace.class);
 	}
 	
