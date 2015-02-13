@@ -44,7 +44,8 @@ import com.appe.util.Objects;
  * 1. Validate and inject authorization
  * 2. Send back the correct challenge
  * 
- *
+ * This filter will be a good replacement of built-in container security, very well integrated.
+ * 
  * @author tobi
  */
 public class HttpSecurityFilter extends HttpServletFilter {
