@@ -18,6 +18,7 @@ package com.appe.server.filter;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
 import com.appe.AppeException;
+import com.appe.registry.AppeLoader;
+import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthenticationProvider;
 import com.appe.security.Authorization;
@@ -53,14 +56,63 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	public static final String SCHEME_BASIC 		= "Basic";	//Client Basic
 	public static final String SCHEME_BEARER		= "Bearer";	//Oauth2 Bearer
 	
-	protected String loginURI 		= "/login";
-	protected String challengeScheme;
-	protected String[] permissions;
-	protected AuthenticationProvider authenticationProvider;
-	
+	private String   loginPage;
+	private String   authScheme;
+	private String[] allowRoles;
+	private AuthenticationProvider authenticator;
 	public HttpSecurityFilter() {
 	}
 	
+	/**
+	 * <init-param>
+	 *	<param-name>login-page</param-name>
+	 *	<param-value></param-value>		
+	 * </init-param>
+	 * 
+	 * <init-param>
+	 *	<param-name>auth-scheme</param-name>
+	 *	<param-value></param-value>		
+	 * </init-param>
+	 * 
+	 * <init-param>
+	 *	<param-name>allow-roles</param-name>
+	 *	<param-value></param-value>		
+	 * </init-param>
+	 * 
+	 * <init-param>
+	 *	<param-name>authenticator</param-name>
+	 *	<param-value></param-value>		
+	 * </init-param>
+	 */
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+		super.init(filterConfig);
+		
+		//BASIC PARAMETERS
+		this.loginPage = filterConfig.getInitParameter("login-page");
+		if(loginPage == null) {
+			loginPage = filterConfig.getServletContext().getRealPath("/login");
+		}
+		this.authScheme = filterConfig.getInitParameter("auth-scheme");
+		String roles = filterConfig.getInitParameter("allow-roles");
+		if(roles != null) {
+			this.allowRoles = roles.split("\\s*,\\s*");
+		}
+		
+		//RESOLVE AUTHENTICATOR
+		try {
+			String authenticator = filterConfig.getInitParameter("authenticator");
+			if(authenticator == null) {
+				this.authenticator = AppeRegistry.get().getInstance(AuthenticationProvider.class);
+			} else {
+				Class<?> zclass = AppeLoader.getClassLoader().loadClass(authenticator);
+				this.authenticator = (AuthenticationProvider)AppeRegistry.get().getInstance(zclass);
+			}
+		} catch(Exception ex) {
+			throw new ServletException(ex);
+		}
+	}
+
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
 	 * 
@@ -70,7 +122,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 			throws ServletException, IOException {
 		try {
 			Authorization authzGrant = doAuthenticate(req);
-			if(permissions != null && !authzGrant.hasAnyPermissions(permissions)) {
+			if(allowRoles != null && !authzGrant.hasAnyPermissions(allowRoles)) {
 				throw new AccessDeniedException();
 			}
 			
@@ -98,7 +150,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 		}
 		
 		//TODO: OK, FILL IN SOME REQUEST DETALS
-		return	authenticationProvider.authenticate(credentials);
+		return	authenticator.authenticate(credentials);
 	}
 	
 	/**
@@ -155,13 +207,13 @@ public class HttpSecurityFilter extends HttpServletFilter {
 		Dictionary entity = Objects.asDict(PARAM_ERROR, exception.getMessage());
 		
 		//ALWAYS ASSUMING BASIC AUTH
-		if(challengeScheme == null) {
-			String redirectUri = loginURI + (loginURI.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
+		if(authScheme == null || authScheme.isEmpty()) {
+			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
 			resp.sendRedirect(redirectUri);
 			//responseRedirect(loginUri + (loginUri.indexOf('?') > 0? "&" : "?") +  Dictionaries.encodeURL(entity));
 		} else {
 			//ANYTHING WILL ASSUMING AUTHZ ISSUE?
-			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, challengeScheme);
+			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, authScheme);
 			resp.setStatus(AppeException.isCausedBy(exception, AccessDeniedException.class) ?
 					HttpServletResponse.SC_FORBIDDEN : HttpServletResponse.SC_UNAUTHORIZED);
 			resp.getWriter().print(Dictionaries.encodeURL(entity));
