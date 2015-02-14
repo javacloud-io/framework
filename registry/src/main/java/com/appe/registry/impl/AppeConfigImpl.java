@@ -62,7 +62,7 @@ public class AppeConfigImpl implements AppeConfig {
 		if(cfg == null) {
 			//MAKE SURE LESS CONCURRENT LOAD AS POSSIBLE
 			synchronized(configCache) {
-				if(!configCache.containsKey(config)) {
+				if((cfg = configCache.get(config)) == null) {
 					cfg = loadConfig(config);
 					configCache.put(config, cfg);
 				}

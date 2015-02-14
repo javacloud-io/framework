@@ -70,9 +70,7 @@ public abstract class BroadcastChannel extends SimpleChannel implements Broadcas
 		if(queue == null && force) {
 			//FIXME: a lock free but guarantee only instance created is prefer
 			synchronized(channels) {
-				queue = channels.get(channel);
-				
-				if(queue == null) {
+				if((queue = channels.get(channel)) == null) {
 					logger.debug("Create channel: {}", channel);
 					channels.putIfAbsent(channel, new ChannelQueue());
 					queue = channels.get(channel);
