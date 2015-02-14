@@ -17,6 +17,8 @@ package com.appe.showcase.startup;
 
 import javax.ws.rs.ApplicationPath;
 
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+
 import com.appe.server.startup.JerseyApplication;
 
 /**
@@ -32,5 +34,6 @@ public class ShowcaseApplication extends JerseyApplication {
 	 */
 	public ShowcaseApplication() {
 		super("com.appe.showcase.apis");
+		register(RolesAllowedDynamicFeature.class);
 	}
 }
