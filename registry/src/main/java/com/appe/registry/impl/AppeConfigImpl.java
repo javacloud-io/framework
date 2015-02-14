@@ -210,7 +210,7 @@ public class AppeConfigImpl implements AppeConfig {
 							ResourceBundle bundle = ResourceBundle.getBundle(baseName, getDefaultLocale(), callerLoader);
 							return	bundle.getString(name);
 						}catch(MissingResourceException ex) {
-							logger.warning(ex.getMessage());
+							logger.finest(ex.getMessage());
 						}
 						return (defaultValue == null || defaultValue.isEmpty()? name: defaultValue);
 					}
