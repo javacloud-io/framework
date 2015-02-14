@@ -27,8 +27,8 @@
 		<filter-name>SecurityFilter</filter-name>
 		<filter-class>com.appe.server.filter.HttpSecurityFilter</filter-class>
 		<init-param>
-			<param-name>auth-scheme</param-name>
-			<param-value>Basic</param-value>
+			<param-name>login-page</param-name>
+			<param-value>/login</param-value>
 		</init-param>
 	</filter>
 	

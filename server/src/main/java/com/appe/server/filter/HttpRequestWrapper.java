@@ -76,4 +76,58 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 		}
 		return request;
 	}
+	
+	/**
+	 * return URI to the correct scheme/port
+	 * 
+	 * @param scheme
+	 * @param port
+	 * @param server
+	 * @return
+	 */
+	public static final StringBuilder buildURI(String scheme, int port, String server) {
+		// TRYING TO EXCLUDE PORT NUMBER IF STANDARD HTTP/HTTPS
+		StringBuilder uri = new StringBuilder(scheme)
+			.append("://")
+			.append(server);
+		if ((port <= 0)
+			|| (port == 80 && scheme.equals("http"))
+			|| (port == 443 && scheme.equals("https"))) {
+			return uri;
+		}
+		
+		// ALWAYS INCLUDE PORT
+		return uri.append(":").append(port);
+	}
+	
+	/**
+	 * return base server URI and path to the server itself. ASSUMING NO TRAILING SLASH
+	 * 
+	 * @param req
+	 * @return
+	 */
+	public static final StringBuilder buildURI(HttpServletRequest req) {
+		return	buildURI(req.getScheme(), req.getServerPort(), req.getServerName())
+				.append(req.getContextPath());
+	}
+	
+	/**
+	 * 
+	 * @param req
+	 * @param path
+	 * @return
+	 */
+	public static final String buildURI(HttpServletRequest req, String path) {
+		if(path.startsWith("https://") || path.startsWith("http://")) {
+			return path;
+		}
+		
+		StringBuilder uri = buildURI(req.getScheme(), req.getServerPort(), req.getServerName())
+				.append(req.getContextPath());
+		
+		if(!path.startsWith("/")) {
+			uri.append("/");
+		}
+		return	uri.append(path).toString();
+	}
 }
