@@ -21,7 +21,7 @@ import com.google.inject.Stage;
 
 /**
  * Basic implementation using google juice and service override at runtime level. By default it will load a file:
- * META-INF/guice-modules.registry => then will perform overriding with XXX.1. It then can be perform a special override
+ * META-INF/registry-modules.guice => then will perform overriding with XXX.1. It then can be perform a special override
  * using only a current class loading XXX.2.
  * 
  * @author ho
@@ -60,8 +60,8 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * @return
 	 */
 	protected Injector createInjector() {
-		String profile = System.getProperty(PROFILE, "registry");
-		String resource= "META-INF/guice-modules." + profile;
+		String profile = System.getProperty(PROFILE, "guice");
+		String resource= "META-INF/registry-modules." + profile;
 		
 		return GuiceFactory.createInjector(Stage.PRODUCTION, resource);
 	}
