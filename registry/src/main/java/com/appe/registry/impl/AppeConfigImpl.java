@@ -20,8 +20,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.text.MessageFormat;
-
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
@@ -29,10 +27,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Logger;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.appe.registry.AppeConfig;
 import com.appe.registry.AppeLoader;
+import com.appe.registry.AppeLocale;
 
 /**
  * Simple implementation of configuration using resource property. Resource property can be overload at runtime by
@@ -45,11 +45,13 @@ import com.appe.registry.AppeLoader;
 public class AppeConfigImpl implements AppeConfig {
 	private static final Logger logger = Logger.getLogger(AppeConfigImpl.class.getName());
 	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
-	
+	private AppeLocale locale;
 	/**
 	 * 
 	 */
-	public AppeConfigImpl() {
+	@Inject
+	public AppeConfigImpl(AppeLocale locale) {
+		this.locale = locale;
 	}
 	
 	/**
@@ -163,15 +165,6 @@ public class AppeConfigImpl implements AppeConfig {
 	}
 	
 	/**
-	 * return default thread locale if any SET, TODAY just return the system default one.
-	 * 
-	 * @return
-	 */
-	protected Locale getDefaultLocale() {
-		return Locale.getDefault();
-	}
-	
-	/**
 	 * Since JDK already cache the bundle so we just pass on and lookup as NEED. We need a better way to be able to using
 	 * bundle local at RUNTIME UI? NEED LOCAL THREAD TO PASSING DOWN..SINCE Locale.getDefault() is SYSTEM LEVEL.
 	 * 
@@ -200,14 +193,14 @@ public class AppeConfigImpl implements AppeConfig {
 					
 					@Override
 					protected String formatValue(String value, Object[] args) {
-						MessageFormat mf = new MessageFormat(value, getDefaultLocale());
+						MessageFormat mf = new MessageFormat(value, locale.get());
 						return mf.format(args);
 					}
 
 					@Override
 					protected String resolveValue(String name, String defaultValue) {
 						try {
-							ResourceBundle bundle = ResourceBundle.getBundle(baseName, getDefaultLocale(), callerLoader);
+							ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale.get(), callerLoader);
 							return	bundle.getString(name);
 						}catch(MissingResourceException ex) {
 							logger.finest(ex.getMessage());
