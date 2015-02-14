@@ -1,1 +1,1 @@
-# Common light weight services for modern enterprise application
+# Common service for modern enterprise application
