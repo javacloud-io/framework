@@ -1,1 +1,1 @@
-# Sample webapp how to use some of the basic component
+# Sample webapp using some of the basic components
