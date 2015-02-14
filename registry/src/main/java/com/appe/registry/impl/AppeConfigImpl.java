@@ -129,7 +129,7 @@ public class AppeConfigImpl implements AppeConfig {
 	protected InvocationHandler createPropertiesHandler(String baseName, Class<?> config) {
 		//ALWAYS APPEND .properties to load the resource
 		String resource = baseName + ".properties";
-		logger.info("Bind the config class: " + config.getName() + " to resource: " + resource);
+		logger.info("Bind the config class: " + config.getName() + " to resource bundle: " + resource);
 		
 		try {
 			final Properties properties = AppeLoader.loadProperties(resource, false);
@@ -180,7 +180,7 @@ public class AppeConfigImpl implements AppeConfig {
 	 * @return
 	 */
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> config) {
-		logger.info("Bind I18n config class: " + config.getName() + " to resource: " + baseName);
+		logger.info("Bind I18n config class: " + config.getName() + " to resource bundle: " + baseName);
 		
 		//TO BE CONSISTENT, FIRST CALLER WIN!!!
 		final ClassLoader callerLoader = AppeLoader.getClassLoader();
