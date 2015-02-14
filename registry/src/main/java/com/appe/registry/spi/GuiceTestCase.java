@@ -18,7 +18,7 @@ package com.appe.registry.spi;
 import org.junit.runner.RunWith;
 
 /**
- * 
+ * Place holder for subclass test case without annotate with RunWith
  * @author ho
  *
  */
