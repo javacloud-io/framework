@@ -114,20 +114,19 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	/**
 	 * 
 	 * @param req
-	 * @param path
+	 * @param location
 	 * @return
 	 */
-	public static final String buildURI(HttpServletRequest req, String path) {
-		if(path.startsWith("https://") || path.startsWith("http://")) {
-			return path;
+	public static final String buildURI(HttpServletRequest req, String location) {
+		if(location.startsWith("https://") || location.startsWith("http://")) {
+			return location;
 		}
 		
 		StringBuilder uri = buildURI(req.getScheme(), req.getServerPort(), req.getServerName())
 				.append(req.getContextPath());
-		
-		if(!path.startsWith("/")) {
+		if(!location.startsWith("/")) {
 			uri.append("/");
 		}
-		return	uri.append(path).toString();
+		return	uri.append(location).toString();
 	}
 }
