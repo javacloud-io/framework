@@ -34,7 +34,7 @@ public final class AppeLoader {
 	}
 	
 	/**
-	 * Always using the current class loader unless specified different
+	 * Always favor to current thread class loader, by doing so most of the resource can be overrided.
 	 * 
 	 * @return
 	 */
