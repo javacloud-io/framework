@@ -1,1 +1,3 @@
-# Dependency injection using Guice to auto discover modules
+# Service registry based on Google Guice
+
+Simplify the objects registration, discovery and providing a clean configuration loading.
