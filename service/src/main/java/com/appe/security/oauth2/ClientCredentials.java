@@ -24,12 +24,6 @@ import com.appe.security.SimpleCredentials;
  *
  */
 public class ClientCredentials extends SimpleCredentials {
-	public static final String _CLIENT_ID	 = "clientId";
-	public static final String _CLIENT_SECRET= "clientSecret";
-	public static final String _REDIRECT_URI = "redirectURI";
-	public static final String _RESPONSE_TYPE= "responseType";
-	public static final String _SCOPE 		 = "scope";
-	public static final String _STATE		 = "state";
 	/**
 	 * 
 	 * @param clientId
@@ -52,7 +46,7 @@ public class ClientCredentials extends SimpleCredentials {
 	 * @return
 	 */
 	public String getRedirectURI() {
-		return getExtra(_REDIRECT_URI);
+		return getExtra(IdPConstants.PARAM_REDIRECT_URI);
 	}
 	
 	/**
@@ -60,6 +54,6 @@ public class ClientCredentials extends SimpleCredentials {
 	 * @return
 	 */
 	public String getScope() {
-		return getExtra(_SCOPE);
+		return getExtra(IdPConstants.PARAM_SCOPE);
 	}
 }

@@ -24,7 +24,6 @@ import com.appe.security.SimpleCredentials;
  *
  */
 public class TokenCredentials extends SimpleCredentials {
-	public static final String _TOKEN	 = "token";
 	public TokenCredentials(String token) {
 		super(null, token);
 	}

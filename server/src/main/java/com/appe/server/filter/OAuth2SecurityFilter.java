@@ -34,6 +34,7 @@ import com.appe.security.AuthorizationException;
 import com.appe.security.InvalidCredentialsException;
 import com.appe.security.SimpleCredentials;
 import com.appe.security.oauth2.ClientCredentials;
+import com.appe.security.oauth2.IdPConstants;
 import com.appe.security.oauth2.TokenCredentials;
 import com.appe.util.Dictionaries;
 import com.appe.util.Dictionary;
@@ -51,12 +52,6 @@ import com.appe.util.Objects;
  * @author tobi
  */
 public class OAuth2SecurityFilter extends HttpServletFilter {
-	public static final String PARAM_ACCESS_TOKEN	= "access_token";
-	public static final String PARAM_ERROR 			= "error";
-	
-	public static final String SCHEME_BASIC 		= "Basic";	//Client Basic
-	public static final String SCHEME_BEARER		= "Bearer";	//Oauth2 Bearer
-	
 	protected String   loginPage;
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
@@ -93,7 +88,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 		//LOGIN PAGE
 		this.loginPage = filterConfig.getInitParameter("login-page");
 		if(loginPage == null) {
-			loginPage = "/login";
+			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
 		}
 		
 		//AUTH SCHEME
@@ -172,22 +167,22 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
 		if(!Objects.isEmpty(authorization)) {
-			if(authorization.startsWith(SCHEME_BEARER)) {
-				return	new TokenCredentials(authorization.substring(SCHEME_BEARER.length() + 1));
-			} else if(authorization.startsWith(SCHEME_BASIC)) {
-				return new ClientCredentials(authorization.substring(SCHEME_BASIC.length() + 1));
+			if(authorization.startsWith(IdPConstants.SCHEME_BEARER)) {
+				return	new TokenCredentials(authorization.substring(IdPConstants.SCHEME_BEARER.length() + 1));
+			} else if(authorization.startsWith(IdPConstants.SCHEME_BASIC)) {
+				return new ClientCredentials(authorization.substring(IdPConstants.SCHEME_BASIC.length() + 1));
 			} else {
 				logger.debug("Unknown authorization header: {}", authorization);
 			}
 		}
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
-		String accessToken = req.getParameter(PARAM_ACCESS_TOKEN);
+		String accessToken = req.getParameter(IdPConstants.PARAM_ACCESS_TOKEN);
 		if(accessToken == null) {
 			Cookie[] cookies = req.getCookies();
 			if(cookies != null && cookies.length > 0) {
 				for (Cookie cookie : cookies) {
-					if (PARAM_ACCESS_TOKEN.equals(cookie.getName())) {
+					if (IdPConstants.PARAM_ACCESS_TOKEN.equals(cookie.getName())) {
 						accessToken = cookie.getValue();
 						break;
 					}
@@ -209,8 +204,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 */
 	protected void responseError(HttpServletRequest req, HttpServletResponse resp, Throwable exception)
 		throws ServletException, IOException {
-		//BASIC ERROR MESSAGE FOR NOW
-		Dictionary entity = Objects.asDict(PARAM_ERROR, exception.getMessage());
+		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getMessage());
 		
 		//ALWAYS ASSUMING BASIC AUTH
 		if(challengeScheme == null || challengeScheme.isEmpty()) {
