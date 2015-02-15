@@ -1,6 +1,6 @@
 # APPE framework
 
-A clean way to build a modern java web application for enterprise usage.
+A clean way to build a modern java microservices for enterprise.
 
 ## Simple registry
 

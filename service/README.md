@@ -1,1 +1,1 @@
-# Basic java services for all applications
+# Common service for modern enterprise application
