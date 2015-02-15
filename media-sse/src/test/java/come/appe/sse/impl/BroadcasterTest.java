@@ -44,6 +44,6 @@ public class BroadcasterTest {
 		});
 		
 		broadcaster.publish("test", "message");
-		Objects.close(broadcaster);
+		Objects.closeQuietly(broadcaster);
 	}
 }

@@ -105,7 +105,7 @@ public final class Files {
 		try {
 			unzipFile(zipStream, folder, 8192);
 		}finally {
-			Objects.close(zipStream);
+			Objects.closeQuietly(zipStream);
 		}
 	}
 	
@@ -185,7 +185,7 @@ public final class Files {
 		try {
 			return	copyFile(fis, fos, chunk);
 		} finally {
-			Objects.close(fis, fos);
+			Objects.closeQuietly(fis, fos);
 		}
 	}
 }

@@ -15,8 +15,6 @@
  */
 package com.appe.util;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -180,19 +178,6 @@ public final class Objects {
 	}
 	
 	/**
-	 * Make new PROXY object for interfaces
-	 * 
-	 * @param loader
-	 * @param handler
-	 * @param interfaces
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <T> T newProxy(ClassLoader loader, InvocationHandler handler, Class<?>... interfaces) {
-		return	(T)Proxy.newProxyInstance(loader, interfaces, handler);
-	}
-	
-	/**
 	 * Trying to sleep up to duration unless interrupted.
 	 * @param duration
 	 * @param unit
@@ -237,7 +222,7 @@ public final class Objects {
 	 * 
 	 * @param closable
 	 */
-	public static void close(java.io.Closeable... closables) {
+	public static void closeQuietly(java.io.Closeable... closables) {
 		for(java.io.Closeable c: closables) {
 			if(c != null) {
 				try {
