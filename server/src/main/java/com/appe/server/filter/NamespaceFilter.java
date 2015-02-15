@@ -31,12 +31,12 @@ import com.appe.util.Objects;
  * @author ho
  *
  */
-public class HttpNamespaceFilter extends HttpServletFilter {
+public class NamespaceFilter extends HttpServletFilter {
 	public static final String PARAM_NAMESPACE	= "__namespace";
 	public static final String HEADER_NAMESPACE	= "X-Namespace";
 	
 	private AppeNamespace appeNamespace;
-	public HttpNamespaceFilter() {
+	public NamespaceFilter() {
 	}
 	
 	/**

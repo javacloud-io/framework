@@ -32,7 +32,9 @@ import com.appe.security.Authenticator;
 import com.appe.security.Authorization;
 import com.appe.security.AuthorizationException;
 import com.appe.security.InvalidCredentialsException;
-import com.appe.security.SimplePrincipal;
+import com.appe.security.SimpleCredentials;
+import com.appe.security.oauth2.ClientCredentials;
+import com.appe.security.oauth2.TokenCredentials;
 import com.appe.util.Dictionaries;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
@@ -48,7 +50,7 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class HttpSecurityFilter extends HttpServletFilter {
+public class OAuth2SecurityFilter extends HttpServletFilter {
 	public static final String PARAM_ACCESS_TOKEN	= "access_token";
 	public static final String PARAM_ERROR 			= "error";
 	
@@ -59,7 +61,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
 	protected Authenticator authenticator;
-	public HttpSecurityFilter() {
+	public OAuth2SecurityFilter() {
 	}
 	
 	/**
@@ -145,13 +147,13 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	 * @throws AuthorizationException
 	 */
 	protected Authorization doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthorizationException {
-		SimplePrincipal credentials = requestCredentials(req);
+		SimpleCredentials credentials = requestCredentials(req);
 		if(credentials == null) {
 			logger.debug("Not found credentials, access denied!");
 			throw new InvalidCredentialsException();
 		}
 		
-		//TODO: OK, FILL IN SOME REQUEST DETALS
+		//TODO: OK, FILL IN SOME REQUEST DETALS (IP, USER AGENT, DEVICE...)
 		return	authenticator.authenticate(credentials);
 	}
 	
@@ -165,15 +167,15 @@ public class HttpSecurityFilter extends HttpServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected SimplePrincipal requestCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected SimpleCredentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
 		if(!Objects.isEmpty(authorization)) {
 			if(authorization.startsWith(SCHEME_BEARER)) {
-				return	new SimplePrincipal(authorization.substring(SCHEME_BEARER.length() + 1));
+				return	new TokenCredentials(authorization.substring(SCHEME_BEARER.length() + 1));
 			} else if(authorization.startsWith(SCHEME_BASIC)) {
-				return new SimplePrincipal(authorization.substring(SCHEME_BASIC.length() + 1));
+				return new ClientCredentials(authorization.substring(SCHEME_BASIC.length() + 1));
 			} else {
 				logger.debug("Unknown authorization header: {}", authorization);
 			}
@@ -192,7 +194,7 @@ public class HttpSecurityFilter extends HttpServletFilter {
 				}
 			}
 		}
-		return	(accessToken == null? null : new SimplePrincipal(accessToken));
+		return	(accessToken == null? null : new TokenCredentials(accessToken));
 	}
 	
 	/**
