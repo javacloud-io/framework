@@ -36,7 +36,7 @@ public class DummyAuthenticator implements Authenticator {
 			throw new InvalidCredentialsException();
 		}
 		
-		final Set<String> permissions = Objects.asSet("User");
+		final Set<String> permissions = Objects.asSet("user");
 		return new Authorization() {
 			@Override
 			public Principal getPrincipal() {

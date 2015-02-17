@@ -20,7 +20,7 @@ public class AccountResource {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@RolesAllowed("User")
+	@RolesAllowed("user")
 	public Principal getAccount(@Context SecurityContext scontext) {
 		return scontext.getUserPrincipal();
 	}
