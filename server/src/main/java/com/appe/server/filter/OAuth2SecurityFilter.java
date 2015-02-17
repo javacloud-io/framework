@@ -52,9 +52,9 @@ import com.appe.util.Objects;
  * @author tobi
  */
 public class OAuth2SecurityFilter extends HttpServletFilter {
-	protected String   loginPage;
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
+	protected String   loginPage;
 	protected Authenticator authenticator;
 	public OAuth2SecurityFilter() {
 	}
@@ -85,17 +85,18 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 */
 	@Override
 	protected void configure() throws ServletException {
-		//LOGIN PAGE
-		this.loginPage = filterConfig.getInitParameter("login-page");
-		if(loginPage == null) {
-			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
-		}
 		
 		//AUTH SCHEME
 		this.challengeScheme = filterConfig.getInitParameter("challenge-scheme");
 		String roles = filterConfig.getInitParameter("allowed-roles");
 		if(roles != null) {
 			this.allowedRoles = Objects.toArray(roles, ",", true);
+		}
+		
+		//LOGIN PAGE
+		this.loginPage = filterConfig.getInitParameter("login-page");
+		if(loginPage == null) {
+			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
 		}
 		
 		//AUTHENTICATOR
