@@ -6,9 +6,6 @@ package com.appe.security.oauth2;
  *
  */
 public interface IdPConstants {
-	//SPECIAL REDIRECT URI INDICATE INSTALLED APPLICATION
-	public static final String OOB_REDIRECT_URI		= "urn:ietf:wg:oauth:2.0:oob";
-	
 	//REQUEST PARAMETERs
 	public static final String PARAM_RESPONSE_TYPE 	= "response_type";
 	public static final String PARAM_CLIENT_ID 		= "client_id";
@@ -34,6 +31,9 @@ public interface IdPConstants {
 	public static final String RESPONSE_TOKEN 		= "token";
 	public static final String RESPONSE_CODE 		= "code";
 	
+	//SPECIAL REDIRECT URI INDICATE INSTALLED APPLICATION
+	public static final String OOB_REDIRECT_URI		= "urn:ietf:wg:oauth:2.0:oob";
+		
 	public static final String SCHEME_BASIC 		= "Basic";	//Client Basic
 	public static final String SCHEME_BEARER		= "Bearer";	//Oauth2 Bearer
 	
