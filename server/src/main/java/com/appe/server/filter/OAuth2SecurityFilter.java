@@ -204,9 +204,10 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 */
 	protected void responseError(HttpServletRequest req, HttpServletResponse resp, Throwable exception)
 		throws ServletException, IOException {
-		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getMessage());
-		
-		//ALWAYS ASSUMING BASIC AUTH
+		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getMessage(),
+				IdPConstants.PARAM_STATE, req.getParameter(IdPConstants.PARAM_STATE));
+				
+		//ALWAYS ASSUMING REDIRECT
 		if(challengeScheme == null || challengeScheme.isEmpty()) {
 			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
 			resp.sendRedirect(HttpRequestWrapper.buildURI(req, redirectUri));
