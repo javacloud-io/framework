@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author tobi
  *
  */
-public class JacksonContextProvider implements ContextResolver<ObjectMapper> {
+public class JacksonContextResolver implements ContextResolver<ObjectMapper> {
 	private ObjectMapper objectMapper;
 	
 	/**
@@ -33,7 +33,7 @@ public class JacksonContextProvider implements ContextResolver<ObjectMapper> {
 	 * @param objectMapper
 	 */
 	@Inject
-	public JacksonContextProvider(ObjectMapper objectMapper) {
+	public JacksonContextResolver(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
 	

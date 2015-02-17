@@ -18,7 +18,7 @@ package com.appe.server.startup;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.appe.server.hk2.GuiceHK2Feature;
-import com.appe.server.hk2.JacksonContextProvider;
+import com.appe.server.hk2.JacksonContextResolver;
 /**
  * Basic jersey application configuration, providing basic features...
  * 
@@ -41,7 +41,7 @@ public class JerseyApplication extends ResourceConfig {
 		
 		//BASIC features
 		register(GuiceHK2Feature.class);
-		register(JacksonContextProvider.class);
+		register(JacksonContextResolver.class);
 		//register(RolesAllowedDynamicFeature.class);
 	}
 }
