@@ -156,7 +156,8 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	/**
 	 * Inspect the authorization header. By default support basic authentication / access_token.
 	 * 1. OAuth2 authorization header
-	 * 2. 
+	 * 2. Access token from request
+	 * 3. Access token from cookie
 	 * 
 	 * @param req
 	 * @return
@@ -180,17 +181,30 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
 		String accessToken = req.getParameter(IdPConstants.PARAM_ACCESS_TOKEN);
 		if(accessToken == null) {
-			Cookie[] cookies = req.getCookies();
-			if(cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if (IdPConstants.PARAM_ACCESS_TOKEN.equals(cookie.getName())) {
-						accessToken = cookie.getValue();
-						break;
-					}
+			accessToken = requestCookie(req);
+		}
+		return	(accessToken == null? null : new TokenCredentials(accessToken));
+	}
+	
+	/**
+	 * Decode access token from cookie if any, due to the nature of unsecured environment, the cookie might need
+	 * to decode and validate...
+	 * 
+	 * @param req
+	 * @return
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	protected String requestCookie(HttpServletRequest req) throws ServletException, IOException {
+		Cookie[] cookies = req.getCookies();
+		if(cookies != null && cookies.length > 0) {
+			for (Cookie cookie : cookies) {
+				if (IdPConstants.PARAM_ACCESS_TOKEN.equals(cookie.getName())) {
+					return	cookie.getValue();
 				}
 			}
 		}
-		return	(accessToken == null? null : new TokenCredentials(accessToken));
+		return null;
 	}
 	
 	/**
