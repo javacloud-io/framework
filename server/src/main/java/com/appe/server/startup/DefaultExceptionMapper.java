@@ -32,6 +32,7 @@ import com.appe.server.i18n.MessageBundle;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
 /**
+ * To be able to handle basic error nicely which always in format of {error, description}
  * 
  * @author ho
  *
@@ -43,6 +44,10 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
 	}
 	
+	/**
+	 * 
+	 * 
+	 */
 	@Override
 	public Response toResponse(Throwable exception) {
 		int status;
@@ -70,14 +75,17 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 		
 		//DEBUG MESSAGE
 		if(status >= 500) {
-			logger.warn("HTTP status: " + status, exception);
-		} else if(logger.isDebugEnabled()) {
+			logger.error("HTTP status: " + status, exception);
+		} else if (status >= 400) {
+			logger.warn("HTTP status: " + status,  exception);
+		} else {
 			logger.debug("HTTP status: " + status, exception);
 		}
 		return Response.status(status).entity(toEntity(exception)).build();
 	}
 	
 	/**
+	 * Convert exception to nicely entity {error:code, description: message}
 	 * 
 	 * @param exception
 	 * @return
@@ -88,6 +96,6 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 			error = exception.getMessage();
 		}
 		String message = bundle.getLocalizedMessage(error);
-		return Objects.asDict("error", error, "message", message);
+		return Objects.asDict("error", error, "description", message);
 	}
 }

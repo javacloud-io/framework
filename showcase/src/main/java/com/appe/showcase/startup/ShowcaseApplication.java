@@ -19,7 +19,7 @@ import javax.ws.rs.ApplicationPath;
 
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-import com.appe.server.startup.JerseyApplication;
+import com.appe.server.startup.DefaultApplication;
 
 /**
  * Route all the API packages to the same v1 resource root.
@@ -28,7 +28,7 @@ import com.appe.server.startup.JerseyApplication;
  *
  */
 @ApplicationPath("/v1/*")
-public class ShowcaseApplication extends JerseyApplication {
+public class ShowcaseApplication extends DefaultApplication {
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 */

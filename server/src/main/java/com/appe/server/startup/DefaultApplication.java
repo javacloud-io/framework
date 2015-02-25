@@ -24,17 +24,18 @@ import com.appe.server.hk2.JacksonContextResolver;
  * 
  * 1. Setup Guice integration
  * 2. Setup Jackson binder
+ * 3. Default exception mapping
  * 
  * @author ho
  *
  */
 //@ApplicationPath(context)
-public class JerseyApplication extends ResourceConfig {
+public class DefaultApplication extends ResourceConfig {
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 * @param serviceLocator
 	 */
-	public JerseyApplication(String...packages) {
+	public DefaultApplication(String...packages) {
 		if(packages != null && packages.length > 0) {
 			packages(packages);
 		}
