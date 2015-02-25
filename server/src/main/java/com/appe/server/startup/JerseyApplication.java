@@ -43,5 +43,7 @@ public class JerseyApplication extends ResourceConfig {
 		register(GuiceHK2Feature.class);
 		register(JacksonContextResolver.class);
 		//register(RolesAllowedDynamicFeature.class);
+		
+		register(DefaultExceptionMapper.class);
 	}
 }
