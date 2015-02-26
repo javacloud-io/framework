@@ -24,11 +24,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.data.AlreadyExistsException;
+import com.appe.data.ConstraintException;
 import com.appe.data.NotFoundException;
+import com.appe.i18n.MessageBundle;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthorizationException;
-import com.appe.server.i18n.MessageBundle;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
 /**
@@ -40,6 +41,9 @@ import com.appe.util.Objects;
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 	private final MessageBundle bundle;
+	/**
+	 * 
+	 */
 	public DefaultExceptionMapper() {
 		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
 	}
@@ -65,9 +69,11 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 			}
 		} else if(exception instanceof AlreadyExistsException) {
 			status = Status.CONFLICT.getStatusCode();
-		} else if(exception instanceof NotFoundException) {
+		} else if(exception instanceof NotFoundException
+				|| exception instanceof java.io.FileNotFoundException) {
 			status = Status.NOT_FOUND.getStatusCode();
-		} else if(exception instanceof IllegalArgumentException) {
+		} else if(exception instanceof IllegalArgumentException
+				|| exception instanceof ConstraintException) {
 			status = Status.BAD_REQUEST.getStatusCode();
 		} else {
 			status = Status.INTERNAL_SERVER_ERROR.getStatusCode();
@@ -96,6 +102,6 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 			error = exception.getMessage();
 		}
 		String message = bundle.getLocalizedMessage(error);
-		return Objects.asDict("error", error, "description", message);
+		return Objects.asDict("error", error, "message", message);
 	}
 }
