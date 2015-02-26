@@ -127,7 +127,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 			}
 			
 			chain.doFilter(HttpRequestWrapper.wrap(req, authzGrant), resp);
-		} catch(Throwable ex) {
+		} catch(AuthorizationException ex) {
 			responseError(req, resp, ex);
 		}
 	}
@@ -217,7 +217,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected void responseError(HttpServletRequest req, HttpServletResponse resp, Throwable exception)
+	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthorizationException exception)
 		throws ServletException, IOException {
 		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getMessage(),
 				IdPConstants.PARAM_STATE, req.getParameter(IdPConstants.PARAM_STATE));
