@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.data.AlreadyExistsException;
-import com.appe.data.ConstraintException;
+import com.appe.data.ValidationException;
 import com.appe.data.NotFoundException;
 import com.appe.i18n.MessageBundle;
 import com.appe.registry.AppeRegistry;
@@ -72,8 +72,8 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 		} else if(exception instanceof NotFoundException
 				|| exception instanceof java.io.FileNotFoundException) {
 			status = Status.NOT_FOUND.getStatusCode();
-		} else if(exception instanceof IllegalArgumentException
-				|| exception instanceof ConstraintException) {
+		} else if(exception instanceof ValidationException
+				|| exception instanceof IllegalArgumentException) {
 			status = Status.BAD_REQUEST.getStatusCode();
 		} else {
 			status = Status.INTERNAL_SERVER_ERROR.getStatusCode();
