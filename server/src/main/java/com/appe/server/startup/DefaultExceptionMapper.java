@@ -73,6 +73,7 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 				|| exception instanceof java.io.FileNotFoundException) {
 			status = Status.NOT_FOUND.getStatusCode();
 		} else if(exception instanceof ValidationException
+				|| exception instanceof javax.validation.ValidationException
 				|| exception instanceof IllegalArgumentException) {
 			status = Status.BAD_REQUEST.getStatusCode();
 		} else {
