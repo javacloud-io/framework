@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 package com.appe;
+
+import com.appe.util.Objects;
+
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
  * @author aimee
@@ -57,6 +60,15 @@ public class AppeException extends RuntimeException {
 		if(th != null) {
 			throw th;
 		}
+	}
+	
+	/**
+	 * return a reason code so we can identify the problem, make sure reason is consistent!!!
+	 * 
+	 * @return
+	 */
+	public String getReason() {
+		return Integer.toHexString(getClass().getName().hashCode());
 	}
 	
 	/**
@@ -120,11 +132,35 @@ public class AppeException extends RuntimeException {
 		//BASIC CHECK
 		if(t == null) {
 			return false;
-		} else if(causedBy.isAssignableFrom(t.getClass())) {
+		}
+		if(causedBy.isAssignableFrom(t.getClass())) {
 			return true;
 		}
 		//Hunt it down.
 		return (findCause(t, causedBy) != null);
+	}
+	
+	/**
+	 * return a reasonable error code if any or always just use the simple class name.
+	 * @param t
+	 * @return
+	 */
+	public static final String findReason(Throwable t) {
+		if(t instanceof AppeException) {
+			return ((AppeException)t).getReason();
+		}
+		return Integer.toHexString(t.getClass().getName().hashCode());
+	}
+	
+	/**
+	 * return a reasonable message if any set.
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public static final String findMessage(Throwable t) {
+		String message = t.getMessage();
+		return Objects.isEmpty(message) ? t.getClass().getName() : message;
 	}
 	
 	/**

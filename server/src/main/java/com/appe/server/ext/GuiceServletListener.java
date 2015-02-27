@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.hk2;
+package com.appe.server.ext;
 
 import com.appe.registry.spi.GuiceFactory;
 import com.google.inject.Injector;

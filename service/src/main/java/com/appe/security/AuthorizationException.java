@@ -16,6 +16,7 @@
 package com.appe.security;
 
 import com.appe.AppeException;
+import com.appe.util.Objects;
 /**
  * 
  * @author aimee
@@ -42,5 +43,14 @@ public class AuthorizationException extends AppeException {
 	 */
 	public AuthorizationException(String message) {
 		super(message);
+	}
+	
+	/**
+	 * ALWAYS USING MESSAGE AS REASON CODE
+	 */
+	@Override
+	public String getReason() {
+		String message = super.getMessage();
+		return Objects.isEmpty(message) ? super.getReason() : message;
 	}
 }

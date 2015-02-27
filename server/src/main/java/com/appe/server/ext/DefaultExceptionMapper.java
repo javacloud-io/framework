@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.startup;
+package com.appe.server.ext;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -23,6 +23,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.appe.AppeException;
 import com.appe.data.AlreadyExistsException;
 import com.appe.data.ValidationException;
 import com.appe.data.NotFoundException;
@@ -32,6 +33,7 @@ import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthorizationException;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
+import com.fasterxml.jackson.core.JsonProcessingException;
 /**
  * To be able to handle basic error nicely which always in format of {error, description}
  * 
@@ -41,15 +43,12 @@ import com.appe.util.Objects;
 public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 	private final MessageBundle bundle;
-	/**
-	 * 
-	 */
 	public DefaultExceptionMapper() {
 		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
 	}
 	
 	/**
-	 * 
+	 * Make sure to be able to map any exception to nicely JSON response.
 	 * 
 	 */
 	@Override
@@ -61,34 +60,51 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 				return resp;
 			}
 			status = resp.getStatus();
-		} else if(exception instanceof AuthorizationException) {
-			if(exception instanceof AccessDeniedException) {
-				status = Status.FORBIDDEN.getStatusCode();
-			} else {
-				status = Status.UNAUTHORIZED.getStatusCode();
-			}
-		} else if(exception instanceof AlreadyExistsException) {
-			status = Status.CONFLICT.getStatusCode();
-		} else if(exception instanceof NotFoundException
-				|| exception instanceof java.io.FileNotFoundException) {
-			status = Status.NOT_FOUND.getStatusCode();
-		} else if(exception instanceof ValidationException
-				|| exception instanceof javax.validation.ValidationException
-				|| exception instanceof IllegalArgumentException) {
-			status = Status.BAD_REQUEST.getStatusCode();
 		} else {
-			status = Status.INTERNAL_SERVER_ERROR.getStatusCode();
+			status = toStatus(exception);
 		}
 		
-		//DEBUG MESSAGE
+		//DEBUG DETAILS
+		Dictionary entity = toEntity(exception);
 		if(status >= 500) {
-			logger.error("HTTP status: " + status, exception);
+			logger.error("HTTP status: {}, details: {}", status, entity, exception);
 		} else if (status >= 400) {
-			logger.warn("HTTP status: " + status,  exception);
+			logger.warn("HTTP status: {}, details: {}", status, entity, exception);
 		} else {
-			logger.debug("HTTP status: " + status, exception);
+			logger.debug("HTTP status: {}, details: {}", status, entity, exception);
 		}
-		return Response.status(status).entity(toEntity(exception)).build();
+		return Response.status(status).entity(entity).build();
+	}
+	
+	/**
+	 * Nicely translate exception to status code.
+	 * 
+	 */
+	protected int toStatus(Throwable exception) {
+		if(exception instanceof AuthorizationException) {
+			if(exception instanceof AccessDeniedException) {
+				return	Status.FORBIDDEN.getStatusCode();
+			} else {
+				return	Status.UNAUTHORIZED.getStatusCode();
+			}
+		}
+		
+		if(exception instanceof AlreadyExistsException) {
+			return	Status.CONFLICT.getStatusCode();
+		}
+		
+		if(exception instanceof NotFoundException
+				|| exception instanceof java.io.FileNotFoundException) {
+			return	Status.NOT_FOUND.getStatusCode();
+		}
+		
+		if(exception instanceof ValidationException
+				|| exception instanceof javax.validation.ValidationException
+				|| exception instanceof IllegalArgumentException
+				|| exception instanceof JsonProcessingException) {
+			return	Status.BAD_REQUEST.getStatusCode();
+		}
+		return	Status.INTERNAL_SERVER_ERROR.getStatusCode();
 	}
 	
 	/**
@@ -98,11 +114,8 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	 * @return
 	 */
 	protected Dictionary toEntity(Throwable exception) {
-		String error = exception.getMessage();
-		if(Objects.isEmpty(error)) {
-			error = exception.getMessage();
-		}
-		String message = bundle.getLocalizedMessage(error);
+		String error   = AppeException.findReason(exception);
+		String message = bundle.getLocalizedMessage(AppeException.findMessage(exception));
 		return Objects.asDict("error", error, "message", message);
 	}
 }
