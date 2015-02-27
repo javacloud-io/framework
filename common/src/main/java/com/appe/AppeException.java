@@ -15,8 +15,6 @@
  */
 package com.appe;
 
-import com.appe.util.Objects;
-
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
  * @author aimee
@@ -138,29 +136,6 @@ public class AppeException extends RuntimeException {
 		}
 		//Hunt it down.
 		return (findCause(t, causedBy) != null);
-	}
-	
-	/**
-	 * return a reasonable error code if any or always just use the simple class name.
-	 * @param t
-	 * @return
-	 */
-	public static final String findReason(Throwable t) {
-		if(t instanceof AppeException) {
-			return ((AppeException)t).getReason();
-		}
-		return Integer.toHexString(t.getClass().getName().hashCode());
-	}
-	
-	/**
-	 * return a reasonable message if any set.
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static final String findMessage(Throwable t) {
-		String message = t.getMessage();
-		return Objects.isEmpty(message) ? t.getClass().getName() : message;
 	}
 	
 	/**
