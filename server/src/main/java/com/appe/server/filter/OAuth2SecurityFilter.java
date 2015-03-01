@@ -219,7 +219,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 */
 	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthorizationException exception)
 		throws ServletException, IOException {
-		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getMessage(),
+		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getReason(),
 				IdPConstants.PARAM_STATE, req.getParameter(IdPConstants.PARAM_STATE));
 				
 		//ALWAYS ASSUMING REDIRECT

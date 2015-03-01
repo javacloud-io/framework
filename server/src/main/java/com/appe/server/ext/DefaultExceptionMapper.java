@@ -124,7 +124,7 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 			error = Integer.toHexString(exception.getClass().getName().hashCode());
 		}
 		
-		//DETAILS MESSAGE LOCALED
+		//DETAILS MESSAGE LOCALE
 		String message;
 		if(exception instanceof JsonProcessingException) {
 			message = ((JsonProcessingException)exception).getOriginalMessage();
