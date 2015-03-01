@@ -90,7 +90,8 @@ public final class Objects {
 		StringBuilder buf = new StringBuilder();
 		buf.append(Converter.STRING.convert(list[0]));
 		for(int i = 1; i < list.length; i ++) {
-			buf.append(sep).append(Converter.STRING.convert(list[i]));
+			buf.append(sep)
+				.append(Converter.STRING.convert(list[i]));
 		}
 		return buf.toString();
 	}
@@ -201,6 +202,7 @@ public final class Objects {
 	
 	/**
 	 * If the string is empty or NOT.
+	 * 
 	 * @param value
 	 * @return
 	 */
@@ -209,6 +211,7 @@ public final class Objects {
 	}
 	
 	/**
+	 * Check if collections is empty
 	 * 
 	 * @param collection
 	 * @return
