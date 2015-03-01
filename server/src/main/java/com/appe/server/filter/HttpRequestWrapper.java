@@ -51,7 +51,7 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public boolean isUserInRole(String roleName) {
-		return(authorization != null? authorization.hasAnyPermissions(roleName) : false);
+		return(authorization != null? authorization.hasAnyRoles(roleName) : false);
 	}
 	
 	/**

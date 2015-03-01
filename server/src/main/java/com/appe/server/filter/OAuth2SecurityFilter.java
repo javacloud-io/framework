@@ -122,7 +122,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 			throws ServletException, IOException {
 		try {
 			Authorization authzGrant = doAuthenticate(req);
-			if(allowedRoles != null && !authzGrant.hasAnyPermissions(allowedRoles)) {
+			if(allowedRoles != null && !authzGrant.hasAnyRoles(allowedRoles)) {
 				throw new AccessDeniedException();
 			}
 			

@@ -39,7 +39,8 @@ public abstract class Authorization implements Principal {
 	}
 
 	/**
-	 * return the principal if any associated besides me.
+	 * return the delegate principal if any associated besides this.
+	 * 
 	 * @return
 	 */
 	public abstract Principal getPrincipal();
@@ -50,28 +51,28 @@ public abstract class Authorization implements Principal {
 	 * 
 	 * @return
 	 */
-	public abstract Set<String> getPermissions();
+	public abstract Set<String> getRoles();
 	
 	/**
 	 * return true if authentication has all permission
 	 * @param permission
 	 * @return
 	 */
-	public boolean hasAllPermissions(String ...permissions) {
+	public boolean hasAllRoles(String ...roles) {
 		//NOT ANY PERMISSIONs
-		Set<String> _permissions = getPermissions();
-		if(_permissions == null || _permissions.isEmpty()) {
+		Set<String> _roles = getRoles();
+		if(_roles == null || _roles.isEmpty()) {
 			return false;
 		}
 				
 		//HAS NOTHING
-		if(permissions == null || permissions.length == 0) {
+		if(roles == null || roles.length == 0) {
 			return true;
 		}
 		
 		//SCAN THEM ALL
-		for(String name: permissions) {
-			if(!_permissions.contains(name)) {
+		for(String name: roles) {
+			if(!_roles.contains(name)) {
 				return false;
 			}
 		}
@@ -80,24 +81,24 @@ public abstract class Authorization implements Principal {
 	
 	/**
 	 * return true if has any role which is the basic of all use cases.
-	 * @param permissions
+	 * @param roles
 	 * @return
 	 */
-	public boolean hasAnyPermissions(String ...permissions) {
+	public boolean hasAnyRoles(String ...roles) {
 		//NOT ANY PERMISSIONS
-		Set<String> _permissions = getPermissions();
-		if(_permissions == null || _permissions.isEmpty()) {
+		Set<String> _roles = getRoles();
+		if(_roles == null || _roles.isEmpty()) {
 			return false;
 		}
 				
 		//NOTHING AT ALL
-		if(permissions == null || permissions.length == 0) {
+		if(roles == null || roles.length == 0) {
 			return true;
 		}
 		
 		//FIND ONE IS ENOUGH
-		for(String name: permissions) {
-			if(_permissions.contains(name)) {
+		for(String name: roles) {
+			if(_roles.contains(name)) {
 				return true;
 			}
 		}
