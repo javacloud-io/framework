@@ -36,7 +36,7 @@ public class DummyAuthenticator implements Authenticator {
 			throw new InvalidCredentialsException();
 		}
 		
-		final Set<String> permissions = Objects.asSet("user");
+		final Set<String> roles = Objects.asSet("user");
 		return new Authorization() {
 			@Override
 			public Principal getPrincipal() {
@@ -44,8 +44,8 @@ public class DummyAuthenticator implements Authenticator {
 			}
 			
 			@Override
-			public Set<String> getPermissions() {
-				return permissions;
+			public Set<String> getRoles() {
+				return roles;
 			}
 		};
 	}
