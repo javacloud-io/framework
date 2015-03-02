@@ -23,7 +23,7 @@ import com.appe.sse.ChannelListener;
  * @author ho
  *
  */
-public class ChannelAdapter implements ChannelListener {
+public class ChannelObserver implements ChannelListener {
 	@Override
 	public void onEvent(ChannelEvent event) {
 		ChannelEvent.Type type = event.getType();
