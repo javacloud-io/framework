@@ -31,7 +31,7 @@ import com.appe.data.NotFoundException;
 import com.appe.i18n.MessageBundle;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
-import com.appe.security.AuthorizationException;
+import com.appe.security.AuthenticationException;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -83,7 +83,7 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	 * 
 	 */
 	protected int toStatus(Throwable exception) {
-		if(exception instanceof AuthorizationException) {
+		if(exception instanceof AuthenticationException) {
 			if(exception instanceof AccessDeniedException) {
 				return	Status.FORBIDDEN.getStatusCode();
 			} else {

@@ -19,8 +19,8 @@ import java.security.Principal;
 import java.util.Set;
 
 import com.appe.security.Authenticator;
-import com.appe.security.Authorization;
-import com.appe.security.AuthorizationException;
+import com.appe.security.Authentication;
+import com.appe.security.AuthenticationException;
 import com.appe.security.InvalidCredentialsException;
 import com.appe.util.Objects;
 /**
@@ -31,13 +31,13 @@ import com.appe.util.Objects;
 public class DummyAuthenticator implements Authenticator {
 
 	@Override
-	public Authorization authenticate(final Principal credentials) throws AuthorizationException {
+	public Authentication authenticate(final Principal credentials) throws AuthenticationException {
 		if(credentials == null) {
 			throw new InvalidCredentialsException();
 		}
 		
 		final Set<String> roles = Objects.asSet("user");
-		return new Authorization() {
+		return new Authentication() {
 			@Override
 			public Principal getPrincipal() {
 				return credentials;

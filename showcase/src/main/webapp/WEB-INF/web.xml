@@ -25,7 +25,7 @@
 	
 	<filter>
 		<filter-name>SecurityFilter</filter-name>
-		<filter-class>com.appe.server.filter.OAuth2SecurityFilter</filter-class>
+		<filter-class>com.appe.server.filter.AuthenticatorFilter</filter-class>
 		<init-param>
 			<param-name>login-page</param-name>
 			<param-value>/login</param-value>

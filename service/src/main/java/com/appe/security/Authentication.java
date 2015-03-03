@@ -24,8 +24,8 @@ import java.util.Set;
  * @author aimee
  *
  */
-public abstract class Authorization implements Principal {
-	protected Authorization() {
+public abstract class Authentication implements Principal {
+	protected Authentication() {
 		
 	}
 	

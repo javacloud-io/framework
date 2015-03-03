@@ -19,7 +19,7 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.appe.security.Authorization;
+import com.appe.security.Authentication;
 
 /**
  * WRAPP THE GRANT AUTHENTICATION CONTEXT to provide an extra layer of protection on regular servlet authorization.
@@ -30,8 +30,8 @@ import com.appe.security.Authorization;
  *
  */
 public class HttpRequestWrapper extends HttpServletRequestWrapper {
-	private Authorization authorization;
-	HttpRequestWrapper(HttpServletRequest request, Authorization authorization) {
+	private Authentication authorization;
+	HttpRequestWrapper(HttpServletRequest request, Authentication authorization) {
 		super(request);
 		
 		//MAKE SURE TO KEEP AS BOTH PLACE!
@@ -68,7 +68,7 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	 * @param authorization
 	 * @return
 	 */
-	public static final HttpServletRequest wrap(HttpServletRequest request, Authorization authorization) {
+	public static final HttpServletRequest wrap(HttpServletRequest request, Authentication authorization) {
 		if(request instanceof HttpRequestWrapper) {
 			((HttpRequestWrapper)request).authorization = authorization;
 		} else {

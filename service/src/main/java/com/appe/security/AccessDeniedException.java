@@ -15,14 +15,14 @@
  */
 package com.appe.security;
 
-import com.appe.security.AuthorizationException;
+import com.appe.security.AuthenticationException;
 /**
  * Denied access due to not enough permission in some case.
  * 
  * @author tobi
  *
  */
-public class AccessDeniedException extends AuthorizationException {
+public class AccessDeniedException extends AuthenticationException {
 	private static final long serialVersionUID = 5341577128925410681L;
 	/**
 	 * 

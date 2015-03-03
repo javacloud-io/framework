@@ -30,7 +30,7 @@ public interface Authenticator {
 	 * 
 	 * @param credentials
 	 * @return
-	 * @throws AuthorizationException
+	 * @throws AuthenticationException
 	 */
-	public Authorization authenticate(Principal credentials) throws AuthorizationException;
+	public Authentication authenticate(Principal credentials) throws AuthenticationException;
 }

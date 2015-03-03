@@ -22,7 +22,7 @@ import com.appe.util.Objects;
  * @author aimee
  *
  */
-public class AuthorizationException extends AppeException {
+public class AuthenticationException extends AppeException {
 	private static final long serialVersionUID = -3499627145582890978L;
 	
 	public static final String UNAUTHORIZED_CLIENT 	= "unauthorized_client";
@@ -33,7 +33,7 @@ public class AuthorizationException extends AppeException {
 	 * 
 	 * @param cause
 	 */
-	public AuthorizationException(Throwable cause) {
+	public AuthenticationException(Throwable cause) {
 		super(cause);
 	}
 	
@@ -41,7 +41,7 @@ public class AuthorizationException extends AppeException {
 	 * 
 	 * @param message
 	 */
-	public AuthorizationException(String message) {
+	public AuthenticationException(String message) {
 		super(message);
 	}
 	

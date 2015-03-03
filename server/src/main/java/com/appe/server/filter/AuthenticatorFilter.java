@@ -29,8 +29,8 @@ import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.Authenticator;
-import com.appe.security.Authorization;
-import com.appe.security.AuthorizationException;
+import com.appe.security.Authentication;
+import com.appe.security.AuthenticationException;
 import com.appe.security.InvalidCredentialsException;
 import com.appe.security.SimpleCredentials;
 import com.appe.security.oauth2.ClientCredentials;
@@ -51,12 +51,12 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class OAuth2SecurityFilter extends HttpServletFilter {
+public class AuthenticatorFilter extends HttpServletFilter {
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
 	protected String   loginPage;
 	protected Authenticator authenticator;
-	public OAuth2SecurityFilter() {
+	public AuthenticatorFilter() {
 	}
 	
 	/**
@@ -121,13 +121,13 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	public final void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			Authorization authzGrant = doAuthenticate(req);
+			Authentication authzGrant = doAuthenticate(req);
 			if(allowedRoles != null && !authzGrant.hasAnyRoles(allowedRoles)) {
 				throw new AccessDeniedException();
 			}
 			
 			chain.doFilter(HttpRequestWrapper.wrap(req, authzGrant), resp);
-		} catch(AuthorizationException ex) {
+		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		}
 	}
@@ -140,9 +140,9 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 * @return
 	 * @throws ServletException
 	 * @throws IOException
-	 * @throws AuthorizationException
+	 * @throws AuthenticationException
 	 */
-	protected Authorization doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthorizationException {
+	protected Authentication doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
 		SimpleCredentials credentials = requestCredentials(req);
 		if(credentials == null) {
 			logger.debug("Not found credentials, access denied!");
@@ -217,7 +217,7 @@ public class OAuth2SecurityFilter extends HttpServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthorizationException exception)
+	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception)
 		throws ServletException, IOException {
 		Dictionary entity = Objects.asDict(IdPConstants.PARAM_ERROR, exception.getReason(),
 				IdPConstants.PARAM_STATE, req.getParameter(IdPConstants.PARAM_STATE));

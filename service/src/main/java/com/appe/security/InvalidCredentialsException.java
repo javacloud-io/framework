@@ -15,13 +15,13 @@
  */
 package com.appe.security;
 
-import com.appe.security.AuthorizationException;
+import com.appe.security.AuthenticationException;
 /**
  * 
  * @author tobi
  *
  */
-public class InvalidCredentialsException extends AuthorizationException {
+public class InvalidCredentialsException extends AuthenticationException {
 	private static final long serialVersionUID = 5341577128925410681L;
 	/**
 	 * 
