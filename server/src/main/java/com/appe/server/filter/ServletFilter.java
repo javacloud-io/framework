@@ -38,13 +38,13 @@ import org.slf4j.LoggerFactory;
 public abstract class ServletFilter implements Filter {
 	//SINGLE LOGGER FOR SERVLET
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	protected FilterConfig filterConfig;
+	protected FilterConfig config;
 	/**
 	 * 
 	 */
 	@Override
-	public final void init(FilterConfig filterConfig) throws ServletException {
-		this.filterConfig = filterConfig;
+	public final void init(FilterConfig config) throws ServletException {
+		this.config = config;
 		configure();
 	}
 	
@@ -52,8 +52,8 @@ public abstract class ServletFilter implements Filter {
 	 * 
 	 * @return
 	 */
-	public FilterConfig getFilterConfig() {
-		return filterConfig;
+	public FilterConfig getConfig() {
+		return config;
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public abstract class ServletFilter implements Filter {
 	}
 	
 	/**
-	 * 
+	 * Default configure the filter
 	 * 
 	 * @throws ServletException
 	 */

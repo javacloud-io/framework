@@ -87,21 +87,21 @@ public class AuthenticatorFilter extends ServletFilter {
 	protected void configure() throws ServletException {
 		
 		//AUTH SCHEME
-		this.challengeScheme = filterConfig.getInitParameter("challenge-scheme");
-		String roles = filterConfig.getInitParameter("allowed-roles");
+		this.challengeScheme = config.getInitParameter("challenge-scheme");
+		String roles = config.getInitParameter("allowed-roles");
 		if(roles != null) {
 			this.allowedRoles = Objects.toArray(roles, ",", true);
 		}
 		
 		//LOGIN PAGE
-		this.loginPage = filterConfig.getInitParameter("login-page");
+		this.loginPage = config.getInitParameter("login-page");
 		if(loginPage == null) {
 			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
 		}
 		
 		//AUTHENTICATOR
 		try {
-			String authenticator = filterConfig.getInitParameter("authenticator");
+			String authenticator = config.getInitParameter("authenticator");
 			if(authenticator == null) {
 				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
 			} else {
