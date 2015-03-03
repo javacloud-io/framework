@@ -31,7 +31,7 @@ import com.appe.util.Objects;
  * @author ho
  *
  */
-public class NamespaceFilter extends HttpServletFilter {
+public class NamespaceFilter extends ServletFilter {
 	public static final String PARAM_NAMESPACE	= "__namespace";
 	public static final String HEADER_NAMESPACE	= "X-Namespace";
 	

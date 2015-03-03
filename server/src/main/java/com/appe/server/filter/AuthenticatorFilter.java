@@ -51,7 +51,7 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class AuthenticatorFilter extends HttpServletFilter {
+public class AuthenticatorFilter extends ServletFilter {
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
 	protected String   loginPage;
@@ -126,7 +126,7 @@ public class AuthenticatorFilter extends HttpServletFilter {
 				throw new AccessDeniedException();
 			}
 			
-			chain.doFilter(HttpRequestWrapper.wrap(req, authzGrant), resp);
+			chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
 		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		}
@@ -225,7 +225,7 @@ public class AuthenticatorFilter extends HttpServletFilter {
 		//ALWAYS ASSUMING REDIRECT
 		if(challengeScheme == null || challengeScheme.isEmpty()) {
 			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
-			resp.sendRedirect(HttpRequestWrapper.buildURI(req, redirectUri));
+			resp.sendRedirect(RequestWrapper.buildURI(req, redirectUri));
 		} else {
 			//ANYTHING WILL ASSUMING AUTHZ ISSUE?
 			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, challengeScheme);

@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @author tobi
  *
  */
-public abstract class HttpServletFilter implements Filter {
+public abstract class ServletFilter implements Filter {
 	//SINGLE LOGGER FOR SERVLET
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 	protected FilterConfig filterConfig;

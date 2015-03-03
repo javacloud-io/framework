@@ -29,13 +29,13 @@ import com.appe.security.Authentication;
  * @author tobi
  *
  */
-public class HttpRequestWrapper extends HttpServletRequestWrapper {
-	private Authentication authorization;
-	HttpRequestWrapper(HttpServletRequest request, Authentication authorization) {
+public class RequestWrapper extends HttpServletRequestWrapper {
+	private Authentication authz;
+	RequestWrapper(HttpServletRequest request, Authentication authz) {
 		super(request);
 		
 		//MAKE SURE TO KEEP AS BOTH PLACE!
-		this.authorization = authorization;
+		this.authz = authz;
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getRemoteUser() {
-		return (authorization != null? authorization.getName() : null);
+		return (authz != null? authz.getName() : null);
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public boolean isUserInRole(String roleName) {
-		return(authorization != null? authorization.hasAnyRoles(roleName) : false);
+		return(authz != null? authz.hasAnyRoles(roleName) : false);
 	}
 	
 	/**
@@ -59,20 +59,20 @@ public class HttpRequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public Principal getUserPrincipal() {
-		return authorization;
+		return authz;
 	}
 	
 	/**
 	 * Wrap the authorization around the request itself.
 	 * @param request
-	 * @param authorization
+	 * @param authz
 	 * @return
 	 */
-	public static final HttpServletRequest wrap(HttpServletRequest request, Authentication authorization) {
-		if(request instanceof HttpRequestWrapper) {
-			((HttpRequestWrapper)request).authorization = authorization;
+	public static final HttpServletRequest wrap(HttpServletRequest request, Authentication authz) {
+		if(request instanceof RequestWrapper) {
+			((RequestWrapper)request).authz = authz;
 		} else {
-			request = new HttpRequestWrapper(request, authorization);
+			request = new RequestWrapper(request, authz);
 		}
 		return request;
 	}
