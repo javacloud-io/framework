@@ -115,7 +115,7 @@ public class AuthenticatorFilter extends HttpServletFilter {
 	
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
-	 * 
+	 * TODO: should support request already authenticated
 	 */
 	@Override
 	public final void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
