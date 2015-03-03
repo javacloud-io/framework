@@ -35,6 +35,9 @@ import com.appe.util.Objects;
  *
  */
 public final class Files {
+	private Files() {
+	}
+	
 	/**
 	 * Make folder and make sure all the child are create too.
 	 * @param folder
