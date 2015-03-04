@@ -113,18 +113,18 @@ public final class Jvms {
 	 * 192.168.1.0/24 -> 192.168.1.0 - 192.168.1.255 (first 24 bits have to match)
 	 * 
 	 * @param address
-	 * @param pattern
+	 * @param range
 	 * @return
 	 * @throws UnknownHostException
 	 */
-	public static boolean isValidIpAddress(String address, String pattern) throws UnknownHostException {
+	public static boolean ipRange(String address, String range) throws UnknownHostException {
 		byte[] baddress = InetAddress.getByName(address).getAddress();
-		int bits, sep = pattern.lastIndexOf('/');
+		int bits, sep = range.lastIndexOf('/');
 		if(sep <= 0) {
 			bits = baddress.length * 8;	//IP4-6
 		} else {
-			bits = Integer.valueOf(pattern.substring(sep + 1).trim());
-			pattern = pattern.substring(0, sep).trim();
+			bits = Integer.valueOf(range.substring(sep + 1).trim());
+			range = range.substring(0, sep).trim();
 		}
 		
 		//NO BIT NEED TO BE MATCH
@@ -133,7 +133,7 @@ public final class Jvms {
 		}
 		
 		//VERITY NUMBER OF BIT NEED TO BE MATCH
-		byte[] paddress = InetAddress.getByName(pattern).getAddress();
+		byte[] paddress = InetAddress.getByName(range).getAddress();
 		int nb = bits / 8;
 		
 		//TOO MANY BYTES NEED TO MATCH
