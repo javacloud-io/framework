@@ -15,7 +15,6 @@
  */
 package com.appe.security.impl;
 
-import com.appe.security.SimpleCredentials;
 
 /**
  * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
@@ -23,7 +22,7 @@ import com.appe.security.SimpleCredentials;
  * @author tobi
  *
  */
-public class TokenCredentials extends SimpleCredentials {
+public class TokenCredentials extends BasicCredentials {
 	public TokenCredentials(String token) {
 		super(null, token);
 	}

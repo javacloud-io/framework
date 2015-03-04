@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security;
+package com.appe.security.impl;
 
 import com.appe.sec.Codecs;
+import com.appe.security.SimplePrincipal;
 import com.appe.util.Dictionary;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.
@@ -23,7 +24,7 @@ import com.appe.util.Dictionary;
  * @author tobi
  *
  */
-public class SimpleCredentials extends SimplePrincipal {
+public class BasicCredentials extends SimplePrincipal {
 	private	String 		secret;
 	private Dictionary 	extras;
 	
@@ -32,7 +33,7 @@ public class SimpleCredentials extends SimplePrincipal {
 	 * @param name
 	 * @param secret
 	 */
-	public SimpleCredentials(String name, String secret) {
+	public BasicCredentials(String name, String secret) {
 		super(name);
 		this.secret = secret;
 	}
@@ -42,7 +43,7 @@ public class SimpleCredentials extends SimplePrincipal {
 	 * 
 	 * @param base64Token
 	 */
-	public SimpleCredentials(String base64Token) {
+	public BasicCredentials(String base64Token) {
 		String stoken = Codecs.encodeUTF8(Codecs.decodeBase64(base64Token, false));
 		int index = stoken.indexOf(':');
 		if(index >= 0) {
@@ -68,7 +69,7 @@ public class SimpleCredentials extends SimplePrincipal {
 	 * @param value
 	 * @return
 	 */
-	public SimpleCredentials withExtra(String name, Object value) {
+	public BasicCredentials withExtra(String name, Object value) {
 		//CREATE ONE IF NOT EXIST
 		if(extras == null) {
 			extras = new Dictionary();

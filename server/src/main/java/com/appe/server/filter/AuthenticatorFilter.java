@@ -32,9 +32,9 @@ import com.appe.security.Authenticator;
 import com.appe.security.Authentication;
 import com.appe.security.AuthenticationException;
 import com.appe.security.InvalidCredentialsException;
-import com.appe.security.SimpleCredentials;
 import com.appe.security.impl.ClientCredentials;
 import com.appe.security.impl.IdPConstants;
+import com.appe.security.impl.BasicCredentials;
 import com.appe.security.impl.TokenCredentials;
 import com.appe.util.Dictionaries;
 import com.appe.util.Dictionary;
@@ -143,7 +143,7 @@ public class AuthenticatorFilter extends ServletFilter {
 	 * @throws AuthenticationException
 	 */
 	protected Authentication doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		SimpleCredentials credentials = requestCredentials(req);
+		BasicCredentials credentials = requestCredentials(req);
 		if(credentials == null) {
 			logger.debug("Not found credentials, access denied!");
 			throw new InvalidCredentialsException();
@@ -164,7 +164,7 @@ public class AuthenticatorFilter extends ServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected SimpleCredentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected BasicCredentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)

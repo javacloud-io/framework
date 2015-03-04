@@ -15,7 +15,6 @@
  */
 package com.appe.security.impl;
 
-import com.appe.security.SimpleCredentials;
 
 /**
  * Represent username & password of credentials.
@@ -23,7 +22,7 @@ import com.appe.security.SimpleCredentials;
  * @author ho
  *
  */
-public class UserCredentials extends SimpleCredentials {
+public class UserCredentials extends BasicCredentials {
 	public UserCredentials(String name, String secret) {
 		super(name, secret);
 	}

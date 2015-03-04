@@ -15,7 +15,6 @@
  */
 package com.appe.security.impl;
 
-import com.appe.security.SimpleCredentials;
 
 /**
  * Special oauth2 client credentials which carry out of of other factor.
@@ -23,7 +22,7 @@ import com.appe.security.SimpleCredentials;
  * @author tobi
  *
  */
-public class ClientCredentials extends SimpleCredentials {
+public class ClientCredentials extends BasicCredentials {
 	/**
 	 * 
 	 * @param clientId
