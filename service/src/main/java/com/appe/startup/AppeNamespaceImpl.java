@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.impl;
+package com.appe.startup;
 
 import javax.inject.Singleton;
 

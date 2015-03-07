@@ -17,7 +17,6 @@ package com.appe.startup;
 
 import com.appe.AppeNamespace;
 import com.appe.data.JacksonMapper;
-import com.appe.impl.AppeNamespaceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 /**
