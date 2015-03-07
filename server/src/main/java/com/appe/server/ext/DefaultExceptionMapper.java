@@ -25,10 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.AppeException;
+import com.appe.config.MessageBundle;
 import com.appe.data.AlreadyExistsException;
 import com.appe.data.ValidationException;
 import com.appe.data.NotFoundException;
-import com.appe.i18n.MessageBundle;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthenticationException;

@@ -40,9 +40,23 @@ public class AppeRegistryTest extends GuiceTestCase {
 	 * 
 	 */
 	@Test
+	public void testSingleton() {
+		AppeConfig appec = AppeRegistry.get().getInstance(AppeConfig.class);
+		Assert.assertSame(appec, AppeRegistry.get().getInstance(AppeConfig.class));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
 	public void testInstance() {
 		Assert.assertNotNull(AppeRegistry.get());
-		Assert.assertNotNull(AppeRegistry.get().getInstance(TestService.class));
+		
+		TestService ts = AppeRegistry.get().getInstance(TestService.class);
+		Assert.assertNotNull(ts);
+		
+		//ALWAYS NEW
+		Assert.assertNotSame(ts, AppeRegistry.get().getInstance(TestService.class));
 	}
 	
 	/**
