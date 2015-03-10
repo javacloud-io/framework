@@ -15,19 +15,16 @@
  */
 package com.appe.registry;
 
-import com.google.inject.AbstractModule;
+import javax.inject.Inject;
 /**
+ * 
  * @author ho
  *
  */
-public class TestModule extends AbstractModule {
-	@Override
-	public void configure() {
-		bind(TestService.class).to(TestServiceImpl.class);
-		bind(TestInject.class);
-	}
-	
-	//TEST
-	public static class TestServiceImpl implements TestService {
+public class TestInject {
+	@Inject
+	TestService service;
+	public TestService getService() {
+		return service;
 	}
 }

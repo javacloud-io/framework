@@ -57,6 +57,7 @@ public class AppeRegistryTest extends GuiceTestCase {
 		
 		//ALWAYS NEW
 		Assert.assertNotSame(ts, AppeRegistry.get().getInstance(TestService.class));
+		Assert.assertNotNull(AppeRegistry.get().getInstance(TestInject.class).getService());
 	}
 	
 	/**
