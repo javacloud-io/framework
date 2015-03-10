@@ -48,7 +48,7 @@
 	</dependency>
 	<dependency>
     	<groupId>com.appe</groupId>
-    	<artifactId>appe-media-sse</artifactId>
+    	<artifactId>appe-server-sse</artifactId>
     	<version>${project.version}</version>
 	</dependency>
   </dependencies>

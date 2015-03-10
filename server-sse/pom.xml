@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-media-sse</artifactId>
+  <artifactId>appe-server-sse</artifactId>
   <packaging>jar</packaging>
   <name>Enhanced SSE implement by jersey</name>
   

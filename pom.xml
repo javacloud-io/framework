@@ -19,7 +19,7 @@
 	<module>common</module>
 	<module>service</module>
 	<module>server</module>
-	<module>media-sse</module>
+	<module>server-sse</module>
 	<module>assembly</module>
 	<module>showcase</module>
   </modules>
