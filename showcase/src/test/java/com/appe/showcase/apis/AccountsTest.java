@@ -22,7 +22,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.server.test.DefaultServerTest;
+import com.appe.server.test.ServerTestCase;
 import com.appe.showcase.startup.ShowcaseApplication;
 
 /**
@@ -30,7 +30,7 @@ import com.appe.showcase.startup.ShowcaseApplication;
  * @author ho
  *
  */
-public class AccountsTest extends DefaultServerTest {
+public class AccountsTest extends ServerTestCase {
 	/**
 	 * 
 	 */

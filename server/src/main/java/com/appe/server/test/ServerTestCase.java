@@ -44,8 +44,8 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  * @author ho
  *
  */
-public abstract class DefaultServerTest extends JerseyTest {
-	public DefaultServerTest() {
+public abstract class ServerTestCase extends JerseyTest {
+	public ServerTestCase() {
 	}
 	
 	/**
