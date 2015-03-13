@@ -44,8 +44,8 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  * @author ho
  *
  */
-public abstract class ServerTestCase extends JerseyTest {
-	public ServerTestCase() {
+public abstract class DefaultServerTest extends JerseyTest {
+	public DefaultServerTest() {
 	}
 	
 	/**
@@ -61,16 +61,16 @@ public abstract class ServerTestCase extends JerseyTest {
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		TestContainerFactory containerFactory = super.getTestContainerFactory();
-		if(!(containerFactory instanceof TestContainerFactoryWrapper)) {
-			containerFactory = new TestContainerFactoryWrapper(containerFactory);
+		if(!(containerFactory instanceof TestContainerFactoryImpl)) {
+			containerFactory = new TestContainerFactoryImpl(containerFactory);
 		}
 		return	containerFactory;
 	}
 
 	//RESPECT THE PATH ANNOTATION
-	static class TestContainerFactoryWrapper implements TestContainerFactory {
+	static class TestContainerFactoryImpl implements TestContainerFactory {
 		private TestContainerFactory delegate;
-		public TestContainerFactoryWrapper(TestContainerFactory delegate) {
+		public TestContainerFactoryImpl(TestContainerFactory delegate) {
 			this.delegate = delegate;
 		}
 		
@@ -86,15 +86,15 @@ public abstract class ServerTestCase extends JerseyTest {
 				}
 				uriBuilder.path(base);
 			}
-			return new TestContainerWrapper(baseUri, delegate.create(uriBuilder.build(), context));
+			return new TestContainerImpl(baseUri, delegate.create(uriBuilder.build(), context));
 		}
 	}
 	
 	//Make sure to USE the client URI after server is started
-	static class TestContainerWrapper implements TestContainer {
+	static class TestContainerImpl implements TestContainer {
 		private URI baseUri;
 		private TestContainer delegate;
-		public TestContainerWrapper(URI baseUri, TestContainer delegate) {
+		public TestContainerImpl(URI baseUri, TestContainer delegate) {
 			this.baseUri  = baseUri;
 			this.delegate = delegate;
 		}
