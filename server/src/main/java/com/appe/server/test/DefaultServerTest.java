@@ -24,6 +24,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.spi.TestContainer;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
@@ -45,6 +46,9 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  *
  */
 public abstract class DefaultServerTest extends JerseyTest {
+	public static final String CONTAINER_CONTEXT = "jersey.config.test.container.context";
+	public static final String CONTAINER_DEBUG	 = "jersey.config.test.container.debug";
+	
 	public DefaultServerTest() {
 	}
 	
@@ -53,6 +57,23 @@ public abstract class DefaultServerTest extends JerseyTest {
 	 */
 	@Override
 	protected abstract Application configure();
+	
+	/**
+	 * Always turn on TRAFFIC LONG & DUMP can be override via system properties
+	 */
+	@Override
+	protected DeploymentContext configureDeployment() {
+		//TURN ON DEBUG BY DEFAULT
+		boolean debug = Boolean.valueOf(System.getProperty(CONTAINER_DEBUG, "true"));
+		if(debug) {
+			enable(TestProperties.LOG_TRAFFIC);
+			enable(TestProperties.DUMP_ENTITY);
+		}
+		
+		String contextPath = System.getProperty(CONTAINER_CONTEXT, "");
+		return DeploymentContext.builder(configure())
+				.contextPath(contextPath).build();
+	}
 	
 	/**
 	 * Always give back test container which suitable to use client absolute URI instead of 

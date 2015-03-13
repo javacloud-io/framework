@@ -18,7 +18,6 @@ package com.appe.showcase.apis;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.test.TestProperties;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,8 +35,6 @@ public class AccountsTest extends DefaultServerTest {
 	 */
 	@Override
 	protected Application configure() {
-		enable(TestProperties.LOG_TRAFFIC);
-		enable(TestProperties.DUMP_ENTITY);
 		return new ShowcaseApplication();
 	}
 
