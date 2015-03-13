@@ -39,6 +39,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 public class DefaultApplication extends ResourceConfig {
 	/**
 	 * Configure how the resource should be combine, object should be inject...
+	 * 
 	 * @param serviceLocator
 	 */
 	public DefaultApplication(String...packages) {

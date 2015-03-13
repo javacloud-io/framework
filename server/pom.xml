@@ -84,5 +84,11 @@
     	<groupId>org.glassfish.hk2</groupId>
       	<artifactId>guice-bridge</artifactId>
   	</dependency>
+  	
+  	<dependency>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+        <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
