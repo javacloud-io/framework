@@ -43,6 +43,14 @@ public class DefaultApplication extends ResourceConfig {
 	 * @param serviceLocator
 	 */
 	public DefaultApplication(String...packages) {
+		configure(packages);
+	}
+	
+	/**
+	 * Default server configuration
+	 * @param packages
+	 */
+	protected void configure(String...packages) {
 		property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE_SERVER, true);
 		property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE_SERVER, true);
 		if(packages != null && packages.length > 0) {
