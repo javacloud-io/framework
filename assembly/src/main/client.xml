@@ -13,10 +13,10 @@
     		<unpack>true</unpack>
     		<useProjectArtifact>false</useProjectArtifact>
     		<includes>
-    			<include>com.appe:appe-registry</include>
-    			<include>com.appe:appe-common</include>
-    			<include>com.appe:appe-service</include>
-    			<include>com.appe:appe-media-sse</include>
+    			<include>com.appe.framework:appe-registry</include>
+    			<include>com.appe.framework:appe-common</include>
+    			<include>com.appe.framework:appe-service</include>
+    			<include>com.appe.framework:appe-media-sse</include>
     		</includes>
     	</dependencySet>
     </dependencySets>

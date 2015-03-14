@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-  	<groupId>com.appe</groupId>
-  	<artifactId>framework</artifactId>
+  	<groupId>com.appe.framework.samples</groupId>
+  	<artifactId>framework-samples</artifactId>
   	<version>0.1</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-showcase</artifactId>
+  <artifactId>framework-boilerplate</artifactId>
   <packaging>war</packaging>
-  <name>Framework showcase</name>
+  <name>Framework boilerplate</name>
   
   <build>
 	<plugins>
@@ -67,26 +67,13 @@
 	
     <!-- APPE -->
     <dependency>
-    	<groupId>com.appe</groupId>
+    	<groupId>com.appe.framework</groupId>
    		<artifactId>appe-server</artifactId>
-   		<version>${project.version}</version>
-  	</dependency>
-  	<dependency>
-    	<groupId>com.appe</groupId>
-   		<artifactId>appe-server-sse</artifactId>
-   		<version>${project.version}</version>
   	</dependency>
   	
     <dependency>
-        <groupId>com.appe</groupId>
+        <groupId>com.appe.framework</groupId>
         <artifactId>appe-server-test</artifactId>
-        <version>${project.version}</version>
-        <scope>test</scope>
-    </dependency>
-    
-    <dependency>
-        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
-        <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
         <scope>test</scope>
     </dependency>
   </dependencies>

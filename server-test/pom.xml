@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-  	<groupId>com.appe</groupId>
+  	<groupId>com.appe.framework</groupId>
   	<artifactId>framework</artifactId>
   	<version>0.1</version>
   </parent>
@@ -42,11 +42,15 @@
     	<groupId>org.glassfish.jersey.containers</groupId>
     	<artifactId>jersey-container-servlet</artifactId>
 	</dependency>
-  	
+  	<dependency>
+        <groupId>org.glassfish.jersey.test-framework</groupId>
+        <artifactId>jersey-test-framework-core</artifactId>
+    </dependency>
+        
   	<dependency>
         <groupId>org.glassfish.jersey.test-framework.providers</groupId>
         <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
-        <scope>provided</scope>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
