@@ -29,7 +29,7 @@ import com.appe.showcase.startup.ShowcaseApplication;
  * @author ho
  *
  */
-public class AccountsTest extends DefaultServerTest {
+public class AccountsResourceTest extends DefaultServerTest {
 	/**
 	 * 
 	 */

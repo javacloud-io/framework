@@ -15,17 +15,11 @@
  */
 package com.appe.server.test;
 
-import java.net.URI;
-
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.UriBuilder;
 
-import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
-import org.glassfish.jersey.test.spi.TestContainer;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
@@ -46,10 +40,14 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  *
  */
 public abstract class DefaultServerTest extends JerseyTest {
-	public static final String CONTAINER_CONTEXT = "jersey.config.test.container.context";
-	public static final String CONTAINER_DEBUG	 = "jersey.config.test.container.debug";
+	public static final String CONTAINER_PATH 	= "jersey.config.test.container.path";
+	public static final String CONTAINER_DEBUG	= "jersey.config.test.container.debug";
 	
+	/**
+	 * Enable the container debug by default. Turn off if needed to.
+	 */
 	public DefaultServerTest() {
+		enable(CONTAINER_DEBUG);
 	}
 	
 	/**
@@ -63,16 +61,13 @@ public abstract class DefaultServerTest extends JerseyTest {
 	 */
 	@Override
 	protected DeploymentContext configureDeployment() {
-		//TURN ON DEBUG BY DEFAULT
-		boolean debug = Boolean.valueOf(System.getProperty(CONTAINER_DEBUG, "true"));
-		if(debug) {
+		if(isDebugContainer()) {
 			enable(TestProperties.LOG_TRAFFIC);
 			enable(TestProperties.DUMP_ENTITY);
 		}
 		
-		String contextPath = System.getProperty(CONTAINER_CONTEXT, "");
 		return DeploymentContext.builder(configure())
-				.contextPath(contextPath).build();
+					.contextPath(getContainerPath()).build();
 	}
 	
 	/**
@@ -82,62 +77,28 @@ public abstract class DefaultServerTest extends JerseyTest {
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		TestContainerFactory containerFactory = super.getTestContainerFactory();
-		if(!(containerFactory instanceof TestContainerFactoryImpl)) {
-			containerFactory = new TestContainerFactoryImpl(containerFactory);
+		
+		if(!(containerFactory instanceof DelegateTestContainerFactory)) {
+			containerFactory = new DelegateTestContainerFactory(containerFactory);
 		}
 		return	containerFactory;
 	}
-
-	//RESPECT THE PATH ANNOTATION
-	static class TestContainerFactoryImpl implements TestContainerFactory {
-		private TestContainerFactory delegate;
-		public TestContainerFactoryImpl(TestContainerFactory delegate) {
-			this.delegate = delegate;
-		}
-		
-		@Override
-		public TestContainer create(URI baseUri, DeploymentContext context) {
-			//JerseyTest always build URI with ROOT context path as default, so we can just re-struct full server annotation
-			UriBuilder uriBuilder = UriBuilder.fromUri(baseUri);
-			ApplicationPath path = context.getResourceConfig().getClass().getAnnotation(ApplicationPath.class);
-			if(path != null) {
-				String base = path.value();
-				if(base.endsWith("/*")) {
-					base = base.substring(0, base.length() - 2);
-				}
-				uriBuilder.path(base);
-			}
-			return new TestContainerImpl(baseUri, delegate.create(uriBuilder.build(), context));
-		}
+	
+	/**
+	 * return the root context path
+	 * 
+	 * @return
+	 */
+	protected String getContainerPath() {
+		return	System.getProperty(CONTAINER_PATH, "");
 	}
 	
-	//Make sure to USE the client URI after server is started
-	static class TestContainerImpl implements TestContainer {
-		private URI baseUri;
-		private TestContainer delegate;
-		public TestContainerImpl(URI baseUri, TestContainer delegate) {
-			this.baseUri  = baseUri;
-			this.delegate = delegate;
-		}
-		
-		@Override
-		public ClientConfig getClientConfig() {
-			return delegate.getClientConfig();
-		}
-
-		@Override
-		public URI getBaseUri() {
-			return	baseUri;
-		}
-
-		@Override
-		public void start() {
-			delegate.start();
-		}
-
-		@Override
-		public void stop() {
-			delegate.stop();
-		}
+	/**
+	 * To dump log & entity to log stream.
+	 * 
+	 * @return
+	 */
+	protected boolean isDebugContainer() {
+		return Boolean.valueOf(System.getProperty(CONTAINER_DEBUG, "true"));
 	}
 }

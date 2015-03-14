@@ -78,6 +78,13 @@
   	</dependency>
   	
     <dependency>
+        <groupId>com.appe</groupId>
+        <artifactId>appe-server-test</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    
+    <dependency>
         <groupId>org.glassfish.jersey.test-framework.providers</groupId>
         <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
         <scope>test</scope>

@@ -18,6 +18,7 @@
     <module>registry</module>
 	<module>common</module>
 	<module>service</module>
+    <module>server-test</module>
 	<module>server</module>
 	<module>server-sse</module>
 	<module>assembly</module>
