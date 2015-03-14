@@ -8,7 +8,7 @@ A clean way to build a modern java microservices for enterprise.
 
 ## Common services
 
-## Common web server
+## Lean RESTful server
 
 ## Robust SSE
 
