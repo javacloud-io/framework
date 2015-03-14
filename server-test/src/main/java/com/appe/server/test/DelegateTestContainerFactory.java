@@ -25,7 +25,13 @@ import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.spi.TestContainer;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
-//RESPECT THE PATH ANNOTATION
+/**
+ * Delegate implementation to take the ApplicationPath to make sure baseUri for server and client are different.
+ * This will allow the test URI looks the same as distribution URI.
+ * 
+ * @author ho
+ *
+ */
 public class DelegateTestContainerFactory implements TestContainerFactory {
 	private TestContainerFactory delegate;
 	public DelegateTestContainerFactory(TestContainerFactory delegate) {
