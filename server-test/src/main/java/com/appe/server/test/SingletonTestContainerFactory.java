@@ -36,7 +36,11 @@ public class SingletonTestContainerFactory implements TestContainerFactory {
 	 */
 	public void shutdown() {
 		if(container != null) {
-			container.stop();
+			try {
+				container.stop();
+			} finally {
+				container = null;
+			}
 		}
 	}
 	
