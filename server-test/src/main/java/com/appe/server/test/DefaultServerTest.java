@@ -40,8 +40,8 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  *
  */
 public abstract class DefaultServerTest extends JerseyTest {
-	public static final String CONTAINER_PATH 	= "jersey.config.test.container.path";
-	public static final String CONTAINER_DEBUG	= "jersey.config.test.container.debug";
+	public static final String CONTAINER_PATH 		= "jersey.config.test.container.path";
+	public static final String CONTAINER_DEBUG		= "jersey.config.test.container.debug";
 	
 	/**
 	 * Enable the container debug by default. Turn off if needed to.
@@ -49,7 +49,7 @@ public abstract class DefaultServerTest extends JerseyTest {
 	public DefaultServerTest() {
 		enable(CONTAINER_DEBUG);
 	}
-	
+
 	/**
 	 * Make the subclass be aware of override to configure the server.
 	 */
@@ -77,7 +77,6 @@ public abstract class DefaultServerTest extends JerseyTest {
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		TestContainerFactory containerFactory = super.getTestContainerFactory();
-		
 		if(!(containerFactory instanceof DelegateTestContainerFactory)) {
 			containerFactory = new DelegateTestContainerFactory(containerFactory);
 		}
