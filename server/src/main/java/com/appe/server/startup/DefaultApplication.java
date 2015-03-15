@@ -21,7 +21,6 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.appe.server.ext.DefaultExceptionMapper;
 import com.appe.server.ext.GuiceHK2Feature;
 import com.appe.server.ext.JacksonContextResolver;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
@@ -65,6 +64,6 @@ public class DefaultApplication extends ResourceConfig {
 		register(JacksonJaxbJsonProvider.class, MessageBodyReader.class, MessageBodyWriter.class);
 		
 		//register(RolesAllowedDynamicFeature.class);
-		register(DefaultExceptionMapper.class);
+		register(UncaughtExceptionMapper.class);
 	}
 }

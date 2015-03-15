@@ -13,25 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.ext;
+package com.appe.server.startup;
 
-import javax.ws.rs.core.Response;
-
-import org.junit.Assert;
-import org.junit.Test;
-
+import com.appe.server.ext.DefaultExceptionMapper;
 /**
- * TODO: all the basic test of exception
+ * The least caught exception handler, in case of the application doesn't have any better way to handler them.
  * 
  * @author ho
  *
  */
-public class ExceptionMapperTest {
-	private DefaultExceptionMapper<Throwable> mapper = new DefaultExceptionMapper<Throwable>();
-	
-	@Test
-	public void testEx() {
-		Response rsp = mapper.toResponse(new Exception("test unknown exception"));
-		Assert.assertEquals(500, rsp.getStatus());
+public final class UncaughtExceptionMapper extends DefaultExceptionMapper<Throwable> {
+	public UncaughtExceptionMapper() {
 	}
 }

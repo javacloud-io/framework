@@ -19,7 +19,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +40,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * @author ho
  *
  */
-@Provider
-public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
+public class DefaultExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
 	private final MessageBundle bundle;
 	public DefaultExceptionMapper() {
@@ -54,7 +52,7 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	 * 
 	 */
 	@Override
-	public Response toResponse(Throwable exception) {
+	public Response toResponse(E exception) {
 		int status;
 		if(exception instanceof WebApplicationException) {
 			Response resp = ((WebApplicationException)exception).getResponse();
@@ -115,7 +113,7 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 	 * @param exception
 	 * @return
 	 */
-	protected Dictionary toEntity(Throwable exception) {
+	protected Dictionary toEntity(E exception) {
 		String error;
 		//REASON ERROR
 		if(exception instanceof AppeException) {
@@ -135,7 +133,16 @@ public class DefaultExceptionMapper implements ExceptionMapper<Throwable> {
 		if(Objects.isEmpty(message)) {
 			message = exception.getClass().getName();
 		}
-		message = bundle.getLocalizedMessage(message);
-		return Objects.asDict("error", error, "message", message);
+		return Objects.asDict("error", error, "message", toLocalizedMessage(message));
+	}
+	
+	/**
+	 * Return the localized message
+	 * 
+	 * @param message
+	 * @return
+	 */
+	protected String toLocalizedMessage(String message) {
+		return	bundle.getLocalizedMessage(message);
 	}
 }
