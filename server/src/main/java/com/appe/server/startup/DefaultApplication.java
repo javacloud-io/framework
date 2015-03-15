@@ -64,6 +64,6 @@ public class DefaultApplication extends ResourceConfig {
 		register(JacksonJaxbJsonProvider.class, MessageBodyReader.class, MessageBodyWriter.class);
 		
 		//register(RolesAllowedDynamicFeature.class);
-		register(UncaughtExceptionMapper.class);
+		register(ThrowableExceptionMapper.class);
 	}
 }

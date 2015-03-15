@@ -22,7 +22,7 @@ import com.appe.server.ext.DefaultExceptionMapper;
  * @author ho
  *
  */
-public final class UncaughtExceptionMapper extends DefaultExceptionMapper<Throwable> {
-	public UncaughtExceptionMapper() {
+public final class ThrowableExceptionMapper extends DefaultExceptionMapper<Throwable> {
+	public ThrowableExceptionMapper() {
 	}
 }
