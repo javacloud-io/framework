@@ -21,22 +21,17 @@
                       http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   	version="3.0">
   
-	<display-name>Showcase portal</display-name>
+	<display-name>Boilerplate portal</display-name>
 	
 	<filter>
 		<filter-name>SecurityFilter</filter-name>
-		<filter-class>com.appe.server.filter.AuthenticatorFilter</filter-class>
+		<filter-class>com.appe.server.filter.AuthorizationFilter</filter-class>
 		<init-param>
 			<param-name>login-page</param-name>
 			<param-value>/login</param-value>
 		</init-param>
 	</filter>
 	
-	<filter-mapping>
-		<filter-name>SecurityFilter</filter-name>
-		<url-pattern>/v1/accounts/*</url-pattern>
-	</filter-mapping>
-	 
 	<!-- for 2.5 only
 	<servlet>
 		<servlet-name>com.appe.startup.ApplicationV1</servlet-name>
@@ -49,6 +44,6 @@
 	</servlet-mapping>
 	 -->
 	 <welcome-file-list>
-	 	<welcome-file>sse.html</welcome-file>
+	 	<welcome-file>index.html</welcome-file>
 	 </welcome-file-list>
 </web-app>

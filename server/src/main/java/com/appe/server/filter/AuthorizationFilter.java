@@ -51,12 +51,12 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class AuthenticatorFilter extends ServletFilter {
+public class AuthorizationFilter extends ServletFilter {
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
 	protected String   loginPage;
 	protected Authenticator authenticator;
-	public AuthenticatorFilter() {
+	public AuthorizationFilter() {
 	}
 	
 	/**
@@ -85,7 +85,6 @@ public class AuthenticatorFilter extends ServletFilter {
 	 */
 	@Override
 	protected void configure() throws ServletException {
-		
 		//AUTH SCHEME
 		this.challengeScheme = config.getInitParameter("challenge-scheme");
 		String roles = config.getInitParameter("allowed-roles");
@@ -115,6 +114,7 @@ public class AuthenticatorFilter extends ServletFilter {
 	
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
+	 * 
 	 * TODO: should support request already authenticated
 	 */
 	@Override
