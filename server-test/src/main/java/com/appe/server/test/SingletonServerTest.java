@@ -27,6 +27,7 @@ import org.junit.AfterClass;
  *
  */
 public abstract class SingletonServerTest extends DefaultServerTest {
+	private static final Object lock = new Object();
 	private static SingletonTestContainerFactory testContainerFactory = null;
 	public SingletonServerTest() {
 	}
@@ -37,8 +38,14 @@ public abstract class SingletonServerTest extends DefaultServerTest {
 	 */
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		if(testContainerFactory != null) {
-			testContainerFactory.shutdown();
+		synchronized(lock) {
+			if(testContainerFactory != null) {
+				try {
+					testContainerFactory.shutdown();
+				} finally {
+					testContainerFactory = null;
+				}
+			}
 		}
 	}
 	
@@ -47,9 +54,11 @@ public abstract class SingletonServerTest extends DefaultServerTest {
 	 */
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
-		if(testContainerFactory == null) {
-			testContainerFactory = new SingletonTestContainerFactory(super.getTestContainerFactory());
+		synchronized(lock) {
+			if(testContainerFactory == null) {
+				testContainerFactory = new SingletonTestContainerFactory(super.getTestContainerFactory());
+			}
+			return testContainerFactory;
 		}
-		return testContainerFactory;
 	}
 }
