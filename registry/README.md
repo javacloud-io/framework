@@ -1,3 +1,3 @@
-# Service registry based on Google Guice
+# Service registry using google Guice
 
-Simplify the objects registration, discovery and providing a clean configuration loading.
+Simplify the objects registration, discovery and clean configuration.
