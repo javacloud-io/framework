@@ -25,6 +25,7 @@ import java.io.Closeable;
  */
 public interface Channel extends Closeable {
 	/**
+	 * Unique identify channel
 	 * 
 	 * @return
 	 */

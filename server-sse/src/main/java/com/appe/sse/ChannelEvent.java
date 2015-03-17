@@ -26,8 +26,8 @@ public class ChannelEvent {
 		SENT,
 		RECEIVED,
 		
-		ERROR,
-		CLOSED
+		CLOSED,
+		ERROR
 	}
 	
 	private Type type;
