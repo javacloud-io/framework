@@ -24,12 +24,10 @@ package com.appe.sse;
  */
 public interface Broadcaster {
 	/**
-	 * Publish a message to all channel, represent by this broadcaster return number of channel which event actually sendout
-	 * or -1 if unknown.
+	 * Publish a message to all channel, represent by this broadcaster
 	 * 
 	 * @param channel
 	 * @param message
-	 * @return
 	 */
 	public void publish(String channel, Object message);
 	
