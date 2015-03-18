@@ -37,6 +37,7 @@ public class BroadcastReceiver extends BroadcastChannel {
 	private static final Logger logger = LoggerFactory.getLogger(BroadcastReceiver.class);
 	
 	private WebTarget resource;
+	
 	/**
 	 * With target to resource of API always point to {ROOT}/channels
 	 * @param resource

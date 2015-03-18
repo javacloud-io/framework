@@ -47,7 +47,7 @@ public class TestInvocation {
 		
 		//CALLER
 		final Channel caller = receiver.subscribe("caller", Dictionary.class);
-		caller.register(new ChannelListener() {
+		caller.addListener(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
 				//ECHO THE RESOLT FOR NOW
@@ -57,7 +57,7 @@ public class TestInvocation {
 		
 		//CALLEE receive an invocation => perform and return result back to callee
 		final Channel callee = receiver.subscribe("callee", Dictionary.class);
-		callee.register(new ChannelListener() {
+		callee.addListener(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
 				//DO CALCULATION & SEND BACK RESULT

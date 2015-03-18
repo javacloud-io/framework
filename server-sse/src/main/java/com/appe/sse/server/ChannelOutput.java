@@ -54,10 +54,18 @@ public class ChannelOutput extends EventOutput implements ChannelSource {
 	 * 
 	 */
 	@Override
-	public int register(ChannelListener listener) {
-		return delegate.register(listener);
+	public int addListener(ChannelListener listener) {
+		return delegate.addListener(listener);
 	}
 	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean removeListener(ChannelListener listener) {
+		return delegate.removeListener(listener);
+	}
+
 	/**
 	 * 
 	 */

@@ -43,7 +43,7 @@ public class TestPollEvent {
 		
 		BroadcastReceiver receiver = new BroadcastReceiver(target);
 		Channel channel = receiver.subscribe("xxxx", Dictionary.class);
-		channel.register(new ChannelListener() {
+		channel.addListener(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
 				logger.info("{}: --> {}", event.getType(), event.getMessage());

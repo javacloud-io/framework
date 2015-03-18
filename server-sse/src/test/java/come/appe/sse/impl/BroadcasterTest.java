@@ -35,7 +35,7 @@ public class BroadcasterTest {
 		BroadcastLocal broadcaster = new BroadcastLocal();
 		//subscribe for
 		Channel channel = broadcaster.subscribe("test", String.class);
-		channel.register(new ChannelListener() {
+		channel.addListener(new ChannelListener() {
 			@Override
 			public void onEvent(ChannelEvent event) {
 				Assert.assertEquals(ChannelEvent.Type.RECEIVED, event.getType());

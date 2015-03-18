@@ -73,7 +73,7 @@ public class ChannelInput extends SimpleChannel {
 		this.executor = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
 			@Override
 			public Thread newThread(Runnable r) {
-				return new Thread(r, "Sse-Poller-" + name);
+				return new Thread(r, "SSE-Poller-" + name);
 			}
 		});
 		executor.submit(new EventPoller(reconnectDelay));
@@ -83,8 +83,8 @@ public class ChannelInput extends SimpleChannel {
 	 * ONLY THE FIRST LISTENER WILL TRIGGER CONNECT
 	 */
 	@Override
-	public int register(ChannelListener listener) {
-		int count = super.register(listener);
+	public int addListener(ChannelListener listener) {
+		int count = super.addListener(listener);
 		if(count == 1) {
 			connectSignal.countDown();
 		}

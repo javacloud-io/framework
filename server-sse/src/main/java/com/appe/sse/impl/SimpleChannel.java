@@ -57,12 +57,20 @@ public class SimpleChannel implements ChannelSource {
      * @return
      */
     @Override
-    public int register(ChannelListener listener) {
+    public int addListener(ChannelListener listener) {
     	listeners.add(listener);
     	return listeners.size();
     }
     
     /**
+     * 
+     */
+    @Override
+	public boolean removeListener(ChannelListener listener) {
+		return	listeners.remove(listener);
+	}
+
+	/**
      * Notify to all listeners
      * 
      * @param event

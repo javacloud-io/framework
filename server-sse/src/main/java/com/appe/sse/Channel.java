@@ -32,10 +32,18 @@ public interface Channel extends Closeable {
 	public String getName();
 	
 	/**
-	 * Register an event listener
+	 * Register an event listener for channel event
 	 * 
 	 * @param listener
 	 * @return
 	 */
-	public int register(ChannelListener listener);
+	public int addListener(ChannelListener listener);
+	
+	/**
+	 * Remove the listener of the channel, it will no longer receive any event.
+	 * 
+	 * @param listener
+	 * @return
+	 */
+	public boolean removeListener(ChannelListener listener);
 }
