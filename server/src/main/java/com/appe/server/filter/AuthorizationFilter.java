@@ -54,6 +54,7 @@ public class AuthorizationFilter extends ServletFilter {
 	protected String   challengeScheme;
 	protected String[] allowedRoles;
 	protected String   loginPage;
+	
 	protected Authenticator authenticator;
 	public AuthorizationFilter() {
 	}
@@ -114,18 +115,32 @@ public class AuthorizationFilter extends ServletFilter {
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
 	 * 
-	 * TODO: should support request already authenticated
 	 */
 	@Override
 	public final void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			Authentication authzGrant = doAuthenticate(req);
-			if(allowedRoles != null && !authzGrant.hasAnyRoles(allowedRoles)) {
-				throw new AccessDeniedException();
+			
+			//AUTH ONLY IF HAVEN'T
+			if(req.getUserPrincipal() == null) {
+				Authentication authzGrant = doAuthenticate(req);
+				req = RequestWrapper.wrap(req, authzGrant);
 			}
 			
-			chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
+			//ONLY CHECK IF EXPLICITLY SET
+			if(allowedRoles != null && allowedRoles.length > 0) {
+				boolean granted = false;
+				for(String role: allowedRoles) {
+					if(req.isUserInRole(role)) {
+						granted = true;
+						break;
+					}
+				}
+				if(!granted) {
+					throw new AccessDeniedException();
+				}
+			}
+			chain.doFilter(req, resp);
 		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		}
