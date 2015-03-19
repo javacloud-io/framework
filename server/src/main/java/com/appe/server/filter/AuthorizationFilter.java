@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -180,31 +179,7 @@ public class AuthorizationFilter extends ServletFilter {
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
 		String accessToken = req.getParameter(IdPConstants.PARAM_ACCESS_TOKEN);
-		if(accessToken == null) {
-			accessToken = requestCookie(req);
-		}
 		return	(accessToken == null? null : new TokenCredentials(accessToken));
-	}
-	
-	/**
-	 * Decode access token from cookie if any, due to the nature of unsecured environment, the cookie might need
-	 * to decode and validate...
-	 * 
-	 * @param req
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected String requestCookie(HttpServletRequest req) throws ServletException, IOException {
-		Cookie[] cookies = req.getCookies();
-		if(cookies != null && cookies.length > 0) {
-			for (Cookie cookie : cookies) {
-				if (IdPConstants.PARAM_ACCESS_TOKEN.equals(cookie.getName())) {
-					return	cookie.getValue();
-				}
-			}
-		}
-		return null;
 	}
 	
 	/**
