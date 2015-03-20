@@ -31,7 +31,7 @@ public class ExceptionMapperTest {
 	
 	@Test
 	public void testEx() {
-		Response rsp = mapper.toResponse(new Exception("test unknown exception"));
+		Response rsp = mapper.toResponse(new Exception("it's a test exception"));
 		Assert.assertEquals(500, rsp.getStatus());
 	}
 }
