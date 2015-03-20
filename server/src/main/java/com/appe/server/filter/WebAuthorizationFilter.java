@@ -53,10 +53,10 @@ public class WebAuthorizationFilter extends AuthorizationFilter {
 	 * Look into to session cookie to see if any available.
 	 */
 	@Override
-	protected BasicCredentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
-		BasicCredentials credentials = super.requestCredentials(req);
+	protected BasicCredentials extractCredentials(HttpServletRequest req) throws ServletException, IOException {
+		BasicCredentials credentials = super.extractCredentials(req);
 		if(credentials == null) {
-			String accessToken = requestCookie(req);
+			String accessToken = extractCookie(req);
 			if(accessToken != null) {
 				credentials = new TokenCredentials(accessToken);
 			}
@@ -73,7 +73,7 @@ public class WebAuthorizationFilter extends AuthorizationFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected String requestCookie(HttpServletRequest req) throws ServletException, IOException {
+	protected String extractCookie(HttpServletRequest req) throws ServletException, IOException {
 		Cookie[] cookies = req.getCookies();
 		if(cookies != null && cookies.length > 0) {
 			for (Cookie cookie : cookies) {

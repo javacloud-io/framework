@@ -142,7 +142,7 @@ public class AuthorizationFilter extends ServletFilter {
 	 * @throws AuthenticationException
 	 */
 	protected Authentication doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		BasicCredentials credentials = requestCredentials(req);
+		BasicCredentials credentials = extractCredentials(req);
 		if(credentials == null) {
 			logger.debug("Not found credentials, access denied!");
 			throw new InvalidCredentialsException();
@@ -163,7 +163,7 @@ public class AuthorizationFilter extends ServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected BasicCredentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected BasicCredentials extractCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
