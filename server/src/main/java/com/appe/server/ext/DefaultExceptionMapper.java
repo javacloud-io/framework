@@ -119,7 +119,7 @@ public class DefaultExceptionMapper<E extends Throwable> implements ExceptionMap
 		if(exception instanceof AppeException) {
 			error = ((AppeException)exception).getReason();
 		} else {
-			error = Integer.toHexString(exception.getClass().getName().hashCode());
+			error = Long.toHexString(Objects.checksum(exception.getClass().getName().getBytes()));
 		}
 		
 		//DETAILS MESSAGE LOCALE

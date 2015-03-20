@@ -15,6 +15,8 @@
  */
 package com.appe;
 
+import com.appe.util.Objects;
+
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
  * @author aimee
@@ -66,7 +68,7 @@ public class AppeException extends RuntimeException {
 	 * @return
 	 */
 	public String getReason() {
-		return Integer.toHexString(getClass().getName().hashCode());
+		return Long.toHexString(Objects.checksum(getClass().getName().getBytes()));
 	}
 	
 	/**
