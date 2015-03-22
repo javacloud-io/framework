@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.server.test.SingletonServerTest;
+import com.appe.server.test.IntegrationServerTest;
 import com.appe.showcase.startup.ShowcaseApplication;
 
 /**
@@ -29,7 +29,7 @@ import com.appe.showcase.startup.ShowcaseApplication;
  * @author ho
  *
  */
-public class AccountsResourceTest extends SingletonServerTest {
+public class AccountsResourceTest extends IntegrationServerTest {
 	/**
 	 * 
 	 */

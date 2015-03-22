@@ -27,7 +27,7 @@ import org.junit.Test;
  * @author ho
  *
  */
-public class HelloworldResourceTest extends SingletonServerTest {
+public class HelloworldResourceTest extends IntegrationServerTest {
 	@Override
 	protected Application configure() {
 		return new TestApplication();

@@ -19,7 +19,7 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 
-import com.appe.server.test.impl.SingletonTestContainerFactory;
+import com.appe.server.test.impl.IntegrationTestContainerFactory;
 
 /**
  * Make sure only ONE server per all the tests method. Basically just to make sure container start right after create
@@ -28,10 +28,10 @@ import com.appe.server.test.impl.SingletonTestContainerFactory;
  * @author ho
  *
  */
-public abstract class SingletonServerTest extends DefaultServerTest {
+public abstract class IntegrationServerTest extends DefaultServerTest {
 	private static final Object lock = new Object();
-	private static SingletonTestContainerFactory testContainerFactory = null;
-	public SingletonServerTest() {
+	private static IntegrationTestContainerFactory testContainerFactory = null;
+	public IntegrationServerTest() {
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public abstract class SingletonServerTest extends DefaultServerTest {
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		synchronized(lock) {
 			if(testContainerFactory == null) {
-				testContainerFactory = new SingletonTestContainerFactory(super.getTestContainerFactory());
+				testContainerFactory = new IntegrationTestContainerFactory(super.getTestContainerFactory());
 			}
 			return testContainerFactory;
 		}

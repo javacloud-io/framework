@@ -12,10 +12,10 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  * @author ho
  *
  */
-public class SingletonTestContainerFactory implements TestContainerFactory {
+public class IntegrationTestContainerFactory implements TestContainerFactory {
 	private TestContainerFactory delegate;
 	private TestContainer container;
-	public SingletonTestContainerFactory(TestContainerFactory delegate) {
+	public IntegrationTestContainerFactory(TestContainerFactory delegate) {
 		this.delegate = delegate;
 	}
 	
