@@ -19,6 +19,8 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 
+import com.appe.server.test.impl.SingletonTestContainerFactory;
+
 /**
  * Make sure only ONE server per all the tests method. Basically just to make sure container start right after create
  * and never be shutdown unless the class teared down.
