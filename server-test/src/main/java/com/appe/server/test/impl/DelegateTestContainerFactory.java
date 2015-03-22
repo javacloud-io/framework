@@ -75,6 +75,11 @@ public class DelegateTestContainerFactory implements TestContainerFactory {
 		@Override
 		public void start() {
 			delegate.start();
+			
+			//FIX DYNAMIC PORT AFTER START
+			if(baseUri.getPort() <= 0) {
+				baseUri = UriBuilder.fromUri(baseUri).port(delegate.getBaseUri().getPort()).build();
+			}
 		}
 
 		@Override
