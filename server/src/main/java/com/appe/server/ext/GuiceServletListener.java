@@ -15,7 +15,7 @@
  */
 package com.appe.server.ext;
 
-import com.appe.registry.spi.GuiceFactory;
+import com.appe.registry.cdi.GuiceFactory;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 

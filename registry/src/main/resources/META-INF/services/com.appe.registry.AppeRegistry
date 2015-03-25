@@ -1,2 +1,2 @@
-#Load the default registry implementation
-com.appe.registry.spi.GuiceRegistryImpl
+#Load the default registry implementation using Google Guice
+com.appe.registry.cdi.GuiceRegistryImpl
