@@ -59,7 +59,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public Principal getUserPrincipal() {
-		return authz;
+		return (authz == null? null : authz.getPrincipal());
 	}
 	
 	/**
