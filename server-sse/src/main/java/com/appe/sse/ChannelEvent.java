@@ -21,13 +21,12 @@ package com.appe.sse;
  */
 public class ChannelEvent {
 	public enum Type {
-		SUBSCRIBED,
-		
 		SENT,
 		RECEIVED,
+		ERROR,
 		
-		CLOSED,
-		ERROR
+		SUBSCRIBED,
+		CLOSED
 	}
 	
 	private Type type;
