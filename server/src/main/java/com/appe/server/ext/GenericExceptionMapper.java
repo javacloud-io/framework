@@ -24,11 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.AppeException;
-import com.appe.config.MessageBundle;
 import com.appe.data.AlreadyExistsException;
 import com.appe.data.ValidationException;
 import com.appe.data.NotFoundException;
-import com.appe.registry.AppeRegistry;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthenticationException;
 import com.appe.util.Dictionary;
@@ -40,15 +38,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * @author ho
  *
  */
-public class DefaultExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionMapper.class);
-	private final MessageBundle bundle;
-	public DefaultExceptionMapper() {
-		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
+public class GenericExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
+	private static final Logger logger = LoggerFactory.getLogger(GenericExceptionMapper.class);
+	public GenericExceptionMapper() {
 	}
 	
 	/**
 	 * Make sure to be able to map any exception to nicely JSON response.
+	 * By default reason code & message name will be used.
 	 * 
 	 */
 	@Override
@@ -137,12 +134,12 @@ public class DefaultExceptionMapper<E extends Throwable> implements ExceptionMap
 	}
 	
 	/**
-	 * Return the localized message
+	 * Return the localized message if any found
 	 * 
 	 * @param message
 	 * @return
 	 */
 	protected String toLocalizedMessage(String message) {
-		return	bundle.getLocalizedMessage(message);
+		return	message;
 	}
 }

@@ -15,14 +15,27 @@
  */
 package com.appe.server.startup;
 
-import com.appe.server.ext.DefaultExceptionMapper;
+import com.appe.config.MessageBundle;
+import com.appe.registry.AppeRegistry;
+import com.appe.server.ext.GenericExceptionMapper;
 /**
  * The least caught exception handler, in case of the application doesn't have any better way to handler them.
  * 
  * @author ho
  *
  */
-public final class ThrowableExceptionMapper extends DefaultExceptionMapper<Throwable> {
-	public ThrowableExceptionMapper() {
+public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwable> {
+	private final MessageBundle bundle;
+	public DefaultExceptionMapper() {
+		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
+	}
+	
+	/**
+	 * Using default message bundle to translate message
+	 * 
+	 */
+	@Override
+	protected String toLocalizedMessage(String message) {
+		return bundle.getLocalizedMessage(message);
 	}
 }

@@ -27,7 +27,7 @@ import org.junit.Test;
  *
  */
 public class ExceptionMapperTest {
-	private DefaultExceptionMapper<Throwable> mapper = new DefaultExceptionMapper<Throwable>();
+	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>();
 	
 	@Test
 	public void testEx() {
