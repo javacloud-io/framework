@@ -21,9 +21,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import com.appe.security.impl.BasicCredentials;
-import com.appe.security.impl.IdPConstants;
-import com.appe.security.impl.TokenCredentials;
+import com.appe.security.ext.BasicCredentials;
+import com.appe.security.ext.IdPConstants;
+import com.appe.security.ext.TokenCredentials;
 
 /**
  * Support extract access cookie from session, the cookie using the same name.
