@@ -17,7 +17,9 @@ package com.appe.registry.cdi;
 
 import com.appe.registry.AppeRegistry;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Stage;
+import com.google.inject.name.Names;
 
 /**
  * Basic implementation using google juice and service override at runtime level. By default it will load a file:
@@ -43,6 +45,14 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	@Override
 	public final <T> T getInstance(Class<T> service) {
 		return injector.getInstance(service);
+	}
+	
+	/**
+	 * The name always need to bind using Guice @Named
+	 */
+	@Override
+	public <T> T getInstance(Class<T> service, String name) {
+		return injector.getInstance(Key.get(service, Names.named(name)));
 	}
 
 	/**

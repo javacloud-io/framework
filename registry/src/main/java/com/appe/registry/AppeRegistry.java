@@ -47,6 +47,15 @@ public abstract class AppeRegistry {
 	public abstract <T> T getInstance(Class<T> service);
 	
 	/**
+	 * Get instance using @Named
+	 * 
+	 * @param service
+	 * @param name
+	 * @return
+	 */
+	public abstract <T> T getInstance(Class<T> service, String name);
+	
+	/**
 	 * Configuration instance by default just annotated using NAME=VALUE, with optional bundle
 	 * 
 	 * @param config
