@@ -15,22 +15,17 @@
  */
 package com.appe.registry;
 
-import com.appe.registry.cdi.GuiceModule;
+import javax.inject.Inject;
+import javax.inject.Named;
 /**
+ * 
  * @author ho
  *
  */
-public class TestModule extends GuiceModule {
-	@Override
-	public void configure() {
-		bind(TestService.class).to(TestServiceImpl.class);
-		bind(TestInject.class);
-		
-		bindNamed(TestService.class, "named").to(TestServiceImpl.class);
-		bind(TestInjectNamed.class);
-	}
-	
-	//TEST
-	public static class TestServiceImpl implements TestService {
+public class TestInjectNamed {
+	@Inject @Named("named")
+	TestService service;
+	public TestService getService() {
+		return service;
 	}
 }

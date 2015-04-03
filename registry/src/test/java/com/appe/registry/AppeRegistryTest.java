@@ -16,6 +16,7 @@
 package com.appe.registry;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,9 +32,12 @@ public class AppeRegistryTest extends GuiceTestCase {
 	@Inject
 	TestService testService;
 	
+	@Inject @Named("named")
+	TestService namedService;
 	@Test
 	public void testInject() {
 		Assert.assertNotNull(testService);
+		Assert.assertNotNull(namedService);
 	}
 	
 	/**
@@ -58,6 +62,7 @@ public class AppeRegistryTest extends GuiceTestCase {
 		//ALWAYS NEW
 		Assert.assertNotSame(ts, AppeRegistry.get().getInstance(TestService.class));
 		Assert.assertNotNull(AppeRegistry.get().getInstance(TestInject.class).getService());
+		Assert.assertNotNull(AppeRegistry.get().getInstance(TestInjectNamed.class).getService());
 	}
 	
 	/**
