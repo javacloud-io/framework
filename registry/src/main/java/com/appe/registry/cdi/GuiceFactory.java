@@ -92,13 +92,13 @@ public final class GuiceFactory {
 		
 		//LOAD ALL THE CLASS
 		List<Module> modules = new ArrayList<Module>();
-		for(Object name: props.keySet()) {
+		for(String name: props.stringPropertyNames()) {
 			logger.info("Load module class: " + name);
 			try {
-				Module m = (Module)loader.loadClass((String)name).newInstance();
+				Module m = (Module)loader.loadClass(name).newInstance();
 				modules.add(m);
 			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-				logger.warning("Unable to load module class: " + name + ", reason: " + ex.getMessage());
+				logger.warning("Unable to load module: " + name + ", reason: " + ex.getMessage());
 			}
 		}
 		return modules;
