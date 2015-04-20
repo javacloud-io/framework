@@ -26,6 +26,7 @@ import javax.inject.Named;
  * @author ho
  * 
  */
+@SuppressWarnings("all")
 public class NamedImpl implements Named, Serializable {
 	private static final long serialVersionUID = 8796749510361477021L;
 
