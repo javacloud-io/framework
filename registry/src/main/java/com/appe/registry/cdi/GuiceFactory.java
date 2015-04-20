@@ -27,12 +27,9 @@ import java.util.logging.Logger;
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
 import com.google.inject.ConfigurationException;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.Stage;
 import com.google.inject.internal.Errors;
-import com.google.inject.util.Modules;
 
 /**
  * Helper class to load and create juice injector. By default it will scan for appe-services.registry properties file.
@@ -49,11 +46,11 @@ public final class GuiceFactory {
 	 * 1. Load all the modules from all classes with resource
 	 * 2. Load all the modules override with resource.1
 	 * 
-	 * @param stage
+	 * @param builder
 	 * @param resource
 	 * @return
 	 */
-	public static Injector createInjector(Stage stage, String resource) {
+	public static Injector createInjector(GuiceBuilder builder, String resource) {
 		ClassLoader loader = AppeLoader.getClassLoader();
 		try {
 			logger.info("Load modules from resource: " + resource);
@@ -66,12 +63,8 @@ public final class GuiceFactory {
 			
 			logger.info("Load override modules from resource: " + resource + ".1");
 			List<Module> overrides = loadModules(AppeLoader.loadProperties(resource + ".1", true), loader);
-			if(overrides == null || overrides.isEmpty()) {
-				return Guice.createInjector(stage, modules);
-			}
 			
-			//USING OVERRIDE
-			return Guice.createInjector(stage, Modules.override(modules).with(overrides));
+			return builder.build(modules, overrides);
 		}catch(IOException ex) {
 			throw new ConfigurationException(Errors.getMessagesFromThrowable(ex));
 		}

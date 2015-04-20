@@ -73,6 +73,6 @@ public class GuiceRegistryImpl extends AppeRegistry {
 		String profile = System.getProperty(PROFILE, "guice");
 		String resource= "META-INF/registry-modules." + profile;
 		
-		return GuiceFactory.createInjector(Stage.PRODUCTION, resource);
+		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION), resource);
 	}
 }
