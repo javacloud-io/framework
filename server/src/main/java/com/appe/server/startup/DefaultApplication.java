@@ -15,15 +15,11 @@
  */
 package com.appe.server.startup;
 
-import javax.ws.rs.ext.MessageBodyReader;
-import javax.ws.rs.ext.MessageBodyWriter;
-
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import com.appe.server.ext.GuiceHK2Feature;
-import com.appe.server.ext.JacksonContextResolver;
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.appe.server.ext.JacksonFeature;
 /**
  * Basic jersey application configuration, providing basic features...
  * 
@@ -51,7 +47,7 @@ public class DefaultApplication extends ResourceConfig {
 	 */
 	protected void configure(String...packages) {
 		property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE_SERVER, true);
-		property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE_SERVER, true);
+		
 		if(packages != null && packages.length > 0) {
 			packages(packages);
 		}
@@ -60,8 +56,7 @@ public class DefaultApplication extends ResourceConfig {
 		register(GuiceHK2Feature.class);
 		
 		//JACKSON POJO
-		register(JacksonContextResolver.class);
-		register(JacksonJaxbJsonProvider.class, MessageBodyReader.class, MessageBodyWriter.class);
+		register(JacksonFeature.class);
 		
 		//register(RolesAllowedDynamicFeature.class);
 		register(DefaultExceptionMapper.class);
