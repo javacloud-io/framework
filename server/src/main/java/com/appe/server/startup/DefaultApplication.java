@@ -42,12 +42,17 @@ public class DefaultApplication extends ResourceConfig {
 	}
 	
 	/**
-	 * Default server configuration
+	 * Default server configuration with Guice HK2 & JSON
+	 * 
 	 * @param packages
 	 */
 	protected void configure(String...packages) {
-		property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE_SERVER, true);
+		//MAKE SURE IF AUTO DISCOVERRY IS DISABLED?
+		if(!isAutoDiscovery()) {
+			property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE_SERVER, true);
+		}
 		
+		//PACKAGE CONFIG
 		if(packages != null && packages.length > 0) {
 			packages(packages);
 		}
@@ -60,5 +65,14 @@ public class DefaultApplication extends ResourceConfig {
 		
 		//register(RolesAllowedDynamicFeature.class);
 		register(DefaultExceptionMapper.class);
+	}
+	
+	/**
+	 * Disabled the auto discovery of the feature to avoid unexpected behavior.
+	 * 
+	 * @return
+	 */
+	protected boolean isAutoDiscovery() {
+		return false;
 	}
 }
