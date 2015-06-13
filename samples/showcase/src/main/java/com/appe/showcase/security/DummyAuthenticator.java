@@ -24,6 +24,7 @@ import com.appe.security.AuthenticationException;
 import com.appe.security.InvalidCredentialsException;
 import com.appe.util.Objects;
 /**
+ * Any valid credentials is OK!
  * 
  * @author ho
  *

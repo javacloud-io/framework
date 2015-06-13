@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.ext;
+package com.appe.security.internal;
 /**
  * Standard OAuth2 constants definition, there will be a mapping across vendors...
  * 
