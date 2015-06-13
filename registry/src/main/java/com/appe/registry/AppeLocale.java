@@ -18,6 +18,7 @@ package com.appe.registry;
 import java.util.Locale;
 
 /**
+ * Be able to capture the current locale
  * 
  * @author ho
  *
