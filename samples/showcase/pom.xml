@@ -75,8 +75,9 @@
    		<artifactId>appe-server</artifactId>
   	</dependency>
   	<dependency>
-    	<groupId>com.appe.framework</groupId>
+    	<groupId>com.appe.framework.samples</groupId>
    		<artifactId>appe-server-sse</artifactId>
+		<version>${project.version}</version>
   	</dependency>
   	
     <dependency>
