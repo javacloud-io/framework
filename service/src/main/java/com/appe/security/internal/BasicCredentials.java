@@ -15,7 +15,7 @@
  */
 package com.appe.security.internal;
 
-import com.appe.sec.Codecs;
+import com.appe.security.Codecs;
 import com.appe.security.SimplePrincipal;
 import com.appe.util.Dictionary;
 /**

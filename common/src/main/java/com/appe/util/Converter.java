@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.appe.AppeException;
-import com.appe.sec.Codecs;
+import com.appe.security.Codecs;
 
 /**
  * Converting from something to something else.

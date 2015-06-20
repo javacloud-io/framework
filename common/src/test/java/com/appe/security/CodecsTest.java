@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.sec;
+package com.appe.security;
 import java.util.UUID;
 
-import com.appe.sec.Codecs;
-import com.appe.sec.Digests;
+import com.appe.security.Codecs;
+import com.appe.security.Digests;
 
 import junit.framework.TestCase;
 
