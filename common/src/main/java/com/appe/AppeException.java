@@ -15,7 +15,7 @@
  */
 package com.appe;
 
-import com.appe.util.Objects;
+import java.util.zip.CRC32;
 
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
@@ -63,12 +63,13 @@ public class AppeException extends RuntimeException {
 	}
 	
 	/**
-	 * return a reason code so we can identify the problem, make sure reason is consistent!!!
+	 * return a reason code so we can identify the problem, make sure reason is consistent by using CRC of root cause.
 	 * 
 	 * @return
 	 */
 	public String getReason() {
-		return Long.toHexString(Objects.checksum(getClass().getName().getBytes()));
+		Throwable cause = findRootCause(this);
+		return getReason(cause);
 	}
 	
 	/**
@@ -138,6 +139,23 @@ public class AppeException extends RuntimeException {
 		}
 		//Hunt it down.
 		return (findCause(t, causedBy) != null);
+	}
+	
+	/**
+	 * return the reason code for given exception
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public static final String getReason(Throwable cause) {
+		String message = cause.getMessage();
+		if(message == null || message.isEmpty()) {
+			message = cause.getClass().getName();
+		}
+		
+		CRC32 crc = new CRC32();
+		crc.update(message.getBytes());
+		return Long.toHexString(crc.getValue());
 	}
 	
 	/**

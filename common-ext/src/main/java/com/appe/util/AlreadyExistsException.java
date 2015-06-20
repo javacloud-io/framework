@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.data;
+package com.appe.util;
 
 import com.appe.AppeException;
 /**
- * Throw exception if something not found.
+ * Throws the exception if something already exist.
  * 
  * @author tobi
- *
+ * 
  */
-public class NotFoundException extends AppeException {
-	private static final long serialVersionUID = -1655317657875278373L;
+public class AlreadyExistsException extends AppeException {
+	private static final long serialVersionUID = -1725603370191594789L;
 	
-	public NotFoundException(String subject) {
+	public AlreadyExistsException(String subject) {
 		super(subject);
 	}
 }

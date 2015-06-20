@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.zip.CRC32;
 
 /**
  * Basic primary object converter
@@ -236,17 +235,5 @@ public final class Objects {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * return checksum of bytes
-	 * 
-	 * @param bytes
-	 * @return
-	 */
-	public static long checksum(byte[] bytes) {
-		CRC32 crc = new CRC32();
-		crc.update(bytes);
-		return crc.getValue();
 	}
 }
