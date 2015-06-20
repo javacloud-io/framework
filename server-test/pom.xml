@@ -37,6 +37,11 @@
 		<artifactId>javax.servlet-api</artifactId>
 		<scope>provided</scope>
 	</dependency>
+    <dependency>
+        <groupId>javax.inject</groupId>
+        <artifactId>javax.inject</artifactId>
+        <scope>test</scope>
+    </dependency>
     
 	<!-- Jersey -->
 	<dependency>
@@ -48,15 +53,34 @@
         <artifactId>jersey-test-framework-core</artifactId>
     </dependency>
     
+    <!-- Pick one of jersey server impl -->
   	<dependency>
         <groupId>org.glassfish.jersey.test-framework.providers</groupId>
         <artifactId>jersey-test-framework-provider-grizzly2</artifactId>
         <scope>test</scope>
     </dependency>
+    
+    <!-- 
     <dependency>
-        <groupId>javax.inject</groupId>
-        <artifactId>javax.inject</artifactId>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-inmemory</artifactId>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-simple</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+        <artifactId>jersey-test-framework-provider-jetty</artifactId>
+        <scope>test</scope>
+    </dependency>
+    -->
   </dependencies>
 </project>

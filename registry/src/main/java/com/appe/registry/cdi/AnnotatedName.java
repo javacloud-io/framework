@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.registry.impl;
+package com.appe.registry.cdi;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -27,12 +27,12 @@ import javax.inject.Named;
  * 
  */
 @SuppressWarnings("all")
-public class NamedImpl implements Named, Serializable {
+public class AnnotatedName implements Named, Serializable {
 	private static final long serialVersionUID = 8796749510361477021L;
 
 	private String value;
 
-	public NamedImpl(String value) {
+	public AnnotatedName(String value) {
 		this.value = value;
 	}
 

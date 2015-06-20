@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.registry.cdi;
+package com.appe.registry.impl;
 
 import com.appe.registry.AppeRegistry;
-import com.appe.registry.impl.NamedImpl;
+import com.appe.registry.cdi.GuiceBuilder;
+import com.appe.registry.cdi.GuiceFactory;
+import com.appe.registry.cdi.AnnotatedName;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Stage;
@@ -52,7 +54,7 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 */
 	@Override
 	public <T> T getInstance(Class<T> service, String name) {
-		return injector.getInstance(Key.get(service, new NamedImpl(name)));
+		return injector.getInstance(Key.get(service, new AnnotatedName(name)));
 	}
 
 	/**

@@ -1,10 +1,9 @@
 package com.appe.registry.cdi;
 
-import com.appe.registry.impl.NamedImpl;
 import com.google.inject.AbstractModule;
 import com.google.inject.binder.LinkedBindingBuilder;
 /**
- * To hide the GUICE binding dependency
+ * To hide the GUICE binding dependency, extend to bind module.
  * 
  * @author ho
  *
@@ -18,6 +17,6 @@ public abstract class GuiceModule extends AbstractModule {
 	 * @return
 	 */
 	protected <T> LinkedBindingBuilder<T> bindNamed(Class<T> clazz, String name) {
-	    return bind(clazz).annotatedWith(new NamedImpl(name));
+	    return bind(clazz).annotatedWith(new AnnotatedName(name));
 	}
 }
