@@ -149,13 +149,16 @@ public class AppeException extends RuntimeException {
 	 * @return
 	 */
 	public static final String getReason(Throwable cause) {
-		String message = cause.getMessage();
-		if(message == null || message.isEmpty()) {
-			message = cause.getClass().getName();
-		}
-		
 		CRC32 crc = new CRC32();
+		//CLASS NAME
+		String message = cause.getClass().getName();
 		crc.update(message.getBytes());
+		
+		//+ MESSAGE
+		message = cause.getMessage();
+		if(message != null && !message.isEmpty()) {
+			crc.update(message.getBytes());
+		}
 		return Long.toHexString(crc.getValue());
 	}
 	
