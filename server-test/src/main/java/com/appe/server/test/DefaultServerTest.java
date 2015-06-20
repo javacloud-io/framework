@@ -23,7 +23,7 @@ import org.glassfish.jersey.test.TestProperties;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 
-import com.appe.server.test.impl.DelegateTestContainerFactory;
+import com.appe.server.test.internal.DelegateTestContainerFactory;
 
 /**
  * To be able to separate the client baseURI and serverURI. Most of the time we would like the URI of test client to look

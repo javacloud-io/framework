@@ -19,7 +19,7 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 
-import com.appe.server.test.impl.IntegrationTestContainerFactory;
+import com.appe.server.test.internal.IntegrationTestContainerFactory;
 
 /**
  * Make sure only ONE server per all the tests method. Basically just to make sure container start right after create
@@ -29,7 +29,6 @@ import com.appe.server.test.impl.IntegrationTestContainerFactory;
  *
  */
 public abstract class IntegrationServerTest extends DefaultServerTest {
-	private static final Object lock = new Object();
 	private static IntegrationTestContainerFactory testContainerFactory = null;
 	public IntegrationServerTest() {
 	}
@@ -40,13 +39,11 @@ public abstract class IntegrationServerTest extends DefaultServerTest {
 	 */
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		synchronized(lock) {
-			if(testContainerFactory != null) {
-				try {
-					testContainerFactory.shutdown();
-				} finally {
-					testContainerFactory = null;
-				}
+		if(testContainerFactory != null) {
+			try {
+				testContainerFactory.shutdown();
+			} finally {
+				testContainerFactory = null;
 			}
 		}
 	}
@@ -56,11 +53,9 @@ public abstract class IntegrationServerTest extends DefaultServerTest {
 	 */
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
-		synchronized(lock) {
-			if(testContainerFactory == null) {
-				testContainerFactory = new IntegrationTestContainerFactory(super.getTestContainerFactory());
-			}
-			return testContainerFactory;
+		if(testContainerFactory == null) {
+			testContainerFactory = new IntegrationTestContainerFactory(super.getTestContainerFactory());
 		}
+		return testContainerFactory;
 	}
 }
