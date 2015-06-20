@@ -19,6 +19,7 @@ import java.util.zip.CRC32;
 
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
+ * 
  * @author aimee
  *
  */
@@ -142,7 +143,7 @@ public class AppeException extends RuntimeException {
 	}
 	
 	/**
-	 * return the reason code for given exception
+	 * return the reason code for given exception. Consistent hash using crc32 is OK.
 	 * 
 	 * @param t
 	 * @return

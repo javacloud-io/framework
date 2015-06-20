@@ -65,7 +65,7 @@ public final class GuiceFactory {
 			List<Module> overrides = loadModules(AppeLoader.loadProperties(resource + ".1", true), loader);
 			
 			return builder.build(modules, overrides);
-		}catch(IOException ex) {
+		} catch(IOException ex) {
 			throw new ConfigurationException(Errors.getMessagesFromThrowable(ex));
 		}
 	}

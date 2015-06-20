@@ -30,6 +30,7 @@ import com.google.inject.util.Modules;
  */
 public interface GuiceBuilder {
 	/**
+	 * Build an injector with default & override modules
 	 * 
 	 * @param modules
 	 * @param overrides
