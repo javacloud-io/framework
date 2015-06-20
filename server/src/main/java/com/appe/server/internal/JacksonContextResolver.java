@@ -29,6 +29,7 @@ public class JacksonContextResolver implements ContextResolver<ObjectMapper> {
 	private ObjectMapper objectMapper;
 	
 	/**
+	 * Inject from registry
 	 * 
 	 * @param objectMapper
 	 */
