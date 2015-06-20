@@ -18,8 +18,8 @@ package com.appe.server.startup;
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.appe.server.ext.GuiceHK2Feature;
-import com.appe.server.ext.JacksonFeature;
+import com.appe.server.internal.GuiceHK2Feature;
+import com.appe.server.internal.JacksonFeature;
 /**
  * Basic jersey application configuration, providing basic features...
  * 

@@ -13,25 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.impl;
+package com.appe.server.internal;
 
+import javax.inject.Inject;
+import javax.ws.rs.ext.ContextResolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 /**
- * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
+ * Configure json mapping to register basic behaviors
  * 
  * @author tobi
  *
  */
-public class TokenCredentials extends BasicCredentials {
-	public TokenCredentials(String token) {
-		super(null, token);
+public class JacksonContextResolver implements ContextResolver<ObjectMapper> {
+	private ObjectMapper objectMapper;
+	
+	/**
+	 * 
+	 * @param objectMapper
+	 */
+	@Inject
+	public JacksonContextResolver(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
 	}
 	
 	/**
-	 * shot cut to return token credentials
-	 * @return
+	 * return the MAPPER
 	 */
-	public String getToken() {
-		return getSecret();
+	@Override
+	public ObjectMapper getContext(Class<?> type) {
+		return (type == ObjectMapper.class? objectMapper : null);
 	}
 }

@@ -20,6 +20,8 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.appe.server.internal.GenericExceptionMapper;
+
 /**
  * TODO: all the basic test of exception
  * 

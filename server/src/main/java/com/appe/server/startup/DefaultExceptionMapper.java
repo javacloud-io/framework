@@ -17,7 +17,7 @@ package com.appe.server.startup;
 
 import com.appe.config.MessageBundle;
 import com.appe.registry.AppeRegistry;
-import com.appe.server.ext.GenericExceptionMapper;
+import com.appe.server.internal.GenericExceptionMapper;
 /**
  * The least caught exception handler, in case of the application doesn't have any better way to handler them.
  * 

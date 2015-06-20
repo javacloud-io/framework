@@ -13,21 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.ext;
+package com.appe.security.internal;
 
-import com.appe.registry.cdi.GuiceFactory;
-import com.google.inject.Injector;
-import com.google.inject.servlet.GuiceServletContextListener;
 
 /**
- * Make sure to bind SERVLET with same context listener so FILTER & JPA WORKING
+ * Represent username & password of credentials.
  * 
  * @author ho
  *
  */
-public class GuiceServletListener extends GuiceServletContextListener {
-	@Override
-	protected Injector getInjector() {
-		return GuiceFactory.registryInjector();
+public class UserCredentials extends BasicCredentials {
+	public UserCredentials(String name, String secret) {
+		super(name, secret);
+	}
+	public UserCredentials(String base64Token) {
+		super(base64Token);
 	}
 }
