@@ -39,7 +39,6 @@
 	<module>common-ext</module>
     <module>server-test</module>
 	<module>server</module>
-	<module>server-sse</module>
 	<module>samples</module>
     <module>assembly</module>
   </modules>

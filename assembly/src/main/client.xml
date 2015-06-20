@@ -15,8 +15,7 @@
     		<includes>
     			<include>com.appe.framework:appe-registry</include>
     			<include>com.appe.framework:appe-common</include>
-    			<include>com.appe.framework:appe-service</include>
-    			<include>com.appe.framework:appe-media-sse</include>
+    			<include>com.appe.framework:appe-common-ext</include>
     		</includes>
     	</dependencySet>
     </dependencySets>

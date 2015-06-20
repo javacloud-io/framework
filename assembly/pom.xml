@@ -38,17 +38,12 @@
 	</dependency>
 	<dependency>
     	<groupId>com.appe.framework</groupId>
-    	<artifactId>appe-service</artifactId>
+    	<artifactId>appe-common-ext</artifactId>
     	<version>${project.version}</version>
 	</dependency>
 	<dependency>
     	<groupId>com.appe.framework</groupId>
     	<artifactId>appe-server</artifactId>
-    	<version>${project.version}</version>
-	</dependency>
-	<dependency>
-    	<groupId>com.appe.framework</groupId>
-    	<artifactId>appe-server-sse</artifactId>
     	<version>${project.version}</version>
 	</dependency>
   </dependencies>
