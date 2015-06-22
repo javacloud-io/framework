@@ -70,7 +70,7 @@ public class AppeException extends RuntimeException {
 	 */
 	public String getReason() {
 		Throwable cause = findRootCause(this);
-		return getReason(cause);
+		return findReason(cause);
 	}
 	
 	/**
@@ -148,7 +148,7 @@ public class AppeException extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public static final String getReason(Throwable cause) {
+	public static final String findReason(Throwable cause) {
 		CRC32 crc = new CRC32();
 		//CLASS NAME
 		String message = cause.getClass().getName();

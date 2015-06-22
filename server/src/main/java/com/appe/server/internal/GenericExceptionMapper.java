@@ -116,7 +116,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		if(exception instanceof AppeException) {
 			error = ((AppeException)exception).getReason();
 		} else {
-			error = AppeException.getReason(exception);
+			error = AppeException.findReason(exception);
 		}
 		
 		//DETAILS MESSAGE LOCALE
