@@ -25,6 +25,7 @@ import java.util.ServiceLoader;
 
 /**
  * Simple utils to load thing such as class/resources...We always use current ClassLoader to allow override.
+ * For some reasons you wish the behavior of class loading different, then just set to the current thread.
  * 
  * @author ho
  *
