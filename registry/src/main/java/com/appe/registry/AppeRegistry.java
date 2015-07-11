@@ -15,6 +15,8 @@
  */
 package com.appe.registry;
 
+import java.util.List;
+
 
 /**
  * Basic registry operation for lookup & register object, module...
@@ -54,6 +56,15 @@ public abstract class AppeRegistry {
 	 * @return
 	 */
 	public abstract <T> T getInstance(Class<T> service, String name);
+	
+	/**
+	 * return all instances of the given service type, intended for plugin and extension. Plugin should bind
+	 * with random name
+	 * 
+	 * @param service
+	 * @return
+	 */
+	public abstract <T> List<T> getInstances(Class<T> service);
 	
 	/**
 	 * Configuration instance by default just annotated using NAME=VALUE, with optional bundle

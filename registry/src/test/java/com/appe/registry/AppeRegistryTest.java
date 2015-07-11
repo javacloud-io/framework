@@ -15,6 +15,8 @@
  */
 package com.appe.registry;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -91,5 +93,14 @@ public class AppeRegistryTest extends GuiceTestCase {
 		
 		//DYNAMIC
 		Assert.assertEquals("Hello HO", i18nConfig.getLocalizedMessage("hello.1", "HO"));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testInstances() {
+		List<TestService> services = AppeRegistry.get().getInstances(TestService.class);
+		Assert.assertEquals(2, services.size());
 	}
 }

@@ -15,13 +15,19 @@
  */
 package com.appe.registry.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.appe.registry.AppeRegistry;
 import com.appe.registry.cdi.GuiceBuilder;
 import com.appe.registry.cdi.GuiceFactory;
 import com.appe.registry.cdi.AnnotatedName;
+import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
 
 /**
  * Basic implementation using google juice and service override at runtime level. By default it will load a file:
@@ -55,6 +61,22 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	@Override
 	public <T> T getInstance(Class<T> service, String name) {
 		return injector.getInstance(Key.get(service, new AnnotatedName(name)));
+	}
+	
+	/**
+	 * Find all instances of the service type.
+	 */
+	@Override
+	public <T> List<T> getInstances(Class<T> service) {
+		List<Binding<T>> bindings = injector.findBindingsByType(TypeLiteral.get(service));
+		if(bindings == null || bindings.isEmpty()) {
+			return Collections.emptyList();
+		}
+		List<T> instances = new ArrayList<>(bindings.size());
+		for(Binding<T> b: bindings) {
+			instances.add(b.getProvider().get());
+		}
+		return instances;
 	}
 
 	/**
