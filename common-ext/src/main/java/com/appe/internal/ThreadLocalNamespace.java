@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.startup;
+package com.appe.internal;
 
 import javax.inject.Singleton;
 
@@ -26,13 +26,13 @@ import com.appe.AppeNamespace;
  * @author tobi
  */
 @Singleton
-public class AppeNamespaceImpl implements AppeNamespace {
+public class ThreadLocalNamespace implements AppeNamespace {
 	private static final ThreadLocal<String> LOCAL = new ThreadLocal<String>();	//NAMESPACE
 	
 	/**
 	 * 
 	 */
-	public AppeNamespaceImpl() {
+	public ThreadLocalNamespace() {
 	}
 	
 	/**

@@ -21,7 +21,7 @@ import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.util.Identifiable;
+import com.appe.internal.Identifiable;
 import com.appe.sse.Channel;
 import com.appe.sse.ChannelEvent;
 import com.appe.sse.impl.BroadcastChannel;

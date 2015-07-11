@@ -1,2 +1,2 @@
 # Basic modules
-com.appe.startup.ServiceModule
+com.appe.startup.CommonModule

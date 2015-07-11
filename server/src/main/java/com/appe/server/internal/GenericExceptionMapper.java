@@ -24,13 +24,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.AppeException;
+import com.appe.internal.AlreadyExistsException;
+import com.appe.internal.NotFoundException;
+import com.appe.internal.ValidationException;
 import com.appe.security.AccessDeniedException;
 import com.appe.security.AuthenticationException;
-import com.appe.util.AlreadyExistsException;
 import com.appe.util.Dictionary;
-import com.appe.util.NotFoundException;
 import com.appe.util.Objects;
-import com.appe.util.ValidationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 /**
  * To be able to handle basic error nicely which always in format of {error, description}

@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.util;
+package com.appe.startup;
 
-import com.appe.AppeException;
+import com.appe.AppeNamespace;
+import com.appe.internal.JacksonMapper;
+import com.appe.internal.ThreadLocalNamespace;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.AbstractModule;
 /**
- * TODO: add special details about the validation
+ * Automatically register & bind classes using basic services as backbone to build more complicated services.
  * 
  * @author ho
  *
  */
-public class ValidationException extends AppeException {
-	private static final long serialVersionUID = 4869699128152046268L;
-
-	public ValidationException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public ValidationException(String message) {
-		super(message);
+public class CommonModule extends AbstractModule {
+	@Override
+	protected void configure() {
+		bind(AppeNamespace.class).to(ThreadLocalNamespace.class);
+		bind(ObjectMapper.class).to(JacksonMapper.class);
 	}
 }
