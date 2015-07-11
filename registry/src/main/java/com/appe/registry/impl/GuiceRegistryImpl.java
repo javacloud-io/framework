@@ -51,24 +51,24 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * 
 	 */
 	@Override
-	public final <T> T getInstance(Class<T> service) {
-		return injector.getInstance(service);
+	public final <T> T getInstance(Class<T> type) {
+		return injector.getInstance(type);
 	}
 	
 	/**
 	 * The name always need to bind using Guice @Named
 	 */
 	@Override
-	public <T> T getInstance(Class<T> service, String name) {
-		return injector.getInstance(Key.get(service, new AnnotatedName(name)));
+	public <T> T getInstance(Class<T> type, String name) {
+		return injector.getInstance(Key.get(type, new AnnotatedName(name)));
 	}
 	
 	/**
 	 * Find all instances of the service type.
 	 */
 	@Override
-	public <T> List<T> getInstances(Class<T> service) {
-		List<Binding<T>> bindings = injector.findBindingsByType(TypeLiteral.get(service));
+	public <T> List<T> getInstances(Class<T> type) {
+		List<Binding<T>> bindings = injector.findBindingsByType(TypeLiteral.get(type));
 		if(bindings == null || bindings.isEmpty()) {
 			return Collections.emptyList();
 		}

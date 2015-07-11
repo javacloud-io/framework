@@ -43,28 +43,28 @@ public abstract class AppeRegistry {
 	/**
 	 * Get class instance from registry
 	 * 
-	 * @param service
+	 * @param type
 	 * @return
 	 */
-	public abstract <T> T getInstance(Class<T> service);
+	public abstract <T> T getInstance(Class<T> type);
 	
 	/**
 	 * Get instance using @Named
 	 * 
-	 * @param service
+	 * @param type
 	 * @param name
 	 * @return
 	 */
-	public abstract <T> T getInstance(Class<T> service, String name);
+	public abstract <T> T getInstance(Class<T> type, String name);
 	
 	/**
 	 * return all instances of the given service type, intended for plugin and extension. Plugin should bind
 	 * with random name
 	 * 
-	 * @param service
+	 * @param type
 	 * @return
 	 */
-	public abstract <T> List<T> getInstances(Class<T> service);
+	public abstract <T> List<T> getInstances(Class<T> type);
 	
 	/**
 	 * Configuration instance by default just annotated using NAME=VALUE, with optional bundle
