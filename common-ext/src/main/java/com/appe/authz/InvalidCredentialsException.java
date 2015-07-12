@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security;
+package com.appe.authz;
 
-import java.security.Principal;
-
+import com.appe.authz.AuthenticationException;
 /**
- * To authenticate almost anything with simple credentials.
  * 
- * @author ho
+ * @author tobi
  *
  */
-public interface Authenticator {
+public class InvalidCredentialsException extends AuthenticationException {
+	private static final long serialVersionUID = 5341577128925410681L;
 	/**
-	 * Authenticate credentials and return new one if success which contains more fine grant system wide permissions.
-	 * return null if credentials is not appropriated to handle.
 	 * 
-	 * @param credentials
-	 * @return
-	 * @throws AuthenticationException
 	 */
-	public Authentication authenticate(Principal credentials) throws AuthenticationException;
+	public InvalidCredentialsException() {
+		this(INVALID_CREDENTIALS);
+	}
+	
+	/**
+	 * 
+	 * @param message
+	 */
+	public InvalidCredentialsException(String message) {
+		super(message);
+	}
 }

@@ -18,10 +18,10 @@ package com.appe.showcase.security;
 import java.security.Principal;
 import java.util.Set;
 
-import com.appe.security.Authenticator;
-import com.appe.security.Authentication;
-import com.appe.security.AuthenticationException;
-import com.appe.security.InvalidCredentialsException;
+import com.appe.authz.Authentication;
+import com.appe.authz.AuthenticationException;
+import com.appe.authz.Authenticator;
+import com.appe.authz.InvalidCredentialsException;
 import com.appe.util.Objects;
 /**
  * Any valid credentials is OK!

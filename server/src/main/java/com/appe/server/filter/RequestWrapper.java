@@ -16,10 +16,11 @@
 package com.appe.server.filter;
 
 import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.appe.security.Authentication;
+import com.appe.authz.Authentication;
 
 /**
  * WRAPP THE GRANT AUTHENTICATION CONTEXT to provide an extra layer of protection on regular servlet authorization.

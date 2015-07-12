@@ -13,35 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.internal;
+package com.appe.ext;
+
+import com.appe.registry.AppeConfig;
 /**
- * Something unique identify the OBJECT, mostly is automatically generated OBJECT.
+ * Default message bundle to handle localization...
  * 
  * @author ho
  *
- * @param <T>
  */
-public abstract class Identifiable<T> {
-	private T id;
-	protected Identifiable() {
-	}
-	
-	/**
-	 * 
-	 * @param id
-	 */
-	protected Identifiable(T id) {
-		this.id = id;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public T getId() {
-		return id;
-	}
-	public void setId(T id) {
-		this.id = id;
-	}
+@AppeConfig.Bundle(name="i18n/messages", i18n=true)
+public interface MessageBundle {
+	public String getLocalizedMessage(String key, Object...arguments);
 }

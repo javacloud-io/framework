@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.internal;
+package com.appe.authz.internal;
 
-import com.appe.registry.AppeConfig;
+
 /**
- * Default message bundle to handle localization...
+ * Represent username & password of credentials.
  * 
  * @author ho
  *
  */
-@AppeConfig.Bundle(name="i18n/messages", i18n=true)
-public interface MessageBundle {
-	public String getLocalizedMessage(String key, Object...arguments);
+public class UserCredentials extends BasicCredentials {
+	public UserCredentials(String name, String secret) {
+		super(name, secret);
+	}
+	public UserCredentials(String base64Token) {
+		super(base64Token);
+	}
 }

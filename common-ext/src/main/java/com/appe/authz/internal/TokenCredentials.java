@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security;
+package com.appe.authz.internal;
 
-import com.appe.security.AuthenticationException;
+
 /**
+ * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
  * 
  * @author tobi
  *
  */
-public class InvalidCredentialsException extends AuthenticationException {
-	private static final long serialVersionUID = 5341577128925410681L;
-	/**
-	 * 
-	 */
-	public InvalidCredentialsException() {
-		this(INVALID_CREDENTIALS);
+public class TokenCredentials extends BasicCredentials {
+	public TokenCredentials(String token) {
+		super(null, token);
 	}
 	
 	/**
-	 * 
-	 * @param message
+	 * shot cut to return token credentials
+	 * @return
 	 */
-	public InvalidCredentialsException(String message) {
-		super(message);
+	public String getToken() {
+		return getSecret();
 	}
 }

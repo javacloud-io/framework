@@ -15,7 +15,7 @@
  */
 package com.appe.showcase.startup;
 
-import com.appe.security.Authenticator;
+import com.appe.authz.Authenticator;
 import com.appe.showcase.security.DummyAuthenticator;
 import com.google.inject.AbstractModule;
 /**

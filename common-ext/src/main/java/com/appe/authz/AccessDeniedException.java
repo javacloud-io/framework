@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.internal;
+package com.appe.authz;
 
-
+import com.appe.authz.AuthenticationException;
 /**
- * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
+ * Denied access due to not enough permission in some case.
  * 
  * @author tobi
  *
  */
-public class TokenCredentials extends BasicCredentials {
-	public TokenCredentials(String token) {
-		super(null, token);
+public class AccessDeniedException extends AuthenticationException {
+	private static final long serialVersionUID = 5341577128925410681L;
+	/**
+	 * 
+	 */
+	public AccessDeniedException() {
+		this(ACCESS_DENIED);
 	}
 	
 	/**
-	 * shot cut to return token credentials
-	 * @return
+	 * 
+	 * @param message
 	 */
-	public String getToken() {
-		return getSecret();
+	public AccessDeniedException(String message) {
+		super(message);
 	}
 }

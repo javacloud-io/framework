@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.internal;
+package com.appe.authz.internal;
 
+import com.appe.authz.SimplePrincipal;
 import com.appe.security.Codecs;
-import com.appe.security.SimplePrincipal;
 import com.appe.util.Dictionary;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.

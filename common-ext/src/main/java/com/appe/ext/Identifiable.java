@@ -13,20 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.internal;
-
-
+package com.appe.ext;
 /**
- * Represent username & password of credentials.
+ * Something unique identify the OBJECT, mostly is automatically generated OBJECT.
  * 
  * @author ho
  *
+ * @param <T>
  */
-public class UserCredentials extends BasicCredentials {
-	public UserCredentials(String name, String secret) {
-		super(name, secret);
+public abstract class Identifiable<T> {
+	private T id;
+	protected Identifiable() {
 	}
-	public UserCredentials(String base64Token) {
-		super(base64Token);
+	
+	/**
+	 * 
+	 * @param id
+	 */
+	protected Identifiable(T id) {
+		this.id = id;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public T getId() {
+		return id;
+	}
+	public void setId(T id) {
+		this.id = id;
 	}
 }

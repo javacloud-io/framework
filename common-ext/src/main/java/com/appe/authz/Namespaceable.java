@@ -13,29 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security;
+package com.appe.authz;
 
-import com.appe.security.AuthenticationException;
+import java.security.Principal;
+
 /**
- * Denied access due to not enough permission in some case.
+ * Indication of a NAMESPACE attach, can be use to validate IMPERSONATE... in an authorization context, it possibly
+ * change the native of the NAMESPACE CONTEXT.
  * 
- * @author tobi
+ * @author ho
  *
  */
-public class AccessDeniedException extends AuthenticationException {
-	private static final long serialVersionUID = 5341577128925410681L;
+public interface Namespaceable extends Principal {
 	/**
 	 * 
+	 * @return
 	 */
-	public AccessDeniedException() {
-		this(ACCESS_DENIED);
-	}
-	
-	/**
-	 * 
-	 * @param message
-	 */
-	public AccessDeniedException(String message) {
-		super(message);
-	}
+	public String getNamespace();
 }
