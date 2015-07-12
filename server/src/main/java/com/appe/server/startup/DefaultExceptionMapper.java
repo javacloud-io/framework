@@ -15,7 +15,7 @@
  */
 package com.appe.server.startup;
 
-import com.appe.ext.MessageBundle;
+import com.appe.ext.internal.MessageBundle;
 import com.appe.registry.AppeRegistry;
 import com.appe.server.internal.GenericExceptionMapper;
 /**
