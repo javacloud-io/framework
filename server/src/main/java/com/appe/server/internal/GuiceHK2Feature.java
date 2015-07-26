@@ -25,7 +25,7 @@ import org.jvnet.hk2.guice.bridge.api.GuiceIntoHK2Bridge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.registry.cdi.GuiceFactory;
+import com.appe.registry.internal.GuiceFactory;
 import com.google.inject.Injector;
 /**
  * If the registry is GuiceRegistry => try to find it and register with the system

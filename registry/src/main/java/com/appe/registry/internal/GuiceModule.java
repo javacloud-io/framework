@@ -1,4 +1,4 @@
-package com.appe.registry.cdi;
+package com.appe.registry.internal;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.binder.LinkedBindingBuilder;

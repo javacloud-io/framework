@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.appe.registry.AppeRegistry;
-import com.appe.registry.cdi.GuiceTestCase;
+import com.appe.registry.internal.GuiceTestCase;
 /**
  * 
  * @author ho

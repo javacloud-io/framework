@@ -15,7 +15,7 @@
  */
 package com.appe.registry;
 
-import com.appe.registry.cdi.GuiceModule;
+import com.appe.registry.internal.GuiceModule;
 /**
  * @author ho
  *

@@ -20,9 +20,9 @@ import java.util.Collections;
 import java.util.List;
 
 import com.appe.registry.AppeRegistry;
-import com.appe.registry.cdi.GuiceBuilder;
-import com.appe.registry.cdi.GuiceFactory;
-import com.appe.registry.cdi.AnnotatedName;
+import com.appe.registry.internal.AnnotatedName;
+import com.appe.registry.internal.GuiceBuilder;
+import com.appe.registry.internal.GuiceFactory;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
