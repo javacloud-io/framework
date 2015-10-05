@@ -132,9 +132,8 @@ public class AppeConfigImpl implements AppeConfig {
 		//ALWAYS APPEND .properties to load the resource
 		String resource = baseName + ".properties";
 		logger.info("Bind the config class: " + config.getName() + " to resource bundle: " + resource);
-		
 		try {
-			final Properties properties = AppeLoader.loadProperties(resource, false);
+			final Properties properties = AppeLoader.loadProperties(resource, null);
 			if(properties == null || properties.isEmpty()) {
 				return new ConfigHandlerImpl();
 			}

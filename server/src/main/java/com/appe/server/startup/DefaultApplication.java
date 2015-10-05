@@ -15,11 +15,15 @@
  */
 package com.appe.server.startup;
 
+import java.util.List;
+
+import javax.ws.rs.core.Feature;
+
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.appe.server.internal.GuiceHK2Feature;
-import com.appe.server.internal.JacksonFeature;
+import com.appe.AppeException;
+import com.appe.registry.AppeLoader;
 /**
  * Basic jersey application configuration, providing basic features...
  * 
@@ -52,19 +56,21 @@ public class DefaultApplication extends ResourceConfig {
 			property(CommonProperties.FEATURE_AUTO_DISCOVERY_DISABLE_SERVER, true);
 		}
 		
-		//PACKAGE CONFIG
+		//PACKAGE CONFIG IF ANY
 		if(packages != null && packages.length > 0) {
 			packages(packages);
 		}
 		
-		//GUICE HK2
-		register(GuiceHK2Feature.class);
-		
-		//JACKSON POJO
-		register(JacksonFeature.class);
-		
-		//register(RolesAllowedDynamicFeature.class);
-		register(DefaultExceptionMapper.class);
+		//AUTO LOAD THE FEATURES
+		try {
+			String resource = AppeLoader.resolveProfile("META-INF/registry-features.jersey");
+			List<Feature> features = AppeLoader.loadServices(resource);
+			for(Feature f: features) {
+				register(f);
+			}
+		}catch(Throwable ex) {
+			throw AppeException.wrap(ex);
+		}
 	}
 	
 	/**

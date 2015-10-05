@@ -25,7 +25,6 @@ import java.util.List;
  *
  */
 public abstract class AppeRegistry {
-	public static final  String PROFILE		= "com.appe.registry.profile";
 	private static final AppeRegistry APPE 	= AppeLoader.loadService(AppeRegistry.class);
 	
 	protected AppeRegistry() {

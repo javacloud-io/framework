@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
 import com.appe.registry.internal.AnnotatedName;
 import com.appe.registry.internal.GuiceBuilder;
@@ -94,9 +95,7 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * @return
 	 */
 	protected Injector createInjector() {
-		String profile = System.getProperty(PROFILE, "guice");
-		String resource= "META-INF/registry-modules." + profile;
-		
+		String resource = AppeLoader.resolveProfile("META-INF/registry-modules.guice");
 		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION), resource);
 	}
 }

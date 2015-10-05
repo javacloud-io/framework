@@ -16,12 +16,13 @@
 package com.appe.registry;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
+
 
 /**
  * Simple utils to load thing such as class/resources...We always use current ClassLoader to allow override.
@@ -31,11 +32,14 @@ import java.util.ServiceLoader;
  *
  */
 public final class AppeLoader {
+	//System profile to append to any resources
+	private static final  String PROFILE = System.getProperty("com.appe.profile");
 	private AppeLoader() {
 	}
 	
 	/**
-	 * Always favor to current thread class loader, by doing so most of the resource can be overrided.
+	 * Always favor to current thread class loader, by doing so most of the resource can be override.
+	 * By using Thread.currentThread().setContextClassLoader(...)
 	 * 
 	 * @return
 	 */
@@ -45,6 +49,17 @@ public final class AppeLoader {
 			loader = AppeLoader.class.getClassLoader();
 		}
 		return loader;
+	}
+	
+	/**
+	 * Resolve the profile to it correct name, always append the profile name. Driver resource using this to switch
+	 * runtime configuration.
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	public static String resolveProfile(String resource) {
+		return (PROFILE == null? resource : (resource + "." + PROFILE));
 	}
 	
 	/**
@@ -60,43 +75,63 @@ public final class AppeLoader {
 	}
 	
 	/**
-	 * Load the merge all the properties and merge together to form one. Or just load single one from current loader. 
+	 * Load all services from a resource properties file. NULL if resource not exist
 	 * 
 	 * @param resource
-	 * @param scanning
-	 * 
-	 * @return NULL if not found any resource
+	 * @return
 	 * @throws IOException
 	 */
-	public static Properties loadProperties(String resource, boolean scanning) throws IOException {
-		List<URL> urls = null;
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> loadServices(String resource) throws IOException {
 		ClassLoader loader = getClassLoader();
-		
-		//LOAD EVERYTHING OT JUST ONE
-		if(scanning) {
-			urls = Collections.list(loader.getResources(resource));
-			Collections.reverse(urls);
-		} else {
-			URL url = loader.getResource(resource);
-			if(url != null) {
-				urls = Arrays.asList(url);
-			}
-		}
-		
-		//MAKE SURE IF ANYTHING NEED TO LOAD
-		if(urls == null || urls.isEmpty()) {
+		URL url = loader.getResource(resource);
+		if(url == null) {
 			return null;
 		}
 		
-		//LOAD THEM ALL UP & MERGE
+		//LOAD THE PROPERTIES
 		Properties props = new Properties();
-		for(URL url: urls) {
-			Properties p = new Properties();
-			p.load(url.openStream());
-			props.putAll(p);
+		try (InputStream stream = url.openStream()) {
+			props.load(stream);
 		}
 		
-		//FINAL VIEW
+		//LOAD ALL THE CLASSES
+		List<T> services = new ArrayList<T>();
+		for(String name: props.stringPropertyNames()) {
+			try {
+				T s = (T)loader.loadClass(name).newInstance();
+				services.add(s);
+			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+				throw new IOException(ex);
+			}
+		}
+		return services;
+	}
+	
+	/**
+	 * Return a properties resource for given class loader.
+	 * 
+	 * @param resource
+	 * @param loader
+	 * @return
+	 * @throws IOException
+	 */
+	public static Properties loadProperties(String resource, ClassLoader loader) throws IOException {
+		//MAKE SURE USING DEFAULT ONE
+		if(loader == null) {
+			loader = getClassLoader();
+		}
+		
+		URL url = loader.getResource(resource);
+		if(url == null) {
+			return null;
+		}
+		
+		//LOAD THE PROPERTIES
+		Properties props = new Properties();
+		try (InputStream stream = url.openStream()) {
+			props.load(stream);
+		}
 		return props;
 	}
 }

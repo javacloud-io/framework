@@ -18,10 +18,8 @@ package com.appe.registry.internal;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import com.appe.registry.AppeLoader;
@@ -51,10 +49,9 @@ public final class GuiceFactory {
 	 * @return
 	 */
 	public static Injector createInjector(GuiceBuilder builder, String resource) {
-		ClassLoader loader = AppeLoader.getClassLoader();
 		try {
-			logger.info("Load modules from resource: " + resource);
-			List<Module> modules = loadModules(AppeLoader.loadProperties(resource, true), loader);
+			logger.info("Loading modules from resource: " + resource);
+			List<Module> modules = AppeLoader.loadServices(resource);
 			
 			//ALWAYS MAKE SURE IT AT LEAST EMPTY
 			if(modules == null) {
@@ -62,39 +59,12 @@ public final class GuiceFactory {
 			}
 			
 			logger.info("Load override modules from resource: " + resource + ".1");
-			List<Module> overrides = loadModules(AppeLoader.loadProperties(resource + ".1", true), loader);
+			List<Module> overrides = AppeLoader.loadServices(resource + ".1");
 			
 			return builder.build(modules, overrides);
 		} catch(IOException ex) {
 			throw new ConfigurationException(Errors.getMessagesFromThrowable(ex));
 		}
-	}
-	
-	/**
-	 * Load all the modules from properties file, using KEY as CLASSNAME. If module is not found => assuming OK!
-	 * 
-	 * @param props
-	 * @param loader
-	 * @return
-	 */
-	static List<Module> loadModules(Properties props, ClassLoader loader) {
-		//NOTHING TO LOAD
-		if(props == null || props.isEmpty()) {
-			return null;
-		}
-		
-		//LOAD ALL THE CLASS
-		List<Module> modules = new ArrayList<Module>();
-		for(String name: props.stringPropertyNames()) {
-			logger.info("Load module class: " + name);
-			try {
-				Module m = (Module)loader.loadClass(name).newInstance();
-				modules.add(m);
-			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-				logger.warning("Unable to load module: " + name + ", reason: " + ex.getMessage());
-			}
-		}
-		return modules;
 	}
 	
 	/**
