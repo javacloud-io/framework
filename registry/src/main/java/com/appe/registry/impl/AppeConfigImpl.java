@@ -133,7 +133,7 @@ public class AppeConfigImpl implements AppeConfig {
 		String resource = baseName + ".properties";
 		logger.info("Bind the config class: " + config.getName() + " to resource bundle: " + resource);
 		try {
-			final Properties properties = AppeLoader.loadProperties(resource, null);
+			final Properties properties = AppeLoader.loadProperties(resource);
 			if(properties == null || properties.isEmpty()) {
 				return new ConfigHandlerImpl();
 			}

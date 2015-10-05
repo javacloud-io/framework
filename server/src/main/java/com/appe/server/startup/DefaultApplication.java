@@ -60,8 +60,7 @@ public class DefaultApplication extends ResourceConfig {
 		
 		//AUTO LOAD THE FEATURES
 		try {
-			String resource = AppeLoader.resolveProfile("META-INF/server-components.jersey");
-			List<Class<?>> components = AppeLoader.loadClasses(resource);
+			List<Class<?>> components = AppeLoader.loadClasses("META-INF/server-components.jersey");
 			for(Class<?> component: components) {
 				register(component);
 			}

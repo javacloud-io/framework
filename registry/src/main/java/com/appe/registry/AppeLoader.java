@@ -32,8 +32,6 @@ import java.util.ServiceLoader;
  *
  */
 public final class AppeLoader {
-	//System profile to append to any resources
-	private static final  String PROFILE = System.getProperty("com.appe.profile");
 	private AppeLoader() {
 	}
 	
@@ -49,17 +47,6 @@ public final class AppeLoader {
 			loader = AppeLoader.class.getClassLoader();
 		}
 		return loader;
-	}
-	
-	/**
-	 * Resolve the profile to it correct name, always append the profile name. Driver resource using this to switch
-	 * runtime configuration.
-	 * 
-	 * @param resource
-	 * @return
-	 */
-	public static String resolveProfile(String resource) {
-		return (PROFILE == null? resource : (resource + "." + PROFILE));
 	}
 	
 	/**
@@ -83,19 +70,14 @@ public final class AppeLoader {
 	 */
 	public static List<Class<?>> loadClasses(String resource)
 			throws IOException, ClassNotFoundException {
-		ClassLoader loader = getClassLoader();
-		URL url = loader.getResource(resource);
-		if(url == null) {
+		//LOAD THE PROPERTIES
+		Properties props = loadProperties(resource);
+		if(props == null) {
 			return null;
 		}
 		
-		//LOAD THE PROPERTIES
-		Properties props = new Properties();
-		try (InputStream stream = url.openStream()) {
-			props.load(stream);
-		}
-		
 		//LOAD ALL THE CLASSES
+		ClassLoader loader = getClassLoader();
 		List<Class<?>> zclasses = new ArrayList<Class<?>>();
 		for(String name: props.stringPropertyNames()) {
 			Class<?> zclass = loader.loadClass(name);
@@ -133,17 +115,12 @@ public final class AppeLoader {
 	 * Return a properties resource for given class loader.
 	 * 
 	 * @param resource
-	 * @param loader
 	 * @return
 	 * @throws IOException
 	 */
-	public static Properties loadProperties(String resource, ClassLoader loader) throws IOException {
+	public static Properties loadProperties(String resource) throws IOException {
 		//MAKE SURE USING DEFAULT ONE
-		if(loader == null) {
-			loader = getClassLoader();
-		}
-		
-		URL url = loader.getResource(resource);
+		URL url = getClassLoader().getResource(resource);
 		if(url == null) {
 			return null;
 		}
