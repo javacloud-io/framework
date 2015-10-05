@@ -3,4 +3,3 @@ com.appe.registry.startup.ConfigModule
 com.appe.ext.internal.CommonModule
 
 #Application modules
-com.appe.showcase.startup.ShowcaseModule
