@@ -17,12 +17,9 @@ package com.appe.server.startup;
 
 import java.util.List;
 
-import javax.ws.rs.core.Feature;
-
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
 
-import com.appe.AppeException;
 import com.appe.registry.AppeLoader;
 /**
  * Basic jersey application configuration, providing basic features...
@@ -63,13 +60,13 @@ public class DefaultApplication extends ResourceConfig {
 		
 		//AUTO LOAD THE FEATURES
 		try {
-			String resource = AppeLoader.resolveProfile("META-INF/registry-features.jersey");
-			List<Feature> features = AppeLoader.loadServices(resource);
-			for(Feature f: features) {
-				register(f);
+			String resource = AppeLoader.resolveProfile("META-INF/server-components.jersey");
+			List<Class<?>> components = AppeLoader.loadClasses(resource);
+			for(Class<?> component: components) {
+				register(component);
 			}
-		}catch(Throwable ex) {
-			throw AppeException.wrap(ex);
+		}catch(Exception ex) {
+			throw new IllegalStateException("Unable to load jersey components", ex);
 		}
 	}
 	

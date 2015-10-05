@@ -1,1 +1,4 @@
+#Basic modules
+com.appe.registry.startup.ConfigModule
+com.appe.ext.internal.CommonModule
 com.appe.showcase.startup.ShowcaseModule

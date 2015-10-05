@@ -75,14 +75,14 @@ public final class AppeLoader {
 	}
 	
 	/**
-	 * Load all services from a resource properties file. NULL if resource not exist
+	 * Return all the classes from resource
 	 * 
 	 * @param resource
 	 * @return
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> loadServices(String resource) throws IOException {
+	public static List<Class<?>> loadClasses(String resource)
+			throws IOException, ClassNotFoundException {
 		ClassLoader loader = getClassLoader();
 		URL url = loader.getResource(resource);
 		if(url == null) {
@@ -96,14 +96,35 @@ public final class AppeLoader {
 		}
 		
 		//LOAD ALL THE CLASSES
-		List<T> services = new ArrayList<T>();
+		List<Class<?>> zclasses = new ArrayList<Class<?>>();
 		for(String name: props.stringPropertyNames()) {
-			try {
-				T s = (T)loader.loadClass(name).newInstance();
-				services.add(s);
-			} catch(ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-				throw new IOException(ex);
-			}
+			Class<?> zclass = loader.loadClass(name);
+			zclasses.add(zclass);
+		}
+		return zclasses;
+	}
+	
+	/**
+	 * Load all services from a resource properties file. NULL if resource not exist
+	 * 
+	 * @param resource
+	 * @return
+	 * @throws IOException
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> loadServices(String resource)
+			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		//LOAD CLASSES
+		List<Class<?>> zclasses = loadClasses(resource);
+		if(zclasses == null) {
+			return null;
+		}
+		
+		//LOAD ALL THE CLASSES
+		List<T> services = new ArrayList<T>();
+		for(Class<?> zclass: zclasses) {
+			T s = (T)zclass.newInstance();
+			services.add(s);
 		}
 		return services;
 	}

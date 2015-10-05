@@ -15,7 +15,6 @@
  */
 package com.appe.registry.internal;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -62,7 +61,7 @@ public final class GuiceFactory {
 			List<Module> overrides = AppeLoader.loadServices(resource + ".1");
 			
 			return builder.build(modules, overrides);
-		} catch(IOException ex) {
+		} catch(Exception ex) {
 			throw new ConfigurationException(Errors.getMessagesFromThrowable(ex));
 		}
 	}
