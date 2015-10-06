@@ -19,6 +19,8 @@ import java.util.List;
 
 import org.glassfish.jersey.CommonProperties;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.appe.registry.AppeLoader;
 /**
@@ -33,6 +35,8 @@ import com.appe.registry.AppeLoader;
  */
 //@ApplicationPath(context)
 public class DefaultApplication extends ResourceConfig {
+	private static final Logger logger = LoggerFactory.getLogger(DefaultApplication.class);
+	
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 * 
@@ -58,14 +62,15 @@ public class DefaultApplication extends ResourceConfig {
 			packages(packages);
 		}
 		
-		//AUTO LOAD THE FEATURES
+		//AUTO LOAD THE COMPONENTS
 		try {
 			List<Class<?>> components = AppeLoader.loadClasses("META-INF/server-components.jersey");
 			for(Class<?> component: components) {
+				logger.debug("Register jersey component: {}", component.getName());
 				register(component);
 			}
 		}catch(Exception ex) {
-			throw new IllegalStateException("Unable to load jersey components", ex);
+			logger.error("Unable to load jersey components", ex);
 		}
 	}
 	

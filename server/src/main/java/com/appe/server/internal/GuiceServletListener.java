@@ -20,8 +20,12 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 /**
- * Make sure to bind SERVLET with same context listener so FILTER & JPA WORKING
+ * Make sure to bind SERVLET with same context listener so FILTER/SERVLET & JPA WORKING.
  * 
+ * <listener>
+ *	   <listener-class>com.appe.server.internal.GuiceServletListener</listener-class>
+ * </listener>
+ *
  * @author ho
  *
  */

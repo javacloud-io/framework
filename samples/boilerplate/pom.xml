@@ -64,7 +64,11 @@
 		<artifactId>javax.servlet-api</artifactId>
 		<scope>provided</scope>
 	</dependency>
-	
+	<dependency>
+        <groupId>com.google.inject.extensions</groupId>
+        <artifactId>guice-servlet</artifactId>
+    </dependency>
+    
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>

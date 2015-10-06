@@ -23,6 +23,12 @@
   
 	<display-name>Showcase portal</display-name>
 	
+	<!-- Guice initialize -->
+    <listener>
+       <listener-class>com.appe.server.internal.GuiceServletListener</listener-class>
+    </listener>
+    
+    <!-- Security filter -->
 	<filter>
 		<filter-name>SecurityFilter</filter-name>
 		<filter-class>com.appe.server.filter.AuthorizationFilter</filter-class>
