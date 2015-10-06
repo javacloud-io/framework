@@ -43,13 +43,13 @@ import com.appe.server.test.internal.DelegateTestContainerFactory;
  */
 public abstract class DefaultServerTest extends JerseyTest {
 	public static final String CONTAINER_PATH 		= "jersey.config.test.container.path";
-	public static final String CONTAINER_DEBUG		= "jersey.config.test.container.debug";
+	public static final String CONTAINER_DEBUGGABLE	= "jersey.config.test.container.debuggable";
 	
 	/**
 	 * Enable the container debug by default. Turn off if needed to.
 	 */
 	public DefaultServerTest() {
-		enable(CONTAINER_DEBUG);
+		enable(CONTAINER_DEBUGGABLE);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public abstract class DefaultServerTest extends JerseyTest {
 	 */
 	@Override
 	protected DeploymentContext configureDeployment() {
-		if(isDebugContainer()) {
+		if(isDebuggableContainer()) {
 			enable(TestProperties.LOG_TRAFFIC);
 			enable(TestProperties.DUMP_ENTITY);
 		}
@@ -99,7 +99,7 @@ public abstract class DefaultServerTest extends JerseyTest {
 	 * 
 	 * @return
 	 */
-	protected boolean isDebugContainer() {
-		return Boolean.valueOf(System.getProperty(CONTAINER_DEBUG, "true"));
+	protected boolean isDebuggableContainer() {
+		return Boolean.valueOf(System.getProperty(CONTAINER_DEBUGGABLE, "true"));
 	}
 }
