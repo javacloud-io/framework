@@ -18,6 +18,8 @@ package com.appe.showcase.security;
 import java.security.Principal;
 import java.util.Set;
 
+import javax.inject.Singleton;
+
 import com.appe.authz.Authentication;
 import com.appe.authz.AuthenticationException;
 import com.appe.authz.Authenticator;
@@ -29,6 +31,7 @@ import com.appe.util.Objects;
  * @author ho
  *
  */
+@Singleton
 public class DummyAuthenticator implements Authenticator {
 
 	@Override
