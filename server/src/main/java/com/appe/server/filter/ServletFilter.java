@@ -49,18 +49,19 @@ public abstract class ServletFilter implements Filter {
 	}
 	
 	/**
+	 * Default configure the filter
+	 * 
+	 * @throws ServletException
+	 */
+	protected void configure() throws ServletException {
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */
 	public FilterConfig getConfig() {
 		return config;
-	}
-	
-	/**
-	 * 
-	 */
-	@Override
-	public void destroy() {
 	}
 	
 	/**
@@ -76,14 +77,7 @@ public abstract class ServletFilter implements Filter {
 	}
 	
 	/**
-	 * Default configure the filter
-	 * 
-	 * @throws ServletException
-	 */
-	protected void configure() throws ServletException {
-	}
-	
-	/**
+	 * Simple filter chain
 	 * 
 	 * @param req
 	 * @param resp
@@ -93,4 +87,12 @@ public abstract class ServletFilter implements Filter {
 	 */
 	public abstract void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException;
+	
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void destroy() {
+	}
 }

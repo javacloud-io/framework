@@ -107,7 +107,7 @@ public class AuthorizationFilter extends ServletFilter {
 				Class<?> type = AppeLoader.getClassLoader().loadClass(authenticator);
 				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(type);
 			}
-		} catch(Exception ex) {
+		} catch(ClassNotFoundException ex) {
 			throw new ServletException(ex);
 		}
 	}

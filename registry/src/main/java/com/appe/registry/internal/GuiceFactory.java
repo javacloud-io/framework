@@ -15,8 +15,10 @@
  */
 package com.appe.registry.internal;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -26,7 +28,7 @@ import com.appe.registry.AppeRegistry;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.internal.Errors;
+import com.google.inject.spi.Message;
 
 /**
  * Helper class to load and create juice injector. By default it will scan for appe-services.registry properties file.
@@ -61,8 +63,8 @@ public final class GuiceFactory {
 			List<Module> overrides = AppeLoader.loadServices(resource + ".1");
 			
 			return builder.build(modules, overrides);
-		} catch(Exception ex) {
-			throw new ConfigurationException(Errors.getMessagesFromThrowable(ex));
+		} catch(IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+			throw new ConfigurationException(Arrays.asList(new Message(ex.getClass() + ": " + ex.getMessage())));
 		}
 	}
 	

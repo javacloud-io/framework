@@ -16,14 +16,14 @@
 package com.appe.showcase.startup;
 
 import com.appe.authz.Authenticator;
+import com.appe.registry.internal.GuiceModule;
 import com.appe.showcase.security.DummyAuthenticator;
-import com.google.inject.AbstractModule;
 /**
  * 
  * @author ho
  *
  */
-public class ShowcaseModule extends AbstractModule {
+public class ShowcaseModule extends GuiceModule {
 	@Override
 	protected void configure() {
 		bind(Authenticator.class).to(DummyAuthenticator.class);

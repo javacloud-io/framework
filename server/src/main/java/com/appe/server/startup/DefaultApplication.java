@@ -15,6 +15,7 @@
  */
 package com.appe.server.startup;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.glassfish.jersey.CommonProperties;
@@ -69,7 +70,8 @@ public class DefaultApplication extends ResourceConfig {
 				logger.debug("Register jersey component: {}", component.getName());
 				register(component);
 			}
-		}catch(Exception ex) {
+		}catch(IOException | ClassNotFoundException ex) {
+			//DON'T RE-THROW EXCEPTION B/C IT's NOT SOLVING ANY REAL PROBLEM
 			logger.error("Unable to load jersey components", ex);
 		}
 	}
