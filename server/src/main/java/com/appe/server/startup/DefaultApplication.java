@@ -66,8 +66,8 @@ public class DefaultApplication extends ResourceConfig {
 		//AUTO LOAD THE COMPONENTS
 		try {
 			List<Class<?>> components = AppeLoader.loadClasses("META-INF/server-components.jersey");
+			logger.debug("Register jersey components: {}", components);
 			for(Class<?> component: components) {
-				logger.debug("Register jersey component: {}", component.getName());
 				register(component);
 			}
 		}catch(IOException | ClassNotFoundException ex) {
