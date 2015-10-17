@@ -16,33 +16,22 @@
 package com.appe.server.internal;
 
 import javax.inject.Inject;
-import javax.ws.rs.ext.ContextResolver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
- * Configure json mapping to register basic behaviors
+ * Make sure jackson using custom object mapper.
  * 
  * @author tobi
  *
  */
-public class JacksonContextResolver implements ContextResolver<ObjectMapper> {
-	private ObjectMapper objectMapper;
-	
+public class JacksonJaxbProvider extends com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider {
 	/**
 	 * Inject from registry
 	 * 
 	 * @param objectMapper
 	 */
 	@Inject
-	public JacksonContextResolver(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper;
-	}
-	
-	/**
-	 * return the MAPPER
-	 */
-	@Override
-	public ObjectMapper getContext(Class<?> type) {
-		return (type == ObjectMapper.class? objectMapper : null);
+	public JacksonJaxbProvider(ObjectMapper objectMapper) {
+		super(objectMapper, DEFAULT_ANNOTATIONS);
 	}
 }

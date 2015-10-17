@@ -47,12 +47,7 @@ public class JacksonMapper extends ObjectMapper {
 	 */
 	public JacksonMapper() {
 		//DEFAULT FEATURES
-		setDateFormat(DateFormats.get(DateFormats.DFL_ISO8601));
-		configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
-		
-		disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-		setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		configure();
 		
 		//CONFIGURE CUSTOM MODULE
 		SimpleModule module = new SimpleModule("APPE-json");
@@ -63,13 +58,29 @@ public class JacksonMapper extends ObjectMapper {
 	}
 	
 	/**
+	 * configure default feature
+	 */
+	protected void configure() {
+		//ENABLEs
+		enable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
+		
+		//DISABLEs
+		disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+		disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+		disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		
+		//DEFAULT DATE FORMAT
+		setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		setDateFormat(DateFormats.get(DateFormats.DFL_ISO8601));
+	}
+	
+	/**
 	 * Register custom module for special enhancing.
 	 * 
 	 * @param module
 	 * @return
 	 */
 	protected void configure(SimpleModule module) {
-		@SuppressWarnings({ "unchecked", "serial" })
 		final UntypedObjectDeserializer deserializer = new UntypedObjectDeserializer() {
 			@Override
 			protected Object mapObject(JsonParser jp, DeserializationContext ctxt)

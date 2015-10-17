@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.appe.ext.Identifiable;
 import com.appe.registry.internal.GuiceTestCase;
 import com.appe.util.Dictionary;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -44,5 +45,11 @@ public class JacksonMapperTest extends GuiceTestCase {
 		
 		//make sure map always dictionary type
 		Assert.assertEquals(Dictionary.class, dict.get("d").getClass());
+	}
+	
+	@Test
+	public void testNull() throws Exception {
+		String value = mapper.writeValueAsString(new Identifiable<String>(){});
+		Assert.assertEquals("{}", value);
 	}
 }
