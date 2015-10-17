@@ -15,7 +15,6 @@
  */
 package com.appe.authz.internal;
 
-import com.appe.authz.SimplePrincipal;
 import com.appe.security.Codecs;
 import com.appe.util.Dictionary;
 /**
