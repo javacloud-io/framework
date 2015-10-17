@@ -75,11 +75,12 @@ public class JacksonMapper extends ObjectMapper {
 	}
 	
 	/**
-	 * Register custom module for special enhancing.
+	 * Register custom module for special enhancing of Dictionary.
 	 * 
 	 * @param module
 	 * @return
 	 */
+	@SuppressWarnings({ "deprecation", "serial" , "unchecked"})
 	protected void configure(SimpleModule module) {
 		final UntypedObjectDeserializer deserializer = new UntypedObjectDeserializer() {
 			@Override
