@@ -84,7 +84,7 @@ public class AuthorizationFilter extends ServletFilter {
 	 * @throws ServletException
 	 */
 	@Override
-	protected void configure() throws ServletException {
+	protected void init() throws ServletException {
 		//AUTH SCHEME
 		this.challengeScheme = config.getInitParameter("challenge-scheme");
 		String roles = config.getInitParameter("allowed-roles");

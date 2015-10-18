@@ -41,8 +41,9 @@ public class WebAuthorizationFilter extends AuthorizationFilter {
 	 * 
 	 */
 	@Override
-	protected void configure() throws ServletException {
-		super.configure();
+	protected void init() throws ServletException {
+		super.init();
+		
 		this.accessCookie = config.getInitParameter("access-cookie");
 		if(this.accessCookie == null) {
 			this.accessCookie = IdPConstants.PARAM_ACCESS_TOKEN;

@@ -43,7 +43,7 @@ public class NamespaceFilter extends ServletFilter {
 	 * 
 	 */
 	@Override
-	protected void configure() throws ServletException {
+	protected void init() throws ServletException {
 		this.appeNamespace = AppeRegistry.get().getInstance(AppeNamespace.class);
 	}
 	

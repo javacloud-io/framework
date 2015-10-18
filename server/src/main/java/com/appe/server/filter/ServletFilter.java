@@ -45,7 +45,7 @@ public abstract class ServletFilter implements Filter {
 	@Override
 	public final void init(FilterConfig config) throws ServletException {
 		this.config = config;
-		configure();
+		init();
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public abstract class ServletFilter implements Filter {
 	 * 
 	 * @throws ServletException
 	 */
-	protected void configure() throws ServletException {
+	protected void init() throws ServletException {
 	}
 	
 	/**
