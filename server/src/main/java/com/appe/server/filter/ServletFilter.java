@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 public abstract class ServletFilter implements Filter {
 	//SINGLE LOGGER FOR SERVLET
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	protected FilterConfig config;
+	private FilterConfig config;
 	/**
 	 * 
 	 */
@@ -57,10 +57,20 @@ public abstract class ServletFilter implements Filter {
 	}
 	
 	/**
+	 * return initial parameter value if any
+	 * 
+	 * @param name
+	 * @return
+	 */
+	protected String getInitParameter(String name) {
+		return config.getInitParameter(name);
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */
-	public FilterConfig getConfig() {
+	protected FilterConfig getConfig() {
 		return config;
 	}
 	

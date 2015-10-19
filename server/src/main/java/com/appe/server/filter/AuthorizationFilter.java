@@ -86,21 +86,21 @@ public class AuthorizationFilter extends ServletFilter {
 	@Override
 	protected void init() throws ServletException {
 		//AUTH SCHEME
-		this.challengeScheme = config.getInitParameter("challenge-scheme");
-		String roles = config.getInitParameter("allowed-roles");
+		this.challengeScheme = getInitParameter("challenge-scheme");
+		String roles = getInitParameter("allowed-roles");
 		if(roles != null) {
 			this.allowedRoles = Objects.toArray(roles, ",", true);
 		}
 		
 		//LOGIN PAGE
-		this.loginPage = config.getInitParameter("login-page");
+		this.loginPage = getInitParameter("login-page");
 		if(loginPage == null) {
 			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
 		}
 		
 		//AUTHENTICATOR
 		try {
-			String authenticator = config.getInitParameter("authenticator");
+			String authenticator = getInitParameter("authenticator");
 			if(authenticator == null) {
 				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
 			} else {
