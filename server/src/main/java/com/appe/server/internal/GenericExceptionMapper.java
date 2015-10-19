@@ -66,9 +66,9 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		if(status >= 500) {
 			logger.error("HTTP status: {}, details: {}", status, entity, exception);
 		} else if (status >= 400) {
-			logger.warn("HTTP status: {}, details: {}", status, entity, exception);
+			logger.warn("HTTP status: {}, details: {}", status, entity);
 		} else {
-			logger.debug("HTTP status: {}, details: {}", status, entity, exception);
+			logger.debug("HTTP status: {}, details: {}", status, entity);
 		}
 		return Response.status(status).entity(entity).build();
 	}
