@@ -12,7 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.appe.util.Objects;
 /**
  * Map a given servlet to a JSP page, by default the page will be located under WEB-INF
- * 
+ * <init-param>
+ *     <param-name>mapping</param-name>
+ *	   <param-value></param-value>
+ * </init-param>
+ *		
  * @author ho
  *
  */
@@ -27,10 +31,10 @@ public class JspViewRender extends HttpServlet {
 		super.init();
 		
 		//requestURI:jsp,requestURI:jsp
-		String views = getInitParameter("mapper");
-		if(views != null) {
-			for(String view: Objects.toArray(views, ",", true)) {
-				String[] pair = Objects.toArray(view, ":", true);
+		String mapping = getInitParameter("mapping");
+		if(mapping != null && !mapping.isEmpty()) {
+			for(String mapp: Objects.toArray(mapping, ",", true)) {
+				String[] pair = Objects.toArray(mapp, ":", true);
 				if(pair.length == 2) {
 					mapper.put(pair[0], pair[1]);
 				}
@@ -39,7 +43,7 @@ public class JspViewRender extends HttpServlet {
 	}
 
 	/**
-	 * 
+	 * Forward to the correct view if specified
 	 */
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
