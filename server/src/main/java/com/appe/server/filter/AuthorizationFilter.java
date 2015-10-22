@@ -19,7 +19,6 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -28,14 +27,8 @@ import com.appe.AppeException;
 import com.appe.authz.AccessDeniedException;
 import com.appe.authz.Authentication;
 import com.appe.authz.AuthenticationException;
-import com.appe.authz.Authenticator;
 import com.appe.authz.InvalidCredentialsException;
-import com.appe.authz.internal.BasicCredentials;
-import com.appe.authz.internal.ClientCredentials;
 import com.appe.authz.internal.IdPConstants;
-import com.appe.authz.internal.TokenCredentials;
-import com.appe.registry.AppeLoader;
-import com.appe.registry.AppeRegistry;
 import com.appe.util.Dictionaries;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
@@ -51,15 +44,11 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class AuthorizationFilter extends ServletFilter {
+public class AuthorizationFilter extends SecurityContextFilter {
 	protected String   challengeScheme;		//redirect, basic, oauth...
 	protected String   loginPage;			//where is the login page if redirect
 	protected String[] allowRoles;			//which roles is GOOD
 	
-	protected String	accessToken;		//access token parameter
-	protected String 	accessCookie;		//access cookie name
-	
-	protected Authenticator authenticator;
 	public AuthorizationFilter() {
 	}
 	
@@ -89,6 +78,8 @@ public class AuthorizationFilter extends ServletFilter {
 	 */
 	@Override
 	protected void init() throws ServletException {
+		super.init();
+		
 		//AUTH SCHEME
 		this.challengeScheme = getInitParameter("challenge-scheme");
 		
@@ -103,34 +94,22 @@ public class AuthorizationFilter extends ServletFilter {
 		if(roles != null) {
 			this.allowRoles = Objects.toArray(roles, ",", true);
 		}
-		
-		//OPTIONALS TOKEN PARAM
-		this.accessToken = getInitParameter("access-token");
-		this.accessCookie= getInitParameter("access-cookie");
-		
-		//AUTHENTICATOR
-		try {
-			String authenticator = getInitParameter("authenticator");
-			if(authenticator == null) {
-				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
-			} else {
-				Class<?> type = AppeLoader.getClassLoader().loadClass(authenticator);
-				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(type);
-			}
-		} catch(ClassNotFoundException ex) {
-			throw new ServletException(ex);
-		}
 	}
 	
 	/**
 	 * Make sure always authenticate any REQUEST coming through and chain the security context
-	 * 
+	 * NULL GRANT ~ INVALID CREDS
 	 */
 	@Override
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
 			Authentication authzGrant = doAuthenticate(req);
+			if(authzGrant == null) {
+				throw new InvalidCredentialsException();
+			}
+			
+			//NOT GRANTED
 			if(allowRoles != null && !authzGrant.hasAnyRoles(allowRoles)) {
 				throw new AccessDeniedException();
 			}
@@ -139,66 +118,6 @@ public class AuthorizationFilter extends ServletFilter {
 		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		}
-	}
-	
-	/**
-	 * Make sure to add enough context around the authentication...
-	 * ALSO CHECK FOR CONTEXT & PERMISSION....
-	 *  
-	 * @param req
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 * @throws AuthenticationException
-	 */
-	protected Authentication doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		BasicCredentials credentials = extractCredentials(req);
-		if(credentials == null) {
-			logger.debug("Not found credentials, access denied!");
-			throw new InvalidCredentialsException();
-		}
-		
-		//TODO: OK, FILL IN SOME REQUEST DETALS (IP, USER AGENT, DEVICE...)
-		return	authenticator.authenticate(credentials);
-	}
-	
-	/**
-	 * Inspect the authorization header. By default support basic authentication / access_token.
-	 * 1. OAuth2 authorization header
-	 * 2. Access token from request
-	 * 3. Access token from cookie
-	 * 
-	 * @param req
-	 * @return
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	protected BasicCredentials extractCredentials(HttpServletRequest req) throws ServletException, IOException {
-		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
-		
-		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
-		if(!Objects.isEmpty(authorization)) {
-			if(authorization.startsWith(IdPConstants.SCHEME_BEARER)) {
-				return	new TokenCredentials(authorization.substring(IdPConstants.SCHEME_BEARER.length() + 1));
-			} else if(authorization.startsWith(IdPConstants.SCHEME_BASIC)) {
-				return new ClientCredentials(authorization.substring(IdPConstants.SCHEME_BASIC.length() + 1));
-			} else {
-				logger.debug("Unknown authorization header: {}", authorization);
-			}
-		}
-		
-		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
-		String token = null;
-		if(this.accessToken != null) {
-			token = req.getParameter(this.accessToken);
-		}
-		if(token == null && this.accessCookie != null) {
-			Cookie cookie = RequestWrapper.getCookie(req, this.accessCookie);
-			if(cookie != null) {
-				token = cookie.getValue();
-			}
-		}
-		return	(token == null? null : new TokenCredentials(token));
 	}
 	
 	/**
