@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -53,7 +54,10 @@ import com.appe.util.Objects;
 public class AuthorizationFilter extends ServletFilter {
 	protected String   challengeScheme;		//redirect, basic, oauth...
 	protected String   loginPage;			//where is the login page if redirect
-	protected String[] allowedRoles;		//which roles is GOOD
+	protected String[] allowRoles;			//which roles is GOOD
+	
+	protected String	accessToken;		//access token parameter
+	protected String 	accessCookie;		//access cookie name
 	
 	protected Authenticator authenticator;
 	public AuthorizationFilter() {
@@ -71,7 +75,7 @@ public class AuthorizationFilter extends ServletFilter {
 	 * </init-param>
 	 * 
 	 * <init-param>
-	 *	<param-name>allowed-roles</param-name>
+	 *	<param-name>allow-roles</param-name>
 	 *	<param-value></param-value>		
 	 * </init-param>
 	 * 
@@ -95,10 +99,14 @@ public class AuthorizationFilter extends ServletFilter {
 		}
 		
 		//ROLES
-		String roles = getInitParameter("allowed-roles");
+		String roles = getInitParameter("allow-roles");
 		if(roles != null) {
-			this.allowedRoles = Objects.toArray(roles, ",", true);
+			this.allowRoles = Objects.toArray(roles, ",", true);
 		}
+		
+		//OPTIONALS TOKEN PARAM
+		this.accessToken = getInitParameter("access-token");
+		this.accessCookie= getInitParameter("access-cookie");
 		
 		//AUTHENTICATOR
 		try {
@@ -119,11 +127,11 @@ public class AuthorizationFilter extends ServletFilter {
 	 * 
 	 */
 	@Override
-	public final void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
+	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
 			Authentication authzGrant = doAuthenticate(req);
-			if(allowedRoles != null && !authzGrant.hasAnyRoles(allowedRoles)) {
+			if(allowRoles != null && !authzGrant.hasAnyRoles(allowRoles)) {
 				throw new AccessDeniedException();
 			}
 			
@@ -180,8 +188,17 @@ public class AuthorizationFilter extends ServletFilter {
 		}
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
-		String accessToken = req.getParameter(IdPConstants.PARAM_ACCESS_TOKEN);
-		return	(accessToken == null? null : new TokenCredentials(accessToken));
+		String token = null;
+		if(this.accessToken != null) {
+			token = req.getParameter(this.accessToken);
+		}
+		if(token == null && this.accessCookie != null) {
+			Cookie cookie = RequestWrapper.getCookie(req, this.accessCookie);
+			if(cookie != null) {
+				token = cookie.getValue();
+			}
+		}
+		return	(token == null? null : new TokenCredentials(token));
 	}
 	
 	/**

@@ -17,6 +17,7 @@ package com.appe.server.filter;
 
 import java.security.Principal;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -76,6 +77,27 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 			request = new RequestWrapper(request, authz);
 		}
 		return request;
+	}
+	
+	/**
+	 * Decode access token from cookie if any, due to the nature of unsecured environment, the cookie might need
+	 * to decode and validate...
+	 * 
+	 * @param req
+	 * @param cookieName
+	 * 
+	 * @return
+	 */
+	public static final Cookie getCookie(HttpServletRequest req, String cookieName) {
+		Cookie[] cookies = req.getCookies();
+		if(cookies != null && cookies.length > 0) {
+			for (Cookie cookie : cookies) {
+				if (cookieName.equals(cookie.getName())) {
+					return	cookie;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**
