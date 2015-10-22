@@ -51,9 +51,9 @@ import com.appe.util.Objects;
  * @author tobi
  */
 public class AuthorizationFilter extends ServletFilter {
-	protected String   challengeScheme;
-	protected String[] allowedRoles;
-	protected String   loginPage;
+	protected String   challengeScheme;		//redirect, basic, oauth...
+	protected String   loginPage;			//where is the login page if redirect
+	protected String[] allowedRoles;		//which roles is GOOD
 	
 	protected Authenticator authenticator;
 	public AuthorizationFilter() {
@@ -61,12 +61,12 @@ public class AuthorizationFilter extends ServletFilter {
 	
 	/**
 	 * <init-param>
-	 *	<param-name>login-page</param-name>
+	 *	<param-name>challenge-scheme</param-name>
 	 *	<param-value></param-value>		
 	 * </init-param>
 	 * 
 	 * <init-param>
-	 *	<param-name>challenge-scheme</param-name>
+	 *	<param-name>login-page</param-name>
 	 *	<param-value></param-value>		
 	 * </init-param>
 	 * 
@@ -87,15 +87,17 @@ public class AuthorizationFilter extends ServletFilter {
 	protected void init() throws ServletException {
 		//AUTH SCHEME
 		this.challengeScheme = getInitParameter("challenge-scheme");
-		String roles = getInitParameter("allowed-roles");
-		if(roles != null) {
-			this.allowedRoles = Objects.toArray(roles, ",", true);
-		}
 		
 		//LOGIN PAGE
 		this.loginPage = getInitParameter("login-page");
 		if(loginPage == null) {
 			loginPage = IdPConstants.LOGIN_REDIRECT_URI;
+		}
+		
+		//ROLES
+		String roles = getInitParameter("allowed-roles");
+		if(roles != null) {
+			this.allowedRoles = Objects.toArray(roles, ",", true);
 		}
 		
 		//AUTHENTICATOR
