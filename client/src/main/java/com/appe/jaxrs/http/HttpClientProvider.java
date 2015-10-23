@@ -53,7 +53,7 @@ public class HttpClientProvider implements Provider<Client> {
 			}
 		} catch(IOException | ClassNotFoundException ex) {
 			//DON'T RE-THROW EXCEPTION B/C IT's NOT SOLVING ANY REAL PROBLEM
-			logger.error("Unable to load jersey components", ex);
+			logger.error("Unable to load jersey client components", ex);
 		}
 		return config;
 	}

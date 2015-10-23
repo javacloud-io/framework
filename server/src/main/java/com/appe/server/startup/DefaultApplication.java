@@ -72,7 +72,7 @@ public class DefaultApplication extends ResourceConfig {
 			}
 		}catch(IOException | ClassNotFoundException ex) {
 			//DON'T RE-THROW EXCEPTION B/C IT's NOT SOLVING ANY REAL PROBLEM
-			logger.error("Unable to load jersey components", ex);
+			logger.error("Unable to load jersey server components", ex);
 		}
 	}
 	
