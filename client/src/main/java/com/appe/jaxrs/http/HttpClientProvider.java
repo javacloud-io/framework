@@ -1,4 +1,4 @@
-package com.appe.client.http;
+package com.appe.jaxrs.http;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,11 +37,11 @@ public class HttpClientProvider implements Provider<Client> {
 	}
 	
 	/**
-	 * return client configuration
+	 * return client configuration, can be use for good testing
 	 * 
 	 * @return
 	 */
-	protected ClientConfig configure() {
+	public ClientConfig configure() {
 		ClientConfig config = new ClientConfig();
 		
 		//LOAD DEFAULT CONFIG

@@ -1,8 +1,8 @@
-package com.appe.client.http;
+package com.appe.jaxrs.http;
 
 import org.junit.Test;
 
-import com.appe.client.http.HttpClientProvider;
+import com.appe.jaxrs.http.HttpClientProvider;
 
 import junit.framework.TestCase;
 /**

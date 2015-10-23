@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>appe-client</artifactId>
   <packaging>jar</packaging>
-  <name>Common restFull client application</name>
+  <name>Common jaxrs client application</name>
   
   <build>
 	<plugins>
@@ -63,6 +63,10 @@
     <dependency>
         <groupId>org.glassfish.jersey.core</groupId>
         <artifactId>jersey-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-json-jackson</artifactId>
     </dependency>
   </dependencies>
 </project>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.internal;
+package com.appe.jaxrs.json;
 
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
@@ -33,7 +33,7 @@ public class JacksonFeature implements Feature {
 	}
 	@Override
 	public boolean configure(FeatureContext context) {
-		context.property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE_SERVER, true)
+		context.property(CommonProperties.JSON_PROCESSING_FEATURE_DISABLE, true)
 			   .register(JacksonJaxbProvider.class, MessageBodyReader.class, MessageBodyWriter.class);
 		return true;
 	}
