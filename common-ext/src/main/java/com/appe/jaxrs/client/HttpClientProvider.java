@@ -1,4 +1,4 @@
-package com.appe.jaxrs.http;
+package com.appe.jaxrs.client;
 
 import java.io.IOException;
 import java.util.List;

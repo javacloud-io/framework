@@ -39,7 +39,6 @@
     <module>registry</module>
 	<module>common</module>
 	<module>common-ext</module>
-    <module>client</module>
     <module>server-test</module>
 	<module>server</module>
 	<module>samples</module>
