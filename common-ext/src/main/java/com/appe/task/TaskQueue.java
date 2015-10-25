@@ -15,7 +15,7 @@ public interface TaskQueue<T> extends TaskTuple<T> {
 	
 	/**
 	 * 
-	 * @param job
+	 * @param task
 	 * @param delaySeconds
 	 */
 	public void offer(T task, int delaySeconds);
