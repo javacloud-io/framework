@@ -15,8 +15,8 @@
  */
 package com.appe.showcase.startup;
 
-import com.appe.authz.Authenticator;
 import com.appe.registry.internal.GuiceModule;
+import com.appe.security.Authenticator;
 import com.appe.showcase.security.DummyAuthenticator;
 /**
  * 

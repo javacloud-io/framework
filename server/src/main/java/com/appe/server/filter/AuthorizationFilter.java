@@ -24,11 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
 import com.appe.AppeException;
-import com.appe.authz.AccessDeniedException;
-import com.appe.authz.Authentication;
-import com.appe.authz.AuthenticationException;
-import com.appe.authz.InvalidCredentialsException;
-import com.appe.authz.internal.IdPConstants;
+import com.appe.security.AccessDeniedException;
+import com.appe.security.Authentication;
+import com.appe.security.AuthenticationException;
+import com.appe.security.IdPConstants;
+import com.appe.security.InvalidCredentialsException;
 import com.appe.util.Dictionaries;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;

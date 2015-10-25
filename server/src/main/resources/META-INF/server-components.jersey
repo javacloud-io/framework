@@ -1,4 +1,4 @@
 # Basic features
 com.appe.server.internal.GuiceHK2Feature
-com.appe.jaxrs.json.JacksonFeature
+com.appe.ext.internal.JacksonFeature
 com.appe.server.startup.DefaultExceptionMapper

@@ -19,7 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
-import com.appe.security.Codecs;
+import com.appe.util.Codecs;
 /**
  * 
  * @author aimee

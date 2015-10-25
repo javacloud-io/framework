@@ -46,8 +46,6 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.appe.security.Codecs;
-
 /**
  * It's much more powerful to use XML Plist instead of java properties file.
  * 

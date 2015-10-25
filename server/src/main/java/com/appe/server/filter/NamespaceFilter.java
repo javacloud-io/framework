@@ -22,7 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.appe.AppeNamespace;
+import com.appe.ext.AppeNamespace;
 import com.appe.registry.AppeRegistry;
 import com.appe.util.Objects;
 /**

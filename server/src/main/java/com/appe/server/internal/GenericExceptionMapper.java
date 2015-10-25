@@ -24,11 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.AppeException;
-import com.appe.authz.AccessDeniedException;
-import com.appe.authz.AuthenticationException;
 import com.appe.ext.AlreadyExistsException;
 import com.appe.ext.NotFoundException;
 import com.appe.ext.ValidationException;
+import com.appe.security.AccessDeniedException;
+import com.appe.security.AuthenticationException;
 import com.appe.util.Dictionary;
 import com.appe.util.Objects;
 import com.fasterxml.jackson.core.JsonProcessingException;

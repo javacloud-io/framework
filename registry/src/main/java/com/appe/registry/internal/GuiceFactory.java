@@ -18,6 +18,7 @@ package com.appe.registry.internal;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,9 +26,11 @@ import java.util.logging.Logger;
 
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
+import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 import com.google.inject.spi.Message;
 
 /**
@@ -75,7 +78,7 @@ public final class GuiceFactory {
 	 * 
 	 * @return
 	 */
-	public final static Injector registryInjector() {
+	public static Injector registryInjector() {
 		try {
 			AppeRegistry registry = AppeRegistry.get();
 			Method method = registry.getClass().getMethod("getInjector");
@@ -84,5 +87,20 @@ public final class GuiceFactory {
 			logger.warning("Unable to find Guice injector, reason: " + ex.getMessage());
 		}
 		return null;
+	}
+	
+	/**
+	 * Find all instances of the service type.
+	 */
+	public static <T> List<T> getInstances(Injector injector, Class<T> type) {
+		List<Binding<T>> bindings = injector.findBindingsByType(TypeLiteral.get(type));
+		if(bindings == null || bindings.isEmpty()) {
+			return Collections.emptyList();
+		}
+		List<T> instances = new ArrayList<>(bindings.size());
+		for(Binding<T> b: bindings) {
+			instances.add(b.getProvider().get());
+		}
+		return instances;
 	}
 }

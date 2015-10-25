@@ -22,8 +22,8 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.ext.Identifiable;
 import com.appe.registry.internal.GuiceTestCase;
+import com.appe.security.Identifiable;
 import com.appe.util.Dictionary;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;

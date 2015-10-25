@@ -24,15 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
-import com.appe.authz.Authentication;
-import com.appe.authz.AuthenticationException;
-import com.appe.authz.Authenticator;
-import com.appe.authz.internal.BasicCredentials;
-import com.appe.authz.internal.ClientCredentials;
-import com.appe.authz.internal.IdPConstants;
-import com.appe.authz.internal.TokenCredentials;
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
+import com.appe.security.Authentication;
+import com.appe.security.AuthenticationException;
+import com.appe.security.Authenticator;
+import com.appe.security.IdPConstants;
+import com.appe.security.internal.BasicCredentials;
+import com.appe.security.internal.ClientCredentials;
+import com.appe.security.internal.TokenCredentials;
 import com.appe.util.Objects;
 
 /**

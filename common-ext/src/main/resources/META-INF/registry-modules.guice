@@ -1,2 +1,2 @@
 # Basic modules
-com.appe.ext.internal.CommonModule
+com.appe.ext.impl.CommonModule
