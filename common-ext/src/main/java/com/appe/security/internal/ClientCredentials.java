@@ -15,7 +15,6 @@
  */
 package com.appe.security.internal;
 
-import com.appe.security.IdPConstants;
 
 
 /**

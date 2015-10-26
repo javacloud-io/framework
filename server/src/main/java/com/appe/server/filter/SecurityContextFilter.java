@@ -29,9 +29,9 @@ import com.appe.registry.AppeRegistry;
 import com.appe.security.Authentication;
 import com.appe.security.AuthenticationException;
 import com.appe.security.Authenticator;
-import com.appe.security.IdPConstants;
 import com.appe.security.internal.BasicCredentials;
 import com.appe.security.internal.ClientCredentials;
+import com.appe.security.internal.IdPConstants;
 import com.appe.security.internal.TokenCredentials;
 import com.appe.util.Objects;
 
