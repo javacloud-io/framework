@@ -65,7 +65,7 @@ public class GuiceHK2Feature implements Feature {
 		context.register(new AbstractBinder() {
             @Override
             protected void configure() {
-            	bindFactory(RequestHK2Factory.class).to(Authorization.class);
+            	bindFactory(SecurityHK2Factory.class).to(Authorization.class);
             }
         });
 		return true;
