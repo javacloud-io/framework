@@ -35,8 +35,6 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	private Authorization authz;
 	RequestWrapper(HttpServletRequest request, Authorization authz) {
 		super(request);
-		
-		//MAKE SURE TO KEEP AS BOTH PLACE!
 		this.authz = authz;
 	}
 	
@@ -76,6 +74,8 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 		} else {
 			request = new RequestWrapper(request, authz);
 		}
+		//ALWAYS SET TO THE CONTEXT
+		request.setAttribute(Authorization.class.getName(), authz);
 		return request;
 	}
 	
