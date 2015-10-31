@@ -8,7 +8,7 @@ import java.security.Principal;
  * @author ho
  *
  */
-public interface AccessPrincipal extends Principal {
+public interface AccessIdentity extends Principal {
 	/**
 	 * 
 	 * @return

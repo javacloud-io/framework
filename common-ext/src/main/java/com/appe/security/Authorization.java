@@ -24,7 +24,7 @@ import java.util.Set;
  * @author aimee
  *
  */
-public abstract class Authorization implements AccessPrincipal {
+public abstract class Authorization implements AccessIdentity {
 	protected Authorization() {
 		
 	}
@@ -46,7 +46,7 @@ public abstract class Authorization implements AccessPrincipal {
 	@Override
 	public String getAudience() {
 		Principal principal = getPrincipal();
-		return (principal instanceof AccessPrincipal ? ((AccessPrincipal)principal).getAudience() : null);
+		return (principal instanceof AccessIdentity ? ((AccessIdentity)principal).getAudience() : null);
 	}
 	
 	/**
