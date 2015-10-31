@@ -12,28 +12,18 @@ package com.appe.task;
  */
 public interface TaskManager {
 	/**
-	 * Register a Queue name with element type, return the existing one if already created. Queue are unique by NAME but TYPE
-	 * help message serialization.
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
-	 */
-	public <T> TaskQueue<T> bindQueue(String name, Class<T> type);
-	
-	/**
 	 * Start an executor to burn down tasks, just number of worker is needed. return FALSE if an executor already
 	 * started for this tuple.
 	 * 
-	 * @param tuple
+	 * @param poller
 	 * @param executor
 	 * @param numberOfWorker
 	 * @return
 	 */
-	public <T> boolean startExecutor(TaskTuple<T> tuple, TaskExecutor<T> executor, int numberOfWorker);
+	public <T> boolean startExecutor(TaskPoller<T> poller, TaskExecutor<T> executor, int numberOfWorker);
 	
 	/**
-	 * 
+	 * Terminate and shutdown all workers... make sure to wait for long enough for worker to finish JOB
 	 */
 	public void shutdown();
 }

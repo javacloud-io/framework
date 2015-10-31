@@ -26,13 +26,14 @@ import javax.ws.rs.core.HttpHeaders;
 
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
-import com.appe.security.Authentication;
+import com.appe.security.Authorization;
 import com.appe.security.AuthenticationException;
 import com.appe.security.Authenticator;
-import com.appe.security.internal.BasicCredentials;
+import com.appe.security.internal.Credentials;
 import com.appe.security.internal.ClientCredentials;
 import com.appe.security.internal.IdPConstants;
 import com.appe.security.internal.TokenCredentials;
+import com.appe.server.internal.RequestWrapper;
 import com.appe.util.Objects;
 
 /**
@@ -87,7 +88,7 @@ public class SecurityContextFilter extends ServletFilter {
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			Authentication authzGrant = doAuthenticate(req);
+			Authorization authzGrant = doAuthenticate(req);
 			if(authzGrant != null) {
 				chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
 			} else {
@@ -109,8 +110,8 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	protected Authentication doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		BasicCredentials credentials = extractCredentials(req);
+	protected Authorization doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
+		Credentials credentials = requestCredentials(req);
 		
 		//ASSUMING NULL GRANT
 		if(credentials == null) {
@@ -132,7 +133,7 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected BasicCredentials extractCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected Credentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)

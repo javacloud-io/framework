@@ -15,11 +15,14 @@
  */
 package com.appe.registry.impl;
 
+import java.beans.Introspector;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
 import com.appe.registry.AppeConfig;
+import com.appe.util.Converter;
+import com.appe.util.Objects;
 /**
  * Quick implementation using properties, make sure to be able to convert the message.
  * 
@@ -54,9 +57,9 @@ public class ConfigHandlerImpl implements InvocationHandler {
 			value = null;
 		}
 		
-		//TODO: support strip of getXXX ?
+		//USING METHOD NAME
 		if(name == null || name.isEmpty()) {
-			name = method.getName();
+			name = stripGetter(method.getName());
 		}
 		
 		value = resolveValue(name, value);
@@ -90,38 +93,39 @@ public class ConfigHandlerImpl implements InvocationHandler {
 	 * @param type
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected Object convertValue(String value, Class<?> type) {
 		//NOTHING TO CONVERT AT ALL
 		if(type == String.class) {
 			return value;
 		}
-		//AUTO BOXING to use valueOf
-		if(type == boolean.class || type == Boolean.class) {
-			return	Boolean.valueOf(value);
+		
+		//ENUM TYPE
+		if(type.isEnum()) {
+			return	Enum.valueOf(type.asSubclass(Enum.class), value);
 		}
-		if(type == byte.class || type == Byte.class) {
-			return	Byte.valueOf(value);
-		}
-		if(type == char.class || type == Character.class) {
-			return	Character.valueOf(value.charAt(0));
-		}
-		if(type == short.class || type == Short.class) {
-			return	Short.valueOf(value);
-		}
-		if(type == int.class || type == Integer.class) {
-			return Integer.valueOf(value);
-		}
-		if(type == long.class || type == Long.class) {
-			return Long.valueOf(value);
-		}
-		if(type == float.class || type == Float.class) {
-			return Float.valueOf(value);
-		}
-		if(type == double.class || type == Double.class) {
-			return Double.valueOf(value);
+		
+		//PRIMITIVES
+		Converter<?> c = Objects.PRIMITIVES.get(type);
+		if(c != null) {
+			return c.convert(value);
 		}
 		
 		//UNKNOW TYPE => RETURN STRING?
 		return value;
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	protected String stripGetter(String name) {
+		if(name.startsWith("get")) {
+			Introspector.decapitalize(name.substring(3));
+		} else if(name.startsWith("is")) {
+			Introspector.decapitalize(name.substring(2));
+		}
+		return name;
 	}
 }

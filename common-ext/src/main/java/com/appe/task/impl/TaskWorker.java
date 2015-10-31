@@ -1,4 +1,4 @@
-package com.appe.task.internal;
+package com.appe.task.impl;
 
 import java.util.concurrent.TimeUnit;
 
@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.appe.task.TaskExecutor;
-import com.appe.task.TaskTuple;
+import com.appe.task.TaskPoller;
 
 /**
  * Simple task WORKER just keep polling the JOB. It's dump enough to not even re-try any execution...
@@ -16,19 +16,19 @@ import com.appe.task.TaskTuple;
  *
  * @param <T>
  */
-public class TaskPoller<T> implements Runnable {
-	private static final Logger logger = LoggerFactory.getLogger(TaskPoller.class);
-	private static final int WAIT_TIMEOUT = (int)TimeUnit.SECONDS.convert(1, TimeUnit.HOURS);		//DEFAULT 1 HOUR EACH?
+public class TaskWorker<T> implements Runnable {
+	private static final Logger logger = LoggerFactory.getLogger(TaskWorker.class);
+	private static final int WAIT_TIMEOUT = (int)TimeUnit.SECONDS.convert(1, TimeUnit.HOURS);	//DEFAULT 1 HOUR EACH?
 	
-	private TaskTuple<T> tuple;
+	private TaskPoller<T> poller;
 	private TaskExecutor<T> executor;
 	/**
 	 * Poller using tuple and an executor, keep polling & execute them one by one.
-	 * @param tuple
+	 * @param poller
 	 * @param executor
 	 */
-	public TaskPoller(TaskTuple<T> tuple, TaskExecutor<T> executor) {
-		this.tuple = tuple;
+	public TaskWorker(TaskPoller<T> poller, TaskExecutor<T> executor) {
+		this.poller   = poller;
 		this.executor = executor;
 	}
 	
@@ -42,7 +42,7 @@ public class TaskPoller<T> implements Runnable {
 			T task = null;
 			try {
 				//POLL & EXECUTE ONLY IF HAVE TASK
-				task = tuple.poll(WAIT_TIMEOUT);
+				task =  poller.poll(WAIT_TIMEOUT);
 				if(task != null) {
 					executor.execute(task);
 				}

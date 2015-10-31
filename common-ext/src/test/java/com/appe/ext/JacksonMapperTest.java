@@ -23,7 +23,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.appe.registry.internal.GuiceTestCase;
-import com.appe.security.Identifiable;
 import com.appe.util.Dictionary;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -51,5 +50,6 @@ public class JacksonMapperTest extends GuiceTestCase {
 	public void testNull() throws Exception {
 		String value = mapper.writeValueAsString(new Identifiable<String>(){});
 		Assert.assertEquals("{}", value);
+		System.out.println(long.class.getName());
 	}
 }

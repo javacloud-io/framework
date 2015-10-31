@@ -11,12 +11,12 @@ import com.appe.task.TaskQueue;
  *
  * @param <T>
  */
-public class LocalTaskQueue<T> implements TaskQueue<T> {
+public class BlockingTaskQueue<T> implements TaskQueue<T> {
 	private BlockingQueue<T> queue;
-	public LocalTaskQueue() {
+	public BlockingTaskQueue() {
 		this(new LinkedBlockingQueue<T>());
 	}
-	public LocalTaskQueue(BlockingQueue<T> queue) {
+	public BlockingTaskQueue(BlockingQueue<T> queue) {
 		this.queue = queue;
 	}
 	

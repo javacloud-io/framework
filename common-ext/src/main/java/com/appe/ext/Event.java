@@ -2,7 +2,6 @@ package com.appe.ext;
 
 import java.util.Date;
 
-import com.appe.security.Identifiable;
 import com.appe.util.Dictionary;
 
 /**

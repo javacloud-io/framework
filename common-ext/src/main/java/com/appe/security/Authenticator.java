@@ -32,5 +32,5 @@ public interface Authenticator {
 	 * @return
 	 * @throws AuthenticationException
 	 */
-	public Authentication authenticate(Principal credentials) throws AuthenticationException;
+	public Authorization authenticate(Principal credentials) throws AuthenticationException;
 }

@@ -9,7 +9,7 @@ package com.appe.task;
  *
  * @param <T>
  */
-public interface TaskTuple<T> {
+public interface TaskPoller<T> {
 	/**
 	 * Maximum wait timeoutSeconds when polling, if nothing found will return NULL.
 	 * 

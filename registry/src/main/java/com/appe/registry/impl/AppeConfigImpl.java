@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import com.appe.AppeException;
 import com.appe.registry.AppeConfig;
 import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeLocale;
@@ -159,7 +160,7 @@ public class AppeConfigImpl implements AppeConfig {
 						}
 					};
 		}catch(IOException ex) {
-			throw new IllegalArgumentException(ex);
+			throw AppeException.wrap(ex);
 		}
 	}
 	

@@ -1,6 +1,7 @@
 #Basic modules
-com.appe.registry.startup.ConfigModule
+com.appe.registry.impl.ConfigModule
 com.appe.ext.impl.CommonModule
+com.appe.task.impl.TaskModule
 
 #Application modules
 com.appe.showcase.startup.ShowcaseModule

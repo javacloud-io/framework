@@ -28,8 +28,8 @@ import java.util.TimeZone;
  */
 public final class DateFormats {
 	//UTC ISO8601?
-	public static final String	DFS_ISO8601 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-	public static final String	DFL_ISO8601 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	public static final String	UTC_ISO8601    = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String	UTC_ISO8601_MS = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 	private DateFormats() {
 	}
 	
@@ -37,8 +37,8 @@ public final class DateFormats {
 	 * 
 	 * @return
 	 */
-	public static DateFormat get() {
-		return get(DFS_ISO8601);
+	public static DateFormat getUTC() {
+		return getUTC(UTC_ISO8601);
 	}
 	
 	/**
@@ -46,7 +46,7 @@ public final class DateFormats {
 	 * @param pattern
 	 * @return
 	 */
-	public static DateFormat get(String pattern) {
+	public static DateFormat getUTC(String pattern) {
 		return get(pattern, TimeZone.getTimeZone("UTC"));
 	}
 	

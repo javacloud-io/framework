@@ -13,33 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.security.internal;
-
-import java.security.Principal;
+package com.appe.ext;
 /**
- * Make sure to give somebody a NAME
+ * Something unique identify the OBJECT, mostly is automatically generated OBJECT.
  * 
  * @author ho
  *
+ * @param <T>
  */
-public class SimplePrincipal implements Principal {
-	protected String name;
-	protected SimplePrincipal() {
+public abstract class Identifiable<T> {
+	private T id;
+	protected Identifiable() {
 	}
 	
 	/**
 	 * 
-	 * @param name
+	 * @param id
 	 */
-	public SimplePrincipal(String name) {
-		this.name = name;
+	protected Identifiable(T id) {
+		this.id = id;
 	}
 	
 	/**
 	 * 
+	 * @return
 	 */
-	@Override
-	public String getName() {
-		return name;
+	public T getId() {
+		return id;
+	}
+	public void setId(T id) {
+		this.id = id;
 	}
 }

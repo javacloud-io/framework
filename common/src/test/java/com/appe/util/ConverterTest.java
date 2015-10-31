@@ -29,6 +29,5 @@ public class ConverterTest extends TestCase {
 	public void testString() {
 		String date = Converter.STRING.convert(new Date());
 		Converter.DATE.convert(date);
-		System.out.println(Boolean.valueOf("1"));
 	}
 }

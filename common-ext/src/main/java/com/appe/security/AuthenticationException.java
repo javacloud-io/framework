@@ -27,6 +27,7 @@ public class AuthenticationException extends AppeException {
 	
 	public static final String UNAUTHORIZED_CLIENT 	= "unauthorized_client";
 	public static final String INVALID_CREDENTIALS 	= "invalid_credentials";
+	public static final String EXPIRED_CREDENTIALS 	= "expired_credentials";
 	public static final String INVALID_SCOPE 		= "invalid_scope";
 	public static final String ACCESS_DENIED 		= "access_denied";
 	/**

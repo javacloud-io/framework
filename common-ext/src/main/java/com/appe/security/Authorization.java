@@ -24,8 +24,8 @@ import java.util.Set;
  * @author aimee
  *
  */
-public abstract class Authentication implements Principal {
-	protected Authentication() {
+public abstract class Authorization implements AccessPrincipal {
+	protected Authorization() {
 		
 	}
 	
@@ -37,7 +37,18 @@ public abstract class Authentication implements Principal {
 		Principal principal = getPrincipal();
 		return (principal == null? null : principal.getName());
 	}
-
+	
+	/**
+	 * Intended of the application which claim is for
+	 * 
+	 * @return
+	 */
+	@Override
+	public String getAudience() {
+		Principal principal = getPrincipal();
+		return (principal instanceof AccessPrincipal ? ((AccessPrincipal)principal).getAudience() : null);
+	}
+	
 	/**
 	 * return the delegate principal if any associated besides this.
 	 * 

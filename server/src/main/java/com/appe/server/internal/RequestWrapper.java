@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.filter;
+package com.appe.server.internal;
 
 import java.security.Principal;
 
@@ -21,7 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.appe.security.Authentication;
+import com.appe.security.Authorization;
 
 /**
  * WRAPP THE GRANT AUTHENTICATION CONTEXT to provide an extra layer of protection on regular servlet authorization.
@@ -32,8 +32,8 @@ import com.appe.security.Authentication;
  *
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
-	private Authentication authz;
-	RequestWrapper(HttpServletRequest request, Authentication authz) {
+	private Authorization authz;
+	RequestWrapper(HttpServletRequest request, Authorization authz) {
 		super(request);
 		
 		//MAKE SURE TO KEEP AS BOTH PLACE!
@@ -70,7 +70,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param authz
 	 * @return
 	 */
-	public static final HttpServletRequest wrap(HttpServletRequest request, Authentication authz) {
+	public static final HttpServletRequest wrap(HttpServletRequest request, Authorization authz) {
 		if(request instanceof RequestWrapper) {
 			((RequestWrapper)request).authz = authz;
 		} else {

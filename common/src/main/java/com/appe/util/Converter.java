@@ -156,6 +156,23 @@ public interface Converter<T> {
 			return (value != null ? ByteBuffer.wrap(Codecs.decodeBase64((String)value, false)) : null);
 		}
 	};
+	//BYTES
+	public static final Converter<byte[]> BYTES = new Converter<byte[]>() {
+		@Override
+		public byte[] convert(Object value) {
+			if(value instanceof ByteBuffer) {
+				ByteBuffer buf = (ByteBuffer)value;
+				byte[] dst = new byte[buf.remaining()];
+				buf.get(dst);
+				return dst;
+			} else if(value instanceof byte[]) {
+				return (byte[])value;
+			}
+			
+			//ASSUMING BASE64 STRING ENCODED?
+			return (value != null ? Codecs.decodeBase64((String)value, false) : null);
+		}
+	};
 	//DATE
 	public static final Converter<Date> DATE = new Converter<Date>() {
 		@Override
@@ -167,7 +184,7 @@ public interface Converter<T> {
 			}
 			//USING ISO DATE
 			try {
-				return (value != null? DateFormats.get(DateFormats.DFL_ISO8601).parse((String)value) : null);
+				return (value != null? DateFormats.getUTC(DateFormats.UTC_ISO8601_MS).parse((String)value) : null);
 			}catch(ParseException ex) {
 				throw AppeException.wrap(ex);
 			}
@@ -180,7 +197,7 @@ public interface Converter<T> {
 			if(value instanceof String) {
 				return	(String)value;
 			} else if(value instanceof Date) {
-				return DateFormats.get(DateFormats.DFL_ISO8601).format((Date)value);
+				return DateFormats.getUTC(DateFormats.UTC_ISO8601_MS).format((Date)value);
 			} else if(value instanceof byte[]) {
 				return Codecs.encodeBase64((byte[])value, false);
 			} else if(value instanceof Object[]) {

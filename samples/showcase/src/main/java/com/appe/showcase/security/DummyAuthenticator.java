@@ -20,7 +20,7 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
-import com.appe.security.Authentication;
+import com.appe.security.Authorization;
 import com.appe.security.AuthenticationException;
 import com.appe.security.Authenticator;
 import com.appe.security.InvalidCredentialsException;
@@ -35,13 +35,13 @@ import com.appe.util.Objects;
 public class DummyAuthenticator implements Authenticator {
 
 	@Override
-	public Authentication authenticate(final Principal credentials) throws AuthenticationException {
+	public Authorization authenticate(final Principal credentials) throws AuthenticationException {
 		if(credentials == null) {
 			throw new InvalidCredentialsException();
 		}
 		
 		final Set<String> roles = Objects.asSet("user");
-		return new Authentication() {
+		return new Authorization() {
 			@Override
 			public Principal getPrincipal() {
 				return credentials;

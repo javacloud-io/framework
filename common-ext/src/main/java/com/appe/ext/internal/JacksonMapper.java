@@ -22,7 +22,9 @@ import javax.inject.Singleton;
 
 import com.appe.util.DateFormats;
 import com.appe.util.Dictionary;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -61,7 +63,14 @@ public class JacksonMapper extends ObjectMapper {
 	 * configure default feature
 	 */
 	protected void configure() {
-		//ENABLEs
+		//ONLY FIELD
+		setVisibility(PropertyAccessor.FIELD, 	 Visibility.ANY);
+		setVisibility(PropertyAccessor.GETTER, 	 Visibility.NONE);
+		setVisibility(PropertyAccessor.SETTER, 	 Visibility.NONE);
+		setVisibility(PropertyAccessor.IS_GETTER,Visibility.NONE);
+		setVisibility(PropertyAccessor.CREATOR,  Visibility.NONE);
+		
+		//WRITE EMPTY
 		enable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
 		
 		//DISABLEs
@@ -71,7 +80,7 @@ public class JacksonMapper extends ObjectMapper {
 		
 		//DEFAULT DATE FORMAT
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		setDateFormat(DateFormats.get(DateFormats.DFL_ISO8601));
+		setDateFormat(DateFormats.getUTC(DateFormats.UTC_ISO8601_MS));
 	}
 	
 	/**

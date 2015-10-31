@@ -1,9 +1,7 @@
-package com.appe.registry.startup;
+package com.appe.registry.impl;
 
 import com.appe.registry.AppeConfig;
 import com.appe.registry.AppeLocale;
-import com.appe.registry.impl.AppeConfigImpl;
-import com.appe.registry.impl.AppeLocaleImpl;
 import com.google.inject.AbstractModule;
 /**
  * Make sure to be able to configure and inject the configuration properly.

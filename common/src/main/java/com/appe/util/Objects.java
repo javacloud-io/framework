@@ -15,9 +15,11 @@
  */
 package com.appe.util;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,6 +34,29 @@ import java.util.concurrent.TimeUnit;
  *
  */
 public final class Objects {
+	//PRIMITIVES MAP
+	public static final Map<Class<?>, Converter<?>> PRIMITIVES = asMap(
+			boolean.class, 	Converter.BOOLEAN,
+			Boolean.class, 	Converter.BOOLEAN,
+			byte.class,    	Converter.BYTE,
+			Byte.class, 	Converter.BYTE,
+			char.class,		Converter.CHARACTER,
+			Character.class,Converter.CHARACTER,
+			short.class,	Converter.SHORT,
+			Short.class,	Converter.SHORT,
+			int.class,		Converter.INTEGER,
+			Integer.class,	Converter.INTEGER,
+			long.class,		Converter.LONG,
+			Long.class,		Converter.LONG,
+			float.class,	Converter.FLOAT,
+			Float.class,	Converter.FLOAT,
+			double.class,	Converter.DOUBLE,
+			Double.class,	Converter.DOUBLE,
+			String.class,	Converter.STRING,
+			Date.class,		Converter.DATE,
+			byte[].class,	Converter.BYTES,
+			ByteBuffer.class,Converter.BYTEB
+		);
 	/**
 	 * Generic comparing 2 objects. It has to be comparable some how.
 	 * NULL <= NULL < NOT NULL

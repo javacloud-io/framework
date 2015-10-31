@@ -32,5 +32,12 @@
 		<groupId>com.google.inject</groupId>
 		<artifactId>guice</artifactId>
 	</dependency>
-    </dependencies>
+	
+	<!-- APPE -->
+    <dependency>
+        <groupId>com.appe.framework</groupId>
+        <artifactId>appe-common</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+   </dependencies>
 </project>

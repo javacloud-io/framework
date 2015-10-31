@@ -2,7 +2,7 @@ package com.appe.task.internal;
 
 
 //import com.google.common.util.concurrent.RateLimiter;
-import com.appe.task.TaskTuple;
+import com.appe.task.TaskPoller;
 /**
  * To avoid contention from original tuple, a rate limiter will be applied so polling to exceed the processing rate.
  * It will be number of task / seconds which task executor are able to pull.
@@ -12,16 +12,16 @@ import com.appe.task.TaskTuple;
  *
  * @param <T>
  */
-public class ThrottlerTaskTuple<T> implements TaskTuple<T> {
-	private TaskTuple<T> tuple;
+public class ThrottlerTaskPoller<T> implements TaskPoller<T> {
+	private TaskPoller<T> poller;
 	//private RateLimiter limiter;
 	/**
 	 * Limit to number of poll task / seconds. 
 	 * @param tuple
 	 * @param limit
 	 */
-	public ThrottlerTaskTuple(TaskTuple<T> tuple, double limit) {
-		this.tuple = tuple;
+	public ThrottlerTaskPoller(TaskPoller<T> poller, double limit) {
+		this.poller = poller;
 		//this.limiter = RateLimiter.create(limit);
 	}
 	
@@ -34,6 +34,6 @@ public class ThrottlerTaskTuple<T> implements TaskTuple<T> {
 	@Override
 	public T poll(int timeoutSeconds) throws InterruptedException {
 		//limiter.acquire(1);
-		return	tuple.poll(timeoutSeconds);
+		return	poller.poll(timeoutSeconds);
 	}
 }

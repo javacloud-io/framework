@@ -23,7 +23,7 @@ package com.appe.security.internal;
  * @author tobi
  *
  */
-public class ClientCredentials extends BasicCredentials {
+public class ClientCredentials extends Credentials {
 	/**
 	 * 
 	 * @param clientId
@@ -46,7 +46,7 @@ public class ClientCredentials extends BasicCredentials {
 	 * @return
 	 */
 	public String getRedirectURI() {
-		return getExtra(IdPConstants.PARAM_REDIRECT_URI);
+		return getAttribute(IdPConstants.PARAM_REDIRECT_URI);
 	}
 	
 	/**
@@ -54,6 +54,6 @@ public class ClientCredentials extends BasicCredentials {
 	 * @return
 	 */
 	public String getScope() {
-		return getExtra(IdPConstants.PARAM_SCOPE);
+		return getAttribute(IdPConstants.PARAM_SCOPE);
 	}
 }

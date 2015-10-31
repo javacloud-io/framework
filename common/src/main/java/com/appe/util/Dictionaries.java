@@ -229,7 +229,7 @@ public final class Dictionaries {
 		} else if("string".equals(type)) {
 			return	element.getTextContent();
 		} else if("date".equals(type)) {
-			return DateFormats.get().parse(element.getTextContent());
+			return DateFormats.getUTC().parse(element.getTextContent());
 		} else if("data".equals(type)) {
 			return	Codecs.decodeBase64(element.getTextContent(), false);
 		} else if("array".equals(type)) {
@@ -344,7 +344,7 @@ public final class Dictionaries {
 			return element;
 		} else if(value instanceof java.util.Date) {
 			Node element = xmlDoc.createElement("date");
-			element.setTextContent(DateFormats.get().format((java.util.Date)value));
+			element.setTextContent(DateFormats.getUTC().format((java.util.Date)value));
 			return element;
 		} else if(value instanceof byte[]) {//BYTEs => ENCODE
 			//broken down in 64 characters/line

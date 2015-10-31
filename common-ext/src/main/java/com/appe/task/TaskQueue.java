@@ -1,4 +1,6 @@
 package com.appe.task;
+
+
 /**
  * Queue of tasks which you can add in something and can get back something else.
  * 
@@ -6,7 +8,7 @@ package com.appe.task;
  *
  * @param <T>
  */
-public interface TaskQueue<T> extends TaskTuple<T> {
+public interface TaskQueue<T> extends TaskPoller<T> {
 	/**
 	 * 
 	 * @param task

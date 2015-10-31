@@ -64,15 +64,4 @@ public abstract class AppeRegistry {
 	 * @return
 	 */
 	public abstract <T> List<T> getInstances(Class<T> type);
-	
-	/**
-	 * Configuration instance by default just annotated using NAME=VALUE, with optional bundle
-	 * 
-	 * @param config
-	 * @return
-	 */
-	public <T> T getConfig(Class<T> config) {
-		AppeConfig factory = getInstance(AppeConfig.class);
-		return factory.get(config);
-	}
 }

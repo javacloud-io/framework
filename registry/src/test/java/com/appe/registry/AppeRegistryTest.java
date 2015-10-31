@@ -72,7 +72,8 @@ public class AppeRegistryTest extends GuiceTestCase {
 	 */
 	@Test
 	public void testConfig() {
-		TestConfig tconfig= AppeRegistry.get().getConfig(TestConfig.class);
+		AppeConfig appeConfig = AppeRegistry.get().getInstance(AppeConfig.class);
+		TestConfig tconfig= appeConfig.get(TestConfig.class);
 		Assert.assertNotNull(tconfig);
 		
 		//LOAD CONFIG
@@ -84,7 +85,8 @@ public class AppeRegistryTest extends GuiceTestCase {
 	@Test
 	public void testI18nConfig() {
 		//LOAD I18N
-		TestI18nConfig i18nConfig = AppeRegistry.get().getConfig(TestI18nConfig.class);
+		AppeConfig appeConfig = AppeRegistry.get().getInstance(AppeConfig.class);
+		TestI18nConfig i18nConfig = appeConfig.get(TestI18nConfig.class);
 		Assert.assertEquals("Hello", i18nConfig.hello());
 		Assert.assertEquals("Hello HO", i18nConfig.hello("HO"));
 		

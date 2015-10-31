@@ -15,6 +15,8 @@
  */
 package com.appe.security.internal;
 
+import java.security.Principal;
+
 import com.appe.util.Codecs;
 import com.appe.util.Dictionary;
 /**
@@ -23,18 +25,27 @@ import com.appe.util.Dictionary;
  * @author tobi
  *
  */
-public class BasicCredentials extends SimplePrincipal {
+public class Credentials implements Principal {
+	private String 		name;
 	private	String 		secret;
-	private Dictionary 	extras;
+	private Dictionary 	attributes;
 	
 	/**
 	 * 
 	 * @param name
 	 * @param secret
 	 */
-	public BasicCredentials(String name, String secret) {
-		super(name);
+	public Credentials(String name, String secret) {
+		this.name 	= name;
 		this.secret = secret;
+	}
+	
+	/**
+	 * return the NAME
+	 */
+	@Override
+	public String getName() {
+		return name;
 	}
 	
 	/**
@@ -42,7 +53,7 @@ public class BasicCredentials extends SimplePrincipal {
 	 * 
 	 * @param base64Token
 	 */
-	public BasicCredentials(String base64Token) {
+	public Credentials(String base64Token) {
 		String stoken = Codecs.encodeUTF8(Codecs.decodeBase64(base64Token, false));
 		int index = stoken.indexOf(':');
 		if(index >= 0) {
@@ -68,12 +79,12 @@ public class BasicCredentials extends SimplePrincipal {
 	 * @param value
 	 * @return
 	 */
-	public BasicCredentials withExtra(String name, Object value) {
+	public Credentials withAttribute(String name, Object value) {
 		//CREATE ONE IF NOT EXIST
-		if(extras == null) {
-			extras = new Dictionary();
+		if(attributes == null) {
+			attributes = new Dictionary();
 		}
-		extras.set(name, value);
+		attributes.set(name, value);
 		return this;
 	}
 	
@@ -84,7 +95,7 @@ public class BasicCredentials extends SimplePrincipal {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getExtra(String name) {
-		return (T)(extras == null? null : extras.get(name));
+	public <T> T getAttribute(String name) {
+		return (T)(attributes == null? null : attributes.get(name));
 	}
 }

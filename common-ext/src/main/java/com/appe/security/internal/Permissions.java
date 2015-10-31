@@ -1,7 +1,7 @@
 package com.appe.security.internal;
 
 import com.appe.security.AccessDeniedException;
-import com.appe.security.Authentication;
+import com.appe.security.Authorization;
 
 
 /**
@@ -17,7 +17,7 @@ public final class Permissions {
 	public static final String ROLE_ADMINISTRATOR	= "administrator";
 	public static final String ROLE_DEVELOPER		= "developer";
 	
-	//OWNER OF NAMESPACE user from APPE
+	//AN EMPTY ROLE
 	public static final String ROLE_OWNER			= "owner";
 	
 	//Valid user in the system
@@ -42,7 +42,7 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertAny(Authentication authz, String... permissions)
+	public static String assertAny(Authorization authz, String... permissions)
 		throws AccessDeniedException {
 		if(authz == null || !authz.hasAnyRoles(permissions)) {
 			throw new AccessDeniedException();
@@ -58,7 +58,7 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertNone(Authentication authz, String... permissions)
+	public static String assertNone(Authorization authz, String... permissions)
 		throws AccessDeniedException {
 		if(authz == null || authz.hasAnyRoles(permissions)) {
 			throw new AccessDeniedException();
@@ -74,7 +74,7 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertAll(Authentication authz, String... permissions)
+	public static String assertAll(Authorization authz, String... permissions)
 		throws AccessDeniedException {
 		if(authz == null || !authz.hasAllRoles(permissions)) {
 			throw new AccessDeniedException();

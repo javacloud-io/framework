@@ -15,8 +15,10 @@
  */
 package com.appe.server.startup;
 
+import javax.inject.Inject;
+
 import com.appe.ext.MessageBundle;
-import com.appe.registry.AppeRegistry;
+import com.appe.registry.AppeConfig;
 import com.appe.server.internal.GenericExceptionMapper;
 /**
  * The least caught exception handler, in case of the application doesn't have any better way to handler them.
@@ -26,8 +28,9 @@ import com.appe.server.internal.GenericExceptionMapper;
  */
 public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwable> {
 	private final MessageBundle bundle;
-	public DefaultExceptionMapper() {
-		this.bundle = AppeRegistry.get().getConfig(MessageBundle.class);
+	@Inject
+	public DefaultExceptionMapper(AppeConfig appeConfig) {
+		this.bundle = appeConfig.get(MessageBundle.class);
 	}
 	
 	/**

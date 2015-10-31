@@ -23,7 +23,7 @@ package com.appe.security.internal;
  * @author tobi
  *
  */
-public class TokenCredentials extends BasicCredentials {
+public class TokenCredentials extends Credentials {
 	public TokenCredentials(String token) {
 		super(null, token);
 	}
