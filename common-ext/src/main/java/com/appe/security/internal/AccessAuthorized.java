@@ -10,7 +10,7 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class AuthorizedGrant extends Authorization {
+public class AccessAuthorized extends Authorization {
 	private static final Set<String> EMPTY_ROLES = Objects.asSet();
 	
 	private Principal	principal;
@@ -20,7 +20,7 @@ public class AuthorizedGrant extends Authorization {
 	 * @param principal
 	 * @param roles
 	 */
-	public AuthorizedGrant(Principal principal, Set<String> roles) {
+	public AccessAuthorized(Principal principal, Set<String> roles) {
 		this.principal = principal;
 		this.roles 	   = roles;
 	}
@@ -29,7 +29,7 @@ public class AuthorizedGrant extends Authorization {
 	 * 
 	 * @param principal
 	 */
-	public AuthorizedGrant(Principal principal) {
+	public AccessAuthorized(Principal principal) {
 		this(principal, EMPTY_ROLES);
 	}
 	

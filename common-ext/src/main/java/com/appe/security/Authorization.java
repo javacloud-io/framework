@@ -39,7 +39,7 @@ public abstract class Authorization implements AccessIdentity {
 	}
 	
 	/**
-	 * Intended of the application which claim is for
+	 * Intended of the target which claim is good for. Normally it's an application who making call.
 	 * 
 	 * @return
 	 */

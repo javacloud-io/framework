@@ -29,7 +29,6 @@ public class Credentials implements Principal {
 	private String 		name;
 	private	String 		secret;
 	private Dictionary 	attributes;
-	
 	/**
 	 * 
 	 * @param name
@@ -97,5 +96,14 @@ public class Credentials implements Principal {
 	@SuppressWarnings("unchecked")
 	public <T> T getAttribute(String name) {
 		return (T)(attributes == null? null : attributes.get(name));
+	}
+	
+	/**
+	 * adopt attributes from other credentials
+	 * 
+	 * @param credentials
+	 */
+	void withAttributes(Credentials credentials) {
+		this.attributes = credentials.attributes;
 	}
 }
