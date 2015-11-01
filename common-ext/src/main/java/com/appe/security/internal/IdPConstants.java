@@ -54,6 +54,5 @@ public interface IdPConstants {
 	
 	//ERROR CODEs
 	public static final String ERROR_SERVER_ERROR 	= "server_error";
-	public static final String ERROR_INVALID_REQUEST= "invalid_request";
 	public static final String LOGIN_REDIRECT_URI	= "/login";
 }

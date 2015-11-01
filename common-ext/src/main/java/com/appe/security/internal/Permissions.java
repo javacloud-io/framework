@@ -26,7 +26,7 @@ public final class Permissions {
 	//untrusted client, native/browser with KEY
 	public static final String ROLE_UNTRUSTED_CLIENT= "untrusted_client";
 	
-	//trusted server client
+	//trusted server client with KEY
 	public static final String ROLE_TRUSTED_CLIENT	= "trusted_client";
 	private Permissions() {
 	}
