@@ -17,10 +17,7 @@ public final class Permissions {
 	public static final String ROLE_ADMINISTRATOR	= "administrator";
 	public static final String ROLE_DEVELOPER		= "developer";
 	
-	//AN EMPTY ROLE
-	public static final String ROLE_OWNER			= "owner";
-	
-	//Valid user in the system
+	//any valid user in the system
 	public static final String ROLE_USER			= "user";
 	
 	//any valid client_id

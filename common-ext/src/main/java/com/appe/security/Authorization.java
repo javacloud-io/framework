@@ -30,7 +30,7 @@ public abstract class Authorization implements AccessIdentity {
 	}
 	
 	/**
-	 * BY DEFAULT RETURN THE SAME as PRINCIPAL!
+	 * BY DEFAULT RETURN THE DISPLAY NAME as PRINCIPAL!
 	 */
 	@Override
 	public String getName() {
