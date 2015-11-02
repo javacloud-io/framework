@@ -1,5 +1,5 @@
 # Basic components
-com.appe.server.internal.GuiceHK2Feature
+com.appe.server.hk2.GuiceHK2Feature
 com.appe.ext.internal.JacksonFeature
 com.appe.server.internal.GenericExceptionMapper
 

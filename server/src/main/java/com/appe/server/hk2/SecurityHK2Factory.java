@@ -1,4 +1,4 @@
-package com.appe.server.internal;
+package com.appe.server.hk2;
 
 import java.security.Principal;
 
