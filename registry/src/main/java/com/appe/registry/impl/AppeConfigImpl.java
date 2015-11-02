@@ -100,7 +100,7 @@ public class AppeConfigImpl implements AppeConfig {
 			if(bundle != null && bundle.i18n()) {
 				configHandler = createI18nHandler(baseName, config);
 			} else {
-				configHandler = createPropertiesHandler(baseName, config);
+				configHandler = createConfigHandler(baseName, config);
 			}
 		}
 		return Proxy.newProxyInstance(AppeLoader.getClassLoader(), new Class<?>[]{ config }, configHandler);
@@ -129,7 +129,7 @@ public class AppeConfigImpl implements AppeConfig {
 	 * @param config
 	 * @return
 	 */
-	protected InvocationHandler createPropertiesHandler(String baseName, Class<?> config) {
+	protected InvocationHandler createConfigHandler(String baseName, Class<?> config) {
 		//ALWAYS APPEND .properties to load the resource
 		String resource = baseName + ".properties";
 		logger.info("Bind the config class: " + config.getName() + " to resource bundle: " + resource);
