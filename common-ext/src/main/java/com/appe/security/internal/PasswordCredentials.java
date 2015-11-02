@@ -23,11 +23,11 @@ package com.appe.security.internal;
  * @author ho
  *
  */
-public class UserCredentials extends Credentials {
-	public UserCredentials(String name, String secret) {
+public class PasswordCredentials extends Credentials {
+	public PasswordCredentials(String name, String secret) {
 		super(name, secret);
 	}
-	public UserCredentials(String base64Token) {
+	public PasswordCredentials(String base64Token) {
 		super(base64Token);
 	}
 }
