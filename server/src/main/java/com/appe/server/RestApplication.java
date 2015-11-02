@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.startup;
+package com.appe.server;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,15 +35,15 @@ import com.appe.registry.AppeLoader;
  *
  */
 //@ApplicationPath(context)
-public class DefaultApplication extends ResourceConfig {
-	private static final Logger logger = LoggerFactory.getLogger(DefaultApplication.class);
+public class RestApplication extends ResourceConfig {
+	private static final Logger logger = LoggerFactory.getLogger(RestApplication.class);
 	
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 * 
 	 * @param serviceLocator
 	 */
-	public DefaultApplication(String...packages) {
+	public RestApplication(String...packages) {
 		configure(packages);
 	}
 	

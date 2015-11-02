@@ -20,7 +20,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.server.internal.GenericExceptionMapper;
+import com.appe.server.internal.DefaultExceptionMapper;
 
 /**
  * TODO: all the basic test of exception
@@ -29,7 +29,7 @@ import com.appe.server.internal.GenericExceptionMapper;
  *
  */
 public class ExceptionMapperTest {
-	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>();
+	private DefaultExceptionMapper<Throwable> mapper = new DefaultExceptionMapper<Throwable>();
 	
 	@Test
 	public void testEx() {

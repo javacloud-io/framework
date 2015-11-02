@@ -15,131 +15,29 @@
  */
 package com.appe.server.internal;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
+import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.appe.AppeException;
-import com.appe.ext.AlreadyExistsException;
-import com.appe.ext.NotFoundException;
-import com.appe.ext.ValidationException;
-import com.appe.security.AccessDeniedException;
-import com.appe.security.AuthenticationException;
-import com.appe.util.Dictionary;
-import com.appe.util.Objects;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.appe.ext.i18n.MessageBundle;
+import com.appe.registry.AppeConfig;
 /**
- * To be able to handle basic error nicely which always in format of {error, description}
+ * The least caught exception handler, in case of the application doesn't have any better way to handler them.
  * 
  * @author ho
  *
  */
-public class GenericExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
-	private static final Logger logger = LoggerFactory.getLogger(GenericExceptionMapper.class);
-	public GenericExceptionMapper() {
+public final class GenericExceptionMapper extends DefaultExceptionMapper<Throwable> {
+	private final MessageBundle bundle;
+	@Inject
+	public GenericExceptionMapper(AppeConfig appeConfig) {
+		this.bundle = appeConfig.get(MessageBundle.class);
 	}
 	
 	/**
-	 * Make sure to be able to map any exception to nicely JSON response.
-	 * By default reason code & message name will be used.
+	 * Using default message bundle to translate message
 	 * 
 	 */
 	@Override
-	public Response toResponse(E exception) {
-		int status;
-		if(exception instanceof WebApplicationException) {
-			Response resp = ((WebApplicationException)exception).getResponse();
-			if(resp.getEntity() != null) {
-				return resp;
-			}
-			status = resp.getStatus();
-		} else {
-			status = toStatus(exception);
-		}
-		
-		//DEBUG DETAILS
-		Dictionary entity = toEntity(exception);
-		if(status >= 500) {
-			logger.error("HTTP status: {}, details: {}", status, entity, exception);
-		} else if (status >= 400) {
-			logger.warn("HTTP status: {}, details: {}", status, entity);
-		} else {
-			logger.debug("HTTP status: {}, details: {}", status, entity);
-		}
-		return Response.status(status).entity(entity).build();
-	}
-	
-	/**
-	 * Nicely translate exception to status code.
-	 * 
-	 */
-	protected int toStatus(Throwable exception) {
-		if(exception instanceof AuthenticationException) {
-			if(exception instanceof AccessDeniedException) {
-				return	Status.FORBIDDEN.getStatusCode();
-			} else {
-				return	Status.UNAUTHORIZED.getStatusCode();
-			}
-		}
-		
-		if(exception instanceof AlreadyExistsException) {
-			return	Status.CONFLICT.getStatusCode();
-		}
-		
-		if(exception instanceof NotFoundException
-				|| exception instanceof java.io.FileNotFoundException) {
-			return	Status.NOT_FOUND.getStatusCode();
-		}
-		
-		if(exception instanceof ValidationException
-				|| exception instanceof javax.validation.ValidationException
-				|| exception instanceof IllegalArgumentException
-				|| exception instanceof JsonProcessingException) {
-			return	Status.BAD_REQUEST.getStatusCode();
-		}
-		return	Status.INTERNAL_SERVER_ERROR.getStatusCode();
-	}
-	
-	/**
-	 * Convert exception to nicely entity {error:code, description: message}
-	 * 
-	 * @param exception
-	 * @return
-	 */
-	protected Dictionary toEntity(E exception) {
-		String error;
-		//REASON ERROR
-		if(exception instanceof AppeException) {
-			error = ((AppeException)exception).getReason();
-		} else {
-			error = AppeException.findReason(exception);
-		}
-		
-		//DETAILS MESSAGE LOCALE
-		String message;
-		if(exception instanceof JsonProcessingException) {
-			message = ((JsonProcessingException)exception).getOriginalMessage();
-		} else {
-			message = exception.getMessage();
-		}
-		
-		if(Objects.isEmpty(message)) {
-			message = exception.getClass().getName();
-		}
-		return Objects.asDict("error", error, "message", toLocalizedMessage(message));
-	}
-	
-	/**
-	 * Return the localized message if any found
-	 * 
-	 * @param message
-	 * @return
-	 */
 	protected String toLocalizedMessage(String message) {
-		return	message;
+		return bundle.getLocalizedMessage(message);
 	}
 }

@@ -17,7 +17,7 @@ package com.appe.showcase.startup;
 
 import javax.ws.rs.ApplicationPath;
 
-import com.appe.server.startup.DefaultApplication;
+import com.appe.server.RestApplication;
 
 /**
  * Route all the API packages to the same v1 resource root.
@@ -26,7 +26,7 @@ import com.appe.server.startup.DefaultApplication;
  *
  */
 @ApplicationPath("/v1/*")
-public class ShowcaseApplication extends DefaultApplication {
+public class ShowcaseApplication extends RestApplication {
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 */
