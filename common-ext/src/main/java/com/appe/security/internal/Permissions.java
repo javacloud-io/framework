@@ -41,10 +41,10 @@ public final class Permissions {
 	 */
 	public static String assertAny(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || !authz.hasAnyRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || !authz.hasAnyRoles(permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getName();
+		return authz.getPrincipal().getName();
 	}
 	
 	/**
@@ -57,10 +57,10 @@ public final class Permissions {
 	 */
 	public static String assertNone(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.hasAnyRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || authz.hasAnyRoles(permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getName();
+		return authz.getPrincipal().getName();
 	}
 	
 	/**
@@ -73,9 +73,9 @@ public final class Permissions {
 	 */
 	public static String assertAll(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || !authz.hasAllRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || !authz.hasAllRoles(permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getName();
+		return authz.getPrincipal().getName();
 	}
 }
