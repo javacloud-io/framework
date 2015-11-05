@@ -17,6 +17,8 @@ package com.appe.server.test;
 
 import javax.ws.rs.core.Application;
 
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
@@ -83,6 +85,15 @@ public abstract class DefaultServerTest extends JerseyTest {
 			containerFactory = new DelegateTestContainerFactory(containerFactory);
 		}
 		return	containerFactory;
+	}
+	
+	/**
+	 * DISABLE FOLLOW REDIRECTS
+	 */
+	@Override
+	protected void configureClient(ClientConfig config) {
+		super.configureClient(config);
+		config.property(ClientProperties.FOLLOW_REDIRECTS, false);
 	}
 	
 	/**
