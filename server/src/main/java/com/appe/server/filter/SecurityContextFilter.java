@@ -138,10 +138,10 @@ public class SecurityContextFilter extends ServletFilter {
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
 		if(!Objects.isEmpty(authorization)) {
-			if(authorization.startsWith(IdPConstants.SCHEME_BEARER)) {
-				return	new TokenCredentials(authorization.substring(IdPConstants.SCHEME_BEARER.length() + 1));
-			} else if(authorization.startsWith(IdPConstants.SCHEME_BASIC)) {
-				return new ClientCredentials(authorization.substring(IdPConstants.SCHEME_BASIC.length() + 1));
+			if(authorization.startsWith(IdPConstants.Scheme.Bearer.name())) {
+				return	new TokenCredentials(authorization.substring(IdPConstants.Scheme.Bearer.name().length() + 1));
+			} else if(authorization.startsWith(IdPConstants.Scheme.Basic.name())) {
+				return new ClientCredentials(authorization.substring(IdPConstants.Scheme.Basic.name().length() + 1));
 			} else {
 				logger.debug("Unknown authorization header: {}", authorization);
 			}

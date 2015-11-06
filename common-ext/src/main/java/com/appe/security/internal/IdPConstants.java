@@ -21,6 +21,23 @@ package com.appe.security.internal;
  *
  */
 public interface IdPConstants {
+	//Schemes
+	public static enum Scheme {
+		Basic,	//Client Basic
+		Bearer;	//Oauth2 Bearer
+	}
+	//
+	public static enum ResponseType {
+		token,
+		code
+	}
+	//
+	public static enum GrantType {
+		authorization_code,
+		password,
+		client_credentials
+	}
+	
 	//REQUEST PARAMETERs
 	public static final String PARAM_RESPONSE_TYPE 	= "response_type";
 	public static final String PARAM_CLIENT_ID 		= "client_id";
@@ -39,20 +56,11 @@ public interface IdPConstants {
 	public static final String PARAM_USERNAME 		= "username";
 	public static final String PARAM_PASSWORD 		= "password";
 	
-	public static final String GRANT_AUTHZ_CODE 	= "authorization_code";
-	public static final String GRANT_PASSWORD 		= "password";
-	public static final String GRANT_CLIENT_CREDS	= "client_credentials";
-	
-	public static final String RESPONSE_TOKEN 		= "token";
-	public static final String RESPONSE_CODE 		= "code";
-	
 	//SPECIAL REDIRECT URI INDICATE INSTALLED APPLICATION
 	public static final String OOB_REDIRECT_URI		= "urn:ietf:wg:oauth:2.0:oob";
-		
-	public static final String SCHEME_BASIC 		= "Basic";	//Client Basic
-	public static final String SCHEME_BEARER		= "Bearer";	//Oauth2 Bearer
+	public static final String LOGIN_REDIRECT_URI	= "/login";
 	
 	//ERROR CODEs
 	public static final String ERROR_SERVER_ERROR 	= "server_error";
-	public static final String LOGIN_REDIRECT_URI	= "/login";
+	public static final String ERROR_INVALID_REQUEST= "invalid_request";
 }
