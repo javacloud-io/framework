@@ -10,7 +10,6 @@ import com.appe.security.Authorization;
 import com.appe.security.AuthenticationException;
 import com.appe.security.Authenticator;
 import com.appe.security.InvalidCredentialsException;
-import com.appe.util.Objects;
 
 /**
  * Assuming a chain of authenticators each handle the authenticate only if appropriate otherwise NULL will be return.
@@ -20,7 +19,6 @@ import com.appe.util.Objects;
  */
 public class Authenticators implements Authenticator {
 	private static final Logger logger = LoggerFactory.getLogger(Authenticators.class);
-	
 	private final List<Authenticator> authenticators;
 	/**
 	 * 
@@ -28,13 +26,6 @@ public class Authenticators implements Authenticator {
 	 */
 	public Authenticators(List<Authenticator> authenticators) {
 		this.authenticators = authenticators;
-	}
-	/**
-	 * 
-	 * @param authenticator
-	 */
-	public Authenticators(Authenticator authenticator) {
-		this.authenticators = Objects.asList(authenticator);
 	}
 	
 	/**

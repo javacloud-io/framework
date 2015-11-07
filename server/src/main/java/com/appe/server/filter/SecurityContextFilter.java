@@ -140,14 +140,15 @@ public class SecurityContextFilter extends ServletFilter {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
-		if(!Objects.isEmpty(authorization)) {
+		if(authorization != null) {
 			if(authorization.startsWith(IdPConstants.Scheme.Bearer.name())) {
 				return	new TokenCredentials(authorization.substring(IdPConstants.Scheme.Bearer.name().length() + 1));
 			} else if(authorization.startsWith(IdPConstants.Scheme.Basic.name())) {
 				return new ClientCredentials(authorization.substring(IdPConstants.Scheme.Basic.name().length() + 1));
-			} else {
-				logger.debug("Unknown authorization header: {}", authorization);
 			}
+			
+			//NOT MEAN TO BE
+			logger.debug("Unknown authorization header: {}", authorization);
 		}
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
