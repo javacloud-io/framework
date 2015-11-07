@@ -43,6 +43,26 @@ import com.appe.util.Objects;
  * 
  * This filter will be a good replacement of built-in container security, very well integrated.
  * 
+ * <init-param>
+ *	<param-name>challenge-scheme</param-name>
+ *	<param-value></param-value>		
+ * </init-param>
+ * 
+ * <init-param>
+ *	<param-name>login-page</param-name>
+ *	<param-value></param-value>		
+ * </init-param>
+ * 
+ * <init-param>
+ *	<param-name>allow-roles</param-name>
+ *	<param-value></param-value>		
+ * </init-param>
+ * 
+ * <init-param>
+ *	<param-name>authenticator</param-name>
+ *	<param-value></param-value>		
+ * </init-param>
+ * 
  * @author tobi
  */
 public class AuthorizationFilter extends SecurityContextFilter {
@@ -54,25 +74,6 @@ public class AuthorizationFilter extends SecurityContextFilter {
 	}
 	
 	/**
-	 * <init-param>
-	 *	<param-name>challenge-scheme</param-name>
-	 *	<param-value></param-value>		
-	 * </init-param>
-	 * 
-	 * <init-param>
-	 *	<param-name>login-page</param-name>
-	 *	<param-value></param-value>		
-	 * </init-param>
-	 * 
-	 * <init-param>
-	 *	<param-name>allow-roles</param-name>
-	 *	<param-value></param-value>		
-	 * </init-param>
-	 * 
-	 * <init-param>
-	 *	<param-name>authenticator</param-name>
-	 *	<param-value></param-value>		
-	 * </init-param>
 	 * 
 	 * @param filterConfig
 	 * @throws ServletException

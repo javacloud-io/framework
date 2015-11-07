@@ -16,6 +16,8 @@
 package com.appe.server.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,11 +26,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
-import com.appe.registry.AppeLoader;
 import com.appe.registry.AppeRegistry;
 import com.appe.security.Authorization;
 import com.appe.security.AuthenticationException;
 import com.appe.security.Authenticator;
+import com.appe.security.internal.Authenticators;
 import com.appe.security.internal.Credentials;
 import com.appe.security.internal.ClientCredentials;
 import com.appe.security.internal.IdPConstants;
@@ -38,24 +40,27 @@ import com.appe.util.Objects;
 
 /**
  * Simply process the authentication if any provided => authenticate and inject context if SUCCESS.
+ * We are looking at <allow-cookie> and an <authenticator> parameters to indicate how the authorization process taking place.
+ * 
+ * <init-param>
+ *	<param-name>authenticator</param-name>
+ *	<param-value>list of binding names</param-value>		
+ * </init-param>
+ * <init-param>
+ *	<param-name>allowCookie</param-name>
+ *	<param-value></param-value>		
+ * </init-param>
  * 
  * @author ho
  *
  */
 public class SecurityContextFilter extends ServletFilter {
-	protected String	accessToken;		//access token parameter
-	protected String 	accessCookie;		//access cookie name
-	
-	protected Authenticator authenticator;
+	protected boolean 	allowCookie;		//allows access cookie
+	protected Authenticator authenticator;	//an authenticator
 	public SecurityContextFilter() {
 	}
 	
 	/**
-	 * 
-	 * <init-param>
-	 *	<param-name>authenticator</param-name>
-	 *	<param-value></param-value>		
-	 * </init-param>
 	 * 
 	 * @param filterConfig
 	 * @throws ServletException
@@ -63,21 +68,19 @@ public class SecurityContextFilter extends ServletFilter {
 	@Override
 	protected void init() throws ServletException {
 		//OPTIONALS TOKEN PARAM
-		this.accessToken = getInitParameter("access-token");
-		this.accessCookie= getInitParameter("access-cookie");
+		this.allowCookie= Boolean.valueOf(getInitParameter("allow-cookie"));
 		
-		//AUTHENTICATOR
-		try {
-			String authenticator = getInitParameter("authenticator");
-			if(authenticator == null) {
-				this.authenticator = AppeRegistry.get().getInstance(Authenticator.class);
-			} else {
-				Class<?> type = AppeLoader.getClassLoader().loadClass(authenticator);
-				this.authenticator = (Authenticator)AppeRegistry.get().getInstance(type);
+		//AUTHENTICATORs
+		List<Authenticator> authenticators = new ArrayList<>();
+		String authenticator = getInitParameter("authenticator");
+		if(Objects.isEmpty(authenticator)) {
+			authenticators.add(AppeRegistry.get().getInstance(Authenticator.class));
+		} else {
+			for(String name: Objects.toArray(authenticator, ",", true)) {
+				authenticators.add(AppeRegistry.get().getInstance(Authenticator.class, name));
 			}
-		} catch(ClassNotFoundException ex) {
-			throw new ServletException(ex);
 		}
+		this.authenticator = new Authenticators(authenticators);
 	}
 	
 	/**
@@ -148,12 +151,9 @@ public class SecurityContextFilter extends ServletFilter {
 		}
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
-		String token = null;
-		if(this.accessToken != null) {
-			token = req.getParameter(this.accessToken);
-		}
-		if(token == null && this.accessCookie != null) {
-			Cookie cookie = RequestWrapper.getCookie(req, this.accessCookie);
+		String token = req.getParameter(IdPConstants.PARAM_ACCESS_TOKEN);
+		if(token == null && this.allowCookie) {
+			Cookie cookie = RequestWrapper.getCookie(req, IdPConstants.PARAM_ACCESS_TOKEN);
 			if(cookie != null) {
 				token = cookie.getValue();
 			}
