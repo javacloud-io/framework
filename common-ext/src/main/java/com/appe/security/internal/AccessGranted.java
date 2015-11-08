@@ -4,15 +4,12 @@ import java.security.Principal;
 import java.util.Set;
 
 import com.appe.security.Authorization;
-import com.appe.util.Objects;
 /**
  * Grant with list of permissions/roles to access system. It's have to be a GRANT TYPE.
  * 
  * @author tobi
  */
 public class AccessGranted extends Authorization {
-	private static final Set<String> EMPTY_ROLES = Objects.asSet();
-	
 	private Principal	principal;
 	private	Set<String>	roles;
 	/**
@@ -23,14 +20,6 @@ public class AccessGranted extends Authorization {
 	public AccessGranted(Principal principal, Set<String> roles) {
 		this.principal = principal;
 		this.roles 	   = roles;
-	}
-	
-	/**
-	 * 
-	 * @param principal
-	 */
-	public AccessGranted(Principal principal) {
-		this(principal, EMPTY_ROLES);
 	}
 	
 	/**

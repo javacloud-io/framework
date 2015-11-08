@@ -1,7 +1,10 @@
 package com.appe.security.internal;
 
+import java.util.Set;
+
 import com.appe.security.AccessDeniedException;
 import com.appe.security.Authorization;
+import com.appe.util.Objects;
 
 
 /**
@@ -12,6 +15,8 @@ import com.appe.security.Authorization;
  *
  */
 public final class Permissions {
+	public static final Set<String> EMPTY_ROLES 	= Objects.asSet();
+	
 	//PRE-DEFINED USER roles
 	public static final String ROLE_ROOT			= "root";
 	public static final String ROLE_ADMINISTRATOR	= "administrator";
