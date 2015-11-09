@@ -38,9 +38,6 @@ import com.appe.util.Objects;
  * Simplest as possible security filter, we protect the WHOLE URL using FIX ROLES. Granularity will be enforce directly
  * at the resource level.
  * 
- * 1. Validate and inject authorization
- * 2. Send back the correct challenge
- * 
  * This filter will be a good replacement of built-in container security, very well integrated.
  * 
  * <init-param>

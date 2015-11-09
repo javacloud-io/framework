@@ -51,6 +51,8 @@ import com.appe.util.Objects;
  *	<param-value></param-value>		
  * </init-param>
  * 
+ * Resources such as REST APIs is perfect for this usage! where at the resource level already handle the authorization.
+ * 
  * @author ho
  *
  */
@@ -84,7 +86,7 @@ public class SecurityContextFilter extends ServletFilter {
 	}
 	
 	/**
-	 * ONLY INJECT THE SECURITY CONTEXT IF GRANTED!
+	 * ONLY INJECT THE SECURITY CONTEXT IF GRANTED! ANY EXCEPTION WILL ASSUMING NO GRANT.
 	 * 
 	 */
 	@Override
@@ -98,6 +100,7 @@ public class SecurityContextFilter extends ServletFilter {
 				chain.doFilter(req, resp);
 			}
 		} catch(AuthenticationException ex) {
+			logger.warn("Unauthorized credentials, reason: {}", ex.getMessage());
 			chain.doFilter(req, resp);
 		}
 	}
