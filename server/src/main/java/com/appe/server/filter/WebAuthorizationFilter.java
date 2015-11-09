@@ -62,12 +62,12 @@ import com.appe.util.Objects;
  * 
  * @author tobi
  */
-public class AuthorizationFilter extends SecurityContextFilter {
+public class WebAuthorizationFilter extends SecurityContextFilter {
 	protected String   challengeScheme;		//redirect, basic, oauth...
 	protected String   loginPage;			//where is the login page if redirect
 	protected String[] allowRoles;			//which roles is GOOD
 	
-	public AuthorizationFilter() {
+	public WebAuthorizationFilter() {
 	}
 	
 	/**
