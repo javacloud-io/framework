@@ -1,0 +1,6 @@
+# Basic modules
+com.appe.framework.impl.CommonModule
+com.appe.framework.impl.ServiceModule
+com.appe.framework.impl.ClientModule
+
+# Application modules

@@ -1,0 +1,13 @@
+com/appe/framework/server/filter/ServletFilter.class
+com/appe/framework/server/hk2/GuiceHK2Feature$1.class
+com/appe/framework/server/filter/NamespaceFilter.class
+com/appe/framework/server/hk2/GuiceServletListener.class
+com/appe/framework/server/hk2/GuiceHK2Feature.class
+com/appe/framework/server/filter/WebAuthorizationFilter.class
+com/appe/framework/server/RestApplication.class
+com/appe/framework/server/hk2/SecurityHK2Factory.class
+com/appe/framework/server/internal/GenericExceptionMapper.class
+com/appe/framework/server/internal/JspViewRender.class
+com/appe/framework/server/internal/RequestWrapper.class
+com/appe/framework/server/internal/DefaultExceptionMapper.class
+com/appe/framework/server/filter/SecurityContextFilter.class

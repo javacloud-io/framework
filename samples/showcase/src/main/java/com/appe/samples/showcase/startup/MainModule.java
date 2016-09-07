@@ -17,7 +17,7 @@ package com.appe.samples.showcase.startup;
 
 import com.appe.framework.internal.GuiceModule;
 import com.appe.framework.security.Authenticator;
-import com.appe.framework.security.impl.SampleAuthenticator;
+import com.appe.framework.security.impl.MockAuthenticator;
 /**
  * 
  * @author ho
@@ -26,6 +26,6 @@ import com.appe.framework.security.impl.SampleAuthenticator;
 public class MainModule extends GuiceModule {
 	@Override
 	protected void configure() {
-		bind(Authenticator.class).to(SampleAuthenticator.class);
+		bind(Authenticator.class).to(MockAuthenticator.class);
 	}
 }
