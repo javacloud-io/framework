@@ -80,7 +80,7 @@
   	</dependency>
   	<dependency>
     	<groupId>com.appe.framework.samples</groupId>
-   		<artifactId>framework-server-sse</artifactId>
+   		<artifactId>framework-sse</artifactId>
 		<version>${project.version}</version>
   	</dependency>
   	

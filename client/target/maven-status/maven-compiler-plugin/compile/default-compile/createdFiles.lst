@@ -1,8 +1,0 @@
-com/appe/framework/databind/JacksonMapper.class
-com/appe/framework/impl/ClientModule.class
-com/appe/framework/hk2/GuiceHK2Feature.class
-com/appe/framework/databind/JacksonMapper$1.class
-com/appe/framework/databind/JacksonFeature.class
-com/appe/framework/databind/JacksonJaxbProvider.class
-com/appe/framework/databind/JacksonMapper$2.class
-com/appe/framework/client/HttpClientProvider.class
