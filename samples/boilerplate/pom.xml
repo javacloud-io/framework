@@ -72,12 +72,12 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-server</artifactId>
+   		<artifactId>appe-server</artifactId>
   	</dependency>
   	
     <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>framework-server-test</artifactId>
+        <artifactId>appe-server-test</artifactId>
         <scope>test</scope>
     </dependency>
   </dependencies>

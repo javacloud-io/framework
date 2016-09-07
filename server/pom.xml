@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-server</artifactId>
+  <artifactId>appe-server</artifactId>
   <packaging>jar</packaging>
   <name>Framework restFull server</name>
   
@@ -67,17 +67,17 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-common</artifactId>
+   		<artifactId>appe-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
   	<dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>framework-client</artifactId>
+        <artifactId>appe-client</artifactId>
         <version>${project.version}</version>
     </dependency>
   	<dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>framework-service</artifactId>
+        <artifactId>appe-service</artifactId>
         <version>${project.version}</version>
     </dependency>
     

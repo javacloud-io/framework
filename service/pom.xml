@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-service</artifactId>
+  <artifactId>appe-service</artifactId>
   <packaging>jar</packaging>
   <name>Framework common services</name>
   
@@ -51,7 +51,7 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-common</artifactId>
+   		<artifactId>appe-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
   </dependencies>

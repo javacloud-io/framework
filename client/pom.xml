@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-client</artifactId>
+  <artifactId>appe-client</artifactId>
   <packaging>jar</packaging>
   <name>Framework restFull client</name>
   
@@ -51,7 +51,7 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-common</artifactId>
+   		<artifactId>appe-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
   	

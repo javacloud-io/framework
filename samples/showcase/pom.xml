@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-showcase</artifactId>
+  <artifactId>samples-showcase</artifactId>
   <packaging>war</packaging>
   <name>Framework showcase</name>
   
@@ -76,17 +76,17 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-server</artifactId>
+   		<artifactId>appe-server</artifactId>
   	</dependency>
   	<dependency>
     	<groupId>com.appe.framework.samples</groupId>
-   		<artifactId>framework-sse</artifactId>
+   		<artifactId>appe-sse</artifactId>
 		<version>${project.version}</version>
   	</dependency>
   	
     <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>framework-server-test</artifactId>
+        <artifactId>appe-server-test</artifactId>
         <scope>test</scope>
     </dependency>
     

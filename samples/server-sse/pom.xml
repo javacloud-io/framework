@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-sse</artifactId>
+  <artifactId>appe-sse</artifactId>
   <packaging>jar</packaging>
   <name>Enhanced SSE implement by jersey</name>
   
@@ -62,7 +62,7 @@
     <!-- APPE -->
   	<dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>framework-server</artifactId>
+   		<artifactId>appe-server</artifactId>
   	</dependency>
   	
 	<!-- Jersey -->
