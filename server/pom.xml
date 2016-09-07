@@ -7,9 +7,9 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-server</artifactId>
+  <artifactId>framework-server</artifactId>
   <packaging>jar</packaging>
-  <name>Common restFull server application</name>
+  <name>Framework restFull server</name>
   
   <build>
 	<plugins>
@@ -67,10 +67,20 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>appe-common-ext</artifactId>
+   		<artifactId>framework-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
-  	
+  	<dependency>
+        <groupId>com.appe.framework</groupId>
+        <artifactId>framework-client</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+  	<dependency>
+        <groupId>com.appe.framework</groupId>
+        <artifactId>framework-service</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
 	<!-- Jersey -->
 	<dependency>
     	<groupId>org.glassfish.jersey.containers</groupId>

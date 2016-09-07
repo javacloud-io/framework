@@ -26,27 +26,27 @@
       <!-- APPE -->
       <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>appe-common</artifactId>
+        <artifactId>framework-common</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>appe-registry</artifactId>
+        <artifactId>framework-client</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>appe-common-ext</artifactId>
+        <artifactId>framework-service</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
-      	<groupId>com.appe.framework</groupId>
-     		<artifactId>appe-server</artifactId>
-     		<version>${project.version}</version>
-    	</dependency>
+      <groupId>com.appe.framework</groupId>
+     	<artifactId>framework-server</artifactId>
+     	<version>${project.version}</version>
+      </dependency>
       <dependency>
           <groupId>com.appe.framework</groupId>
-          <artifactId>appe-server-test</artifactId>
+          <artifactId>framework-server-test</artifactId>
           <version>${project.version}</version>
           <scope>test</scope>
       </dependency>

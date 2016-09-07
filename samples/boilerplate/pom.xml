@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>framework-boilerplate</artifactId>
+  <artifactId>samples-boilerplate</artifactId>
   <packaging>war</packaging>
   <name>Framework boilerplate</name>
   
@@ -72,12 +72,12 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>appe-server</artifactId>
+   		<artifactId>framework-server</artifactId>
   	</dependency>
   	
     <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>appe-server-test</artifactId>
+        <artifactId>framework-server-test</artifactId>
         <scope>test</scope>
     </dependency>
   </dependencies>

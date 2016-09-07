@@ -7,9 +7,9 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-common</artifactId>
+  <artifactId>framework-common</artifactId>
   <packaging>jar</packaging>
-  <name>Common utilities</name>
+  <name>Framework common utilities</name>
   
   <build>
 	<plugins>
@@ -24,6 +24,11 @@
     <dependency>
       	<groupId>junit</groupId>
       	<artifactId>junit</artifactId>
+      	<scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.google.inject</groupId>
+        <artifactId>guice</artifactId>
     </dependency>
   </dependencies>
 </project>

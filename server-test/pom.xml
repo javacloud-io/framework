@@ -7,9 +7,9 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-server-test</artifactId>
+  <artifactId>framework-server-test</artifactId>
   <packaging>jar</packaging>
-  <name>Common restFull test server</name>
+  <name>Framework restFull test server</name>
   
   <build>
 	<plugins>

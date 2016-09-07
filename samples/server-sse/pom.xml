@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
   	<groupId>com.appe.framework.samples</groupId>
-        <artifactId>framework-samples</artifactId>
+    <artifactId>framework-samples</artifactId>
 	<version>0.1</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-server-sse</artifactId>
+  <artifactId>framework-server-sse</artifactId>
   <packaging>jar</packaging>
   <name>Enhanced SSE implement by jersey</name>
   
@@ -62,8 +62,7 @@
     <!-- APPE -->
   	<dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>appe-server</artifactId>
-   		<version>${project.version}</version>
+   		<artifactId>framework-server</artifactId>
   	</dependency>
   	
 	<!-- Jersey -->

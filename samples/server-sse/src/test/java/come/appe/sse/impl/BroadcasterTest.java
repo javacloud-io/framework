@@ -18,11 +18,11 @@ package come.appe.sse.impl;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.sse.Channel;
-import com.appe.sse.ChannelEvent;
-import com.appe.sse.ChannelListener;
-import com.appe.sse.impl.BroadcastLocal;
-import com.appe.util.Objects;
+import com.appe.framework.sse.Channel;
+import com.appe.framework.sse.ChannelEvent;
+import com.appe.framework.sse.ChannelListener;
+import com.appe.framework.sse.impl.BroadcastLocal;
+import com.appe.framework.util.Objects;
 
 /**
  * 

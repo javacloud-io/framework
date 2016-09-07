@@ -23,7 +23,7 @@
   </licenses>
   
   <properties>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tomcat.version>7.0.64</tomcat.version>
     <httpclient.version>4.5.1</httpclient.version>
     <guice.version>4.0</guice.version>
@@ -36,12 +36,12 @@
   </properties>
   
   <modules>
-    <module>registry</module>
-	<module>common</module>
-	<module>common-ext</module>
+    <module>common</module>
+    <module>client</module>
+    <module>service</module>
     <module>server-test</module>
-	<module>server</module>
-	<module>samples</module>
+    <module>server</module>
+    <module>samples</module>
     <module>assembly</module>
   </modules>
   

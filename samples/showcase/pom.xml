@@ -76,17 +76,17 @@
     <!-- APPE -->
     <dependency>
     	<groupId>com.appe.framework</groupId>
-   		<artifactId>appe-server</artifactId>
+   		<artifactId>framework-server</artifactId>
   	</dependency>
   	<dependency>
     	<groupId>com.appe.framework.samples</groupId>
-   		<artifactId>appe-server-sse</artifactId>
+   		<artifactId>framework-server-sse</artifactId>
 		<version>${project.version}</version>
   	</dependency>
   	
     <dependency>
         <groupId>com.appe.framework</groupId>
-        <artifactId>appe-server-test</artifactId>
+        <artifactId>framework-server-test</artifactId>
         <scope>test</scope>
     </dependency>
     
