@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 
 /**
@@ -64,8 +68,8 @@ public final class AppeLoader {
 		//LOAD ALL THE CLASSES
 		ClassLoader loader = getClassLoader();
 		List<Class<?>> zclasses = new ArrayList<Class<?>>();
-		for(String name: props.stringPropertyNames()) {
-			Class<?> zclass = loader.loadClass(name);
+		for(Enumeration<?> ename = props.keys(); ename.hasMoreElements(); ) {
+			Class<?> zclass = loader.loadClass((String)ename.nextElement());
 			zclasses.add(zclass);
 		}
 		return zclasses;
@@ -110,11 +114,37 @@ public final class AppeLoader {
 			return null;
 		}
 		
-		//LOAD THE PROPERTIES
-		Properties props = new Properties();
+		//LOAD THE PROPERTIES & MAKE SURE KEEP KEY ORDERED
+		Properties props = new OrderedProperties();
 		try (InputStream stream = url.openStream()) {
 			props.load(stream);
 		}
 		return props;
+	}
+	
+	//MAKE SURE LOADED KEYS IS CORRECT ORDER IF ENUMERATE BY KEYS!!!
+	static class OrderedProperties extends Properties {
+		private static final long serialVersionUID = 1L;
+		private final Set<Object> keys = new LinkedHashSet<Object>();
+		//ORDER KEYS
+		@Override
+		public synchronized Enumeration<Object> keys() {
+			return Collections.enumeration(keys);
+		}
+		//ORDER KEYS
+		@Override
+		public Set<Object> keySet() {
+			return keys;
+		}
+		@Override
+		public synchronized Object put(Object key, Object value) {
+			keys.add(key);
+			return super.put(key, value);
+		}
+		@Override
+		public synchronized Object remove(Object key) {
+			keys.remove(key);
+			return super.remove(key);
+		}
 	}
 }
