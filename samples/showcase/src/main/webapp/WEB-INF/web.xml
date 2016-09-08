@@ -25,13 +25,13 @@
 	
 	<!-- Guice initialize -->
     <listener>
-       <listener-class>com.appe.server.internal.GuiceServletListener</listener-class>
+       <listener-class>com.appe.framework.server.hk2.GuiceServletListener</listener-class>
     </listener>
     
     <!-- Security filter -->
 	<filter>
 		<filter-name>SecurityContextFilter</filter-name>
-		<filter-class>com.appe.server.filter.SecurityContextFilter</filter-class>
+		<filter-class>com.appe.framework.server.filter.SecurityContextFilter</filter-class>
 		<init-param>
 			<param-name>login-page</param-name>
 			<param-value>/login</param-value>

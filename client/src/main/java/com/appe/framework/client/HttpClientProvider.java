@@ -50,7 +50,7 @@ public class HttpClientProvider implements Provider<Client> {
 		//LOAD DEFAULT CONFIG
 		try {
 			List<Class<?>> components = AppeLoader.loadClasses("META-INF/client-components.jersey");
-			logger.debug("Register jersey components: {}", components);
+			logger.debug("Register jersey client components: {}", components);
 			for(Class<?> c: components) {
 				config.register(c);
 			}

@@ -5,8 +5,6 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.framework.server.internal.DefaultExceptionMapper;
-
 /**
  * TODO: all the basic test of exception
  * 
@@ -14,7 +12,7 @@ import com.appe.framework.server.internal.DefaultExceptionMapper;
  *
  */
 public class ExceptionMapperTest {
-	private DefaultExceptionMapper<Throwable> mapper = new DefaultExceptionMapper<Throwable>();
+	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>();
 	
 	@Test
 	public void testEx() {

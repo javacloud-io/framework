@@ -53,7 +53,7 @@ public class RestApplication extends ResourceConfig {
 		//AUTO LOAD THE COMPONENTS
 		try {
 			List<Class<?>> components = AppeLoader.loadClasses("META-INF/server-components.jersey");
-			logger.debug("Register jersey components: {}", components);
+			logger.debug("Register jersey server components: {}", components);
 			for(Class<?> component: components) {
 				register(component);
 			}
