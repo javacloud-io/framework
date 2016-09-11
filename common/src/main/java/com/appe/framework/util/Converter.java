@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.appe.framework.AppeException;
-import com.appe.framework.misc.Codecs;
 
 /**
  * Converting from something to something else.

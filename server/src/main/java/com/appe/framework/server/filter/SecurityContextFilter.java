@@ -14,12 +14,12 @@ import javax.ws.rs.core.HttpHeaders;
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
+import com.appe.framework.security.AuthenticatorManager;
 import com.appe.framework.security.Authorization;
+import com.appe.framework.security.ClientCredentials;
+import com.appe.framework.security.Credentials;
 import com.appe.framework.security.IdParameters;
-import com.appe.framework.security.internal.AuthenticatorManager;
-import com.appe.framework.security.internal.ClientCredentials;
-import com.appe.framework.security.internal.Credentials;
-import com.appe.framework.security.internal.TokenCredentials;
+import com.appe.framework.security.TokenCredentials;
 import com.appe.framework.server.internal.RequestWrapper;
 import com.appe.framework.util.Objects;
 

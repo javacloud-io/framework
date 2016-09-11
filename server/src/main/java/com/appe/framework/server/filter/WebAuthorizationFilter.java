@@ -126,7 +126,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 				IdParameters.PARAM_STATE, req.getParameter(IdParameters.PARAM_STATE));
 				
 		//ALWAYS ASSUMING REDIRECT
-		if(challengeScheme == null || challengeScheme.isEmpty()) {
+		if(Objects.isEmpty(challengeScheme)) {
 			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
 			resp.sendRedirect(RequestWrapper.buildURI(req, redirectUri));
 		} else {

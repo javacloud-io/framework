@@ -2,8 +2,8 @@ package com.appe.framework.server.internal;
 
 import javax.inject.Inject;
 
-import com.appe.framework.bundle.MessageBundle;
-import com.appe.framework.bundle.ResourceBundleManager;
+import com.appe.framework.resource.MessageBundle;
+import com.appe.framework.resource.ResourceBundleManager;
 import com.appe.framework.server.GenericExceptionMapper;
 
 /**
@@ -29,6 +29,6 @@ public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwab
 	 */
 	@Override
 	protected String toLocalizedMessage(String message) {
-		return bundle.getString(message);
+		return bundle.getMessage(message);
 	}
 }

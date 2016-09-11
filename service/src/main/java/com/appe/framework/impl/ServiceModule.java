@@ -4,10 +4,10 @@ import java.util.List;
 
 import com.appe.framework.activity.EventManager;
 import com.appe.framework.activity.impl.EventManagerImpl;
-import com.appe.framework.bundle.ResourceBundleManager;
-import com.appe.framework.bundle.impl.ResourceBundleManagerImpl;
 import com.appe.framework.internal.GuiceFactory;
 import com.appe.framework.internal.GuiceModule;
+import com.appe.framework.resource.ResourceBundleManager;
+import com.appe.framework.resource.impl.ResourceBundleManagerImpl;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 /**

@@ -12,7 +12,7 @@ import org.junit.Test;
  *
  */
 public class ExceptionMapperTest {
-	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>();
+	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>(){};
 	
 	@Test
 	public void testEx() {

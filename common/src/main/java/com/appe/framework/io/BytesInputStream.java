@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 
-import com.appe.framework.misc.Codecs;
+import com.appe.framework.util.Codecs;
 /**
  * 
  * @author aimee

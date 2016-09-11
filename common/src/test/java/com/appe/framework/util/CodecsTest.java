@@ -16,9 +16,6 @@
 package com.appe.framework.util;
 import java.util.UUID;
 
-import com.appe.framework.misc.Codecs;
-import com.appe.framework.misc.Digests;
-
 import junit.framework.TestCase;
 
 /**
