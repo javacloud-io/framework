@@ -1,4 +1,5 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
+
 
 /**
  * Authentication using oauth2 Bearer token base, user/client already exchanged for token.

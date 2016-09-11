@@ -1,7 +1,9 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
 
 import java.util.Set;
 
+import com.appe.framework.security.AccessDeniedException;
+import com.appe.framework.security.Authorization;
 import com.appe.framework.util.Objects;
 
 
@@ -44,7 +46,7 @@ public final class Permissions {
 	 */
 	public static String assertAny(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || !authz.hasAnyRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || !hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getPrincipal().getName();
@@ -60,7 +62,7 @@ public final class Permissions {
 	 */
 	public static String assertNone(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || authz.hasAnyRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getPrincipal().getName();
@@ -76,9 +78,63 @@ public final class Permissions {
 	 */
 	public static String assertAll(Authorization authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || !authz.hasAllRoles(permissions)) {
+		if(authz == null || authz.getPrincipal() == null || !hasAll(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getPrincipal().getName();
+	}
+	
+	/**
+	 * return true if authentication has all permission
+	 * @param authz
+	 * @param permission
+	 * @return
+	 */
+	public static boolean hasAll(Authorization authz, String ...roles) {
+		//NOT ANY PERMISSIONs
+		Set<String> claims = authz.getClaims();
+		if(claims == null || claims.isEmpty()) {
+			return false;
+		}
+				
+		//HAS NOTHING
+		if(roles == null || roles.length == 0) {
+			return true;
+		}
+		
+		//SCAN THEM ALL
+		for(String name: roles) {
+			if(!claims.contains(name)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * return true if has any role which is the basic of all use cases.
+	 * @param authz
+	 * @param roles
+	 * @return
+	 */
+	public static boolean hasAny(Authorization authz, String ...roles) {
+		//NOT ANY PERMISSIONS
+		Set<String> claims = authz.getClaims();
+		if(claims == null || claims.isEmpty()) {
+			return false;
+		}
+				
+		//NOTHING AT ALL
+		if(roles == null || roles.length == 0) {
+			return true;
+		}
+		
+		//FIND ONE IS ENOUGH
+		for(String name: roles) {
+			if(claims.contains(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

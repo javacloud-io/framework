@@ -1,4 +1,4 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
 /**
  * Standard OAuth2 constants definition, there will be a mapping across vendors...
  * 

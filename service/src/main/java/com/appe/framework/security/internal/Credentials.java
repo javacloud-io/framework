@@ -1,4 +1,4 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
 
 import java.security.Principal;
 
@@ -88,7 +88,7 @@ public class Credentials implements Principal {
 	 * 
 	 * @param credentials
 	 */
-	void withAttributes(Credentials credentials) {
+	void adoptAttributes(Credentials credentials) {
 		this.attributes = credentials.attributes;
 	}
 }

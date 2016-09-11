@@ -1,4 +1,4 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
 
 import java.security.Principal;
 import java.util.List;
@@ -8,6 +8,11 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.appe.framework.security.AuthenticationException;
+import com.appe.framework.security.Authenticator;
+import com.appe.framework.security.Authorization;
+import com.appe.framework.security.InvalidCredentialsException;
 
 /**
  * Assuming a chain of authenticators each handle the authenticate only if appropriate otherwise NULL will be return.

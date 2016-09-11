@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import com.appe.framework.security.Authorization;
+import com.appe.framework.security.internal.Permissions;
 
 /**
  * WRAPP THE GRANT AUTHENTICATION CONTEXT to provide an extra layer of protection on regular servlet authorization.
@@ -36,7 +37,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public boolean isUserInRole(String roleName) {
-		return(authz != null? authz.hasAnyRoles(roleName) : false);
+		return(authz != null? Permissions.hasAny(authz, roleName) : false);
 	}
 	
 	/**

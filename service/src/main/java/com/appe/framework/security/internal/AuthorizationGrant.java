@@ -1,7 +1,9 @@
-package com.appe.framework.security;
+package com.appe.framework.security.internal;
 
 import java.security.Principal;
 import java.util.Set;
+
+import com.appe.framework.security.Authorization;
 /**
  * Grant with list of permissions/roles to access system. It's have to be a GRANT TYPE.
  * 
@@ -34,7 +36,7 @@ public class AuthorizationGrant extends Authorization {
 	 * @return
 	 */
 	@Override
-	public Set<String> getRoles() {
+	public Set<String> getClaims() {
 		return roles;
 	}
 }

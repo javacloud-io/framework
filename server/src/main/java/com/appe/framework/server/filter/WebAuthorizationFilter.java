@@ -12,8 +12,9 @@ import com.appe.framework.AppeException;
 import com.appe.framework.security.AccessDeniedException;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authorization;
-import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.InvalidCredentialsException;
+import com.appe.framework.security.internal.IdParameters;
+import com.appe.framework.security.internal.Permissions;
 import com.appe.framework.server.internal.RequestWrapper;
 import com.appe.framework.util.Dictionaries;
 import com.appe.framework.util.Dictionary;
@@ -94,7 +95,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 			}
 			
 			//NOT GRANTED
-			if(permissions != null && !authzGrant.hasAnyRoles(permissions)) {
+			if(permissions != null && !Permissions.hasAny(authzGrant, permissions)) {
 				throw new AccessDeniedException();
 			}
 			

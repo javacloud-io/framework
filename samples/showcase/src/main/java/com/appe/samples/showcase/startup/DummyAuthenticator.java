@@ -5,8 +5,8 @@ import java.security.Principal;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
 import com.appe.framework.security.Authorization;
-import com.appe.framework.security.AuthorizationGrant;
-import com.appe.framework.security.Permissions;
+import com.appe.framework.security.internal.AuthorizationGrant;
+import com.appe.framework.security.internal.Permissions;
 import com.appe.framework.util.Objects;
 /**
  * 
