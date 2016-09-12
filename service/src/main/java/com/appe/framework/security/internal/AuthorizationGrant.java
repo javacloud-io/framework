@@ -3,32 +3,40 @@ package com.appe.framework.security.internal;
 import java.security.Principal;
 import java.util.Set;
 
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 /**
  * Grant with list of permissions/roles to access system. It's have to be a GRANT TYPE.
  * 
  * @author tobi
  */
-public class AuthorizationGrant extends Authorization {
-	private Principal	principal;
-	private	Set<String>	roles;
+public class AuthorizationGrant implements AccessGrant {
+	private Principal	subject;
+	private	Set<String>	claims;
 	/**
 	 * Grant authentication with permission set associated with.
-	 * @param principal
+	 * @param subject
 	 * @param roles
 	 */
-	public AuthorizationGrant(Principal principal, Set<String> roles) {
-		this.principal = principal;
-		this.roles 	   = roles;
+	public AuthorizationGrant(Principal subject, Set<String> claims) {
+		this.subject = subject;
+		this.claims  = claims;
 	}
 	
+	/**
+	 * 
+	 */
+	@Override
+	public String getName() {
+		return (subject != null? subject.getName() : null);
+	}
+
 	/**
 	 * return the original principal can be a STRING...
 	 * @return
 	 */
 	@Override
-	public Principal getPrincipal() {
-		return principal;
+	public Principal getSubject() {
+		return subject;
 	}
 	
 	/**
@@ -37,6 +45,6 @@ public class AuthorizationGrant extends Authorization {
 	 */
 	@Override
 	public Set<String> getClaims() {
-		return roles;
+		return claims;
 	}
 }

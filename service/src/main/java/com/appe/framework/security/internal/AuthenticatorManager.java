@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
-import com.appe.framework.security.Authorization;
 import com.appe.framework.security.InvalidCredentialsException;
 
 /**
@@ -38,9 +38,9 @@ public class AuthenticatorManager implements Authenticator {
 	 * 
 	 */
 	@Override
-	public Authorization authenticate(Principal credentials) throws AuthenticationException {
+	public AccessGrant authenticate(Principal credentials) throws AuthenticationException {
 		for(Authenticator authenticator: authenticators) {
-			Authorization authzGrant = authenticator.authenticate(credentials);
+			AccessGrant authzGrant = authenticator.authenticate(credentials);
 			if(authzGrant != null) {
 				return authzGrant;
 			}

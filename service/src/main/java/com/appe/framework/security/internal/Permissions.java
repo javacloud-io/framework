@@ -3,7 +3,7 @@ package com.appe.framework.security.internal;
 import java.util.Set;
 
 import com.appe.framework.security.AccessDeniedException;
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 import com.appe.framework.util.Objects;
 
 
@@ -44,12 +44,12 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertAny(Authorization authz, String... permissions)
+	public static String assertAny(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || !hasAny(authz, permissions)) {
+		if(authz == null || authz.getSubject() == null || !hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getPrincipal().getName();
+		return authz.getSubject().getName();
 	}
 	
 	/**
@@ -60,12 +60,12 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertNone(Authorization authz, String... permissions)
+	public static String assertNone(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || hasAny(authz, permissions)) {
+		if(authz == null || authz.getSubject() == null || hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getPrincipal().getName();
+		return authz.getSubject().getName();
 	}
 	
 	/**
@@ -76,12 +76,12 @@ public final class Permissions {
 	 * @return
 	 * @throws AccessDeniedException
 	 */
-	public static String assertAll(Authorization authz, String... permissions)
+	public static String assertAll(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getPrincipal() == null || !hasAll(authz, permissions)) {
+		if(authz == null || authz.getSubject() == null || !hasAll(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
-		return authz.getPrincipal().getName();
+		return authz.getSubject().getName();
 	}
 	
 	/**
@@ -90,7 +90,7 @@ public final class Permissions {
 	 * @param permission
 	 * @return
 	 */
-	public static boolean hasAll(Authorization authz, String ...roles) {
+	public static boolean hasAll(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONs
 		Set<String> claims = authz.getClaims();
 		if(claims == null || claims.isEmpty()) {
@@ -117,7 +117,7 @@ public final class Permissions {
 	 * @param roles
 	 * @return
 	 */
-	public static boolean hasAny(Authorization authz, String ...roles) {
+	public static boolean hasAny(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONS
 		Set<String> claims = authz.getClaims();
 		if(claims == null || claims.isEmpty()) {

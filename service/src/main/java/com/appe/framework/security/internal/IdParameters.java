@@ -11,12 +11,12 @@ public interface IdParameters {
 		Basic,	//Client Basic
 		Bearer;	//Oauth2 Bearer
 	}
-	//
+	//type of response
 	public static enum ResponseType {
 		token,
 		code
 	}
-	//
+	//type of grant
 	public static enum GrantType {
 		authorization_code,
 		password,

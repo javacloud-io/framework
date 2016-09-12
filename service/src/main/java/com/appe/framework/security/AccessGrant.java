@@ -11,14 +11,15 @@ import java.util.Set;
  */
 public interface AccessGrant extends Principal {
 	/**
+	 * User/Client... of the grant
 	 * 
 	 * @return
 	 */
-	public String getAudience();
+	public Principal getSubject();
 	
 	/**
 	 * return the permission set of this authentication, by default it will be NONE.
-	 * ONLY GRANTED authentication should have roles.
+	 * ONLY GRANTED authentication should have claims.
 	 * 
 	 * @return
 	 */

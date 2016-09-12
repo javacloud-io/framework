@@ -1,6 +1,7 @@
 package com.appe.framework.server.filter;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +15,9 @@ import javax.ws.rs.core.HttpHeaders;
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.internal.AuthenticatorManager;
 import com.appe.framework.security.internal.ClientCredentials;
-import com.appe.framework.security.internal.Credentials;
 import com.appe.framework.security.internal.IdParameters;
 import com.appe.framework.security.internal.TokenCredentials;
 import com.appe.framework.server.internal.RequestWrapper;
@@ -78,7 +78,7 @@ public class SecurityContextFilter extends ServletFilter {
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			Authorization authzGrant = doAuthenticate(req);
+			AccessGrant authzGrant = doAuthenticate(req);
 			if(authzGrant != null) {
 				chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
 			} else {
@@ -101,8 +101,8 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws IOException
 	 * @throws AuthenticationException
 	 */
-	protected Authorization doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		Credentials credentials = requestCredentials(req);
+	protected AccessGrant doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
+		Principal credentials = requestCredentials(req);
 		
 		//ASSUMING NULL GRANT
 		if(credentials == null) {
@@ -124,7 +124,7 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected Credentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected Principal requestCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)

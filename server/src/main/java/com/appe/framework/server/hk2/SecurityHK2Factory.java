@@ -7,14 +7,14 @@ import javax.ws.rs.core.SecurityContext;
 
 import org.glassfish.hk2.api.Factory;
 
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 /**
  * For easy integrate with jersey resource allow Authorization to be inject using @Inject or @Context
  * 
  * @author ho
  *
  */
-public class SecurityHK2Factory implements Factory<Authorization> {
+public class SecurityHK2Factory implements Factory<AccessGrant> {
 	private SecurityContext securityContext;
 	
 	@Inject
@@ -26,15 +26,15 @@ public class SecurityHK2Factory implements Factory<Authorization> {
 	 * return authorization from attribute if any found.
 	 */
 	@Override
-	public Authorization provide() {
+	public AccessGrant provide() {
 		Principal principal = securityContext.getUserPrincipal();
-		return	(principal instanceof Authorization? (Authorization)principal: null);
+		return	(principal instanceof AccessGrant? (AccessGrant)principal: null);
 	}
 	
 	/**
 	 * 
 	 */
 	@Override
-	public void dispose(Authorization authz) {
+	public void dispose(AccessGrant authz) {
 	}
 }

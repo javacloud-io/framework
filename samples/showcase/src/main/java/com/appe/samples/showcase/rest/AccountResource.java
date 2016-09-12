@@ -1,4 +1,4 @@
-package com.appe.samples.showcase.restapi;
+package com.appe.samples.showcase.rest;
 
 import java.security.Principal;
 

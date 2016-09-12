@@ -6,7 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.internal.Permissions;
 
 /**
@@ -18,8 +18,8 @@ import com.appe.framework.security.internal.Permissions;
  *
  */
 public class RequestWrapper extends HttpServletRequestWrapper {
-	private Authorization authz;
-	RequestWrapper(HttpServletRequest request, Authorization authz) {
+	private AccessGrant authz;
+	RequestWrapper(HttpServletRequest request, AccessGrant authz) {
 		super(request);
 		this.authz = authz;
 	}
@@ -54,7 +54,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @param authz
 	 * @return
 	 */
-	public static final HttpServletRequest wrap(HttpServletRequest request, Authorization authz) {
+	public static final HttpServletRequest wrap(HttpServletRequest request, AccessGrant authz) {
 		if(request instanceof RequestWrapper) {
 			((RequestWrapper)request).authz = authz;
 		} else {

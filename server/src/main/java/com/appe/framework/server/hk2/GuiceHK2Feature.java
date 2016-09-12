@@ -5,7 +5,7 @@ import javax.ws.rs.core.FeatureContext;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 /**
  * If the registry is GuiceRegistry => try to find it and register with the system
  * 
@@ -34,7 +34,7 @@ public class GuiceHK2Feature extends com.appe.framework.hk2.GuiceHK2Feature {
 		context.register(new AbstractBinder() {
             @Override
             protected void configure() {
-            	bindFactory(SecurityHK2Factory.class).to(Authorization.class);
+            	bindFactory(SecurityHK2Factory.class).to(AccessGrant.class);
             }
         });
 		return true;

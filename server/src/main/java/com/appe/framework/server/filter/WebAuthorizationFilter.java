@@ -11,7 +11,7 @@ import javax.ws.rs.core.HttpHeaders;
 import com.appe.framework.AppeException;
 import com.appe.framework.security.AccessDeniedException;
 import com.appe.framework.security.AuthenticationException;
-import com.appe.framework.security.Authorization;
+import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.InvalidCredentialsException;
 import com.appe.framework.security.internal.IdParameters;
 import com.appe.framework.security.internal.Permissions;
@@ -89,7 +89,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp, FilterChain chain)
 			throws ServletException, IOException {
 		try {
-			Authorization authzGrant = doAuthenticate(req);
+			AccessGrant authzGrant = doAuthenticate(req);
 			if(authzGrant == null) {
 				throw new InvalidCredentialsException();
 			}

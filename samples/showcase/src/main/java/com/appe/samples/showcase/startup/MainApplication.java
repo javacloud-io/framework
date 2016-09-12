@@ -16,6 +16,6 @@ public class MainApplication extends RestApplication {
 	 * Configure how the resource should be combine, object should be inject...
 	 */
 	public MainApplication() {
-		super("com.appe.samples.showcase.restapi");
+		super("com.appe.samples.showcase.rest");
 	}
 }

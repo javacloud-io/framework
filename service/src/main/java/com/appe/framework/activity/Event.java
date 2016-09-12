@@ -16,7 +16,7 @@ import com.appe.framework.util.Identifiable;
  */
 public class Event extends Identifiable<String> {
 	//BASIC KINDs
-	public static enum Type {
+	public static enum Kind {
 		SUCCESS,
 		FAILED,
 		
@@ -27,16 +27,16 @@ public class Event extends Identifiable<String> {
 		ALERT
 	}
 	private	String 	name;			//name of the event using lower case(register.user, apns.push...)
-	private Type	type;			//type of event
+	private Kind	kind;			//type of event
 	private String 	message;		//quick message description if ANY
 	
 	private	Dictionary details;		//details context event related if any (APPE, USER, ORDER...).
 	private Date   	timestamp;		//when did it happen
 	public Event() {
 	}
-	public Event(String name, Type type, String message) {
+	public Event(String name, Kind kind, String message) {
 		this.name = name;
-		this.type = type;
+		this.kind = kind;
 		this.message = message;
 		this.timestamp= new java.util.Date();
 	}
@@ -55,11 +55,11 @@ public class Event extends Identifiable<String> {
 	 * 
 	 * @return
 	 */
-	public Type getType() {
-		return type;
+	public Kind getKind() {
+		return kind;
 	}
-	public void setType(Type type) {
-		this.type = type;
+	public void setKind(Kind kind) {
+		this.kind = kind;
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class Event extends Identifiable<String> {
 	 */
 	@Override
 	public String toString() {
-		return "{" + name + ": " + name + ", type: " + type + ", message: " + message
+		return "{" + name + ": " + name + ", kind: " + kind + ", message: " + message
 				   + ", details: " + details + ", timestamp: " + timestamp + "}";
 	}
 }
