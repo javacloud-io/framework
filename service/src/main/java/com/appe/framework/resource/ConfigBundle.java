@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A simple bundle with key/value pair for any configuration purpose
+ * A simple bundle with key/value pair for any configuration purpose.
  * 
  * @author ho
  *
@@ -23,7 +23,7 @@ public interface ConfigBundle {
 		 * 
 		 * @return
 		 */
-		public String  name() default "";
+		public String  value() default "";
 	}
 	
 	/**

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.appe.framework.util.Dictionary;
+import com.appe.framework.util.Objects;
 
 /**
  * 
@@ -14,12 +15,20 @@ import com.appe.framework.util.Dictionary;
  */
 public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	private final Dictionary config;
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private boolean isSystemProperties = false;
+	/**
+	 * 
+	 */
+	public ConfigBundleHandlerImpl() {
+		this(System.getProperties());
+		this.isSystemProperties = true;
+	}
 	
 	/**
 	 * 
 	 * @param properties
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ConfigBundleHandlerImpl(Properties properties) {
 		this.config = new Dictionary((Map)Collections.unmodifiableMap(properties));
 	}
@@ -34,13 +43,18 @@ public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	}
 	
 	/**
-	 * 
+	 * Resource bundle value is always overrides by system one if exist
 	 */
 	@Override
 	protected String resolveValue(String key, String defaultValue) {
-		String value = System.getProperty(key);
-		if(value == null) {
+		String value;
+		if(isSystemProperties) {
 			value = config.getString(key, defaultValue);
+		} else {
+			value = System.getProperty(key);
+			if(Objects.isEmpty(value)) {
+				value = config.getString(key, defaultValue);
+			}
 		}
 		return value;
 	}

@@ -10,6 +10,6 @@ import org.junit.runner.RunWith;
  *
  */
 @RunWith(GuiceJUnit4Runner.class)
-public abstract class RegistryTest {
+public abstract class GuiceTestCase {
 
 }

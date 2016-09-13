@@ -1,9 +1,12 @@
 package com.appe.framework.security.internal;
 
+import com.appe.framework.security.Credentials;
+
 
 /**
  * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
  * A default NULL issuer if token is local
+ * 
  * @author tobi
  *
  */

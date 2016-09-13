@@ -1,11 +1,14 @@
-package com.appe.framework.security.internal;
+package com.appe.framework.security;
+
+import java.security.Principal;
+
 /**
  * Standard OAuth2 constants definition, there will be a mapping across vendors...
  * 
  * @author ho
  *
  */
-public interface IdParameters {
+public interface IdParameters extends Principal {
 	//Schemes
 	public static enum Scheme {
 		Basic,	//Client Basic
@@ -20,7 +23,8 @@ public interface IdParameters {
 	public static enum GrantType {
 		authorization_code,
 		password,
-		client_credentials
+		client_credentials,
+		refresh_token
 	}
 	
 	//REQUEST PARAMETERs

@@ -1,5 +1,8 @@
 package com.appe.framework.security.internal;
 
+import com.appe.framework.security.Credentials;
+import com.appe.framework.security.IdParameters;
+
 
 /**
  * Special oauth2 client credentials which carry out of of other factor.

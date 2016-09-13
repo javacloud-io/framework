@@ -88,8 +88,8 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager {
 	 * @return
 	 */
 	protected Object loadResourceBundle(Class<?> type) {
-		ConfigBundle.Bundle resource = type.getAnnotation(ConfigBundle.Bundle.class);
-		String baseName = (resource != null? resource.name(): null);
+		ConfigBundle.Bundle bundle = type.getAnnotation(ConfigBundle.Bundle.class);
+		String baseName = (bundle != null? bundle.value(): null);
 		
 		InvocationHandler configHandler;
 		if(baseName == null || baseName.isEmpty()) {
@@ -116,7 +116,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager {
 	 */
 	protected InvocationHandler createSystemHandler(Class<?> config) {
 		logger.info("Bind config class: " + config.getName() + " to system properties.");
-		return	new ConfigBundleHandlerImpl(System.getProperties());
+		return	new ConfigBundleHandlerImpl();
 	}
 	
 	/**

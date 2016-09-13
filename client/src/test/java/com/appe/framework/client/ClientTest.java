@@ -5,13 +5,13 @@ import javax.ws.rs.client.Client;
 
 import org.junit.Test;
 
-import com.appe.framework.internal.RegistryTest;
+import com.appe.framework.internal.GuiceTestCase;
 /**
  * 
  * @author ho
  *
  */
-public class ClientTest extends RegistryTest {
+public class ClientTest extends GuiceTestCase {
 	@Inject
 	private Client client;
 	

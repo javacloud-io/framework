@@ -1,4 +1,4 @@
-package com.appe.framework.security.internal;
+package com.appe.framework.security;
 
 import java.security.Principal;
 
@@ -81,14 +81,5 @@ public class Credentials implements Principal {
 	@SuppressWarnings("unchecked")
 	public <T> T getAttribute(String name) {
 		return (T)(attributes == null? null : attributes.get(name));
-	}
-	
-	/**
-	 * adopt attributes from other credentials
-	 * 
-	 * @param credentials
-	 */
-	void adoptAttributes(Credentials credentials) {
-		this.attributes = credentials.attributes;
 	}
 }
