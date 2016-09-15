@@ -1,10 +1,13 @@
-package com.appe.framework.json;
+package com.appe.framework.json.internal;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 import javax.inject.Singleton;
 
+import com.appe.framework.json.Externalizer;
 import com.appe.framework.util.DateFormats;
 import com.appe.framework.util.Dictionary;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
@@ -27,7 +30,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
  *
  */
 @Singleton
-public class JacksonMapper extends ObjectMapper {
+public class JacksonMapper extends ObjectMapper implements Externalizer {
 	private static final long serialVersionUID = -6439745503024511184L;
 	/**
 	 * 
@@ -98,4 +101,28 @@ public class JacksonMapper extends ObjectMapper {
 			}
 		});
 	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public String contentType() {
+		return JSON;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void marshal(Object v, OutputStream dst) throws IOException {
+		writeValue(dst, v);
+	}
+	/**
+	 * 
+	 */
+	@Override
+	public <T> T unmarshal(InputStream src, Class<T> type) throws IOException {
+		return readValue(src, type);
+	}
+	
 }

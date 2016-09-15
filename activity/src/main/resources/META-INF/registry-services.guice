@@ -5,6 +5,8 @@
 # interface.class=implementation.class
 # interface.class:named=implementation.class
 
-#Common services
-com.appe.framework.resource.ResourceBundleManager=com.appe.framework.resource.impl.ResourceBundleManagerImpl
-com.appe.framework.activity.registry.ActivityModule
+# Common services
+com.appe.framework.registry.DefaultModule
+
+# Activity services
+com.appe.framework.activity.registry.DefaultModule

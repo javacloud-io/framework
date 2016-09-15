@@ -33,7 +33,7 @@ import com.appe.framework.util.Objects;
  * @author tobi
  *
  */
-public class MemoryDataStoreImpl<T> extends AbstractDataStore<T> {
+public class InMemoryDataStoreImpl<T> extends AbstractDataStore<T> {
 	//index key to data model
 	private ConcurrentMap<DataKey, Dictionary> models = new ConcurrentHashMap<DataKey, Dictionary>();
 	
@@ -43,7 +43,7 @@ public class MemoryDataStoreImpl<T> extends AbstractDataStore<T> {
 	 * Simple passing the schema over.
 	 * @param schema
 	 */
-	public MemoryDataStoreImpl(DataSchema<T> schema) {
+	public InMemoryDataStoreImpl(DataSchema<T> schema) {
 		super(schema, 0);
 	}
 	

@@ -5,5 +5,10 @@
 # interface.class=implementation.class
 # interface.class:named=implementation.class
 
-com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+# Common services
+com.appe.framework.registry.DefaultModule
+
+# Json services
+com.appe.framework.json.registry.DefaultModule
+
 javax.ws.rs.client.Client=com.appe.framework.client.HttpClientProvider

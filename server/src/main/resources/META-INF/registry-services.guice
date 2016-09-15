@@ -5,21 +5,20 @@
 # interface.class=implementation.class
 # interface.class:named=implementation.class
 
-# common services
-com.appe.framework.AppeNamespace=com.appe.framework.impl.AppeNamespaceImpl
-com.appe.framework.AppeLocale=com.appe.framework.impl.AppeLocaleImpl
+# Common services
+com.appe.framework.registry.DefaultModule
 
-# resource services
-com.appe.framework.resource.ResourceBundleManager=com.appe.framework.resource.impl.ResourceBundleManagerImpl
+# Json services
+com.appe.framework.json.registry.DefaultModule
 
-# activity services
-com.appe.framework.activity.registry.ActivityModule
+# Config services
+com.appe.framework.resource.registry.DefaultModule
 
-# json services
-com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+# Activity services
+com.appe.framework.activity.registry.DefaultModule
 
-# data services
-com.appe.framework.data.DataManager=com.appe.framework.data.impl.DataManagerImpl
+# InMemory data services
+com.appe.framework.data.registry.InMemoryModule
 
-# client services
+# Client services
 javax.ws.rs.client.Client=com.appe.framework.client.HttpClientProvider

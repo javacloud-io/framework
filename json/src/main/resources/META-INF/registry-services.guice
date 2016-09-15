@@ -6,4 +6,4 @@
 # interface.class:named=implementation.class
 
 # json services
-com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+com.appe.framework.json.registry.DefaultModule

@@ -6,5 +6,4 @@
 # interface.class:named=implementation.class
 
 #Common services
-com.appe.framework.AppeNamespace=com.appe.framework.impl.AppeNamespaceImpl
-com.appe.framework.AppeLocale=com.appe.framework.impl.AppeLocaleImpl
+com.appe.framework.registry.DefaultModule

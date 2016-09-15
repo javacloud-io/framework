@@ -17,7 +17,7 @@ import com.google.inject.Provides;
  * @author ho
  *
  */
-public class ActivityModule extends GuiceModule {
+public class DefaultModule extends GuiceModule {
 	@Override
 	protected void configure() {
 		bind(EventManager.class).to(EventManagerImpl.class);

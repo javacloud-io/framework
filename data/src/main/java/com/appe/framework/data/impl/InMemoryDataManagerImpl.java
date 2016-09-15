@@ -12,8 +12,8 @@ import com.appe.framework.data.internal.AbstractDataManager;
  *
  */
 @Singleton
-public class MemoryDataManagerImpl extends AbstractDataManager {
-	public MemoryDataManagerImpl() {
+public class InMemoryDataManagerImpl extends AbstractDataManager {
+	public InMemoryDataManagerImpl() {
 	}
 	
 	/**
@@ -21,6 +21,6 @@ public class MemoryDataManagerImpl extends AbstractDataManager {
 	 */
 	@Override
 	protected <T> DataStore<T> createStore(DataSchema<T> schema, int options) {
-		return new MemoryDataStoreImpl<T>(schema);
+		return new InMemoryDataStoreImpl<T>(schema);
 	}
 }

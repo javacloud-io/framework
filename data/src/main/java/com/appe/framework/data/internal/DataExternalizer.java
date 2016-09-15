@@ -9,9 +9,10 @@ import com.appe.framework.data.DataMapper;
 import com.appe.framework.data.DataType;
 import com.appe.framework.io.BytesInputStream;
 import com.appe.framework.io.BytesOutputStream;
+import com.appe.framework.json.Externalizer;
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.Objects;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * For complex object type, trying to map all the complex field to JSON using CUSTOM TYPE. ANY CUSTOM FIELD WILL BE
  * STORE AS BYTEB THEN IT WILL AUTOMATICALLY HANDLE SERIALIZE & DESERIALIZE.
@@ -19,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author ho
  * @param <T>
  */
-public abstract class ObjectDataMapper<T> extends DataMapper<T> {
+public abstract class DataExternalizer<T> extends DataMapper<T> {
 	private DataMapper<T> mapper;
 	private Map<String, Class<?>> types;
 	/**
@@ -28,7 +29,7 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 	 * @param type
 	 * @param types
 	 */
-	public ObjectDataMapper(DataMapper<T> mapper, DataType type, Object...types) {
+	public DataExternalizer(DataMapper<T> mapper, DataType type, Object...types) {
 		this.mapper = mapper;
 		this.types  = Objects.asMap(types);
 		
@@ -101,11 +102,11 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 	protected abstract Object wrapValue(Object value, Class<?> type);
 	
 	//CUSTOM OBJECT AS BYTEB
-	public static class BYTEB<T> extends ObjectDataMapper<T> {
-		private ObjectMapper objectMapper;
-		public BYTEB(DataMapper<T> mapper, ObjectMapper objectMapper, Object... types) {
+	public static class BYTEB<T> extends DataExternalizer<T> {
+		private Externalizer externalizer;
+		public BYTEB(DataMapper<T> mapper, Externalizer externalizer, Object... types) {
 			super(mapper, DataType.BYTEB, types);
-			this.objectMapper = objectMapper;
+			this.externalizer = externalizer;
 		}
 		
 		/**
@@ -120,7 +121,7 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 			//BYTES -> OBJECT
 			try {
 				BytesInputStream src = new BytesInputStream((byte[])value);
-				return	objectMapper.readValue(src, type);
+				return	externalizer.unmarshal(src, type);
 			}catch(IOException ex) {
 				throw DataException.wrap(ex);
 			}
@@ -138,7 +139,7 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 			//CONVERT TO BYTES
 			try {
 				BytesOutputStream dst = new BytesOutputStream();
-				objectMapper.writeValue(dst, value);
+				externalizer.marshal(value, dst);
 				return dst.toByteArray();
 			} catch(IOException ex) {
 				throw DataException.wrap(ex);
@@ -147,11 +148,11 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 	}
 	
 	//UTF8 ALL CUSTOME FIELD
-	public static class UTF8<T> extends ObjectDataMapper<T> {
-		private ObjectMapper objectMapper;
-		public UTF8(DataMapper<T> mapper, ObjectMapper objectMapper, Object... types) {
+	public static class UTF8<T> extends DataExternalizer<T> {
+		private Externalizer externalizer;
+		public UTF8(DataMapper<T> mapper, Externalizer externalizer, Object... types) {
 			super(mapper, DataType.UTF8, types);
-			this.objectMapper = objectMapper;
+			this.externalizer = externalizer;
 		}
 		
 		/**
@@ -165,7 +166,8 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 		protected Object unwrapValue(Object value, Class<?> type) {
 			//UTF8 -> OBJECT
 			try {
-				return	objectMapper.readValue((String)value, type);
+				BytesInputStream src = new BytesInputStream((String)value);
+				return	externalizer.unmarshal(src, type);
 			}catch(IOException ex) {
 				throw DataException.wrap(ex);
 			}
@@ -183,7 +185,7 @@ public abstract class ObjectDataMapper<T> extends DataMapper<T> {
 			//CONVERT TO BYTES
 			try {
 				BytesOutputStream dst = new BytesOutputStream();
-				objectMapper.writeValue(dst, value);
+				externalizer.marshal(value, dst);
 				return dst.toString(Codecs.UTF8);
 			} catch(IOException ex) {
 				throw DataException.wrap(ex);

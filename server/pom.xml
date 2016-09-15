@@ -87,6 +87,11 @@
     </dependency>
     <dependency>
         <groupId>com.appe.framework</groupId>
+        <artifactId>appe-activity</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.appe.framework</groupId>
         <artifactId>appe-client</artifactId>
         <version>${project.version}</version>
     </dependency>
