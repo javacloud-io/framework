@@ -67,6 +67,6 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * @return
 	 */
 	protected Injector createInjector() {
-		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION), "META-INF/registry-modules.guice");
+		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION), "META-INF/registry-services.guice");
 	}
 }

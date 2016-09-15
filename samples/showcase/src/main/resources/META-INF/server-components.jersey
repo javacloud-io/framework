@@ -1,7 +1,0 @@
-# Basic components
-com.appe.framework.server.hk2.GuiceHK2Feature
-com.appe.framework.databind.JacksonFeature
-com.appe.framework.server.internal.DefaultExceptionMapper
-
-#Application components
-org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature

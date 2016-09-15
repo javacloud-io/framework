@@ -1,0 +1,10 @@
+######### List of modules or services binding ########
+
+# module.class
+# implementation.class
+# interface.class=implementation.class
+# interface.class:named=implementation.class
+
+#Common services
+com.appe.framework.resource.ResourceBundleManager=com.appe.framework.resource.impl.ResourceBundleManagerImpl
+com.appe.framework.activity.registry.ActivityModule

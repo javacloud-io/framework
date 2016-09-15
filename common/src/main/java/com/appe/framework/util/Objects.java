@@ -231,6 +231,15 @@ public final class Objects {
 	}
 	
 	/**
+	 * 
+	 * @param collection
+	 * @return
+	 */
+	public static boolean isEmpty(Map<?, ?> collection) {
+		return collection == null || collection.isEmpty();
+	}
+	
+	/**
 	 * Quietly close the streams without any exception...
 	 * 
 	 * @param closable

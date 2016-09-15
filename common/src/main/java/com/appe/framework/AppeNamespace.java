@@ -21,6 +21,13 @@ public interface AppeNamespace {
 	public String get();
 	
 	/**
+	 * return hash of the keys with namespace
+	 * @param keys
+	 * @return
+	 */
+	public String hash(Object... keys);
+	
+	/**
 	 * Clean out any NAMESPACE currently set
 	 * 
 	 */

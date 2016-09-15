@@ -37,11 +37,16 @@
   
   <modules>
     <module>common</module>
+    <module>json</module>
+    <module>config</module>
+    <module>data</module>
+    <module>cache</module>
+    <module>security</module>
+    <module>activity</module>
+    <!--module>ssl</module-->
     <module>client</module>
-    <module>service</module>
     <module>server-test</module>
     <module>server</module>
-    <module>samples</module>
     <module>assembly</module>
   </modules>
   
@@ -53,8 +58,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 

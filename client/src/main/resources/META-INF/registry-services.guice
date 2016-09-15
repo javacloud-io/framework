@@ -1,0 +1,9 @@
+######### List of modules or services binding ########
+
+# module.class
+# implementation.class
+# interface.class=implementation.class
+# interface.class:named=implementation.class
+
+com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+javax.ws.rs.client.Client=com.appe.framework.client.HttpClientProvider

@@ -101,7 +101,7 @@ public final class AppeLoader {
 	}
 	
 	/**
-	 * Return a properties resource for given class loader.
+	 * Return a properties resource for given class loader. NULL indicate not FOUND the properties
 	 * 
 	 * @param resource
 	 * @return

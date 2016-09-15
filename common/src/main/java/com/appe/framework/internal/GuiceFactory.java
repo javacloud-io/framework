@@ -6,16 +6,23 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Logger;
+
+import javax.inject.Provider;
 
 import com.appe.framework.AppeLoader;
 import com.appe.framework.AppeRegistry;
+import com.appe.framework.util.Objects;
+import com.appe.framework.util.Pair;
 import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
+import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.spi.Message;
 
 /**
@@ -30,6 +37,93 @@ public final class GuiceFactory {
 	}
 	
 	/**
+	 * Properties file with modules/services implementation
+	 * 
+	 * # module.class
+	 * # implementation.class
+	 * # interface.class=implementation.class
+	 * # interface.class:named=implementation.class
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	private static List<Module> loadModules(String resource) {
+		try {
+			Properties properties = AppeLoader.loadProperties(resource);
+			if(Objects.isEmpty(properties)) {
+				return Objects.asList();
+			}
+			
+			ClassLoader loader = AppeLoader.getClassLoader();
+			List<Module> zmodules = new ArrayList<>();
+			final List<Pair<Pair<Class<?>, String>, Class<?>>> zservices = new ArrayList<>();
+			for(Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
+				String ztype = (String)ename.nextElement();
+				String zimpl = properties.getProperty(ztype);
+				
+				//FIND MAPPING NAMED
+				String zname;
+				int idot = ztype.indexOf(':');
+				if(idot > 0) {
+					zname = ztype.substring(idot + 1);
+					ztype = ztype.substring(0, idot);
+				} else {
+					zname = null;
+				}
+				
+				//LOAD ALL MODULES/SERVICES
+				Class<?> zclass = loader.loadClass(ztype);
+				if(Module.class.isAssignableFrom(zclass)) {
+					zmodules.add((Module)zclass.newInstance());
+				} else {
+					Class<?> zzimpl;
+					if(!Objects.isEmpty(zimpl)) {
+						zzimpl = loader.loadClass(zimpl);
+					} else {
+						zzimpl = null;
+					}
+					zservices.add(new Pair<Pair<Class<?>, String>, Class<?>>(new Pair<Class<?>, String>(zclass, zname), zzimpl));
+				}
+			}
+			
+			//CONSTRUCT DYNAMIC MODULE AT THE END!!!
+			if(!zservices.isEmpty()) {
+				GuiceModule dynamicModule = new GuiceModule() {
+					@SuppressWarnings({ "rawtypes", "unchecked" })
+					@Override
+					protected void configure() {
+						for(Pair<Pair<Class<?>, String>, Class<?>> pair: zservices) {
+							Pair<Class<?>, String> zclass = pair.getKey();
+							String zname = zclass.getValue();
+							
+							LinkedBindingBuilder<?> binding;
+							if(Objects.isEmpty(zname)) {
+								binding = bind(zclass.getKey());
+							} else {
+								binding = bindNamed(zclass.getKey(), zname);
+							}
+							
+							//BIND TO IMPL IF VALID
+							Class<?> zzimpl = pair.getValue();
+							if(zzimpl != null) {
+								if(Provider.class.isAssignableFrom(zzimpl)) {
+									binding.toProvider((Class)zzimpl);
+								} else {
+									binding.to((Class)zzimpl);
+								}
+							}
+						}
+					}
+				};
+				zmodules.add(dynamicModule);
+			}
+			return zmodules;
+		} catch(IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+			throw new ConfigurationException(Arrays.asList(new Message(ex.getClass() + ": " + ex.getMessage())));
+		}
+	}
+	
+	/**
 	 * 1. Load all the modules from all classes with resource
 	 * 2. Load all the modules override with resource.1
 	 * 
@@ -38,22 +132,18 @@ public final class GuiceFactory {
 	 * @return
 	 */
 	public static Injector createInjector(GuiceBuilder builder, String resource) {
-		try {
-			logger.info("Loading modules from resource: " + resource);
-			List<Module> modules = AppeLoader.loadServices(resource);
-			
-			//ALWAYS MAKE SURE IT AT LEAST EMPTY
-			if(modules == null) {
-				modules = Collections.emptyList();
-			}
-			
-			logger.info("Load override modules from resource: " + resource + ".1");
-			List<Module> overrides = AppeLoader.loadServices(resource + ".1");
-			
-			return builder.build(modules, overrides);
-		} catch(IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-			throw new ConfigurationException(Arrays.asList(new Message(ex.getClass() + ": " + ex.getMessage())));
+		logger.info("Loading modules from resource: " + resource);
+		List<Module> modules = loadModules(resource);
+		
+		//ALWAYS MAKE SURE IT AT LEAST EMPTY
+		if(modules == null) {
+			modules = Collections.emptyList();
 		}
+		
+		logger.info("Load override modules from resource: " + resource + ".1");
+		List<Module> overrides = loadModules(resource + ".1");
+		
+		return builder.build(modules, overrides);
 	}
 	
 	/**
@@ -75,6 +165,7 @@ public final class GuiceFactory {
 	}
 	
 	/**
+	 * 
 	 * Find all instances of the service type.
 	 */
 	public static <T> List<T> getInstances(Injector injector, Class<T> type) {

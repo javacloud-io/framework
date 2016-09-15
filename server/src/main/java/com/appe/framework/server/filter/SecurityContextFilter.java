@@ -1,7 +1,6 @@
 package com.appe.framework.server.filter;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import com.appe.framework.AppeRegistry;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
 import com.appe.framework.security.AccessGrant;
+import com.appe.framework.security.Credentials;
 import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.internal.AuthenticatorManager;
 import com.appe.framework.security.internal.ClientCredentials;
@@ -102,7 +102,7 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws AuthenticationException
 	 */
 	protected AccessGrant doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		Principal credentials = requestCredentials(req);
+		Credentials credentials = requestCredentials(req);
 		
 		//ASSUMING NULL GRANT
 		if(credentials == null) {
@@ -124,7 +124,7 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws ServletException
 	 * @throws IOException
 	 */
-	protected Principal requestCredentials(HttpServletRequest req) throws ServletException, IOException {
+	protected Credentials requestCredentials(HttpServletRequest req) throws ServletException, IOException {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)

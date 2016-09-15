@@ -149,9 +149,10 @@ public class AppeException extends RuntimeException {
 	
 	/**
 	 * Make sure to always return a single AppeException instead of stack of them.
+	 * 
 	 * @param t
 	 */
-	public static final AppeException wrap(Throwable t) {
+	public static AppeException wrap(Throwable t) {
 		if(t instanceof AppeException) {
 			return	(AppeException)t;
 		}

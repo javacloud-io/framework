@@ -13,11 +13,15 @@
     		<unpack>true</unpack>
     		<useProjectArtifact>false</useProjectArtifact>
     		<includes>
-    			<include>com.appe.framework:appe-registry</include>
-    			<include>com.appe.framework:appe-common</include>
-    			<include>com.appe.framework:appe-common-ext</include>
-    			<include>com.appe.framework:appe-server</include>
-    		</includes>
+                <include>com.appe.framework:appe-common</include>
+                <include>com.appe.framework:appe-config</include>
+                <include>com.appe.framework:appe-data</include>
+                <include>com.appe.framework:appe-activity</include>
+                <include>com.appe.framework:appe-cache</include>
+                <include>com.appe.framework:appe-security</include>
+                <include>com.appe.framework:appe-client</include>
+                <include>com.appe.framework:appe-server</include>
+            </includes>
     	</dependencySet>
 	</dependencySets>
 </assembly>

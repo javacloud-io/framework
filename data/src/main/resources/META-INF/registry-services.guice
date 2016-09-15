@@ -1,0 +1,10 @@
+######### List of modules or services binding ########
+
+# module.class
+# implementation.class
+# interface.class=implementation.class
+# interface.class:named=implementation.class
+
+# memory data services
+com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+com.appe.framework.data.DataManager=com.appe.framework.data.impl.DataManagerImpl

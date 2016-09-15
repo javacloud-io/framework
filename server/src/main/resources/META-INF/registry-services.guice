@@ -1,0 +1,25 @@
+######### List of modules or services binding ########
+
+# module.class
+# implementation.class
+# interface.class=implementation.class
+# interface.class:named=implementation.class
+
+# common services
+com.appe.framework.AppeNamespace=com.appe.framework.impl.AppeNamespaceImpl
+com.appe.framework.AppeLocale=com.appe.framework.impl.AppeLocaleImpl
+
+# resource services
+com.appe.framework.resource.ResourceBundleManager=com.appe.framework.resource.impl.ResourceBundleManagerImpl
+
+# activity services
+com.appe.framework.activity.registry.ActivityModule
+
+# json services
+com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.JacksonMapper
+
+# data services
+com.appe.framework.data.DataManager=com.appe.framework.data.impl.DataManagerImpl
+
+# client services
+javax.ws.rs.client.Client=com.appe.framework.client.HttpClientProvider
