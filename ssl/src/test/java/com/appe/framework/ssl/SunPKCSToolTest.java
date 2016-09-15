@@ -22,9 +22,9 @@ import junit.framework.TestCase;
 public class SunPKCSToolTest extends TestCase {
 	public void testSubjectDN() throws Exception {
 		DN subjectDN = new DN();
-		subjectDN.put(DN._CN, "test");
-		subjectDN.put(DN._UID, "ho");
-		subjectDN.put(DN._EMAIL, "ho@yahoo.com");
+		subjectDN.put(DN.CN, "test");
+		subjectDN.put(DN.UID, "ho");
+		subjectDN.put(DN.EMAIL, "ho@yahoo.com");
 		
 		KeyPair keypair = PKCSTool.createKeyPair(1024);
 		

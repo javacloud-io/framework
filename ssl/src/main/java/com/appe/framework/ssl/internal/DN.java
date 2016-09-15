@@ -18,15 +18,15 @@ import com.appe.framework.util.Dictionary;
  *
  */
 public final class DN extends Dictionary {
-	public static final String _CN 	= "CN";	//common name
-	public static final String _O  	= "O";	//organization
-	public static final String _OU  = "OU";	//organization unit
-	public static final String _L  	= "L";	//city name
-	public static final String _S  	= "S";	//state name
-	public static final String _C  	= "C";	//country
+	public static final String CN 		= "CN";	//common name
+	public static final String ORG  	= "O";	//organization
+	public static final String OU  		= "OU";	//organization unit
+	public static final String CITY 	= "L";	//city name
+	public static final String STATE	= "S";	//state name
+	public static final String COUNTRY  = "C";	//country
 	
-	public static final String _UID	 = "UID";
-	public static final String _EMAIL= "EMAIL";
+	public static final String UID	 	= "UID";
+	public static final String EMAIL	= "EMAIL";
 	
 	public DN() {
 		super(new LinkedHashMap<String, Object>());
