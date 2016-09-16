@@ -161,7 +161,7 @@ public abstract class DataMapper<T> {
 			try {
 				PropertyDescriptor[] descriptors = Introspector.getBeanInfo(type).getPropertyDescriptors();
 				for(PropertyDescriptor descr: descriptors) {
-					//FILTER OUT NON QUALIFY NAME
+					//FILTER OUT NON QUALIFY NAME, HAVE TO BE BOTH READ/WRITE
 					if(descr instanceof IndexedPropertyDescriptor
 						|| descr.getReadMethod() == null || descr.getWriteMethod() == null) {
 						continue;
@@ -169,7 +169,7 @@ public abstract class DataMapper<T> {
 					
 					//FIND THE CORRECT TYPE MAPPING
 					if(discover) {
-						DataType dt = DataType.PRIMITIVES.get(descr.getPropertyType());
+						DataType dt = DataType.get(descr.getPropertyType());
 						
 						//ADD DATA TYPE IF FOUND
 						if(dt != null) {

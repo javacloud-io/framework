@@ -126,7 +126,7 @@ public class ConfigBundleHandler implements InvocationHandler {
 	 * @return
 	 */
 	protected String stripGetter(String name) {
-		if(name.startsWith("get")) {
+		if(name.startsWith("get") || name.startsWith("set")) {
 			Introspector.decapitalize(name.substring(3));
 		} else if(name.startsWith("is")) {
 			Introspector.decapitalize(name.substring(2));

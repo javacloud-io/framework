@@ -142,7 +142,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager {
 		return new MessageBundleHandler(appeLocale) {
 			@Override
 			protected ResourceBundle resolveBundle() throws MissingResourceException {
-				throw new MissingResourceException("Not implemented yet", MessageBundleHandler.class.getName(), "");
+				throw new MissingResourceException("TODO: Implement universal i18n handler", MessageBundleHandler.class.getName(), "");
 			}
 		};
 	}

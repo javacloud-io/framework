@@ -26,21 +26,29 @@ public enum DataType {
 	BYTEB;		//RAW BYTEs or BASE64 ENCODED.
 	
 	//MAP PRIMARY DATA TYPE
-	public static final Map<Class<?>, DataType> PRIMITIVES = Objects.asMap(
-			boolean.class, 	BOOLEAN,
-			Boolean.class,	BOOLEAN,
-			char.class, 	CHAR,
-			Character.class,CHAR,
-			int.class,		INTEGER,
-			Integer.class,	INTEGER,
-			long.class,		LONG,
-			Long.class,		LONG,
-			float.class,	FLOAT,
-			Float.class,	FLOAT,
-			double.class,	DOUBLE,
-			Double.class,	DOUBLE,
-			String.class,	UTF8,
-			Date.class,		DATE,
-			byte[].class,	BYTEB,
-			ByteBuffer.class,BYTEB);
+	private static final Map<Class<?>, DataType> PRIMITIVES = Objects.asMap(
+		boolean.class, 		BOOLEAN,
+		Boolean.class,		BOOLEAN,
+		char.class, 		CHAR,
+		Character.class,	CHAR,
+		int.class,			INTEGER,
+		Integer.class,		INTEGER,
+		long.class,			LONG,
+		Long.class,			LONG,
+		float.class,		FLOAT,
+		Float.class,		FLOAT,
+		double.class,		DOUBLE,
+		Double.class,		DOUBLE,
+		String.class,		UTF8,
+		Date.class,			DATE,
+		byte[].class,		BYTEB,
+		ByteBuffer.class,	BYTEB);
+	
+	//ENUM is SPECIAL
+	public static DataType get(Class<?> type) {
+		if(type.isEnum()) {
+			return DataType.UTF8;
+		}
+		return PRIMITIVES.get(type);
+	}
 }
