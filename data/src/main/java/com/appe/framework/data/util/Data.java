@@ -23,8 +23,8 @@ import com.appe.framework.util.Objects;
  * @author tobi
  *
  */
-public final class DataUtil {
-	private DataUtil() {
+public final class Data {
+	private Data() {
 	}
 	
 	/**
@@ -247,5 +247,19 @@ public final class DataUtil {
 	 */
 	public static Map<String, DataCondition> conditions(Object...conditions) {
 		return Objects.asMap(conditions);
+	}
+	
+	/**
+	 * Scan for first match only
+	 * 
+	 * @param store
+	 * @param name
+	 */
+	public static <T> T scanOne(DataStore<T> store, String name, DataCondition condition, String...columns) {
+		DataResult<T> result = store.scan(conditions(name, condition), new DataRange(1), columns);
+		if(result.count() > 0) {
+			return result.items().get(0);
+		}
+		return null;
 	}
 }

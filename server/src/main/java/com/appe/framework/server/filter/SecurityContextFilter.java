@@ -32,7 +32,7 @@ import com.appe.framework.util.Objects;
  *	<param-value>list of binding names</param-value>		
  * </init-param>
  * <init-param>
- *	<param-name>allow-cookie</param-name>
+ *	<param-name>allows-cookie</param-name>
  *	<param-value></param-value>		
  * </init-param>
  * 
@@ -55,7 +55,7 @@ public class SecurityContextFilter extends ServletFilter {
 	@Override
 	protected void init() throws ServletException {
 		//OPTIONALS TOKEN PARAM
-		this.allowsCookie= Boolean.valueOf(getInitParameter("allow-cookie"));
+		this.allowsCookie= Boolean.valueOf(getInitParameter("allows-cookie"));
 		
 		//AUTHENTICATORs
 		List<Authenticator> authenticators = new ArrayList<>();

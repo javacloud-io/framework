@@ -52,6 +52,18 @@ public abstract class ServletFilter implements Filter {
 	}
 	
 	/**
+	 * return initial parameter with default value if not provided
+	 * 
+	 * @param name
+	 * @param defaultValue
+	 * @return
+	 */
+	protected String getInitParameter(String name, String defaultValue) {
+		String value = config.getInitParameter(name);
+		return (value == null? defaultValue : value);
+	}
+	
+	/**
 	 * 
 	 * @return
 	 */
