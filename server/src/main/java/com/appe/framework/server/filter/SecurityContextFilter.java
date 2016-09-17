@@ -129,10 +129,11 @@ public class SecurityContextFilter extends ServletFilter {
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
 		if(authorization != null) {
-			if(authorization.startsWith(IdParameters.Scheme.Bearer.name())) {
-				return	new TokenCredentials(authorization.substring(IdParameters.Scheme.Bearer.name().length() + 1));
-			} else if(authorization.startsWith(IdParameters.Scheme.Basic.name())) {
-				return new ClientCredentials(authorization.substring(IdParameters.Scheme.Basic.name().length() + 1));
+			if(authorization.startsWith(IdParameters.SchemeType.Bearer.name())) {
+				return	new TokenCredentials(IdParameters.GrantType.access_token,
+									authorization.substring(IdParameters.SchemeType.Bearer.name().length() + 1));
+			} else if(authorization.startsWith(IdParameters.SchemeType.Basic.name())) {
+				return new ClientCredentials(authorization.substring(IdParameters.SchemeType.Basic.name().length() + 1));
 			}
 			
 			//NOT MEAN TO BE
@@ -147,6 +148,6 @@ public class SecurityContextFilter extends ServletFilter {
 				token = cookie.getValue();
 			}
 		}
-		return	(token == null? null : new TokenCredentials(token));
+		return	(token == null? null : new TokenCredentials(IdParameters.GrantType.access_token, token));
 	}
 }

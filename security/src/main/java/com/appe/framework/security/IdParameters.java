@@ -7,24 +7,6 @@ package com.appe.framework.security;
  *
  */
 public interface IdParameters extends Credentials {
-	//Schemes
-	public static enum Scheme {
-		Basic,	//Client Basic
-		Bearer;	//Oauth2 Bearer
-	}
-	//type of response
-	public static enum ResponseType {
-		token,
-		code
-	}
-	//type of grant
-	public static enum GrantType {
-		authorization_code,
-		password,
-		client_credentials,
-		refresh_token
-	}
-	
 	//REQUEST PARAMETERs
 	public static final String PARAM_CLIENT_ID 		= "client_id";
 	public static final String PARAM_CLIENT_SECRET 	= "client_secret";
@@ -51,62 +33,85 @@ public interface IdParameters extends Credentials {
 	public static final String ERROR_SERVER_ERROR 	= "server_error";
 	public static final String ERROR_INVALID_REQUEST= "invalid_request";
 	
+	//Schemes
+	public static enum SchemeType {
+		Basic,	//Client Basic
+		Bearer;	//Oauth2 Bearer
+	}
+	
+	//type of response
+	public static enum ResponseType {
+		token,
+		code
+	}
+	
+	//type of grant
+	public static enum GrantType {
+		password,
+		client_credentials,
+		
+		authorization_code,
+		access_token,
+		refresh_token
+	}
+		
 	/**
-	 * 
+	 * return requested client
 	 * @return
 	 */
 	public String getClientId();
 	
 	/**
-	 * 
+	 * return client requested secret
 	 * @return
 	 */
 	public String getClientSecret();
 	
 	/**
-	 * 
+	 * URI to handle the authorization token
 	 * @return
 	 */
 	public String getRedirectURI();
 	
 	/**
+	 * intended response type
 	 * 
 	 * @return
 	 */
 	public String getResponseType();
 	
 	/**
-	 * 
+	 * space delimiter of scope of token, which service is asking for
 	 * @return
 	 */
 	public String getScope();
 	
 	/**
-	 * 
+	 * return turn the state passing around
 	 * @return
 	 */
 	public String getState();
 	
 	/**
-	 * 
+	 * return requested grant type
 	 * @return
 	 */
 	public String getGrantType();
 	
 	/**
-	 * 
+	 * return authorization code if grant type is authorization_code
 	 * @return
 	 */
 	public String getCode();
 	
 	/**
-	 * 
+	 * return requested username if grant type is password
 	 * @return
 	 */
 	public String getUsername();
 	
 	/**
-	 * 
+	 * requested password if grant type is password 
 	 * @return
 	 */
 	public String getPassword();

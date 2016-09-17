@@ -1,34 +1,34 @@
 package com.appe.framework.security.internal;
 
+import com.appe.framework.security.IdParameters;
+
 
 
 /**
  * Authentication using oauth2 Bearer token base, user/client already exchanged for token.
- * A default NULL issuer if token is local
  * 
  * @author tobi
  *
  */
 public class TokenCredentials extends BasicCredentials {
 	/**
-	 * Local token
 	 * 
+	 * @param type
 	 * @param token
 	 */
-	public TokenCredentials(String token) {
-		this(null, token);
+	public TokenCredentials(IdParameters.GrantType type, String token) {
+		super(type.name(), token);
 	}
 	
 	/**
-	 * External token with issuer
+	 * return grant type of token
 	 * 
-	 * @param issuer
-	 * @param token
+	 * @return
 	 */
-	public TokenCredentials(String issuer, String token) {
-		super(issuer, token);
+	public IdParameters.GrantType getType() {
+		return IdParameters.GrantType.valueOf(getName());
 	}
-
+	
 	/**
 	 * shot cut to return token credentials
 	 * @return
