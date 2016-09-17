@@ -14,5 +14,6 @@ public class DefaultModule extends GuiceModule {
 	protected void configure() {
 		bind(ObjectMapper.class).to(JacksonMapper.class);
 		bind(Externalizer.class).to(JacksonMapper.class);
+		bindNamed(Externalizer.class, Externalizer.JSON).to(JacksonMapper.class);
 	}
 }

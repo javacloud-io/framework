@@ -54,5 +54,12 @@
    		<artifactId>appe-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
+  	
+  	<dependency>
+        <groupId>com.appe.framework</groupId>
+        <artifactId>appe-json</artifactId>
+        <version>${project.version}</version>
+        <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>
