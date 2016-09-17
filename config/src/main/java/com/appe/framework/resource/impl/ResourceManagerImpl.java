@@ -18,7 +18,7 @@ import com.appe.framework.AppeLoader;
 import com.appe.framework.AppeLocale;
 import com.appe.framework.resource.ConfigBundle;
 import com.appe.framework.resource.MessageBundle;
-import com.appe.framework.resource.ResourceBundleManager;
+import com.appe.framework.resource.ResourceManager;
 import com.appe.framework.resource.internal.ConfigBundleHandler;
 import com.appe.framework.resource.internal.MessageBundleHandler;
 import com.appe.framework.util.Objects;
@@ -29,8 +29,8 @@ import com.appe.framework.util.Objects;
  *
  */
 @Singleton
-public class ResourceBundleManagerImpl implements ResourceBundleManager {
-	private static final Logger logger = LoggerFactory.getLogger(ResourceBundleManagerImpl.class);
+public class ResourceManagerImpl implements ResourceManager {
+	private static final Logger logger = LoggerFactory.getLogger(ResourceManagerImpl.class);
 	private AppeLocale appeLocale;
 	
 	/**
@@ -38,7 +38,7 @@ public class ResourceBundleManagerImpl implements ResourceBundleManager {
 	 * @param appeLocale
 	 */
 	@Inject
-	public ResourceBundleManagerImpl(AppeLocale appeLocale) {
+	public ResourceManagerImpl(AppeLocale appeLocale) {
 		this.appeLocale = appeLocale;
 	}
 	

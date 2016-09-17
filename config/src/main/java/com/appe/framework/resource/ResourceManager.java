@@ -5,7 +5,7 @@ package com.appe.framework.resource;
  * @author ho
  *
  */
-public interface ResourceBundleManager {
+public interface ResourceManager {
 	/**
 	 * return a config bundle
 	 * 

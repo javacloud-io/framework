@@ -3,7 +3,7 @@ package com.appe.framework.server.internal;
 import javax.inject.Inject;
 
 import com.appe.framework.resource.MessageBundle;
-import com.appe.framework.resource.ResourceBundleManager;
+import com.appe.framework.resource.ResourceManager;
 import com.appe.framework.server.GenericExceptionMapper;
 
 /**
@@ -13,14 +13,14 @@ import com.appe.framework.server.GenericExceptionMapper;
  *
  */
 public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwable> {
-	private final MessageBundle bundle;
+	private final MessageBundle messageBundle;
 	/**
 	 * 
 	 * @param bundleManager
 	 */
 	@Inject
-	public DefaultExceptionMapper(ResourceBundleManager bundleManager) {
-		this.bundle = bundleManager.getMessageBundle(MessageBundle.class);
+	public DefaultExceptionMapper(ResourceManager resourceManager) {
+		this.messageBundle = resourceManager.getMessageBundle(MessageBundle.class);
 	}
 	
 	/**
@@ -29,6 +29,6 @@ public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwab
 	 */
 	@Override
 	protected String toLocalizedMessage(String message) {
-		return bundle.getMessage(message);
+		return messageBundle.getMessage(message);
 	}
 }
