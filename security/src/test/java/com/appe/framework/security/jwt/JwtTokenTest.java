@@ -1,4 +1,4 @@
-package com.appe.framework.security.util;
+package com.appe.framework.security.jwt;
 
 import com.appe.framework.security.jwt.JwtCodecs;
 import com.appe.framework.security.jwt.JwtSigner;
