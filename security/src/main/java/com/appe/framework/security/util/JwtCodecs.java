@@ -21,9 +21,9 @@ public final class JwtCodecs {
 	 */
 	public static String encodeJWT(JwtToken token, JwtSigner signer) {
 		String header = "{\"typ\":\"" + token.getType() + "\",\"alg\":\"" + signer.getAlgorithm() + "\"}";
-		String content = Codecs.encodeBase64(Codecs.decodeUTF8(header), true)
-						+ "." + Codecs.encodeBase64(token.getPayload(), true);
-		return content + "." + signer.sign(Codecs.decodeUTF8(content));
+		String payload= Codecs.encodeBase64(Codecs.decodeUTF8(header), true)
+						+ "." + Codecs.encodeBase64(token.getClaims(), true);
+		return payload + "." + signer.sign(Codecs.decodeUTF8(payload));
 	}
 	
 	/**
@@ -45,25 +45,25 @@ public final class JwtCodecs {
 		}
 		
 		//VALIDATE THE PAYLOAD BEFORE CONTINUE
-		String content  = token.substring(0, idot);
+		String payload  = token.substring(0, idot);
 		String signature= token.substring(idot + 1);
-		String sexpected= signer.sign(Codecs.decodeUTF8(content));
+		String sexpected= signer.sign(Codecs.decodeUTF8(payload));
 		if(!sexpected.equals(signature)) {
 			throw new JwtException();
 		}
 		
 		//DECODE PAYLOAD
-		idot = content.indexOf('.');
+		idot = payload.indexOf('.');
 		if(idot < 0) {
 			throw new JwtException();
 		}
-		String header = Codecs.encodeUTF8(Codecs.decodeBase64(content.substring(0, idot), true));
-		byte[] payload= Codecs.decodeBase64(content.substring(idot + 1), true);
+		String header = Codecs.encodeUTF8(Codecs.decodeBase64(payload.substring(0, idot), true));
+		byte[] claims = Codecs.decodeBase64(payload.substring(idot + 1), true);
 		
 		//Parsing type/algorithm
 		String type = jsonValue(header, "\"typ\"");
 		String algorithm = jsonValue(header, "\"alg\"");
-		return new JwtToken(type, algorithm, payload);
+		return new JwtToken(type, algorithm, claims);
 	}
 	
 	/**

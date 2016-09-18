@@ -8,6 +8,7 @@ import junit.framework.TestCase;
  */
 public class JwtTokenTest extends TestCase {
 	private static JwtSigner signer = new JwtSigner.HS256("a secret key".getBytes());
+	
 	public void testToken() {
 		JwtToken token = new JwtToken("JWT", "{}".getBytes());
 		String stoken = JwtCodecs.encodeJWT(token, signer);

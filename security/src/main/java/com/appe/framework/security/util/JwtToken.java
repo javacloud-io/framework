@@ -7,27 +7,27 @@ package com.appe.framework.security.util;
 public final class JwtToken {
 	private String type;
 	private String algorithm;
-	private byte[] payload;
+	private byte[] claims;
 	/**
 	 * 
 	 * @param type
 	 * @param algorithm
-	 * @param payload
+	 * @param claims
 	 */
-	public JwtToken(String type, String algorithm, byte[] payload) {
+	public JwtToken(String type, String algorithm, byte[] claims) {
 		this.type = type;
 		this.algorithm = algorithm;
-		this.payload = payload;
+		this.claims = claims;
 	}
 	
 	/**
 	 * 
 	 * @param type
-	 * @param payload
+	 * @param claims
 	 */
-	public JwtToken(String type, byte[] payload) {
+	public JwtToken(String type, byte[] claims) {
 		this.type = type;
-		this.payload = payload;
+		this.claims = claims;
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public final class JwtToken {
 	 * 
 	 * @return
 	 */
-	public byte[] getPayload() {
-		return payload;
+	public byte[] getClaims() {
+		return claims;
 	}
 }
