@@ -1,4 +1,4 @@
-package com.appe.framework.security.util;
+package com.appe.framework.security.jwt;
 /**
  * 
  * @author ho
