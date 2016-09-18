@@ -57,7 +57,7 @@ public class SecurityContextFilter extends ServletFilter {
 		//OPTIONALS TOKEN PARAM
 		this.allowsCookie= Boolean.valueOf(getInitParameter("allows-cookie"));
 		
-		//AUTHENTICATORs
+		//SEARCH FOR AUTHENTICATORs
 		List<Authenticator> authenticators = new ArrayList<>();
 		String authenticator = getInitParameter("authenticator");
 		if(Objects.isEmpty(authenticator)) {

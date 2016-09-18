@@ -231,6 +231,7 @@ public final class Objects {
 	}
 	
 	/**
+	 * return true if collection is empty
 	 * 
 	 * @param collection
 	 * @return

@@ -118,7 +118,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	protected InvocationHandler createConfigHandler(String baseName, Class<?> type) {
 		//ALWAYS APPEND .properties to load the resource
 		String resource = baseName + ".properties";
-		logger.info("Bind the config class: " + type.getName() + " to resource bundle: " + resource);
+		logger.info("Bind the config: " + type.getName() + " to resource bundle: " + resource);
 		try {
 			Properties properties = AppeLoader.loadProperties(resource);
 			if(Objects.isEmpty(properties)) {
@@ -156,7 +156,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> type) {
-		logger.info("Bind I18n config class: " + type.getName() + " to resource bundle: " + baseName);
+		logger.info("Bind I18n bundle: " + type.getName() + " to resource bundle: " + baseName);
 		
 		//TO BE CONSISTENT, FIRST CALLER WIN!!!
 		final ClassLoader callerLoader = AppeLoader.getClassLoader();

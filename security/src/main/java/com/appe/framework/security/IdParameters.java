@@ -18,7 +18,7 @@ public interface IdParameters extends Credentials {
 	public static final String PARAM_STATE 			= "state";
 	public static final String PARAM_ERROR 			= "error";
 	
-	public static final String PARAM_ACCESS_CODE 	= "code";
+	public static final String PARAM_AUTHORIZATION_CODE 	= "code";
 	public static final String PARAM_ACCESS_TOKEN 	= "access_token";
 	public static final String PARAM_TOKEN_TYPE 	= "token_type";
 	public static final String PARAM_EXPIRES_IN 	= "expires_in"; //UTC seconds
