@@ -133,19 +133,20 @@ public final class Jvms {
 			}
 		}
 		
-		//MATCH REMAINING BITS
+		//MATCH REMAINING BITS IF ANY RIGHT TO LEFT
 		int mb = bits % 8;
-		byte bb = baddress[nb], bp = paddress[nb];
-		for(int i = 0; i < mb; i ++) {
-			if((bb & 0x80) != (bp & 0x80)) {
-				return false;
+		if(mb > 0) {
+			byte bb = baddress[nb], bp = paddress[nb];
+			for(int i = 0; i < mb; i ++) {
+				if((bb & 0x01) != (bp & 0x01)) {
+					return false;
+				}
+				
+				//SHIFT RIGHT
+				bb >>= 1;
+				bp >>= 1;
 			}
-			
-			//SHIFT LEFT
-			bb <<= 1;
-			bp <<= 1;
 		}
-		
 		//PERFECT
 		return true;
 	}
