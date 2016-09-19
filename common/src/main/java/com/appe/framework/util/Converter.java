@@ -8,7 +8,7 @@ import java.util.Date;
 import com.appe.framework.AppeException;
 
 /**
- * Converting from something to something else.
+ * Converting from something to something else. String to bytes[] will automatically assuming base64 encoded!!!
  * 
  * @author tobi
  * @param <T>
@@ -127,7 +127,8 @@ public interface Converter<T> {
 			return (value != null ? Double.valueOf((String)value) : null);
 		}
 	};
-	//BYTES | BYTED | BASE64 ENCODED?
+	
+	//BYTES | BYTEB | BASE64 ENCODED
 	public static final Converter<ByteBuffer> BYTEB = new Converter<ByteBuffer>() {
 		@Override
 		public ByteBuffer convert(Object value) {
@@ -141,7 +142,7 @@ public interface Converter<T> {
 			return (value != null ? ByteBuffer.wrap(Codecs.decodeBase64((String)value, false)) : null);
 		}
 	};
-	//BYTES
+	//BYTES | BYTEB | BASE64 ENCODED
 	public static final Converter<byte[]> BYTES = new Converter<byte[]>() {
 		@Override
 		public byte[] convert(Object value) {
