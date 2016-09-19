@@ -6,6 +6,8 @@ import java.lang.reflect.Proxy;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,6 +33,7 @@ import com.appe.framework.util.Objects;
 @Singleton
 public class ResourceManagerImpl implements ResourceManager {
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManagerImpl.class);
+	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
 	private AppeLocale appeLocale;
 	
 	/**
@@ -61,11 +64,24 @@ public class ResourceManagerImpl implements ResourceManager {
 	}
 	
 	/**
-	 * Just load the resource bundle on the fly!!!
+	 * Load and cache the bundle, it's OK if somehow has multiple load. ONLY ONE WILL MAKE TO CACHE!
+	 * 
+	 * @param type
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	protected <T> T getResourceBundle(Class<T> type) {
-		return (T)loadResourceBundle(type);
+		Object config = configCache.get(type);
+		if(config == null) {
+			synchronized(configCache) {
+				config = configCache.get(type);
+				if(config == null) {
+					config = loadResourceBundle(type);
+					configCache.put(type, config);
+				}
+			}
+		}
+		return (T)config;
 	}
 	
 	/**
