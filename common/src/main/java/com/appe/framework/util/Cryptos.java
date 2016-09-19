@@ -88,7 +88,7 @@ public class Cryptos {
 	 */
 	public static Cipher getAES(int opmode, String keyseed, int keylen) {
 		//CALCULATE THE SHA2 OF THE CONTENT 32 bytes
-		byte[] hash = Digests.sha2(Codecs.decodeUTF8(keyseed));
+		byte[] hash = Digests.sha2(Codecs.toBytes(keyseed));
 				
 		//KEY SIZE CAN BE DYNAMIC 128 bits
 		SecretKeySpec keyspec = new SecretKeySpec(hash, 0, keylen, Cryptos.AES);

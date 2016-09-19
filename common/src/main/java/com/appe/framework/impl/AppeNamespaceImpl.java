@@ -57,7 +57,7 @@ public class AppeNamespaceImpl implements AppeNamespace {
 		//HASHKEY IF ANY AVAILABLE
 		String hashKey = get();
 		if(hashKey != null) {
-			md.update(Codecs.decodeUTF8(hashKey));
+			md.update(Codecs.toBytes(hashKey));
 		}
 		
 		//ADD ALL KEYS WITHIN
@@ -69,7 +69,7 @@ public class AppeNamespaceImpl implements AppeNamespace {
 				} else if(key instanceof ByteBuffer) {
 					md.update((ByteBuffer)key);
 				} else if(key != null) {
-					md.update(Codecs.decodeUTF8(key.toString()));
+					md.update(Codecs.toBytes(key.toString()));
 				}
 			}
 		}

@@ -1,4 +1,4 @@
-package com.appe.framework.security.jwt;
+package com.appe.framework.jwt;
 
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.Objects;
@@ -21,9 +21,9 @@ public final class JwtCodecs {
 	 */
 	public static String encodeJWT(JwtToken token, JwtSigner signer) {
 		String header = "{\"typ\":\"" + token.getType() + "\",\"alg\":\"" + signer.getAlgorithm() + "\"}";
-		String payload= Codecs.encodeBase64(Codecs.decodeUTF8(header), true)
+		String payload= Codecs.encodeBase64(Codecs.toBytes(header), true)
 						+ "." + Codecs.encodeBase64(token.getClaims(), true);
-		return payload + "." + signer.sign(Codecs.decodeUTF8(payload));
+		return payload + "." + signer.sign(Codecs.toBytes(payload));
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public final class JwtCodecs {
 		//VALIDATE THE PAYLOAD BEFORE CONTINUE
 		String payload  = token.substring(0, idot);
 		String signature= token.substring(idot + 1);
-		String sexpected= signer.sign(Codecs.decodeUTF8(payload));
+		String sexpected= signer.sign(Codecs.toBytes(payload));
 		if(!sexpected.equals(signature)) {
 			throw new JwtException();
 		}
@@ -57,7 +57,7 @@ public final class JwtCodecs {
 		if(idot < 0) {
 			throw new JwtException();
 		}
-		String header = Codecs.encodeUTF8(Codecs.decodeBase64(payload.substring(0, idot), true));
+		String header = Codecs.toUTF8(Codecs.decodeBase64(payload.substring(0, idot), true));
 		byte[] claims = Codecs.decodeBase64(payload.substring(idot + 1), true);
 		
 		//Parsing type/algorithm
@@ -67,18 +67,18 @@ public final class JwtCodecs {
 	}
 	
 	/**
-	 * Simple JSON PARSING
+	 * Simple JSON PARSING field value
 	 * 
 	 * @param json
-	 * @param name
+	 * @param field
 	 * @return
 	 */
-	static final String jsonValue(String json, String name) {
-		int idx = json.indexOf(name);
+	static final String jsonValue(String json, String field) {
+		int idx = json.indexOf(field);
 		if(idx < 0) {
 			return null;
 		}
-		idx = json.indexOf(':', idx + name.length());
+		idx = json.indexOf(':', idx + field.length());
 		if(idx < 0) {
 			return null;
 		}

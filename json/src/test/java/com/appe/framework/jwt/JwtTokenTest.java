@@ -1,8 +1,8 @@
-package com.appe.framework.security.jwt;
+package com.appe.framework.jwt;
 
-import com.appe.framework.security.jwt.JwtCodecs;
-import com.appe.framework.security.jwt.JwtSigner;
-import com.appe.framework.security.jwt.JwtToken;
+import com.appe.framework.jwt.JwtCodecs;
+import com.appe.framework.jwt.JwtSigner;
+import com.appe.framework.jwt.JwtToken;
 
 import junit.framework.TestCase;
 /**

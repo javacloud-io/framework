@@ -1,4 +1,4 @@
-package com.appe.framework.security.jwt;
+package com.appe.framework.jwt;
 
 import com.appe.framework.util.ValidationException;
 /**

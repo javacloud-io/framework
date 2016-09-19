@@ -51,6 +51,6 @@ public class BytesInputStream extends ByteArrayInputStream {
 	 * @throws UnsupportedEncodingException
 	 */
 	public BytesInputStream(String buf) throws UnsupportedEncodingException {
-		super(buf == null? new byte[0] : Codecs.decodeUTF8(buf));
+		super(buf == null? new byte[0] : Codecs.toBytes(buf));
 	}
 }

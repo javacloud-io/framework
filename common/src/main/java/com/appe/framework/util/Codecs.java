@@ -23,8 +23,8 @@ public final class Codecs {
 	 * @param bytes
 	 * @return
 	 */
-	public static String encodeUTF8(byte[] bytes) {
-		return encodeUTF8(bytes, 0, bytes.length);
+	public static String toUTF8(byte[] bytes) {
+		return toUTF8(bytes, 0, bytes.length);
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public final class Codecs {
 	 * @param len
 	 * @return
 	 */
-	public static String encodeUTF8(byte[] bytes, int offset, int len) {
+	public static String toUTF8(byte[] bytes, int offset, int len) {
 		try {
 			return new String(bytes, offset, len, UTF8);
 		} catch (UnsupportedEncodingException ex) {
@@ -48,7 +48,7 @@ public final class Codecs {
 	 * @param utf8
 	 * @return
 	 */
-	public static byte[] decodeUTF8(String utf8) {
+	public static byte[] toBytes(String utf8) {
 		try {
 			return utf8.getBytes(UTF8);
 		} catch (UnsupportedEncodingException ex) {
