@@ -41,8 +41,8 @@ public final class GuiceFactory {
 	 * 
 	 * # module.class
 	 * # implementation.class
-	 * # interface.class=implementation.class
-	 * # interface.class:named=implementation.class
+	 * # interface.class=implementation/provider.class
+	 * # interface.class:named=implementation/provider.class
 	 * 
 	 * @param resource
 	 * @return
