@@ -1,4 +1,4 @@
-package com.appe.server.test.internal;
+package com.appe.framework.server.internal;
 
 import java.net.URI;
 

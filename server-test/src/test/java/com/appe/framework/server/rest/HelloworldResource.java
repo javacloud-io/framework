@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.test.apis;
+package com.appe.framework.server.rest;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

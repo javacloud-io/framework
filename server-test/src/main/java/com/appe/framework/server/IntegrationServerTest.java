@@ -1,10 +1,10 @@
-package com.appe.server.test;
+package com.appe.framework.server;
 
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 
-import com.appe.server.test.internal.IntegrationTestContainerFactory;
+import com.appe.framework.server.internal.IntegrationTestContainerFactory;
 
 /**
  * Make sure only ONE server per all the tests method. Basically just to make sure container start right after create

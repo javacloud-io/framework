@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.appe.server.test;
+package com.appe.framework.server;
 
 import javax.ws.rs.ApplicationPath;
 
@@ -26,6 +26,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 @ApplicationPath("/v1/*")
 public class TestApplication extends ResourceConfig {
 	public TestApplication() {
-		packages("com.appe.server.test.apis");
+		packages("com.appe.framework.server.rest");
 	}
 }
