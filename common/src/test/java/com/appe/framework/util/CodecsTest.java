@@ -47,14 +47,14 @@ public class CodecsTest extends TestCase {
 		for(int i = 0; i < 10000; i ++) {
 			Codecs.randomID();
 		}
-		System.out.println("BID:" + (System.currentTimeMillis() - start));
+		System.out.println("BID cost:" + (System.currentTimeMillis() - start));
 		
 		//UUID
 		start = System.currentTimeMillis();
 		for(int i = 0; i < 10000; i ++) {
 			UUID.randomUUID().toString();
 		}
-		System.out.println("UUID:" + (System.currentTimeMillis() - start));
+		System.out.println("UUID cost:" + (System.currentTimeMillis() - start));
 	}
 	
 	public void testSHA() {

@@ -89,12 +89,25 @@ public class Cryptos {
 	public static Cipher getAES(int opmode, String keyseed, int keylen) {
 		//CALCULATE THE SHA2 OF THE CONTENT 32 bytes
 		byte[] hash = Digests.sha2(Codecs.toBytes(keyseed));
-				
-		//KEY SIZE CAN BE DYNAMIC 128 bits
-		SecretKeySpec keyspec = new SecretKeySpec(hash, 0, keylen, Cryptos.AES);
 		
 		//PICK LAST 16 BYTEs of 32 BYTEs
-		return get(Cryptos.AES_CBC_PKCS5Padding, opmode, keyspec, new IvParameterSpec(hash, 16, 16));
+		return getAES(opmode, hash, keylen);
+	}
+	
+	/**
+	 * CALCULATE THE SHA2 OF THE CONTENT 32 bytes
+	 * 
+	 * @param opmode
+	 * @param key
+	 * @param keylen
+	 * @return
+	 */
+	public static Cipher getAES(int opmode, byte[] key, int keylen) {
+		//KEY SIZE CAN BE DYNAMIC 128 bits
+		SecretKeySpec keyspec = new SecretKeySpec(key, 0, keylen, Cryptos.AES);
+		
+		//PICK LAST 16 BYTEs of 32 BYTEs
+		return get(Cryptos.AES_CBC_PKCS5Padding, opmode, keyspec, new IvParameterSpec(key, 16, 16));
 	}
 	
 	/**
