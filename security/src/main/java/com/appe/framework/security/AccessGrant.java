@@ -4,7 +4,11 @@ import java.security.Principal;
 import java.util.Set;
 
 /**
- * Remote principal access to an endpoint
+ * A grant with set of claims for given subject and target audience. Claims include:
+ * -SUBJECT
+ * -ROLES
+ * -SCOPE
+ * -AUDIENCE
  * 
  * @author ho
  *
