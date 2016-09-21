@@ -3,7 +3,7 @@
 # module.class
 # implementation.class
 # interface.class=implementation.class
-# interface.class:named=implementation.class
+# interface.class#named=implementation.class
 
 #Common services
 com.appe.framework.registry.DefaultModule

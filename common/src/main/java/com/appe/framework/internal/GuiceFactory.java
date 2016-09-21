@@ -42,7 +42,7 @@ public final class GuiceFactory {
 	 * # module.class
 	 * # implementation.class
 	 * # interface.class=implementation/provider.class
-	 * # interface.class:named=implementation/provider.class
+	 * # interface.class#named=implementation/provider.class
 	 * 
 	 * @param resource
 	 * @return
@@ -61,9 +61,9 @@ public final class GuiceFactory {
 				String ztype = (String)ename.nextElement();
 				String zimpl = properties.getProperty(ztype);
 				
-				//FIND MAPPING NAMED
+				//FIND MAPPING NAMED, using # to look for name
 				String zname;
-				int idot = ztype.indexOf(':');
+				int idot = ztype.indexOf('#');
 				if(idot > 0) {
 					zname = ztype.substring(idot + 1);
 					ztype = ztype.substring(0, idot);
