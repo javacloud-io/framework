@@ -57,7 +57,7 @@ public final class GuiceFactory {
 		try {
 			Properties properties = AppeLoader.loadProperties(resource);
 			if(Objects.isEmpty(properties)) {
-				logger.warning("Not found modules or resource file: " + resource);
+				logger.fine("Not found modules or resource file: " + resource);
 				return Objects.asList();
 			}
 			
