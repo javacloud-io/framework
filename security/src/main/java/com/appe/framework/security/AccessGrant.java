@@ -22,10 +22,22 @@ public interface AccessGrant extends Principal {
 	public Principal getSubject();
 	
 	/**
-	 * return the permission set of this authentication, by default it will be NONE.
-	 * ONLY GRANTED authentication should have claims.
+	 * Client in which this is grant all
 	 * 
 	 * @return
 	 */
-	public Set<String> getClaims();
+	public String getAudience();
+	
+	/**
+	 * Set of scope which grant might have access
+	 * 
+	 * @return
+	 */
+	public String getScope();
+	
+	/**
+	 * Set of static roles entitle to the grant
+	 * @return
+	 */
+	public Set<String> getRoles();
 }

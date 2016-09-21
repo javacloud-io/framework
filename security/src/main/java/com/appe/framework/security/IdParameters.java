@@ -54,7 +54,7 @@ public interface IdParameters extends Credentials {
 		access_token,
 		refresh_token
 	}
-		
+	
 	/**
 	 * return requested client
 	 * @return

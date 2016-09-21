@@ -11,15 +11,18 @@ import com.appe.framework.security.AccessGrant;
  */
 public class AuthorizationGrant implements AccessGrant {
 	private Principal	subject;
-	private	Set<String>	claims;
+	private	Set<String>	roles;
+	
+	private String		audience;
+	private String 		scope;
 	/**
 	 * Grant authentication with permission set associated with.
 	 * @param subject
 	 * @param roles
 	 */
-	public AuthorizationGrant(Principal subject, Set<String> claims) {
+	public AuthorizationGrant(Principal subject, Set<String> roles) {
 		this.subject = subject;
-		this.claims  = claims;
+		this.roles  = roles;
 	}
 	
 	/**
@@ -44,7 +47,35 @@ public class AuthorizationGrant implements AccessGrant {
 	 * @return
 	 */
 	@Override
-	public Set<String> getClaims() {
-		return claims;
+	public Set<String> getRoles() {
+		return roles;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public String getAudience() {
+		return audience;
+	}
+	public AuthorizationGrant withAudience(String audience) {
+		this.audience = audience;
+		return this;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public String getScope() {
+		return scope;
+	}
+	/**
+	 * 
+	 * @param scope
+	 */
+	public AuthorizationGrant withScope(String scope) {
+		this.scope = scope;
+		return this;
 	}
 }

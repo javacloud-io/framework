@@ -92,7 +92,7 @@ public final class Permissions {
 	 */
 	public static boolean hasAll(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONs
-		Set<String> claims = authz.getClaims();
+		Set<String> claims = authz.getRoles();
 		if(claims == null || claims.isEmpty()) {
 			return false;
 		}
@@ -119,7 +119,7 @@ public final class Permissions {
 	 */
 	public static boolean hasAny(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONS
-		Set<String> claims = authz.getClaims();
+		Set<String> claims = authz.getRoles();
 		if(claims == null || claims.isEmpty()) {
 			return false;
 		}
