@@ -1,4 +1,4 @@
-# Simple module registration build on top of Guice
+## Simple module registration build on top of Guice
 
 Each services registry can include other services, register module or binding (and named) to implementation as well as provider
 
