@@ -1,0 +1,4 @@
+######### List of modules or services binding ########
+
+framework.common.services
+framework.activity.services

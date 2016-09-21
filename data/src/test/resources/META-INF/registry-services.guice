@@ -1,0 +1,5 @@
+######### List of modules or services binding ########
+
+framework.common.services
+framework.json.services
+framework.data.InMemory.services

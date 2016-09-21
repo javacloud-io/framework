@@ -11,7 +11,7 @@ import java.io.OutputStream;
  *
  */
 public interface Externalizer {
-	public static final String JSON = "application/json";
+	public static final String JSON = "json";
 	
 	/**
 	 * return content type identifier

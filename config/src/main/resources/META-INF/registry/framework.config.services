@@ -1,0 +1,3 @@
+# Default framework config registry
+#
+com.appe.framework.resource.ResourceManager=com.appe.framework.resource.impl.ResourceManagerImpl

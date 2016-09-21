@@ -23,15 +23,8 @@ import com.appe.framework.util.Objects;
  */
 @Singleton
 public class TokenAuthenticator implements Authenticator {
-	private TokenValidator tokenValidator;
-	/**
-	 * 
-	 * @param tokenValidator
-	 */
 	@Inject
-	public TokenAuthenticator(TokenValidator tokenValidator) {
-		this.tokenValidator = tokenValidator;
-	}
+	private TokenValidator tokenValidator;
 	
 	/**
 	 * 

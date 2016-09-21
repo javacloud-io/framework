@@ -1,0 +1,5 @@
+# Default framework json registry
+#
+com.fasterxml.jackson.databind.ObjectMapper=com.appe.framework.json.internal.JacksonMapper
+com.appe.framework.json.Externalizer=com.appe.framework.json.internal.JacksonMapper
+com.appe.framework.json.Externalizer#json=com.appe.framework.json.internal.JacksonMapper

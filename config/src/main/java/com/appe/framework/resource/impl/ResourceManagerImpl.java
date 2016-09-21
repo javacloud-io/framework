@@ -33,17 +33,13 @@ import com.appe.framework.util.Objects;
 @Singleton
 public class ResourceManagerImpl implements ResourceManager {
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManagerImpl.class);
-	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
-	private AppeLocale appeLocale;
+	private static final String CONF_EXTENSION 	= ".properties";
+	private static final String CONF_RESOURCE 	= "conf/";
+	private static final String I18N_RESOURCE 	= "i18n/";
 	
-	/**
-	 * 
-	 * @param appeLocale
-	 */
+	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
 	@Inject
-	public ResourceManagerImpl(AppeLocale appeLocale) {
-		this.appeLocale = appeLocale;
-	}
+	private AppeLocale appeLocale;
 	
 	/**
 	 * Always lookup from cache
@@ -133,7 +129,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	 */
 	protected InvocationHandler createConfigHandler(String baseName, Class<?> type) {
 		//ALWAYS APPEND .properties to load the resource
-		String resource = baseName + ".properties";
+		final String resource = CONF_RESOURCE + baseName + CONF_EXTENSION;
 		logger.info("Bind the config: " + type.getName() + " to resource bundle: " + resource);
 		try {
 			Properties properties = AppeLoader.loadProperties(resource);
@@ -172,14 +168,15 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> type) {
-		logger.info("Bind I18n bundle: " + type.getName() + " to resource bundle: " + baseName);
+		final String resource = I18N_RESOURCE + baseName;
+		logger.info("Bind I18n bundle: " + type.getName() + " to resource bundle: " + resource);
 		
 		//TO BE CONSISTENT, FIRST CALLER WIN!!!
 		final ClassLoader callerLoader = AppeLoader.getClassLoader();
 		return	new MessageBundleHandler(appeLocale) {
 					@Override
 					protected ResourceBundle resolveBundle() throws MissingResourceException {
-						return	ResourceBundle.getBundle(baseName, appeLocale.get(), callerLoader);
+						return	ResourceBundle.getBundle(resource, appeLocale.get(), callerLoader);
 					}
 				};
 	}

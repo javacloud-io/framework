@@ -22,8 +22,7 @@ import com.appe.framework.activity.EventManager;
  */
 @Singleton
 public class EventManagerImpl implements EventManager {
-	private List<Handler> eventHandlers;
-	
+	private final List<Handler> eventHandlers;
 	@Inject
 	public EventManagerImpl(List<Handler> eventHandlers) {
 		this.eventHandlers = eventHandlers;

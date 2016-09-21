@@ -1,0 +1,4 @@
+# Default framework common registry
+#
+com.appe.framework.AppeNamespace=com.appe.framework.impl.AppeNamespaceImpl
+com.appe.framework.AppeLocale=com.appe.framework.impl.AppeLocaleImpl

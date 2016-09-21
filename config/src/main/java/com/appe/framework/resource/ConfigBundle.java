@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * A simple bundle with key/value pair for any configuration purpose.
+ * A simple bundle with key/value pair for any configuration purpose. By default all config bundle will be
+ * under /conf
  * 
  * @author ho
  *

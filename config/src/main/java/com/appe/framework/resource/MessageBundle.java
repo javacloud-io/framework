@@ -1,6 +1,7 @@
 package com.appe.framework.resource;
 
 /**
+ * All message bundle will locate under /i18n folder
  * 
  * @author ho
  *

@@ -26,23 +26,29 @@ import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.spi.Message;
 
 /**
- * Helper class to load and create juice injector. By default it will scan for appe-services.registry properties file.
+ * Helper class to load and create juice injector. By default it will scan for registry-services.guice properties file.
  * 
+ * # module.class
+ * # implementation.class
+ * # interface.class=implementation/provider.class
+ * # interface.class#named=implementation/provider.class
+ * # =other.registry.module
+ * #
  * @author ho
  *
  */
 public final class GuiceFactory {
 	private static final Logger logger = Logger.getLogger(GuiceFactory.class.getName());
+	
+	static final String MAIN_RESOURCE		= "META-INF/registry-services.guice";
+	static final String SUB_RESOURCE 		= "META-INF/registry/";
+	static final String SERVICES_EXTENSION	= ".services";
 	private GuiceFactory() {
 	}
 	
 	/**
 	 * Properties file with modules/services implementation
 	 * 
-	 * # module.class
-	 * # implementation.class
-	 * # interface.class=implementation/provider.class
-	 * # interface.class#named=implementation/provider.class
 	 * 
 	 * @param resource
 	 * @return
@@ -51,6 +57,7 @@ public final class GuiceFactory {
 		try {
 			Properties properties = AppeLoader.loadProperties(resource);
 			if(Objects.isEmpty(properties)) {
+				logger.warning("Not found modules or resource file: " + resource);
 				return Objects.asList();
 			}
 			
@@ -60,6 +67,15 @@ public final class GuiceFactory {
 			for(Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
 				String ztype = (String)ename.nextElement();
 				String zimpl = properties.getProperty(ztype);
+				
+				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS 
+				if(ztype.endsWith(SERVICES_EXTENSION)) {
+					String subresource = SUB_RESOURCE + ztype;
+					
+					logger.fine("Including modules from resource file: " + subresource);
+					zmodules.addAll(loadModules(subresource));
+					continue;
+				}
 				
 				//FIND MAPPING NAMED, using # to look for name
 				String zname;
@@ -74,6 +90,7 @@ public final class GuiceFactory {
 				//LOAD ALL MODULES/SERVICES
 				Class<?> zclass = loader.loadClass(ztype);
 				if(Module.class.isAssignableFrom(zclass)) {
+					logger.fine("Registering module: " + zclass);
 					zmodules.add((Module)zclass.newInstance());
 				} else {
 					Class<?> zzimpl;
@@ -124,6 +141,15 @@ public final class GuiceFactory {
 	}
 	
 	/**
+	 * 
+	 * @param builder
+	 * @return
+	 */
+	public static Injector createInjector(GuiceBuilder builder) {
+		return createInjector(builder, MAIN_RESOURCE);
+	}
+	
+	/**
 	 * 1. Load all the modules from all classes with resource
 	 * 2. Load all the modules override with resource.1
 	 * 
@@ -132,7 +158,7 @@ public final class GuiceFactory {
 	 * @return
 	 */
 	public static Injector createInjector(GuiceBuilder builder, String resource) {
-		logger.info("Loading modules from resource: " + resource);
+		logger.info("Loading modules from resource file: " + resource);
 		List<Module> modules = loadModules(resource);
 		
 		//ALWAYS MAKE SURE IT AT LEAST EMPTY
@@ -140,7 +166,7 @@ public final class GuiceFactory {
 			modules = Collections.emptyList();
 		}
 		
-		logger.info("Load override modules from resource: " + resource + ".1");
+		logger.info("Loading override modules from resource file: " + resource + ".1");
 		List<Module> overrides = loadModules(resource + ".1");
 		
 		return builder.build(modules, overrides);

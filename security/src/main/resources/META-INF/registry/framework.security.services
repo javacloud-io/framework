@@ -1,0 +1,4 @@
+# Default framework security registry
+#
+# SP only need AccessToken authenticator
+com.appe.framework.security.Authenticator#access_token=com.appe.framework.security.internal.AccessTokenAuthenticator

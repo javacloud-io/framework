@@ -1,0 +1,4 @@
+# Default framework data InMemory registry
+#
+#
+com.appe.framework.activity.impl.ServiceModule

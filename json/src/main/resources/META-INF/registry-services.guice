@@ -1,9 +1,0 @@
-######### List of modules or services binding ########
-
-# module.class
-# implementation.class
-# interface.class=implementation.class
-# interface.class#named=implementation.class
-
-# json services
-com.appe.framework.json.registry.DefaultModule
