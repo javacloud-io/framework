@@ -19,7 +19,9 @@ import com.appe.framework.security.claim.TokenProvider;
 import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 /**
- * 
+ * Basic implementation of JTW token which is compatible with validator.
+ * Make sure the signer is correctly configure.
+ *  
  * @author ho
  *
  */
