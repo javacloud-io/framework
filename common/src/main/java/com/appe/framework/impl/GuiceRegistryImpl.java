@@ -1,5 +1,6 @@
 package com.appe.framework.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.appe.framework.AppeRegistry;
@@ -48,8 +49,15 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * Find all instances of the service type.
 	 */
 	@Override
-	public <T> List<T> getInstances(Class<T> type) {
-		return GuiceFactory.getInstances(injector, type);
+	public <T> List<T> getInstances(Class<T> type, String...names) {
+		if(names == null || names.length == 0) {
+			return GuiceFactory.getInstances(injector, type);
+		}
+		List<T> instances = new ArrayList<>();
+		for(String name: names) {
+			instances.add(getInstance(type, name));
+		}
+		return instances;
 	}
 
 	/**

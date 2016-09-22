@@ -1,7 +1,6 @@
 package com.appe.framework.server.filter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.FilterChain;
@@ -58,14 +57,12 @@ public class SecurityContextFilter extends ServletFilter {
 		this.allowsCookie= Boolean.valueOf(getInitParameter("allows-cookie"));
 		
 		//SEARCH FOR AUTHENTICATORs
-		List<Authenticator> authenticators = new ArrayList<>();
 		String authenticator = getInitParameter("authenticator");
+		List<Authenticator> authenticators;
 		if(Objects.isEmpty(authenticator)) {
-			authenticators.add(AppeRegistry.get().getInstance(Authenticator.class));
+			authenticators = Objects.asList(AppeRegistry.get().getInstance(Authenticator.class));
 		} else {
-			for(String name: Objects.toArray(authenticator, ",", true)) {
-				authenticators.add(AppeRegistry.get().getInstance(Authenticator.class, name));
-			}
+			authenticators = AppeRegistry.get().getInstances(Authenticator.class, Objects.toArray(authenticator, ",", true));
 		}
 		this.authenticator = new AuthenticatorManager(authenticators);
 	}

@@ -44,7 +44,8 @@ public abstract class AppeRegistry {
 	 * with random name
 	 * 
 	 * @param type
+	 * @param names
 	 * @return
 	 */
-	public abstract <T> List<T> getInstances(Class<T> type);
+	public abstract <T> List<T> getInstances(Class<T> type, String... names);
 }
