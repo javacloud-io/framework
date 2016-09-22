@@ -20,6 +20,14 @@ public class JwtException extends ValidationException {
 	
 	/**
 	 * 
+	 * @param t
+	 */
+	public JwtException(Throwable t) {
+		super(INVALID_TOKEN, t);
+	}
+	
+	/**
+	 * 
 	 */
 	public JwtException() {
 		super(INVALID_TOKEN);

@@ -21,7 +21,7 @@ import com.appe.framework.AppeException;
  */
 public class Cryptos {
 	//ALGORITHM & KEY SIZE
-	public static final String 	AES 		= "AES";
+	public static final String 	ALG_AES 	= "AES";
 	public static final int		AES_KEY128	= 16;
 	public static final int 	AES_KEY192	= 24;
 	public static final int 	AES_KEY256	= 32;
@@ -104,10 +104,10 @@ public class Cryptos {
 	 */
 	public static Cipher getAES(int opmode, byte[] key, int keylen) {
 		//KEY SIZE CAN BE DYNAMIC 128 bits
-		SecretKeySpec keyspec = new SecretKeySpec(key, 0, keylen, Cryptos.AES);
+		SecretKeySpec keyspec = new SecretKeySpec(key, 0, keylen, ALG_AES);
 		
 		//PICK LAST 16 BYTEs of 32 BYTEs
-		return get(Cryptos.AES_CBC_PKCS5Padding, opmode, keyspec, new IvParameterSpec(key, 16, 16));
+		return get(AES_CBC_PKCS5Padding, opmode, keyspec, new IvParameterSpec(key, 16, 16));
 	}
 	
 	/**

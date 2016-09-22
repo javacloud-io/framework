@@ -10,8 +10,8 @@ import com.appe.framework.io.BytesInputStream;
 import com.appe.framework.json.Externalizer;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtException;
-import com.appe.framework.jwt.JwtSigner;
 import com.appe.framework.jwt.JwtToken;
+import com.appe.framework.jwt.JwtVerifier;
 import com.appe.framework.security.AccessDeniedException;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.IdParameters;
@@ -41,15 +41,15 @@ public class JwtTokenValidator implements TokenValidator {
 	public static final String JWT_ROLES 		= "roles";	//subject roles
 	
 	protected Externalizer  externalizer;
-	protected JwtSigner 	jwtSigner;
+	protected JwtVerifier 	jwtVerifier;
 	/**
 	 * 
 	 * @param externalizer
 	 * @param jwtSigner
 	 */
-	public JwtTokenValidator(Externalizer externalizer, JwtSigner 	jwtSigner) {
+	public JwtTokenValidator(Externalizer externalizer, JwtVerifier jwtVerifier) {
 		this.externalizer = externalizer;
-		this.jwtSigner	  = jwtSigner;
+		this.jwtVerifier  = jwtVerifier;
 	}
 	
 	/**
@@ -59,7 +59,7 @@ public class JwtTokenValidator implements TokenValidator {
 	public TokenGrant validateToken(String token) throws AuthenticationException {
 		Dictionary claims;
 		try {
-			JwtToken jwtToken = JwtCodecs.decodeJWT(token, jwtSigner);
+			JwtToken jwtToken = JwtCodecs.decodeJWT(token, jwtVerifier);
 			claims = externalizer.unmarshal(new BytesInputStream(jwtToken.getClaims()), Dictionary.class);
 		} catch (JwtException ex) {
 			logger.warn("Problem decoding JWT Token: {}", token, ex);
