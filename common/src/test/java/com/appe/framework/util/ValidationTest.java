@@ -1,0 +1,24 @@
+package com.appe.framework.util;
+
+import junit.framework.TestCase;
+/**
+ * 
+ * @author ho
+ *
+ */
+public class ValidationTest extends TestCase {
+	/**
+	 * 
+	 */
+	public void testGoodID() {
+		ValidationException.assertId("hO@ya8.com", "good id");
+	}
+	
+	/**
+	 * 
+	 */
+	public void testGoodEmail() {
+		ValidationException.assertId("ho@ya8.com", "good email");
+		ValidationException.assertEmail("administrator@jwt.issuer", "good email");
+	}
+}
