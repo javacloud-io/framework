@@ -1,4 +1,4 @@
-package com.appe.framework.security.internal;
+package com.appe.framework.security.jwt;
 
 import javax.inject.Singleton;
 
@@ -16,7 +16,7 @@ import com.appe.framework.security.claim.TokenGrant;
  *
  */
 @Singleton
-public class AccessTokenAuthenticator extends TokenAuthenticator {
+public class JwtTokenAuthenticator extends TokenAuthenticator {
 	/**
 	 * 
 	 */

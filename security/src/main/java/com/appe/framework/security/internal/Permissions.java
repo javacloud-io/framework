@@ -20,9 +20,9 @@ public final class Permissions {
 	//PRE-DEFINED USER roles
 	public static final String ROLE_ROOT			= "root";
 	public static final String ROLE_ADMINISTRATOR	= "administrator";
-	public static final String ROLE_DEVELOPER		= "developer";
 	
 	//any valid user in the system
+	public static final String ROLE_DEVELOPER		= "developer";
 	public static final String ROLE_USER			= "user";
 	
 	//any valid client_id

@@ -1,7 +1,10 @@
-package com.appe.framework.security.internal;
+package com.appe.framework.security.jwt;
 
 import java.io.IOException;
 import java.util.Date;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +24,7 @@ import com.appe.framework.security.claim.TokenValidator;
 import com.appe.framework.util.Dictionary;
 
 /**
- * Simple implementation of a JWT validation with a trusted signer, assuming sharing the signing key for now
+ * Simple implementation of a JWT validation with a trusted signer, assuming sharing the signing key or public/private
  * 
  * @author ho
  *
@@ -40,20 +43,22 @@ public class JwtTokenValidator implements TokenValidator {
 	public static final String JWT_TYPE 		= "jtt";	//type
 	public static final String JWT_ROLES 		= "roles";	//subject roles
 	
-	protected Externalizer  externalizer;
-	protected JwtVerifier 	jwtVerifier;
+	private Externalizer  externalizer;
+	private JwtVerifier	  jwtVerifier;
 	/**
 	 * 
 	 * @param externalizer
-	 * @param jwtSigner
+	 * @param jwtVerifier
 	 */
-	public JwtTokenValidator(Externalizer externalizer, JwtVerifier jwtVerifier) {
+	@Inject
+	public JwtTokenValidator(@Named(Externalizer.JSON) Externalizer externalizer, JwtVerifier jwtVerifier) {
 		this.externalizer = externalizer;
 		this.jwtVerifier  = jwtVerifier;
 	}
 	
 	/**
-	 * Deserializing the token and unwrap correctly
+	 * Validate token signature to make sure no tempering.
+	 * 
 	 */
 	@Override
 	public TokenGrant validateToken(String token) throws AuthenticationException {
