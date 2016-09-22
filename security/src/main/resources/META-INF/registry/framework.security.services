@@ -2,4 +2,4 @@
 #
 # SP only need JWT AccessToken authenticator
 com.appe.framework.security.claim.TokenValidator=com.appe.framework.security.jwt.JwtTokenValidator
-com.appe.framework.security.Authenticator#access_token=com.appe.framework.security.jwt.JwtTokenAuthenticator
+com.appe.framework.security.Authenticator#access_token=com.appe.framework.security.impl.AccessTokenAuthenticator
