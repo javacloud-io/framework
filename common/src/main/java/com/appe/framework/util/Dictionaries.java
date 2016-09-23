@@ -62,29 +62,18 @@ public final class Dictionaries {
 	}
 	
 	/**
-	 * Using default conveter
-	 * @param params
-	 * @return
-	 * @throws IOException
-	 */
-	public static String encodeURL(Dictionary params) throws IOException {
-		return encodeURL(params, Converter.STRING);
-	}
-	
-	/**
 	 * TODO: 
 	 * -need to take care of multiple value encoded.
 	 * -consider replace '+' with '%20'
 	 * 
 	 * @param params
-	 * @param converter
 	 * @return
 	 * @throws IOException
 	 */
-	public static String encodeURL(Dictionary params, Converter<String> converter) throws IOException {
+	public static String encodeURL(Dictionary params) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for(String name: params.keySet()) {
-			String value = converter.convert(params.get(name));
+			String value = params.getString(name);
 			if(value == null) {
 				continue;
 			}
@@ -106,26 +95,14 @@ public final class Dictionaries {
 	}
 	
 	/**
-	 * Parsing simple NAME/VALUE
 	 * 
+	 * TODO: need to take care of multiple value decoded.
 	 * @param params
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
 	public static Dictionary decodeURL(String params) throws IOException {
-		return decodeURL(params, Converter.OBJECT);
-	}
-	
-	/**
-	 * 
-	 * TODO: need to take care of multiple value decoded.
-	 * @param params
-	 * @param converter
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public static Dictionary decodeURL(String params, Converter<Object> converter) throws IOException {
 		//NEW INSTANCE OBJECT
 		Dictionary props = new Dictionary();
 		
@@ -151,7 +128,7 @@ public final class Dictionaries {
 			}
 			
 			//SET VALUE
-			props.put(name, converter.convert(value));
+			props.put(name, value);
 		}
 		return props;
 	}

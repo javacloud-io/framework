@@ -41,8 +41,8 @@ import com.appe.framework.util.Objects;
  *
  */
 public class SecurityContextFilter extends ServletFilter {
-	protected boolean 	allowsCookie;		//allows access cookie
-	protected Authenticator authenticator;	//an authenticator
+	private boolean 	allowsCookie;		//allows access cookie
+	private Authenticator authenticator;	//an authenticator
 	public SecurityContextFilter() {
 	}
 	
@@ -88,9 +88,8 @@ public class SecurityContextFilter extends ServletFilter {
 	}
 	
 	/**
-	 * Make sure to add enough context around the authentication...
-	 * ALSO CHECK FOR CONTEXT & PERMISSION....
-	 *  
+	 * Make sure to add enough context around the authentication... ALSO CHECK FOR CONTEXT & PERMISSION....
+	 * 
 	 * @param req
 	 * @return GRANTED principal if success.
 	 * 
@@ -99,7 +98,10 @@ public class SecurityContextFilter extends ServletFilter {
 	 * @throws AuthenticationException
 	 */
 	protected AccessGrant doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
-		Credentials credentials = requestCredentials(req);
+		//MAKE SURE ACCESS TO PARAMETER NOT CAUSE PARSING THE REQUEST BODY
+		Credentials credentials = requestCredentials(new W3RequestWrapper(req) {
+			
+		});
 		
 		//ASSUMING NULL GRANT
 		if(credentials == null) {
