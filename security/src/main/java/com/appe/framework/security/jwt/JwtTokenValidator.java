@@ -1,15 +1,14 @@
 package com.appe.framework.security.jwt;
 
-import java.io.IOException;
 import java.util.Date;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.io.BytesInputStream;
 import com.appe.framework.json.Externalizer;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtException;
@@ -29,9 +28,9 @@ import com.appe.framework.util.Dictionary;
  * @author ho
  *
  */
+@Singleton
 public class JwtTokenValidator implements TokenValidator {
 	private static final Logger logger = LoggerFactory.getLogger(JwtTokenValidator.class);
-	
 	public static final String JWT_ISSUER 		= "iss";
 	public static final String JWT_SUBJECT 		= "sub";
 	public static final String JWT_AUDIENCE		= "aud";
@@ -43,8 +42,8 @@ public class JwtTokenValidator implements TokenValidator {
 	public static final String JWT_TYPE 		= "jtt";	//type
 	public static final String JWT_ROLES 		= "roles";	//subject roles
 	
-	private Externalizer  externalizer;
-	private JwtVerifier	  jwtVerifier;
+	private JwtCodecs  	jwtCodecs;
+	private JwtVerifier	jwtVerifier;
 	/**
 	 * 
 	 * @param externalizer
@@ -52,7 +51,7 @@ public class JwtTokenValidator implements TokenValidator {
 	 */
 	@Inject
 	public JwtTokenValidator(@Named(Externalizer.JSON) Externalizer externalizer, JwtVerifier jwtVerifier) {
-		this.externalizer = externalizer;
+		this.jwtCodecs = new JwtCodecs(externalizer);
 		this.jwtVerifier  = jwtVerifier;
 	}
 	
@@ -64,13 +63,10 @@ public class JwtTokenValidator implements TokenValidator {
 	public TokenGrant validateToken(String token) throws AuthenticationException {
 		Dictionary claims;
 		try {
-			JwtToken jwtToken = JwtCodecs.decodeJWT(token, jwtVerifier);
-			claims = externalizer.unmarshal(new BytesInputStream(jwtToken.getClaims()), Dictionary.class);
+			JwtToken jwtToken = jwtCodecs.decodeJWT(token, jwtVerifier);
+			claims = jwtToken.getClaims();
 		} catch (JwtException ex) {
 			logger.warn("Problem decoding JWT Token: {}", token, ex);
-			throw new InvalidCredentialsException();
-		} catch(IOException ex) {
-			logger.error("Problem decoding JWT Token: {}", token, ex);
 			throw new InvalidCredentialsException();
 		}
 		

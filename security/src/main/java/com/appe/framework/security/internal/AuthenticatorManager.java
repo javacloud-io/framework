@@ -2,9 +2,6 @@ package com.appe.framework.security.internal;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +17,6 @@ import com.appe.framework.security.InvalidCredentialsException;
  * @author ho
  *
  */
-@Singleton
 public class AuthenticatorManager implements Authenticator {
 	private static final Logger logger = LoggerFactory.getLogger(AuthenticatorManager.class);
 	private final List<Authenticator> authenticators;
@@ -28,7 +24,6 @@ public class AuthenticatorManager implements Authenticator {
 	 * 
 	 * @param authenticators
 	 */
-	@Inject
 	public AuthenticatorManager(List<Authenticator> authenticators) {
 		this.authenticators = authenticators;
 	}

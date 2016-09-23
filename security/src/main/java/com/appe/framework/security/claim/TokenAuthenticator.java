@@ -2,9 +2,6 @@ package com.appe.framework.security.claim;
 
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.Authenticator;
 import com.appe.framework.security.AccessGrant;
@@ -21,11 +18,11 @@ import com.appe.framework.util.Objects;
  * @author ho
  *
  */
-@Singleton
 public class TokenAuthenticator implements Authenticator {
-	@Inject
 	private TokenValidator tokenValidator;
-	
+	public TokenAuthenticator(TokenValidator tokenValidator) {
+		this.tokenValidator = tokenValidator;
+	}
 	/**
 	 * 
 	 */

@@ -1,5 +1,6 @@
 package com.appe.framework.jwt;
 
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -10,7 +11,10 @@ import java.security.SignatureException;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import com.appe.framework.json.Externalizer;
+import com.appe.framework.json.internal.JacksonConverter;
 import com.appe.framework.util.Codecs;
+import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Hmacs;
 import com.appe.framework.util.Objects;
 
@@ -116,20 +120,34 @@ public final class JwtCodecs {
 	}
 	
 	//PROTECTED
-	private JwtCodecs() {
+	private JacksonConverter converter;
+	public JwtCodecs(Externalizer externalizer) {
+		this.converter = new JacksonConverter(externalizer);
 	}
 	
 	/**
 	 * <base64 header>.<base64 payload>.<base64 signature>
 	 * 
 	 * @param token
+	 * @param signer
+	 * 
 	 * @return
+	 * @throws JwtException
 	 */
-	public static String encodeJWT(JwtToken token, JwtSigner signer) {
-		String header = "{\"typ\":\"" + token.getType() + "\",\"alg\":\"" + signer.getAlgorithm() + "\"}";
-		String payload= Codecs.encodeBase64(Codecs.toBytes(header), true)
-						+ "." + Codecs.encodeBase64(token.getClaims(), true);
-		return payload + "." + signer.sign(payload);
+	public String encodeJWT(JwtToken token, JwtSigner signer) throws JwtException {
+		try {
+			byte[] header = converter.toBytes(
+					Objects.asDict("typ", token.getType(), "alg", signer.getAlgorithm())
+				);
+			
+			byte[] claims = converter.toBytes(token.getClaims());
+			String payload = Codecs.encodeBase64(header, true)
+							+ "." + Codecs.encodeBase64(claims, true);
+			
+			return payload + "." + signer.sign(payload);
+		} catch(IOException ex) {
+			throw new JwtException(ex);
+		}
 	}
 	
 	/**
@@ -141,7 +159,7 @@ public final class JwtCodecs {
 	 * 
 	 * @throws JwtException
 	 */
-	public static JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtException {
+	public JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtException {
 		if(Objects.isEmpty(token)) {
 			throw new JwtException();
 		}
@@ -157,46 +175,17 @@ public final class JwtCodecs {
 			throw new JwtException();
 		}
 		
-		//DECODE PAYLOAD
+		//DECODE PAYLOAD TO JSON
 		idot = payload.indexOf('.');
 		if(idot < 0) {
 			throw new JwtException();
 		}
-		String header = Codecs.toUTF8(Codecs.decodeBase64(payload.substring(0, idot), true));
-		byte[] claims = Codecs.decodeBase64(payload.substring(idot + 1), true);
-		
-		//Parsing type/algorithm
-		String type = jsonValue(header, "\"typ\"");
-		String algorithm = jsonValue(header, "\"alg\"");
-		return new JwtToken(type, algorithm, claims);
-	}
-	
-	/**
-	 * Simple JSON PARSING field value
-	 * 
-	 * @param json
-	 * @param field
-	 * @return
-	 */
-	private static String jsonValue(String json, String field) {
-		int idx = json.indexOf(field);
-		if(idx < 0) {
-			return null;
+		try {
+			Dictionary header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true), Dictionary.class);
+			Dictionary claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Dictionary.class);
+			return new JwtToken(header.getString("typ"), header.getString("alg"), claims);
+		} catch(IOException ex) {
+			throw new JwtException(ex);
 		}
-		idx = json.indexOf(':', idx + field.length());
-		if(idx < 0) {
-			return null;
-		}
-		
-		//Value is right after inside "<value>"
-		idx = json.indexOf('"', idx + 1);
-		if(idx < 0) {
-			return null;
-		}
-		int ind = json.indexOf('"', idx + 1);
-		if(ind < 0) {
-			return null;
-		}
-		return json.substring(idx + 1, ind);
 	}
 }

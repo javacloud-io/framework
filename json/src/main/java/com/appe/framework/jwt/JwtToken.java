@@ -1,5 +1,9 @@
 package com.appe.framework.jwt;
+
+import com.appe.framework.util.Dictionary;
+
 /**
+ * Simple token representation with Dictionary claims set.
  * 
  * @author ho
  *
@@ -7,14 +11,14 @@ package com.appe.framework.jwt;
 public final class JwtToken {
 	private String type;
 	private String algorithm;
-	private byte[] claims;
+	private Dictionary claims;
 	/**
 	 * 
 	 * @param type
 	 * @param algorithm
 	 * @param claims
 	 */
-	public JwtToken(String type, String algorithm, byte[] claims) {
+	public JwtToken(String type, String algorithm, Dictionary claims) {
 		this.type = type;
 		this.algorithm = algorithm;
 		this.claims = claims;
@@ -25,7 +29,7 @@ public final class JwtToken {
 	 * @param type
 	 * @param claims
 	 */
-	public JwtToken(String type, byte[] claims) {
+	public JwtToken(String type, Dictionary claims) {
 		this.type = type;
 		this.claims = claims;
 	}
@@ -50,7 +54,7 @@ public final class JwtToken {
 	 * 
 	 * @return
 	 */
-	public byte[] getClaims() {
+	public Dictionary getClaims() {
 		return claims;
 	}
 }

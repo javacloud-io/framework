@@ -4,9 +4,11 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
+import com.appe.framework.json.internal.JacksonMapper;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtToken;
 import com.appe.framework.util.Codecs;
+import com.appe.framework.util.Objects;
 
 import junit.framework.TestCase;
 /**
@@ -49,11 +51,12 @@ public class JwtTokenTest extends TestCase {
 	 * @param jwtVerifier
 	 */
 	private void doTest(JwtSigner jwtSigner, JwtVerifier jwtVerifier) {
-		JwtToken token = new JwtToken("JWT", "{\"sub\":\"token\"}".getBytes());
-		String stoken = JwtCodecs.encodeJWT(token, jwtSigner);
+		JwtCodecs jwtCodecs = new JwtCodecs(new JacksonMapper());
+		JwtToken token = new JwtToken("JWT", Objects.asDict("a", "a", "b", "b"));
+		String stoken = jwtCodecs.encodeJWT(token, jwtSigner);
 		
 		System.out.println(jwtSigner.getAlgorithm() + " JWT: " + stoken);
-		JwtToken tt = JwtCodecs.decodeJWT(stoken, jwtVerifier);
+		JwtToken tt = jwtCodecs.decodeJWT(stoken, jwtVerifier);
 		assertEquals(token.getType(), tt.getType());
 		assertEquals(jwtSigner.getAlgorithm(), tt.getAlgorithm());
 	}
