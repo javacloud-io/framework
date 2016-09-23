@@ -25,7 +25,7 @@ public final class Permissions {
 	public static final String ROLE_DEVELOPER		= "developer";
 	public static final String ROLE_USER			= "user";
 	
-	//any valid client_id
+	//any agent based valid client_id
 	public static final String ROLE_CLIENT			= "client";
 		
 	//untrusted client, native/browser with KEY
