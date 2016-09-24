@@ -20,6 +20,7 @@ import com.appe.framework.security.internal.AuthenticatorManager;
 import com.appe.framework.security.internal.ClientCredentials;
 import com.appe.framework.security.internal.TokenCredentials;
 import com.appe.framework.server.internal.RequestWrapper;
+import com.appe.framework.server.internal.W3RequestWrapper;
 import com.appe.framework.util.Objects;
 
 /**

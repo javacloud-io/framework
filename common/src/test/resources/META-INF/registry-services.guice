@@ -7,3 +7,4 @@
 # interface-class#named=implementation-class
 
 framework.common.services
+com.appe.framework.TestModule

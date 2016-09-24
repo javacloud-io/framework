@@ -1,4 +1,4 @@
-package com.appe.framework.server.filter;
+package com.appe.framework.server.internal;
 
 import java.io.IOException;
 import java.util.Enumeration;

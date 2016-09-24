@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.AppeNamespace;
+import com.appe.framework.server.internal.W3RequestWrapper;
 import com.appe.framework.util.Objects;
 /**
  * ALL APIs SHOULD PASSING THROUGH THE MAIN FILTER IF WOULD LIKE TO TRACK EVENT....
@@ -33,13 +34,13 @@ public class NamespaceFilter extends ServletFilter {
 	}
 	
 	/**
-	 * 
+	 * Make sure to just look at query parameters!!!
 	 */
 	@Override
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp,
 			FilterChain chain) throws ServletException, IOException {
 		try {
-			appeNamespace.set(requestNamespace(req));
+			appeNamespace.set(requestNamespace(new W3RequestWrapper(req)));
 			chain.doFilter(req, resp);
 		} finally {
 			appeNamespace.clear();

@@ -1,4 +1,4 @@
-package com.appe.framework.server.internal;
+package com.appe.framework.server.view;
 
 import java.io.IOException;
 

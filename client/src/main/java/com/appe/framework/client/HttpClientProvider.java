@@ -1,6 +1,5 @@
 package com.appe.framework.client;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Provider;
@@ -12,7 +11,7 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.AppeLoader;
+import com.appe.framework.hk2.ComponentFactory;
 
 /**
  * Dynamically loading jersey client from META-INF/client-components.jersey
@@ -40,23 +39,17 @@ public class HttpClientProvider implements Provider<Client> {
 	}
 	
 	/**
-	 * return client configuration, can be use for good testing
+	 * Load & register components from resource file
 	 * 
 	 * @return
 	 */
 	public ClientConfig configure() {
 		ClientConfig config = new ClientConfig();
 		
-		//LOAD DEFAULT CONFIG
-		try {
-			List<Class<?>> components = AppeLoader.loadClasses("META-INF/client-components.jersey");
-			logger.debug("Register jersey client components: {}", components);
-			for(Class<?> c: components) {
-				config.register(c);
-			}
-		} catch(IOException | ClassNotFoundException ex) {
-			//DON'T RE-THROW EXCEPTION B/C IT's NOT SOLVING ANY REAL PROBLEM
-			logger.error("Unable to load jersey client components", ex);
+		List<Class<?>> components = ComponentFactory.loadComponents("META-INF/client-components.jersey");
+		logger.debug("Registering jersey client components: {}", components);
+		for(Class<?> c: components) {
+			config.register(c);
 		}
 		return config;
 	}

@@ -132,7 +132,7 @@ public class ResourceManagerImpl implements ResourceManager {
 		final String resource = CONF_RESOURCE + baseName + CONF_EXTENSION;
 		logger.info("Bind the config: " + type.getName() + " to resource bundle: " + resource);
 		try {
-			Properties properties = AppeLoader.loadProperties(resource);
+			Properties properties = AppeLoader.loadProperties(resource, AppeLoader.getClassLoader());
 			if(Objects.isEmpty(properties)) {
 				return new ConfigBundleHandler();
 			}

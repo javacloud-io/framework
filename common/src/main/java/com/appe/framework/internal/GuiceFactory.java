@@ -6,9 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.inject.Provider;
@@ -16,7 +14,6 @@ import javax.inject.Provider;
 import com.appe.framework.AppeLoader;
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.util.Objects;
-import com.appe.framework.util.Pair;
 import com.google.inject.Binding;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
@@ -28,21 +25,22 @@ import com.google.inject.spi.Message;
 /**
  * Helper class to load and create juice injector. By default it will scan for registry-services.guice properties file.
  * 
+ * #
  * # module.class
  * # implementation.class
  * # interface.class=implementation/provider.class
  * # interface.class#named=implementation/provider.class
- * # =other.registry.module
+ * # other modules
  * #
+ * 
  * @author ho
  *
  */
 public final class GuiceFactory {
 	private static final Logger logger = Logger.getLogger(GuiceFactory.class.getName());
 	
-	static final String MAIN_RESOURCE		= "META-INF/registry-services.guice";
-	static final String SUB_RESOURCE 		= "META-INF/registry/";
-	static final String SERVICES_EXTENSION	= ".services";
+	static final String MAIN_RESOURCE	= "META-INF/registry-services.guice";
+	static final String SUB_RESOURCE 	= "META-INF/registry/";
 	private GuiceFactory() {
 	}
 	
@@ -55,51 +53,33 @@ public final class GuiceFactory {
 	 */
 	private static List<Module> loadModules(String resource) {
 		try {
-			Properties properties = AppeLoader.loadProperties(resource);
-			if(Objects.isEmpty(properties)) {
+			ClassLoader loader = AppeLoader.getClassLoader();
+			List<AppeLoader.Binding> bindings = AppeLoader.loadBindings(resource, loader);
+			if(Objects.isEmpty(bindings)) {
 				logger.fine("Not found modules or resource file: " + resource);
 				return Objects.asList();
 			}
 			
-			ClassLoader loader = AppeLoader.getClassLoader();
-			List<Module> zmodules = new ArrayList<>();
-			final List<Pair<Pair<Class<?>, String>, Class<?>>> zservices = new ArrayList<>();
-			for(Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
-				String ztype = (String)ename.nextElement();
-				String zimpl = properties.getProperty(ztype);
+			final List<Module> zmodules = new ArrayList<>();
+			final List<AppeLoader.Binding> zservices = new ArrayList<>();
+			for(AppeLoader.Binding binding: bindings) {
+				Class<?> typeClass = binding.typeClass();
 				
-				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS 
-				if(ztype.endsWith(SERVICES_EXTENSION)) {
-					String subresource = SUB_RESOURCE + ztype;
+				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS
+				if(typeClass == null && binding.implClass() == null) {
+					String subresource = SUB_RESOURCE + binding.name();
 					
 					logger.fine("Including modules from resource file: " + subresource);
 					zmodules.addAll(loadModules(subresource));
 					continue;
 				}
 				
-				//FIND MAPPING NAMED, using # to look for name
-				String zname;
-				int idot = ztype.indexOf('#');
-				if(idot > 0) {
-					zname = ztype.substring(idot + 1);
-					ztype = ztype.substring(0, idot);
-				} else {
-					zname = null;
-				}
-				
 				//LOAD ALL MODULES/SERVICES
-				Class<?> zclass = loader.loadClass(ztype);
-				if(Module.class.isAssignableFrom(zclass)) {
-					logger.fine("Registering module: " + zclass);
-					zmodules.add((Module)zclass.newInstance());
+				if(Module.class.isAssignableFrom(typeClass)) {
+					logger.fine("Registering module: " + typeClass);
+					zmodules.add((Module)typeClass.newInstance());
 				} else {
-					Class<?> zzimpl;
-					if(!Objects.isEmpty(zimpl)) {
-						zzimpl = loader.loadClass(zimpl);
-					} else {
-						zzimpl = null;
-					}
-					zservices.add(new Pair<Pair<Class<?>, String>, Class<?>>(new Pair<Class<?>, String>(zclass, zname), zzimpl));
+					zservices.add(binding);
 				}
 			}
 			
@@ -109,24 +89,21 @@ public final class GuiceFactory {
 					@SuppressWarnings({ "rawtypes", "unchecked" })
 					@Override
 					protected void configure() {
-						for(Pair<Pair<Class<?>, String>, Class<?>> pair: zservices) {
-							Pair<Class<?>, String> zclass = pair.getKey();
-							String zname = zclass.getValue();
-							
-							LinkedBindingBuilder<?> binding;
-							if(Objects.isEmpty(zname)) {
-								binding = bind(zclass.getKey());
+						for(AppeLoader.Binding binding: zservices) {
+							LinkedBindingBuilder<?> bindingBuilder;
+							if(Objects.isEmpty(binding.name())) {
+								bindingBuilder = bind(binding.typeClass());
 							} else {
-								binding = bindNamed(zclass.getKey(), zname);
+								bindingBuilder = bindNamed(binding.typeClass(), binding.name());
 							}
 							
 							//BIND TO IMPL IF VALID
-							Class<?> zzimpl = pair.getValue();
-							if(zzimpl != null) {
-								if(Provider.class.isAssignableFrom(zzimpl)) {
-									binding.toProvider((Class)zzimpl);
+							Class<?> implClass = binding.implClass();
+							if(implClass != null) {
+								if(Provider.class.isAssignableFrom(implClass)) {
+									bindingBuilder.toProvider((Class)implClass);
 								} else {
-									binding.to((Class)zzimpl);
+									bindingBuilder.to((Class)implClass);
 								}
 							}
 						}
@@ -165,11 +142,7 @@ public final class GuiceFactory {
 		if(modules == null) {
 			modules = Collections.emptyList();
 		}
-		
-		logger.info("Loading override modules from resource file: " + resource + ".1");
-		List<Module> overrides = loadModules(resource + ".1");
-		
-		return builder.build(modules, overrides);
+		return builder.build(modules, null);
 	}
 	
 	/**

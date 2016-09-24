@@ -1,5 +1,2 @@
 # Basic features
-com.appe.framework.hk2.GuiceHK2Feature
-com.appe.framework.hk2.JacksonFeature
-
-#org.glassfish.jersey.filter.LoggingFilter
+framework.client.components

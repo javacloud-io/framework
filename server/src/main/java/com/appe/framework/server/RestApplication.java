@@ -1,6 +1,5 @@
 package com.appe.framework.server;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.glassfish.jersey.CommonProperties;
@@ -8,7 +7,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.AppeLoader;
+import com.appe.framework.hk2.ComponentFactory;
 /**
  * Basic jersey application configuration, providing basic features...
  * 
@@ -51,15 +50,10 @@ public class RestApplication extends ResourceConfig {
 		}
 		
 		//AUTO LOAD THE COMPONENTS
-		try {
-			List<Class<?>> components = AppeLoader.loadClasses("META-INF/server-components.jersey");
-			logger.debug("Register jersey server components: {}", components);
-			for(Class<?> component: components) {
-				register(component);
-			}
-		}catch(IOException | ClassNotFoundException ex) {
-			//DON'T RE-THROW EXCEPTION B/C IT's NOT SOLVING ANY REAL PROBLEM
-			logger.error("Unable to load jersey server components", ex);
+		List<Class<?>> components = ComponentFactory.loadComponents("META-INF/server-components.jersey");
+		logger.debug("Registering jersey server components: {}", components);
+		for(Class<?> component: components) {
+			register(component);
 		}
 	}
 	

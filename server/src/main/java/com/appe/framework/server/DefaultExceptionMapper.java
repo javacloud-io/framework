@@ -1,10 +1,9 @@
-package com.appe.framework.server.internal;
+package com.appe.framework.server;
 
 import javax.inject.Inject;
 
 import com.appe.framework.resource.MessageBundle;
 import com.appe.framework.resource.ResourceManager;
-import com.appe.framework.server.GenericExceptionMapper;
 
 /**
  * The least caught exception handler, in case of the application doesn't have any better way to handler them.

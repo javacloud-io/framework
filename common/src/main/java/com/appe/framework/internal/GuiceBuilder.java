@@ -15,7 +15,7 @@ import com.google.inject.util.Modules;
  */
 public interface GuiceBuilder {
 	/**
-	 * Build an injector with default & override modules
+	 * Build an injector from set of modules and overrides
 	 * 
 	 * @param modules
 	 * @param overrides

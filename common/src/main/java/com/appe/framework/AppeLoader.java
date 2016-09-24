@@ -12,7 +12,6 @@ import java.util.Properties;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-
 /**
  * Simple utils to load thing such as class/resources...We always use current ClassLoader to allow override.
  * For some reasons you wish the behavior of class loading different, then just set to the current thread.
@@ -51,65 +50,74 @@ public final class AppeLoader {
 	}
 	
 	/**
-	 * Return all the classes from given resource
-	 * 
-	 * @param resource
-	 * @return
-	 * @throws IOException
-	 */
-	public static List<Class<?>> loadClasses(String resource)
-			throws IOException, ClassNotFoundException {
-		//LOAD THE PROPERTIES
-		Properties props = loadProperties(resource);
-		if(props == null) {
-			return null;
-		}
-		
-		//LOAD ALL THE CLASSES
-		ClassLoader loader = getClassLoader();
-		List<Class<?>> zclasses = new ArrayList<Class<?>>();
-		for(Enumeration<?> ename = props.keys(); ename.hasMoreElements(); ) {
-			Class<?> zclass = loader.loadClass((String)ename.nextElement());
-			zclasses.add(zclass);
-		}
-		return zclasses;
-	}
-	
-	/**
 	 * Load all services from a resource properties file. NULL if resource not exist
 	 * 
+	 * module.class
+	 * implementation.class
+	 * interface.class=implementation/provider.class
+	 * interface.class#named=implementation/provider.class
+	 * other.modules
+	 * 
+	 * <named, interface, implementation>
+	 * 
 	 * @param resource
 	 * @return
 	 * @throws IOException
+	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> List<T> loadServices(String resource)
-			throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		//LOAD CLASSES
-		List<Class<?>> zclasses = loadClasses(resource);
-		if(zclasses == null) {
+	public static List<Binding> loadBindings(String resource, ClassLoader loader)
+			throws IOException, ClassNotFoundException {
+		//NOT FOUND THE RESOURCE => NULL
+		Properties properties = loadProperties(resource, loader);
+		if(properties == null) {
 			return null;
 		}
 		
-		//LOAD ALL THE CLASSES
-		List<T> services = new ArrayList<T>();
-		for(Class<?> zclass: zclasses) {
-			T s = (T)zclass.newInstance();
-			services.add(s);
+		//LOAD ALL THE BINDINGS
+		List<Binding> bindings = new ArrayList<Binding>();
+		for(Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
+			String ztype = (String)ename.nextElement();
+			String zimpl = properties.getProperty(ztype);
+			
+			//FIND MAPPING NAMED, using # to look for name
+			Binding binding = new Binding();
+			int idot = ztype.lastIndexOf('#');
+			if(idot > 0) {
+				binding.name = ztype.substring(idot + 1);
+				ztype = ztype.substring(0, idot);
+			}
+			
+			//NO IMPL => CHECK TO SEE IF BINDING IS PACKAGE
+			if(zimpl == null || zimpl.isEmpty()) {
+				idot = ztype.lastIndexOf('.');
+				
+				//DOESN'T LOOK LIKE CLASS NAME => ASSUMING PACKAGE NAME
+				if(idot < 0 || idot >= ztype.length() || Character.isLowerCase(ztype.charAt(idot + 1))) {
+					binding.name = ztype;
+				} else {
+					binding.typeClass = loader.loadClass(ztype);
+				}
+			} else {
+				binding.typeClass = loader.loadClass(ztype);
+				binding.implClass = loader.loadClass(zimpl);
+			}
+			bindings.add(binding);
 		}
-		return services;
+		return bindings;
 	}
 	
 	/**
 	 * Return a properties resource for given class loader. NULL indicate not FOUND the properties
 	 * 
 	 * @param resource
+	 * @param loader
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
-	public static Properties loadProperties(String resource) throws IOException {
+	public static Properties loadProperties(String resource, ClassLoader loader) throws IOException {
 		//MAKE SURE USING DEFAULT ONE
-		URL url = getClassLoader().getResource(resource);
+		URL url = loader.getResource(resource);
 		if(url == null) {
 			return null;
 		}
@@ -123,7 +131,7 @@ public final class AppeLoader {
 	}
 	
 	//MAKE SURE LOADED KEYS IS CORRECT ORDER IF ENUMERATE BY KEYS!!!
-	static class OrderedProperties extends Properties {
+	static final class OrderedProperties extends Properties {
 		private static final long serialVersionUID = 1L;
 		private final Set<Object> keys = new LinkedHashSet<Object>();
 		//ORDER KEYS
@@ -145,6 +153,24 @@ public final class AppeLoader {
 		public synchronized Object remove(Object key) {
 			keys.remove(key);
 			return super.remove(key);
+		}
+	}
+	
+	//BINDING INFO
+	public static final class Binding {
+		private String 	 name;
+		private Class<?> typeClass;
+		private Class<?> implClass;
+		public Binding() {
+		}
+		public String name() {
+			return name;
+		}
+		public Class<?> typeClass() {
+			return typeClass;
+		}
+		public Class<?> implClass() {
+			return implClass;
 		}
 	}
 }
