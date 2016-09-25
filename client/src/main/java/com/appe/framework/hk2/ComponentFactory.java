@@ -23,12 +23,13 @@ public final class ComponentFactory {
 	}
 	
 	/**
-	 * return all the components + dependencies from resource
+	 * return all the components + dependencies from resource. A components can be an instance of something
+	 * or class or string represent component
 	 * 
 	 * @param resource
 	 * @return
 	 */
-	public static List<Class<?>> loadComponents(String resource) {
+	public static List<Object> loadComponents(String resource) {
 		try {
 			ClassLoader loader = AppeLoader.getClassLoader();
 			List<AppeLoader.Binding> bindings = AppeLoader.loadBindings(resource, loader);
@@ -37,19 +38,24 @@ public final class ComponentFactory {
 				return Objects.asList();
 			}
 			
-			final List<Class<?>> zcomponents = new ArrayList<>();
+			final List<Object> zcomponents = new ArrayList<>();
 			for(AppeLoader.Binding binding: bindings) {
 				Class<?> typeClass = binding.typeClass();
 				
 				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS
 				if(typeClass == null && binding.implClass() == null) {
-					String subresource = SUB_RESOURCE + binding.name();
-					
-					logger.fine("Including components from resource file: " + subresource);
-					zcomponents.addAll(loadComponents(subresource));
-					continue;
+					Package pkg = Package.getPackage(binding.name());
+					if(pkg == null) {
+						String subresource = SUB_RESOURCE + binding.name();
+						logger.fine("Including components from resource file: " + subresource);
+						zcomponents.addAll(loadComponents(subresource));
+					} else {
+						logger.fine("Including components from package: " + pkg);
+						zcomponents.add(pkg);
+					}
+				} else {
+					zcomponents.add(binding.typeClass());
 				}
-				zcomponents.add(binding.typeClass());
 			}
 			return zcomponents;
 		} catch(IOException | ClassNotFoundException ex) {

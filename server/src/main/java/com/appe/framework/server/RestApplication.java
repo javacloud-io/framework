@@ -35,7 +35,7 @@ public class RestApplication extends ResourceConfig {
 	
 	/**
 	 * Default server configuration with Guice HK2 & JSON
-	 * 
+	 * java.lange.Package
 	 * @param packages
 	 */
 	protected void configure(String...packages) {
@@ -50,10 +50,16 @@ public class RestApplication extends ResourceConfig {
 		}
 		
 		//AUTO LOAD THE COMPONENTS
-		List<Class<?>> components = ComponentFactory.loadComponents("META-INF/server-components.jersey");
+		List<Object> components = ComponentFactory.loadComponents("META-INF/server-components.jersey");
 		logger.debug("Registering jersey server components: {}", components);
-		for(Class<?> component: components) {
-			register(component);
+		for(Object c: components) {
+			if( c instanceof Class) {
+				register((Class<?>)c);
+			} else if(c instanceof Package) {
+				packages(((Package)c).getName());
+			} else {
+				register(c);
+			}
 		}
 	}
 	

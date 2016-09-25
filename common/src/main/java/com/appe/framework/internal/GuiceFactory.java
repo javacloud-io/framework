@@ -71,15 +71,14 @@ public final class GuiceFactory {
 					
 					logger.fine("Including modules from resource file: " + subresource);
 					zmodules.addAll(loadModules(subresource));
-					continue;
-				}
-				
-				//LOAD ALL MODULES/SERVICES
-				if(Module.class.isAssignableFrom(typeClass)) {
-					logger.fine("Registering module: " + typeClass);
-					zmodules.add((Module)typeClass.newInstance());
 				} else {
-					zservices.add(binding);
+					//LOAD ALL MODULES/SERVICES
+					if(Module.class.isAssignableFrom(typeClass)) {
+						logger.fine("Registering module: " + typeClass);
+						zmodules.add((Module)typeClass.newInstance());
+					} else {
+						zservices.add(binding);
+					}
 				}
 			}
 			

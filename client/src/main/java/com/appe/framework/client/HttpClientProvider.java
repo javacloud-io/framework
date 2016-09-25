@@ -46,10 +46,14 @@ public class HttpClientProvider implements Provider<Client> {
 	public ClientConfig configure() {
 		ClientConfig config = new ClientConfig();
 		
-		List<Class<?>> components = ComponentFactory.loadComponents("META-INF/client-components.jersey");
+		List<Object> components = ComponentFactory.loadComponents("META-INF/client-components.jersey");
 		logger.debug("Registering jersey client components: {}", components);
-		for(Class<?> c: components) {
-			config.register(c);
+		for(Object c: components) {
+			if(c instanceof Class) {
+				config.register((Class<?>)c);
+			} else {
+				config.register(c);
+			}
 		}
 		return config;
 	}
