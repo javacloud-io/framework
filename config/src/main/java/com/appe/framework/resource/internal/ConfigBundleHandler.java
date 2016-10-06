@@ -115,6 +115,11 @@ public class ConfigBundleHandler implements InvocationHandler {
 			return c.convert(value);
 		}
 		
+		//ARRAYS
+		if(type == String[].class) {
+			return Objects.toArray(value, ",", true);
+		}
+		
 		//UNKNOW TYPE => RETURN STRING?
 		return value;
 	}

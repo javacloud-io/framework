@@ -16,24 +16,36 @@ import com.appe.framework.util.Objects;
  */
 public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	private final Dictionary config;
-	private boolean isSystemProperties = false;
+	private final boolean useSystemProperties;
 	/**
 	 * 
 	 */
 	public ConfigBundleHandlerImpl() {
-		this(System.getProperties());
-		this.isSystemProperties = true;
+		this(System.getProperties(), false);
 	}
 	
 	/**
 	 * 
 	 * @param properties
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ConfigBundleHandlerImpl(Properties properties) {
-		this.config = new Dictionary((Map)Collections.unmodifiableMap(properties));
+		this(properties, true);
 	}
 	
+	/**
+	 * 
+	 * @param properties
+	 * @param useSystemProperties
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public ConfigBundleHandlerImpl(Properties properties, boolean useSystemProperties) {
+		this.config = new Dictionary((Map)Collections.unmodifiableMap(properties));
+		this.useSystemProperties = useSystemProperties;
+	}
+	
+	/**
+	 * 
+	 */
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		//DYNAMIC values() for PASS THROUGH
@@ -49,13 +61,13 @@ public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	@Override
 	protected String resolveValue(String key, String defaultValue) {
 		String value;
-		if(isSystemProperties) {
-			value = config.getString(key, defaultValue);
-		} else {
+		if(useSystemProperties) {
 			value = System.getProperty(key);
 			if(Objects.isEmpty(value)) {
 				value = config.getString(key, defaultValue);
 			}
+		} else {
+			value = config.getString(key, defaultValue);
 		}
 		return value;
 	}
