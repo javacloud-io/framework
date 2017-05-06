@@ -35,18 +35,10 @@ public class NoCacheManagerImpl implements CacheManager {
 	/**
 	 * 
 	 */
-	@Override
-	public <T> CacheRegion<T> bindCache(String name, Class<T> type) {
-		return bindCache(name, type, 0);
-	}
-
-	/**
-	 * 
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> CacheRegion<T> bindCache(String name, Class<T> type, int options) {
-		logger.debug("Create nocache region: {} -> {} with flags: {}", name, type, options);
+	public <T> CacheRegion<T> bindCache(String name, Class<T> type) {
+		logger.debug("Create nocache region: {} -> {}", name, type);
 		return (CacheRegion<T>)NOCACHE;
 	}
 }

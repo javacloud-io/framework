@@ -10,21 +10,10 @@ package com.appe.framework.cache;
  */
 public interface CacheManager {
 	/**
-	 * Bind with default options
 	 * 
 	 * @param name
 	 * @param type
 	 * @return
 	 */
 	public <T> CacheRegion<T> bindCache(String name, Class<T> type);
-	
-	/**
-	 * Create the cache with same name if exist. TYPE will help the serialize purpose if cache go remote.
-	 * 
-	 * @param name
-	 * @param type
-	 * @param options
-	 * @return
-	 */
-	public <T> CacheRegion<T> bindCache(String name, Class<T> type, int options);
 }

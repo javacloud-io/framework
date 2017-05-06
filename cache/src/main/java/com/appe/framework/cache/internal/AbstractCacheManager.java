@@ -20,24 +20,16 @@ public abstract class AbstractCacheManager implements CacheManager {
 	private ConcurrentMap<String, CacheRegion<?>> cacheRegions = new ConcurrentHashMap<String, CacheRegion<?>>();
 	
 	/**
-	 * ALWAYS PASSING DEFAULT OPTIONS
-	 */
-	@Override
-	public <T> CacheRegion<T> bindCache(String name, Class<T> type) {
-		return bindCache(name, type, 0);
-	}
-
-	/**
 	 * Make a modification version of schema
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> CacheRegion<T> bindCache(String name, Class<T> type, int options) {
+	public <T> CacheRegion<T> bindCache(String name, Class<T> type) {
 		if(!cacheRegions.containsKey(name)) {
 			logger.debug("Create cache region: {} =>{}", name, type);
 			
 			//THEN ADD TO CACHE.
-			cacheRegions.putIfAbsent(name, createCache(name, type, options));
+			cacheRegions.putIfAbsent(name, createCache(name, type));
 		}
 		return (CacheRegion<T>)cacheRegions.get(name);
 	}
@@ -47,8 +39,7 @@ public abstract class AbstractCacheManager implements CacheManager {
 	 * 
 	 * @param name
 	 * @param type
-	 * @param options
 	 * @return
 	 */
-	protected abstract <T> CacheRegion<T> createCache(String name, Class<T> type, int options);
+	protected abstract <T> CacheRegion<T> createCache(String name, Class<T> type);
 }

@@ -28,11 +28,8 @@ public class NamespaceCacheManager extends AbstractCacheManager {
 	 * MAKE SPECIAL TREATMENT WHEN CREATE CACHE REGION FOR NAMESPACE.
 	 */
 	@Override
-	protected <T> CacheRegion<T> createCache(String name, Class<T> type, int options) {
-		final CacheRegion<T> cacheRegion = cacheManager.bindCache(name, type, options);
-		if((options & CacheRegion.OPT_NONAMESPACE) != 0) {
-			return cacheRegion;
-		}
+	protected <T> CacheRegion<T> createCache(String name, Class<T> type) {
+		final CacheRegion<T> cacheRegion = cacheManager.bindCache(name, type);
 		
 		//RETURN A WRAPPER WITH MODIFIED HASHKEY
 		return new CacheRegion<T>() {
