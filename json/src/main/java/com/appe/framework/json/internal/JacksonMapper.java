@@ -51,15 +51,12 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 * configure default feature
 	 */
 	protected void configure() {
-		//ONLY FIELD
+		//ONLY FIELDS
 		setVisibility(PropertyAccessor.FIELD, 	 Visibility.ANY);
 		setVisibility(PropertyAccessor.GETTER, 	 Visibility.NONE);
 		setVisibility(PropertyAccessor.SETTER, 	 Visibility.NONE);
 		setVisibility(PropertyAccessor.IS_GETTER,Visibility.NONE);
 		setVisibility(PropertyAccessor.CREATOR,  Visibility.NONE);
-		
-		//WRITE EMPTY
-		enable(SerializationFeature.WRITE_EMPTY_JSON_ARRAYS);
 		
 		//DISABLEs
 		disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
