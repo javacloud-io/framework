@@ -11,10 +11,6 @@ import java.util.Map;
  * @param <T>
  */
 public class DataSchema<T> {
-	//SPECIAL FLAG PERFORMANCE & OPTIMIZATION
-	public static final int OPT_FASTSCAN		= 0x00000001;	//interest in fast scan the data
-	public static final int OPT_NONAMESPACE		= 0x00010000;	//no NAMESPACE apply
-		
 	//RESERVED COLUMN NAME
 	public static final String __HASHKEY 	= "__hashkey";		//BACK UP HASHKEY
 	public static final String __NAMESPACE	= "__namespace";	//HASH OF NAMESPACE	

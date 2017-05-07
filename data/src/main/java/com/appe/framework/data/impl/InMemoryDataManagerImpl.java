@@ -20,7 +20,7 @@ public class InMemoryDataManagerImpl extends AbstractDataManager {
 	 * return memory data store.
 	 */
 	@Override
-	protected <T> DataStore<T> createStore(DataSchema<T> schema, int options) {
+	protected <T> DataStore<T> createStore(DataSchema<T> schema) {
 		return new InMemoryDataStoreImpl<T>(schema);
 	}
 }

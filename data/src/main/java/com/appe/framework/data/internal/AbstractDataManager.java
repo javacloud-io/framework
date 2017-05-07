@@ -22,22 +22,14 @@ public abstract class AbstractDataManager implements DataManager {
 	/**
 	 * BY DEFAULT WILL BE DEFAULT AS IT IS...
 	 */
-	@Override
-	public <T> DataStore<T> bindStore(DataSchema<T> schema) {
-		return bindStore(schema, 0);
-	}
-	
-	/**
-	 * Make a modification version of schema
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> DataStore<T> bindStore(DataSchema<T> schema, int options) {
+	public <T> DataStore<T> bindStore(DataSchema<T> schema) {
 		if(!dataStores.containsKey(schema.getTable())) {
 			logger.debug("Create data store: {} =>{}", schema.getTable(), schema.getColumns());
 			
 			//THEN ADD TO CACHE.
-			dataStores.putIfAbsent(schema.getTable(), createStore(schema, options));
+			dataStores.putIfAbsent(schema.getTable(), createStore(schema));
 		}
 		return (DataStore<T>)dataStores.get(schema.getTable());
 	}
@@ -52,6 +44,9 @@ public abstract class AbstractDataManager implements DataManager {
 	
 	/**
 	 * Create a new data store if caching version if not exist.
+	 * 
+	 * @param schema
+	 * @return
 	 */
-	protected abstract <T> DataStore<T> createStore(DataSchema<T> schema, int usageFlags);
+	protected abstract <T> DataStore<T> createStore(DataSchema<T> schema);
 }

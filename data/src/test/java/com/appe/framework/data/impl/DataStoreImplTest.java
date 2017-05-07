@@ -41,7 +41,7 @@ public abstract class DataStoreImplTest extends TestCase {
 		assertTrue(schema.getHashKey().equals("id"));
 		
 		//CREATE A TABLE
-		DataStore<Dictionary> dataStore = dataManager.bindStore(schema, 0);
+		DataStore<Dictionary> dataStore = dataManager.bindStore(schema);
 		
 		Dictionary model;
 		for(int i = 0; i < 110; i ++) {
@@ -102,7 +102,7 @@ public abstract class DataStoreImplTest extends TestCase {
 		assertTrue(schema.getHashKey().equals("id"));
 		
 		//CREATE A TABLE
-		DataStore<Dictionary> dataStore = dataManager.bindStore(schema, 0);
+		DataStore<Dictionary> dataStore = dataManager.bindStore(schema);
 		
 		Dictionary model;
 		for(int i = 0; i < 10; i ++) {
@@ -154,7 +154,7 @@ public abstract class DataStoreImplTest extends TestCase {
 		assertTrue(schema.getHashKey().equals("id"));
 		
 		//CREATE A TABLE
-		DataStore<Dictionary> dataStore = dataManager.bindStore(schema, 0);
+		DataStore<Dictionary> dataStore = dataManager.bindStore(schema);
 		
 		Dictionary model;
 		for(int i = 0; i < 10; i ++) {
@@ -213,7 +213,7 @@ public abstract class DataStoreImplTest extends TestCase {
 		assertTrue(schema.getHashKey().equals("id"));
 		
 		//CREATE A TABLE
-		DataStore<Dictionary> dataStore = dataManager.bindStore(schema, 0);
+		DataStore<Dictionary> dataStore = dataManager.bindStore(schema);
 		Dictionary model = new Dictionary();
 		model.set("id", "id-123");
 		model.set("name", "hohoho");
@@ -265,7 +265,7 @@ public abstract class DataStoreImplTest extends TestCase {
 		assertTrue(schema.getHashKey().equals("id"));
 		
 		//CREATE A TABLE
-		DataStore<Dictionary> dataStore = dataManager.bindStore(schema, 0);
+		DataStore<Dictionary> dataStore = dataManager.bindStore(schema);
 		
 		Dictionary model;
 		for(int i = 0; i < 50; i ++) {

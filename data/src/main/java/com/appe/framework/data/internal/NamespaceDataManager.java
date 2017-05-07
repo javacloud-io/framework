@@ -42,12 +42,7 @@ public class NamespaceDataManager extends AbstractDataManager {
 	 * Make new data store by using new HASHKEY
 	 */
 	@Override
-	protected <T> DataStore<T> createStore(final DataSchema<T> schema, int options) {
-		//0. NO NAMESPACE => ALWAYS NO NAMESPACE
-		if((options & DataSchema.OPT_NONAMESPACE) != 0) {
-			return dataManager.bindStore(schema, options);
-		}
-		
+	protected <T> DataStore<T> createStore(final DataSchema<T> schema) {
 		//1. NEW MAPPER TO INCLUDE NAMESPACE
 		NamespaceDataMapper<T> mapper = new NamespaceDataMapper<T>(schema, namespace);
 		
@@ -55,6 +50,6 @@ public class NamespaceDataManager extends AbstractDataManager {
 		DataSchema<T> __schema = new NamespaceDataSchema<>(schema, mapper);
 		
 		//WRAPPING AROUND BY NAMESPACE STORE
-		return new NamespaceDataStore<T>(dataManager.bindStore(__schema, options), schema, mapper);
+		return new NamespaceDataStore<T>(dataManager.bindStore(__schema), schema, mapper);
 	}
 }
