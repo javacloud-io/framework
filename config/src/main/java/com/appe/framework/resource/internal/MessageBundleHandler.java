@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.appe.framework.AppeLocale;
 
 /**
+ * An implementation of message bundle using thread locale of to detect the locale.
  * 
  * @author ho
  *
@@ -68,6 +69,7 @@ public abstract class MessageBundleHandler extends ConfigBundleHandler {
 	}
 	
 	/**
+	 * return message bundle to be use
 	 * 
 	 * @param callerLoader
 	 * @return

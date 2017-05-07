@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * A simple bundle with key/value pair for any configuration purpose. By default all config bundle will be
- * under /conf
+ * under /conf resource. To have all properties return back, just
  * 
  * @author ho
  *

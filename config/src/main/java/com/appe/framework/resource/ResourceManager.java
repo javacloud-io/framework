@@ -7,7 +7,7 @@ package com.appe.framework.resource;
  */
 public interface ResourceManager {
 	/**
-	 * return a config bundle
+	 * return a config bundle, using the system properties if baseName of bundle is EMPTY.
 	 * 
 	 * @param type
 	 * @return
@@ -15,7 +15,7 @@ public interface ResourceManager {
 	public <T extends ConfigBundle> T getConfigBundle(Class<T> type);
 	
 	/**
-	 * return i18n message bundle
+	 * return i18n message bundle, if not specify a baseName a UNIVERSAL bundle will be loaded.
 	 * 
 	 * @param type
 	 * @return

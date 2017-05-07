@@ -10,6 +10,7 @@ import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 
 /**
+ * Default implementation of configBundle which can return MAP/DICTIONARY OF all properties
  * 
  * @author ho
  *
@@ -18,7 +19,7 @@ public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	private final Dictionary config;
 	private final boolean useSystemProperties;
 	/**
-	 * 
+	 * Default using system handler so no need to fallback.
 	 */
 	public ConfigBundleHandlerImpl() {
 		this(System.getProperties(), false);
@@ -49,7 +50,7 @@ public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		//DYNAMIC values() for PASS THROUGH
-		if(method.getReturnType().isAssignableFrom(Map.class)) {
+		if(method.getReturnType().isAssignableFrom(Dictionary.class)) {
 			return config;
 		}
 		return super.invoke(proxy, method, args);

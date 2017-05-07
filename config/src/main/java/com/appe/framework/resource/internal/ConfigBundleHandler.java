@@ -35,7 +35,7 @@ public class ConfigBundleHandler implements InvocationHandler {
 	}
 	
 	/**
-	 * resolve the config value with given name
+	 * resolve the config value with given name!
 	 * 
 	 * @param key
 	 * @param defaultValue
