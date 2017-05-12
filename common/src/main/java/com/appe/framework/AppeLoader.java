@@ -121,7 +121,15 @@ public final class AppeLoader {
 		if(url == null) {
 			return null;
 		}
-		
+		return loadProperties(url);
+	}
+	/**
+	 * 
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public static Properties loadProperties(URL url) throws IOException {	
 		//LOAD THE PROPERTIES & MAKE SURE KEEP KEY ORDERED
 		Properties props = new OrderedProperties();
 		try (InputStream stream = url.openStream()) {

@@ -22,6 +22,7 @@ import com.appe.framework.resource.ConfigBundle;
 import com.appe.framework.resource.MessageBundle;
 import com.appe.framework.resource.ResourceManager;
 import com.appe.framework.resource.internal.ConfigBundleHandler;
+import com.appe.framework.resource.internal.I18nResourceBundlesControl;
 import com.appe.framework.resource.internal.MessageBundleHandler;
 import com.appe.framework.util.Objects;
 /**
@@ -34,12 +35,35 @@ import com.appe.framework.util.Objects;
 public class ResourceManagerImpl implements ResourceManager {
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManagerImpl.class);
 	private static final String CONF_EXTENSION 	= ".properties";
-	private static final String CONF_RESOURCE 	= "conf/";
-	private static final String I18N_RESOURCE 	= "i18n/";
+	private static final String CONF_FOLDER 	= "conf/";
+	private static final String I18N_FOLDER 	= "i18n/";
 	
+	private final I18nResourceBundlesControl CONTROL = new I18nResourceBundlesControl();
 	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
 	@Inject
 	private AppeLocale appeLocale;
+	private ClassLoader classLoader;
+	
+	/**
+	 * Assign the default LOADER
+	 */
+	public ResourceManagerImpl() {
+	}
+	
+	/**
+	 * Switch class loader will lead to re-scan the bundle
+	 */
+	@Override
+	public void setResourceLoader(ClassLoader classLoader) {
+		try {
+			this.classLoader = classLoader;
+			CONTROL.scanBundles(classLoader, true);
+			
+			logger.debug("Found resource bundles: {}", CONTROL.getBundleNames());
+		} catch(IOException ex) {
+			logger.warn("Unable to scan I18N bundles");
+		}
+	}
 	
 	/**
 	 * Always lookup from cache
@@ -70,6 +94,10 @@ public class ResourceManagerImpl implements ResourceManager {
 		Object config = configCache.get(type);
 		if(config == null) {
 			synchronized(configCache) {
+				//INITIALIZE THE LOADER IF NOT YET
+				if(classLoader == null) {
+					setResourceLoader(AppeLoader.getClassLoader());
+				}
 				config = configCache.get(type);
 				if(config == null) {
 					config = loadResourceBundle(type);
@@ -106,7 +134,7 @@ public class ResourceManagerImpl implements ResourceManager {
 				configHandler = createConfigHandler(baseName, type);
 			}
 		}
-		return Proxy.newProxyInstance(AppeLoader.getClassLoader(), new Class<?>[]{ type }, configHandler);
+		return Proxy.newProxyInstance(classLoader, new Class<?>[]{ type }, configHandler);
 	}
 	
 	/**
@@ -116,7 +144,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createSystemHandler(Class<?> config) {
-		logger.info("Bind config class: " + config.getName() + " to system properties.");
+		logger.info("Binding config bundle: {} to system properties.", config.getName());
 		return	new ConfigBundleHandlerImpl();
 	}
 	
@@ -129,10 +157,10 @@ public class ResourceManagerImpl implements ResourceManager {
 	 */
 	protected InvocationHandler createConfigHandler(String baseName, Class<?> type) {
 		//ALWAYS APPEND .properties to load the resource
-		final String resource = CONF_RESOURCE + baseName + CONF_EXTENSION;
-		logger.info("Bind the config: " + type.getName() + " to resource bundle: " + resource);
+		final String resource = CONF_FOLDER + baseName + CONF_EXTENSION;
+		logger.info("Binding config bundle: {} to resource: {}", type.getName(), resource);
 		try {
-			Properties properties = AppeLoader.loadProperties(resource, AppeLoader.getClassLoader());
+			Properties properties = AppeLoader.loadProperties(resource, classLoader);
 			if(Objects.isEmpty(properties)) {
 				return new ConfigBundleHandler();
 			}
@@ -151,10 +179,12 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createSystemI18nHandler(Class<?> type) {
+		logger.info("Binding I18n universal bundle: {}", type.getName());
 		return new MessageBundleHandler(appeLocale) {
 			@Override
 			protected ResourceBundle resolveBundle() throws MissingResourceException {
-				throw new MissingResourceException("TODO: Implement universal i18n handler", MessageBundleHandler.class.getName(), "");
+				//USING UNIFY BUNDLE
+				return	ResourceBundle.getBundle("", appeLocale.get(), classLoader, CONTROL);
 			}
 		};
 	}
@@ -168,15 +198,14 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> type) {
-		final String resource = I18N_RESOURCE + baseName;
-		logger.info("Bind I18n bundle: " + type.getName() + " to resource bundle: " + resource);
+		final String resource = I18N_FOLDER + baseName;
+		logger.info("Binding I18n bundle: {} to resource: {}", type.getName(), resource);
 		
 		//TO BE CONSISTENT, FIRST CALLER WIN!!!
-		final ClassLoader callerLoader = AppeLoader.getClassLoader();
 		return	new MessageBundleHandler(appeLocale) {
 					@Override
 					protected ResourceBundle resolveBundle() throws MissingResourceException {
-						return	ResourceBundle.getBundle(resource, appeLocale.get(), callerLoader);
+						return	ResourceBundle.getBundle(resource, appeLocale.get(), classLoader, CONTROL);
 					}
 				};
 	}

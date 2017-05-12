@@ -7,6 +7,13 @@ package com.appe.framework.resource;
  */
 public interface ResourceManager {
 	/**
+	 * Which class loader to be use for resource hunting
+	 * 
+	 * @param classLoader
+	 */
+	public void setResourceLoader(ClassLoader classLoader);
+	
+	/**
 	 * return a config bundle, using the system properties if baseName of bundle is EMPTY.
 	 * 
 	 * @param type
