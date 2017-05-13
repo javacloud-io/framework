@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.appe.framework.AppeLoader;
+import com.appe.framework.AppeLocale;
 /**
  * 
  * @author ho
@@ -19,8 +20,10 @@ import com.appe.framework.AppeLoader;
  */
 public class I18nResourceBundlesControl extends ResourceBundle.Control {
 	private static final String I18N_BUNDLES = "META-INF/i18n-messages.bundles";
+	private final AppeLocale appeLocale;
 	private Set<String> bundleNames = new ConcurrentSkipListSet<>();
-	public I18nResourceBundlesControl() {
+	public I18nResourceBundlesControl(AppeLocale appeLocale) {
+		this.appeLocale = appeLocale;
 	}
 	
 	/**
@@ -36,7 +39,7 @@ public class I18nResourceBundlesControl extends ResourceBundle.Control {
 	 */
 	@Override
 	public Locale getFallbackLocale(String baseName, Locale locale) {
-		return super.getFallbackLocale(baseName, locale);
+		return appeLocale.next(locale);
 	}
 	
 	/**

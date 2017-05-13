@@ -38,16 +38,18 @@ public class ResourceManagerImpl implements ResourceManager {
 	private static final String CONF_FOLDER 	= "conf/";
 	private static final String I18N_FOLDER 	= "i18n/";
 	
-	private final I18nResourceBundlesControl CONTROL = new I18nResourceBundlesControl();
+	private final I18nResourceBundlesControl CONTROL;
 	private final ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
 	private ClassLoader classLoader;
-	@Inject
 	private AppeLocale appeLocale;
 	
 	/**
 	 * Assign the default LOADER
 	 */
-	public ResourceManagerImpl() {
+	@Inject
+	public ResourceManagerImpl(AppeLocale appeLocale) {
+		this.appeLocale = appeLocale;
+		CONTROL = new I18nResourceBundlesControl(appeLocale);
 	}
 	
 	/**

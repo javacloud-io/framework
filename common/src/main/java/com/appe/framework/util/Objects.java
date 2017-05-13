@@ -231,6 +231,16 @@ public final class Objects {
 	}
 	
 	/**
+	 * return true if list is empty
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static boolean isEmpty(Object[] value) {
+		return value == null || value.length == 0;
+	}
+	
+	/**
 	 * return true if collection is empty
 	 * 
 	 * @param collection

@@ -10,15 +10,23 @@ import java.util.Locale;
  */
 public interface AppeLocale {
 	/**
+	 * Set list of prefer locale in order of important
 	 * 
-	 * @param locale
+	 * @param locales
 	 */
-	public void set(Locale locale);
+	public void set(Locale... locales);
 	/**
-	 * 
+	 * return the first locale
 	 * @return
 	 */
 	public Locale get();
+	
+	/**
+	 * return the next one from the current or NULL if nothing else
+	 * @param local
+	 * @return
+	 */
+	public Locale next(Locale locale);
 	
 	/**
 	 * 
