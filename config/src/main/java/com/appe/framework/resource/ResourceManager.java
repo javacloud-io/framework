@@ -7,7 +7,7 @@ package com.appe.framework.resource;
  */
 public interface ResourceManager {
 	/**
-	 * Which class loader to be use for resource hunting
+	 * Which class loader to be use for resource hunting, will re-discover the resources.
 	 * 
 	 * @param classLoader
 	 */

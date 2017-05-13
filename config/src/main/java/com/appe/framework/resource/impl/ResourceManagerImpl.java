@@ -39,10 +39,10 @@ public class ResourceManagerImpl implements ResourceManager {
 	private static final String I18N_FOLDER 	= "i18n/";
 	
 	private final I18nResourceBundlesControl CONTROL = new I18nResourceBundlesControl();
-	private ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
+	private final ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
+	private ClassLoader classLoader;
 	@Inject
 	private AppeLocale appeLocale;
-	private ClassLoader classLoader;
 	
 	/**
 	 * Assign the default LOADER
@@ -57,9 +57,10 @@ public class ResourceManagerImpl implements ResourceManager {
 	public void setResourceLoader(ClassLoader classLoader) {
 		try {
 			this.classLoader = classLoader;
+			configCache.clear();
 			CONTROL.scanBundles(classLoader, true);
 			
-			logger.debug("Found resource bundles: {}", CONTROL.getBundleNames());
+			logger.debug("Found I18n resource bundles: {}", CONTROL.getBundleNames());
 		} catch(IOException ex) {
 			logger.warn("Unable to scan I18N bundles");
 		}
