@@ -19,6 +19,7 @@ public class ResourceManagerTest extends GuiceTestCase {
 	public void testConfig() {
 		TestConfig testConfig = resourceManager.getConfigBundle(TestConfig.class);
 		Assert.assertEquals("xyz", testConfig.name());
+		Assert.assertEquals("lala", testConfig.dummy());
 	}
 	
 	@Test

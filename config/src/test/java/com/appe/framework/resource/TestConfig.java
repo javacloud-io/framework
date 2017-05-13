@@ -1,4 +1,5 @@
 package com.appe.framework.resource;
+
 /**
  * 
  * @author ho
@@ -6,6 +7,11 @@ package com.appe.framework.resource;
  */
 @ConfigBundle.Resource("platform.test")
 public interface TestConfig extends ConfigBundle {
+	@Entry(key="name")
 	String name();
 	String user();
+	
+	//dummy with default value lala
+	@Entry(key="dummy.key", value="lala")
+	String dummy();
 }
