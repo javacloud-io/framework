@@ -5,13 +5,13 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.appe.framework.internal.GuiceTestCase;
+import com.appe.framework.internal.InjectionTest;
 /**
  * 
  * @author ho
  *
  */
-public class ResourceManagerTest extends GuiceTestCase {
+public class ResourceManagerTest extends InjectionTest {
 	@Inject
 	ResourceManager resourceManager;
 	

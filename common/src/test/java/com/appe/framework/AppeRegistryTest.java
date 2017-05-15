@@ -9,13 +9,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.appe.framework.AppeRegistry;
-import com.appe.framework.internal.GuiceTestCase;
+import com.appe.framework.internal.InjectionTest;
 /**
  * 
  * @author ho
  *
  */
-public class AppeRegistryTest extends GuiceTestCase {
+public class AppeRegistryTest extends InjectionTest {
 	@Inject
 	TestService testService;
 	

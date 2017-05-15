@@ -145,8 +145,7 @@ public final class GuiceFactory {
 	}
 	
 	/**
-	 * HACK TO GET BACK INJECTOR from registry:
-	 * 
+	 * HACK TO GET BACK INJECTOR from registry to avoid circular dependency
 	 * Assuming the Registry return an INJECTOR which can be use for testing as well as other purpose
 	 * 
 	 * @return
