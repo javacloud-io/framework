@@ -192,13 +192,16 @@ public final class Objects {
 	 * Trying to sleep up to duration unless interrupted.
 	 * @param duration
 	 * @param unit
+	 * @return true if no interrupted
 	 */
-	public static void sleep(long duration, TimeUnit unit) {
+	public static boolean sleep(long duration, TimeUnit unit) {
 		try {
 			Thread.sleep(unit.toMillis(duration));
+			return true;
 		}catch(InterruptedException ex) {
 			//IGNORE EX
 		}
+		return false;
 	}
 	
 	/**
