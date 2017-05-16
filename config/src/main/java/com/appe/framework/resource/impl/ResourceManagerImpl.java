@@ -56,15 +56,21 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * Switch class loader will lead to re-scan the bundle
 	 */
 	@Override
-	public void initResourceLoader() {
+	public boolean initResourceLoader() {
+		if(this.classLoader != null) {
+			logger.warn("Resource loader already initialized with classLoader: {}", classLoader);
+			return false;
+		}
+		
+		//CACHE CURRENT CLASS LOADER
 		try {
 			this.classLoader = AppeLoader.getClassLoader();
-			configCache.clear();
 			CONTROL.scanBundles(classLoader, true);
 			
 			logger.debug("Found I18n resource bundles: {}", CONTROL.getBundleNames());
+			return true;
 		} catch(IOException ex) {
-			logger.warn("Unable to scan I18N bundles");
+			throw new AppeException("Unable to scan I18N bundles", ex);
 		}
 	}
 	

@@ -8,8 +8,9 @@ package com.appe.framework.resource;
 public interface ResourceManager {
 	/**
 	 * Which class loader to be use for resource hunting, will re-discover the resources.
+	 * Can be use to initialize the resource prior to any form of loading.
 	 */
-	public void initResourceLoader();
+	public boolean initResourceLoader();
 	
 	/**
 	 * return current resource loader if one set
