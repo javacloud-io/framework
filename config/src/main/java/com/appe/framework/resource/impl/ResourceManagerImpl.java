@@ -56,9 +56,9 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * Switch class loader will lead to re-scan the bundle
 	 */
 	@Override
-	public void setResourceLoader(ClassLoader classLoader) {
+	public void initResourceLoader() {
 		try {
-			this.classLoader = classLoader;
+			this.classLoader = AppeLoader.getClassLoader();
 			configCache.clear();
 			CONTROL.scanBundles(classLoader, true);
 			
@@ -68,6 +68,14 @@ public class ResourceManagerImpl implements ResourceManager {
 		}
 	}
 	
+	/**
+	 * return current resource loader NULL if not initialize YET.
+	 */
+	@Override
+	public ClassLoader getResourceLoader() {
+		return classLoader;
+	}
+
 	/**
 	 * Always lookup from cache
 	 * 
@@ -97,10 +105,12 @@ public class ResourceManagerImpl implements ResourceManager {
 		Object config = configCache.get(type);
 		if(config == null) {
 			synchronized(configCache) {
-				//INITIALIZE THE LOADER IF NOT YET
+				//INITIALIZE THE LOADER IF NOT YET DONE SO
 				if(classLoader == null) {
-					setResourceLoader(AppeLoader.getClassLoader());
+					initResourceLoader();
 				}
+				
+				//FOUND FROM CACHE
 				config = configCache.get(type);
 				if(config == null) {
 					config = loadResourceBundle(type);

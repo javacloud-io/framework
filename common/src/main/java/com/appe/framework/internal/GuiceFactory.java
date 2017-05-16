@@ -49,11 +49,11 @@ public final class GuiceFactory {
 	 * 
 	 * 
 	 * @param resource
+	 * @param loader
 	 * @return
 	 */
-	private static List<Module> loadModules(String resource) {
+	private static List<Module> loadModules(String resource, ClassLoader loader) {
 		try {
-			ClassLoader loader = AppeLoader.getClassLoader();
 			List<AppeLoader.Binding> bindings = AppeLoader.loadBindings(resource, loader);
 			if(Objects.isEmpty(bindings)) {
 				logger.fine("Not found modules or resource file: " + resource);
@@ -70,7 +70,7 @@ public final class GuiceFactory {
 					String subresource = SUB_RESOURCE + binding.name();
 					
 					logger.fine("Including modules from resource file: " + subresource);
-					zmodules.addAll(loadModules(subresource));
+					zmodules.addAll(loadModules(subresource, loader));
 				} else {
 					//LOAD ALL MODULES/SERVICES
 					if(Module.class.isAssignableFrom(typeClass)) {
@@ -119,10 +119,12 @@ public final class GuiceFactory {
 	/**
 	 * 
 	 * @param builder
+	 * @param loader
+	 * 
 	 * @return
 	 */
-	public static Injector createInjector(GuiceBuilder builder) {
-		return createInjector(builder, MAIN_RESOURCE);
+	public static Injector createInjector(GuiceBuilder builder, ClassLoader loader) {
+		return createInjector(builder, MAIN_RESOURCE, loader);
 	}
 	
 	/**
@@ -131,11 +133,12 @@ public final class GuiceFactory {
 	 * 
 	 * @param builder
 	 * @param resource
+	 * @param loader
 	 * @return
 	 */
-	public static Injector createInjector(GuiceBuilder builder, String resource) {
+	public static Injector createInjector(GuiceBuilder builder, String resource, ClassLoader loader) {
 		logger.info("Loading modules from resource file: " + resource);
-		List<Module> modules = loadModules(resource);
+		List<Module> modules = loadModules(resource, loader);
 		
 		//ALWAYS MAKE SURE IT AT LEAST EMPTY
 		if(modules == null) {

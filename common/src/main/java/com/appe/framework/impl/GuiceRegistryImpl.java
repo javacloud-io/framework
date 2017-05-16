@@ -3,6 +3,7 @@ package com.appe.framework.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.appe.framework.AppeLoader;
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.internal.AnnotatedName;
 import com.appe.framework.internal.GuiceBuilder;
@@ -22,12 +23,13 @@ import com.google.inject.Stage;
 public class GuiceRegistryImpl extends AppeRegistry {
 	private final Injector injector;
 	/**
-	 * 
+	 * Injector only create at first time construction using current class loader.
+	 * Make sure AppeRegistry just load at the correct time!!!
 	 */
 	public GuiceRegistryImpl() {
 		injector = createInjector();
 	}
-	
+
 	/**
 	 * return an instance of any service interface
 	 * 
@@ -75,6 +77,6 @@ public class GuiceRegistryImpl extends AppeRegistry {
 	 * @return
 	 */
 	protected Injector createInjector() {
-		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION));
+		return GuiceFactory.createInjector(new GuiceBuilder.StageBuilder(Stage.PRODUCTION), AppeLoader.getClassLoader());
 	}
 }
