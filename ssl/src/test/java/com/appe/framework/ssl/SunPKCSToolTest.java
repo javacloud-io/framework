@@ -24,7 +24,7 @@ public class SunPKCSToolTest extends TestCase {
 		DN subjectDN = new DN();
 		subjectDN.put(DN.CN, "test");
 		subjectDN.put(DN.UID, "ho");
-		subjectDN.put(DN.EMAIL, "ho@yahoo.com");
+		//subjectDN.put(DN.EMAIL, "ho@yahoo.com");
 		
 		KeyPair keypair = PKCSTool.createKeyPair(1024);
 		

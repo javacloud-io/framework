@@ -41,12 +41,10 @@ import sun.security.x509.X509CertImpl;
 import sun.security.x509.X509CertInfo;
 import sun.security.x509.CertificateValidity;
 import sun.security.x509.CertificateExtensions;
-import sun.security.x509.CertificateIssuerName;
 import sun.security.x509.CertificateVersion;
 import sun.security.x509.CertificateSerialNumber;
 import sun.security.x509.CertificateAlgorithmId;
 import sun.security.x509.CertificateX509Key;
-import sun.security.x509.CertificateSubjectName;
 import sun.security.x509.KeyUsageExtension;
 import sun.security.x509.ExtendedKeyUsageExtension;
 import sun.security.x509.SubjectAlternativeNameExtension;
@@ -401,14 +399,14 @@ public final class SunPKCSTool {
 		info.set(X509CertInfo.SERIAL_NUMBER, new CertificateSerialNumber(PRNG.nextBInteger(16)));	//16 bytes
 		
 		info.set(X509CertInfo.ALGORITHM_ID, new CertificateAlgorithmId(AlgorithmId.get(PKCSTool.ALGO_SHA2withRSA)));
-		info.set(X509CertInfo.SUBJECT, new CertificateSubjectName(subjectName));
+		info.set(X509CertInfo.SUBJECT, subjectName);
 		
 		info.set(X509CertInfo.KEY, new CertificateX509Key(publicKey));
 		info.set(X509CertInfo.VALIDITY, validity);
 		
 		//SELF-SIGN IF NOT SIGNER CERT
-		info.set(X509CertInfo.ISSUER, new CertificateIssuerName(
-				signerCert != null? new X500Name(signerCert.getSubjectDN().getName()) : subjectName));
+		info.set(X509CertInfo.ISSUER, 
+				signerCert != null? new X500Name(signerCert.getSubjectDN().getName()) : subjectName);
 		
 		//ANY EXTENSIONS V3?
 		CertificateExtensions exts = new CertificateExtensions();
