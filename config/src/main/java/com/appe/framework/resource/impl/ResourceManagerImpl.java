@@ -55,8 +55,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	/**
 	 * Switch class loader will lead to re-scan the bundle
 	 */
-	@Override
-	public boolean initResourceLoader() {
+	protected boolean initResourceLoader() {
 		if(this.classLoader != null) {
 			logger.warn("Resource loader already initialized with classLoader: {}", classLoader);
 			return false;
