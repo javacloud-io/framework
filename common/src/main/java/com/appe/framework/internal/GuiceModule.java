@@ -10,6 +10,27 @@ import com.google.inject.binder.LinkedBindingBuilder;
  */
 public abstract class GuiceModule extends AbstractModule {
 	/**
+	 * Bind class to an implementation
+	 * 
+	 * @param clazz
+	 * @param clazzImpl
+	 */
+	protected <T> void bind(Class<T> clazz, Class<T> clazzImpl) {
+	    bind(clazz).to(clazzImpl);
+	}
+	
+	/**
+	 * Bind a class using a NAME to an implementation
+	 * 
+	 * @param clazz
+	 * @param name
+	 * @param clazzImpl
+	 */
+	protected <T> void bind(Class<T> clazz, String name, Class<T> clazzImpl) {
+	    bindNamed(clazz, name).to(clazzImpl);
+	}
+	
+	/**
 	 * Bind an instance with a string NAME to be able to lookup
 	 * 
 	 * @param clazz

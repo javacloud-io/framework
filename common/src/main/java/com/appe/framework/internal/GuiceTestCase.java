@@ -9,6 +9,6 @@ import org.junit.runner.RunWith;
  *
  */
 @RunWith(GuiceJUnit4Runner.class)
-public abstract class InjectionTest {
+public abstract class GuiceTestCase {
 
 }
