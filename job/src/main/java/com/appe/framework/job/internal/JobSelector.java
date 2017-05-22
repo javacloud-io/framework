@@ -2,8 +2,6 @@ package com.appe.framework.job.internal;
 
 import java.util.Set;
 
-import com.appe.framework.util.Objects;
-
 /**
  * To be able to do complicated slice/dice the JOB and states. A job satisfy all of the conditions will be pick.
  * 
@@ -14,7 +12,6 @@ public final class JobSelector {
 	private String parentId;
 	private Set<String> jobIds;
 	private Set<JobState> states;
-	private int limit;
 	public JobSelector() {
 	}
 	
@@ -40,9 +37,6 @@ public final class JobSelector {
 
 	public void setJobIds(Set<String> jobIds) {
 		this.jobIds = jobIds;
-		if(!Objects.isEmpty(jobIds)) {
-			this.limit = jobIds.size();
-		}
 	}
 	
 	/**
@@ -55,17 +49,5 @@ public final class JobSelector {
 
 	public void setStates(Set<JobState> states) {
 		this.states = states;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getLimit() {
-		return limit;
-	}
-
-	public void setLimit(int limit) {
-		this.limit = limit;
 	}
 }

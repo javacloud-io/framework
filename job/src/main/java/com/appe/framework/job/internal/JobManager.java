@@ -41,8 +41,7 @@ public abstract class JobManager {
 				JobSelector selector = new JobSelector();
 				selector.setParentId(getId());
 				selector.setJobIds(Objects.asSet(jobIds));
-				
-				return JobManager.this.selectJobs(selector);
+				return JobManager.this.selectJobs(selector, selector.getJobIds().size());
 			}
 		};
 	}
@@ -94,9 +93,11 @@ public abstract class JobManager {
 	 * return a map of JOBs and it status which satisfy the selector
 	 * 
 	 * @param selector
+	 * @param limit
+	 * 
 	 * @return
 	 */
-	public abstract Map<String, ExecutionStatus> selectJobs(JobSelector selector);
+	public abstract Map<String, ExecutionStatus> selectJobs(JobSelector selector, int limit);
 	
 	/**
 	 * This have to be smart enough to know which changes can be update which is NOT. To correctly refresh

@@ -41,7 +41,7 @@ public class InMemoryJobManagerImpl extends JobManager {
 	 * Find all JOBs with correct information
 	 */
 	@Override
-	public Map<String, ExecutionStatus> selectJobs(JobSelector selector) {
+	public Map<String, ExecutionStatus> selectJobs(JobSelector selector, int limit) {
 		Map<String, ExecutionStatus> jobs = Objects.asMap();
 		for(JobInfo job: jobStore.values()) {
 			if(isApplicableJob(job, selector)) {
@@ -49,8 +49,7 @@ public class InMemoryJobManagerImpl extends JobManager {
 			}
 			
 			//COLLECT ENOUGH JOBS
-			if(selector.getLimit() > 0
-					&& jobs.size() >= selector.getLimit()) {
+			if(limit > 0 && jobs.size() >= limit) {
 				break;
 			}
 		}

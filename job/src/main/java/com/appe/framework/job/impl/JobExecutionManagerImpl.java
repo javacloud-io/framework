@@ -54,13 +54,14 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	@Override
 	public Map<String, ExecutionStatus> selectJobs(String... jobIds) {
 		JobSelector selector = new JobSelector();
+		int limit = 10;
 		if(Objects.isEmpty(jobIds)) {
-			selector.setLimit(10);
 			selector.setStates(Objects.asSet(JobState.RETRYING, JobState.RUNNING, JobState.WAITING));
 		} else {
 			selector.setJobIds(Objects.asSet(jobIds));
+			limit = selector.getJobIds().size();
 		}
-		return jobManager.selectJobs(selector);
+		return jobManager.selectJobs(selector, limit);
 	}
 
 	/**
