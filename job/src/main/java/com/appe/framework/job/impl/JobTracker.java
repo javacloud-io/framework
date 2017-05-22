@@ -35,7 +35,7 @@ public class JobTracker extends JobWorker {
 		
 		//RESOLVE FINAL RESULT
 		ExecutionStatus finalStatus = resolveStatus(childJobs);
-		logger.debug("Status: [{}], waiting job: {}", finalStatus, job);
+		logger.debug("Status: {}, waiting job: {}", finalStatus, job);
 		
 		job.setStatus(finalStatus);
 		if(!ExecutionStatus.isCompleted(finalStatus)) {
