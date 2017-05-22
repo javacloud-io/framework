@@ -17,7 +17,7 @@ import com.appe.framework.util.Objects;
  */
 public final class ComponentFactory {
 	private static final Logger logger = Logger.getLogger(ComponentFactory.class.getName());
-	static final String SUB_RESOURCE 	= "META-INF/jersey/";
+	static final String JERSEY_COMPONENTS 	= "META-INF/jersey/";
 	
 	private ComponentFactory() {
 	}
@@ -46,7 +46,7 @@ public final class ComponentFactory {
 				if(typeClass == null && binding.implClass() == null) {
 					Package pkg = Package.getPackage(binding.name());
 					if(pkg == null) {
-						String subresource = SUB_RESOURCE + binding.name();
+						String subresource = JERSEY_COMPONENTS + binding.name();
 						logger.fine("Including components from resource file: " + subresource);
 						zcomponents.addAll(loadComponents(subresource));
 					} else {

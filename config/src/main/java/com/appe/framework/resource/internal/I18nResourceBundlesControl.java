@@ -14,12 +14,14 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import com.appe.framework.AppeLoader;
 import com.appe.framework.AppeLocale;
 /**
+ * Loading the unify message bundle from META-INF/i18n-messages.bundles
  * 
  * @author ho
  *
  */
 public class I18nResourceBundlesControl extends ResourceBundle.Control {
 	private static final String I18N_BUNDLES = "META-INF/i18n-messages.bundles";
+	
 	private final AppeLocale appeLocale;
 	private Set<String> bundleNames = new ConcurrentSkipListSet<>();
 	public I18nResourceBundlesControl(AppeLocale appeLocale) {

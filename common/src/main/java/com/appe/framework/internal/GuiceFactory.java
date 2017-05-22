@@ -1,8 +1,6 @@
 package com.appe.framework.internal;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,9 +36,8 @@ import com.google.inject.spi.Message;
  */
 public final class GuiceFactory {
 	private static final Logger logger = Logger.getLogger(GuiceFactory.class.getName());
-	
-	static final String MAIN_RESOURCE	= "META-INF/registry-services.guice";
-	static final String SUB_RESOURCE 	= "META-INF/registry/";
+	//location of all registry services
+	private static final String REGISTRY_SERVICES = "META-INF/registry/";
 	private GuiceFactory() {
 	}
 	
@@ -67,7 +64,7 @@ public final class GuiceFactory {
 				
 				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS
 				if(typeClass == null && binding.implClass() == null) {
-					String subresource = SUB_RESOURCE + binding.name();
+					String subresource = REGISTRY_SERVICES + binding.name();
 					
 					logger.fine("Including modules from resource file: " + subresource);
 					zmodules.addAll(loadModules(subresource, loader));
@@ -117,17 +114,6 @@ public final class GuiceFactory {
 	}
 	
 	/**
-	 * 
-	 * @param builder
-	 * @param loader
-	 * 
-	 * @return
-	 */
-	public static Injector createInjector(GuiceBuilder builder, ClassLoader loader) {
-		return createInjector(builder, MAIN_RESOURCE, loader);
-	}
-	
-	/**
 	 * 1. Load all the modules from all classes with resource
 	 * 2. Load all the modules override with resource.1
 	 * 
@@ -154,14 +140,7 @@ public final class GuiceFactory {
 	 * @return
 	 */
 	public static Injector registryInjector() {
-		try {
-			AppeRegistry registry = AppeRegistry.get();
-			Method method = registry.getClass().getMethod("getInjector");
-			return (Injector)method.invoke(registry);
-		} catch(IllegalAccessException | InvocationTargetException | NoSuchMethodException ex) {
-			logger.warning("Unable to find Guice injector, reason: " + ex.getMessage());
-		}
-		return null;
+		return ((GuiceRegistry)AppeRegistry.get()).injector;
 	}
 	
 	/**

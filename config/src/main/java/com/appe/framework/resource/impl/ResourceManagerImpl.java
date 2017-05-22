@@ -34,9 +34,10 @@ import com.appe.framework.util.Objects;
 @Singleton
 public class ResourceManagerImpl implements ResourceManager {
 	private static final Logger logger = LoggerFactory.getLogger(ResourceManagerImpl.class);
+	
 	private static final String CONF_EXTENSION 	= ".properties";
-	private static final String CONF_FOLDER 	= "conf/";
-	private static final String I18N_FOLDER 	= "i18n/";
+	private static final String CONF_RESOURCES 	= "conf/";
+	private static final String I18N_RESOURCES 	= "i18n/";
 	
 	private final I18nResourceBundlesControl CONTROL;
 	private final ConcurrentMap<Class<?>, Object> configCache = new ConcurrentHashMap<Class<?>, Object>();
@@ -175,7 +176,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	 */
 	protected InvocationHandler createConfigHandler(String baseName, Class<?> type) {
 		//ALWAYS APPEND .properties to load the resource
-		final String resource = CONF_FOLDER + baseName + CONF_EXTENSION;
+		final String resource = CONF_RESOURCES + baseName + CONF_EXTENSION;
 		logger.info("Binding config bundle: {} to resource: {}", type.getName(), resource);
 		try {
 			Properties properties = AppeLoader.loadProperties(resource, classLoader);
@@ -216,7 +217,7 @@ public class ResourceManagerImpl implements ResourceManager {
 	 * @return
 	 */
 	protected InvocationHandler createI18nHandler(final String baseName, Class<?> type) {
-		final String resource = I18N_FOLDER + baseName;
+		final String resource = I18N_RESOURCES + baseName;
 		logger.info("Binding I18n bundle: {} to resource: {}", type.getName(), resource);
 		
 		//TO BE CONSISTENT, FIRST CALLER WIN!!!

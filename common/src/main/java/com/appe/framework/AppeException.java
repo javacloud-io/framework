@@ -1,5 +1,7 @@
 package com.appe.framework;
 
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.zip.CRC32;
 
 /**
@@ -145,6 +147,21 @@ public class AppeException extends RuntimeException {
 			crc.update(message.getBytes());
 		}
 		return Long.toHexString(crc.getValue()).toUpperCase();
+	}
+	
+	/**
+	 * Dump stack track to a writer in format of: message/n/trace
+	 * 
+	 * @param cause
+	 * @param writer
+	 */
+	public static final void dumpStackTrace(Throwable cause, Writer writer) {
+		PrintWriter printer = new PrintWriter(writer);
+		printer.print(cause.getMessage());
+		printer.println();
+		
+		cause.printStackTrace(printer);
+		printer.flush();
 	}
 	
 	/**

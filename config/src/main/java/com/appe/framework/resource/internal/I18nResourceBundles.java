@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 /**
+ * Messages aggregation into a memory to build a unify bundle
  * 
  * @author ho
  *
