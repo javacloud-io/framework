@@ -1,0 +1,14 @@
+######### List of modules or services binding ########
+
+# include-resource.services
+# module-class
+# implementation-class
+# interface-class=implementation-class
+# interface-class#named=implementation-class
+
+framework.common.services
+framework.job.InMemory.services
+
+#test jobs
+com.appe.framework.job.ExecutionAction#HelloAction=com.appe.framework.job.HelloAction
+com.appe.framework.job.ExecutionAction#HelloChildAction=com.appe.framework.job.HelloChildAction
