@@ -15,9 +15,17 @@ import com.appe.framework.job.ext.JobQueue;
  */
 public class BlockingJobQueue implements JobQueue {
 	private BlockingQueue<JobInfo> queue;
+	/**
+	 * 
+	 */
 	public BlockingJobQueue() {
 		this(new LinkedBlockingQueue<JobInfo>());
 	}
+	
+	/**
+	 * 
+	 * @param queue
+	 */
 	public BlockingJobQueue(BlockingQueue<JobInfo> queue) {
 		this.queue = queue;
 	}

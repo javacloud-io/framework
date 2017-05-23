@@ -16,7 +16,7 @@ public interface ExecutionManager {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, ExecutionAction.Parameters parameters);
+	public String submitJob(String jobName, ExecutionState.Parameters parameters);
 	
 	/**
 	 * Select some jobs and its status. If no jobs is specify, system will return SOME JOBS that haven't completed PROCESSING YET.
@@ -24,7 +24,7 @@ public interface ExecutionManager {
 	 * @param jobIds
 	 * @return
 	 */
-	public Map<String, ExecutionStatus>  selectJobs(String...jobIds);
+	public Map<String, ExecutionState>  selectJobs(String...jobIds);
 	
 	/**
 	 * Only the worker nodes would need to do this. Assuming a worker node can process all tasks for now.

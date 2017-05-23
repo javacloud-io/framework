@@ -3,7 +3,7 @@ package com.appe.framework.job.internal;
 import java.util.Map;
 
 import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.job.ext.JobContext;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
@@ -34,7 +34,7 @@ public abstract class JobExecutor extends JobWorker {
 		
 		//TRACK CORRECT STATE
 		job.setState(JobState.BLOCKED);
-		job.setStatus(ExecutionStatus.FAIL);
+		job.setStatus(ExecutionState.Status.FAIL);
 		
 		//TODO: collect stack trace
 		jobManager.syncJob(job);
@@ -55,7 +55,7 @@ public abstract class JobExecutor extends JobWorker {
 			jobManager.syncJob(job);
 		} else {
 			job.setState(JobState.RETRYING);
-			job.setStatus(ExecutionStatus.RETRY);
+			job.setStatus(ExecutionState.Status.RETRY);
 			job.setRetryCount(job.getRetryCount() + 1);
 			
 			//PUSH JOB BACK TO JOB QUEUE
@@ -73,24 +73,37 @@ public abstract class JobExecutor extends JobWorker {
 	 * @param childJobs
 	 * @return
 	 */
-	public static final ExecutionStatus resolveStatus(Map<String, ExecutionStatus> childJobs) {
-		ExecutionStatus finalStatus = ExecutionStatus.SUCCESS;
-		for(Map.Entry<String, ExecutionStatus> entry: childJobs.entrySet()) {
-			ExecutionStatus status = entry.getValue();
+	public static final ExecutionState resolveJobState(Map<String, ExecutionState> childJobs) {
+		ExecutionState finalState = null;
+		for(Map.Entry<String, ExecutionState> entry: childJobs.entrySet()) {
+			ExecutionState state = entry.getValue();
 			
 			//STILL IN WAITING STATE => PUSH BACK TO QUEUE
-			if(!ExecutionStatus.isCompleted(status)) {
-				finalStatus = status;
+			if(!ExecutionState.Status.isCompleted(state.getStatus())) {
+				finalState = state;
 				break;
 			}
 			
-			//COMPLETED STATUS
-			if(status == ExecutionStatus.FAIL) {
-				finalStatus = ExecutionStatus.FAIL;
-			} else if(status == ExecutionStatus.WARNING && finalStatus != ExecutionStatus.FAIL) {
-				finalStatus = ExecutionStatus.WARNING;
+			//COMPLETION STATUS WARNING/FAIL
+			if(state.getStatus() == ExecutionState.Status.FAIL) {
+				finalState = state;
+			} else if(state.getStatus() == ExecutionState.Status.WARNING) {
+				if(finalState == null || finalState.getStatus() != ExecutionState.Status.FAIL) {
+					finalState = state;
+				}
 			}
 		}
-		return finalStatus;
+		return finalState;
+	}
+	
+	/**
+	 * return the final status if not => return SUCCESS
+	 * 
+	 * @param childJobs
+	 * @return
+	 */
+	public static final ExecutionState.Status resolveJobStatus(Map<String, ExecutionState> childJobs) {
+		ExecutionState finalState = resolveJobState(childJobs);
+		return (finalState == null? ExecutionState.Status.SUCCESS: finalState.getStatus());
 	}
 }

@@ -1,9 +1,8 @@
 package com.appe.framework.job.internal;
 
-import java.util.Map;
 
 import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.job.ext.JobContext;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
@@ -27,19 +26,19 @@ public class WaitingJobTracker extends JobExecutor {
 	@Override
 	protected void execute(JobInfo job) {
 		JobContext jobContext 		= jobManager.createJobContext(job);
-		Map<String, ExecutionStatus> childJobs = jobContext.selectJobs();
+		ExecutionState finalState 	= resolveJobState(jobContext.selectJobs());
 		
 		//RESOLVE FINAL RESULT
-		ExecutionStatus finalStatus = resolveStatus(childJobs);
+		ExecutionState.Status finalStatus = (finalState == null? ExecutionState.Status.SUCCESS: finalState.getStatus());
 		logger.debug("Tracking job: {} -> {}", job, finalStatus);
 		
-		job.setStatus(finalStatus);
-		if(!ExecutionStatus.isCompleted(finalStatus)) {
+		if(!ExecutionState.Status.isCompleted(finalStatus)) {
 			job.setState(JobState.WAITING);
 			
 			//PUSH BACK TO WAITING QUEUE
 			jobManager.submitJob(job);
 		} else {
+			job.setStatus(finalStatus);
 			ExecutionAction  jobAction = jobManager.resolveJobExecution(job);
 			notifyCompletion(jobAction, jobContext);
 		}

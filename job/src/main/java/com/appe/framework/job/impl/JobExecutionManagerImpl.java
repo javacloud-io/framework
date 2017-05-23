@@ -10,9 +10,8 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionManager;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
 import com.appe.framework.job.ext.JobSelector;
@@ -44,7 +43,7 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	 * Submit a job with NAME and parameters
 	 */
 	@Override
-	public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
+	public String submitJob(String jobName, ExecutionState.Parameters parameters) {
 		JobInfo job = new JobInfo(jobName, parameters);
 		return jobManager.submitJob(job);
 	}
@@ -53,7 +52,7 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	 * return some jobs and its statuses
 	 */
 	@Override
-	public Map<String, ExecutionStatus> selectJobs(String... jobIds) {
+	public Map<String, ExecutionState> selectJobs(String... jobIds) {
 		JobSelector selector = new JobSelector();
 		int limit = 10;
 		if(Objects.isEmpty(jobIds)) {
@@ -62,7 +61,7 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 			selector.setJobIds(Objects.asSet(jobIds));
 			limit = selector.getJobIds().size();
 		}
-		return jobManager.selectJobs(selector, limit);
+		return JobManager.toJobStates(jobManager.selectJobs(selector, limit));
 	}
 
 	/**

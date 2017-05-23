@@ -12,11 +12,11 @@ import com.appe.framework.util.Objects;
 public class HelloAction implements ExecutionAction {
 
 	@Override
-	public ExecutionStatus onExecute(ExecutionContext executionContext) {
+	public ExecutionState.Status onExecute(ExecutionContext executionContext) {
 		System.out.println("<" + executionContext.getRetryCount() + "> Hello world!");
 		executionContext.submitJob("HelloChildAction", null);
 		Objects.sleep(2, TimeUnit.SECONDS);
-		return ExecutionStatus.WAIT;
+		return ExecutionState.Status.WAIT;
 	}
 
 	@Override

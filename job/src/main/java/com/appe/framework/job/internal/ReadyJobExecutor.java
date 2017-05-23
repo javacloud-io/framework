@@ -1,7 +1,7 @@
 package com.appe.framework.job.internal;
 
 import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.job.ext.JobContext;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
@@ -42,17 +42,17 @@ public class ReadyJobExecutor extends JobExecutor {
 		//SWITCH JOB TO RUNNING STATE
 		job.setState(JobState.RUNNING);
 		jobManager.syncJob(job);
-		ExecutionStatus status = jobAction.onExecute(jobContext);
+		ExecutionState.Status status = jobAction.onExecute(jobContext);
 		
 		job.setStatus(status);
-		if(ExecutionStatus.isCompleted(status)) {
+		if(ExecutionState.Status.isCompleted(status)) {
 			notifyCompletion(jobAction, jobContext);
-		} else if(status == ExecutionStatus.WAIT) {
+		} else if(status == ExecutionState.Status.WAIT) {
 			job.setState(JobState.WAITING);
 			
 			//PUSH JOB BACK TO WAITING QUEUE
 			jobManager.submitJob(job);
-		} else if(status == ExecutionStatus.RETRY) {
+		} else if(status == ExecutionState.Status.RETRY) {
 			job.setState(JobState.RETRYING);
 			job.setRetryCount(job.getRetryCount() + 1);
 			

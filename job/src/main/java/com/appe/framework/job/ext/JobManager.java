@@ -1,10 +1,11 @@
 package com.appe.framework.job.ext;
 
+import java.util.List;
 import java.util.Map;
 
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.Objects;
 
@@ -29,7 +30,7 @@ public abstract class JobManager {
 	public JobContext createJobContext(JobInfo job) {
 		return new JobContext(job) {
 			@Override
-			public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
+			public String submitJob(String jobName, ExecutionState.Parameters parameters) {
 				//inherit a copy parent parameters
 				JobInfo childJob = new JobInfo(jobName, new JobParameters(getParameters()).set(parameters));
 				childJob.setParentId(getId());
@@ -37,11 +38,12 @@ public abstract class JobManager {
 				return JobManager.this.submitJob(childJob);
 			}
 			@Override
-			public Map<String, ExecutionStatus> selectJobs(String...jobIds) {
+			public Map<String, ExecutionState> selectJobs(String...jobIds) {
 				JobSelector selector = new JobSelector();
 				selector.setParentId(getId());
 				selector.setJobIds(Objects.asSet(jobIds));
-				return JobManager.this.selectJobs(selector, selector.getJobIds().size());
+				
+				return toJobStates(JobManager.this.selectJobs(selector, selector.getJobIds().size()));
 			}
 		};
 	}
@@ -97,7 +99,7 @@ public abstract class JobManager {
 	 * 
 	 * @return
 	 */
-	public abstract Map<String, ExecutionStatus> selectJobs(JobSelector selector, int limit);
+	public abstract List<JobInfo> selectJobs(JobSelector selector, int limit);
 	
 	/**
 	 * This have to be smart enough to know which changes can be update which is NOT. To correctly refresh
@@ -106,4 +108,18 @@ public abstract class JobManager {
 	 * @param job
 	 */
 	public abstract void syncJob(JobInfo job);
+	
+	/**
+	 * return the job states as MAP
+	 * 
+	 * @param jobs
+	 * @return
+	 */
+	public static Map<String, ExecutionState> toJobStates(List<JobInfo> jobs) {
+		Map<String, ExecutionState> states = Objects.asMap();
+		for(JobInfo job: jobs) {
+			states.put(job.getId(), job);
+		}
+		return states;
+	}
 }

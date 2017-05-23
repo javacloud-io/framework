@@ -25,7 +25,7 @@ public interface ExecutionContext {
 	/**
 	 * return the current status of the JOB is finish otherwise NULL
 	 */
-	public ExecutionStatus getStatus();
+	public ExecutionState.Status getStatus();
 	
 	/**
 	 * return run id if being executed more than ONE. in case of RETRY/LOOP
@@ -37,14 +37,14 @@ public interface ExecutionContext {
 	 * return current context parameters
 	 * @return
 	 */
-	public ExecutionAction.Parameters getParameters();
+	public ExecutionState.Parameters getParameters();
 	
 	/**
 	 * return the current context attributes
 	 * 
 	 * @return
 	 */
-	public ExecutionAction.Attributes getAttributes();
+	public ExecutionState.Attributes getAttributes();
 	
 	/**
 	 * return all children jobs or jobs with specific ID and its status if ANY FOUND.
@@ -52,7 +52,7 @@ public interface ExecutionContext {
 	 * @param jobIds
 	 * @return
 	 */
-	public Map<String, ExecutionStatus>  selectJobs(String...jobIds);
+	public Map<String, ExecutionState>  selectJobs(String...jobIds);
 	
 	/**
 	 * Submit child jobs using parent context
@@ -61,5 +61,5 @@ public interface ExecutionContext {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, ExecutionAction.Parameters parameters);
+	public String submitJob(String jobName, ExecutionState.Parameters parameters);
 }

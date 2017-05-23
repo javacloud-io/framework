@@ -2,8 +2,7 @@ package com.appe.framework.job.ext;
 
 import java.util.Date;
 
-import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.util.Identifiable;
 
 /**
@@ -12,14 +11,14 @@ import com.appe.framework.util.Identifiable;
  * @author ho
  *
  */
-public class JobInfo extends Identifiable<String> {
+public class JobInfo extends Identifiable<String> implements ExecutionState {
 	private String name;
 	private int retryCount;
 	private JobParameters parameters;
 	private JobParameters attributes;
 	
 	private JobState state;
-	private ExecutionStatus status;
+	private Status status;
 	
 	private String parentId;
 	
@@ -33,7 +32,7 @@ public class JobInfo extends Identifiable<String> {
 	 * @param name
 	 * @param parameters
 	 */
-	public JobInfo(String name, ExecutionAction.Parameters parameters) {
+	public JobInfo(String name, ExecutionState.Parameters parameters) {
 		this.name = name;
 		this.parameters = JobParameters.wrap(parameters);
 		this.attributes = new JobParameters();
@@ -95,10 +94,10 @@ public class JobInfo extends Identifiable<String> {
 	 * return execution status
 	 * @return
 	 */
-	public ExecutionStatus getStatus() {
+	public Status getStatus() {
 		return status;
 	}
-	public void setStatus(ExecutionStatus status) {
+	public void setStatus(Status status) {
 		this.status = status;
 	}
 	

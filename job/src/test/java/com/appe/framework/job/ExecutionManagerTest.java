@@ -40,8 +40,8 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	public void shutdown() {
 		//WAITING FOR ALL JOBS TO FINISHES
 		while(true) {
-			Map<String, ExecutionStatus> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
-			if(ExecutionStatus.isCompleted(JobExecutor.resolveStatus(jobs))) {
+			Map<String, ExecutionState> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
+			if(ExecutionState.Status.isCompleted(JobExecutor.resolveJobStatus(jobs))) {
 				break;
 			}
 			

@@ -13,10 +13,10 @@ import com.appe.framework.util.Objects;
 public class HelloChildAction implements ExecutionAction {
 
 	@Override
-	public ExecutionStatus onExecute(ExecutionContext executionContext) {
+	public ExecutionState.Status onExecute(ExecutionContext executionContext) {
 		System.out.println("Hello parents !");
 		Objects.sleep(1, TimeUnit.SECONDS);
-		return ExecutionStatus.SUCCESS;
+		return ExecutionState.Status.SUCCESS;
 	}
 
 	@Override

@@ -1,11 +1,10 @@
 package com.appe.framework.job.impl;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
 
-import com.appe.framework.job.ExecutionStatus;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
 import com.appe.framework.job.ext.JobQueue;
@@ -42,16 +41,26 @@ public class InMemoryJobManagerImpl extends JobManager {
 	 * Find all JOBs with correct information
 	 */
 	@Override
-	public Map<String, ExecutionStatus> selectJobs(JobSelector selector, int limit) {
-		Map<String, ExecutionStatus> jobs = Objects.asMap();
-		for(JobInfo job: jobStore.values()) {
-			if(isApplicableJob(job, selector)) {
-				jobs.put(job.getId(), job.getStatus());
+	public List<JobInfo> selectJobs(JobSelector selector, int limit) {
+		List<JobInfo> jobs = Objects.asList();
+		
+		if(!Objects.isEmpty(selector.getJobIds())) {
+			for(String jobId: selector.getJobIds()) {
+				JobInfo job = jobStore.get(jobId);
+				if(job != null && isApplicableJob(job, selector)) {
+					jobs.add(job);
+				}
 			}
-			
-			//COLLECT ENOUGH JOBS
-			if(limit > 0 && jobs.size() >= limit) {
-				break;
+		} else {
+			for(JobInfo job: jobStore.values()) {
+				if(isApplicableJob(job, selector)) {
+					jobs.add(job);
+				}
+				
+				//COLLECT ENOUGH JOBS
+				if(limit > 0 && jobs.size() >= limit) {
+					break;
+				}
 			}
 		}
 		return jobs;
@@ -75,15 +84,16 @@ public class InMemoryJobManagerImpl extends JobManager {
 	 */
 	static boolean isApplicableJob(JobInfo job, JobSelector selector) {
 		if(selector.getParentId() != null 
-				&& ! selector.getParentId().equals(job.getParentId())) {
+				&& !selector.getParentId().equals(job.getParentId())) {
 			return false;
 		}
-		if(selector.getJobIds() != null
-				&& ! selector.getJobIds().contains(job.getId())) {
-			return false;
-		}
+		//ALREADY satisfied
+		//if(selector.getJobIds() != null
+		//		&& ! selector.getJobIds().contains(job.getId())) {
+		//	return false;
+		//}
 		if(selector.getStates() != null
-				&& ! selector.getStates().contains(job.getState())) {
+				&& !selector.getStates().contains(job.getState())) {
 			return false;
 		}
 		return true;

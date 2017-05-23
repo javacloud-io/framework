@@ -3,7 +3,7 @@ package com.appe.framework.job.ext;
 
 import java.util.Set;
 
-import com.appe.framework.job.ExecutionAction;
+import com.appe.framework.job.ExecutionState;
 import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 /**
@@ -12,7 +12,7 @@ import com.appe.framework.util.Objects;
  * @author ho
  *
  */
-public final class JobParameters extends Dictionary implements ExecutionAction.Attributes {
+public final class JobParameters extends Dictionary implements ExecutionState.Attributes {
 	public JobParameters() {
 	}
 	/**
@@ -27,7 +27,7 @@ public final class JobParameters extends Dictionary implements ExecutionAction.A
 	 * Initialize the attributes SET
 	 * @param attributes
 	 */
-	public JobParameters(ExecutionAction.Parameters parameters) {
+	public JobParameters(ExecutionState.Parameters parameters) {
 		set(parameters);
 	}
 	
@@ -40,15 +40,15 @@ public final class JobParameters extends Dictionary implements ExecutionAction.A
 	
 	/**
 	 * Override set of new VALUEs
+	 * 
 	 * @param parameters
 	 * @return
 	 */
-	public JobParameters set(ExecutionAction.Parameters parameters) {
-		if(parameters == null) {
-			return this;
-		}
-		for(String key: parameters.keys()) {
-			set(key, parameters.get(key));
+	public JobParameters set(ExecutionState.Parameters parameters) {
+		if(parameters != null) {
+			for(String key: parameters.keys()) {
+				set(key, parameters.get(key));
+			}
 		}
 		return this;
 	}
@@ -58,7 +58,7 @@ public final class JobParameters extends Dictionary implements ExecutionAction.A
 	 * @param parameters
 	 * @return
 	 */
-	public static JobParameters wrap(ExecutionAction.Parameters parameters) {
+	public static JobParameters wrap(ExecutionState.Parameters parameters) {
 		if(parameters instanceof JobParameters) {
 			return (JobParameters)parameters;
 		}

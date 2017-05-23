@@ -1,8 +1,7 @@
 package com.appe.framework.job.ext;
 
-import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionContext;
-import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.ExecutionState;
 /**
  * 
  * @author ho
@@ -30,17 +29,17 @@ public abstract class JobContext implements ExecutionContext {
 	}
 
 	@Override
-	public ExecutionStatus getStatus() {
+	public ExecutionState.Status getStatus() {
 		return job.getStatus();
 	}
 
 	@Override
-	public ExecutionAction.Parameters getParameters() {
+	public ExecutionState.Parameters getParameters() {
 		return job.getParameters();
 	}
 
 	@Override
-	public ExecutionAction.Attributes getAttributes() {
+	public ExecutionState.Attributes getAttributes() {
 		return job.getAttributes();
 	}
 	
