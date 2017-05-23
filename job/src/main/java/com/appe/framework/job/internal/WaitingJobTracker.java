@@ -19,7 +19,7 @@ import com.appe.framework.job.ext.JobState;
  * @author ho
  *
  */
-public class WaitingJobTracker extends GenericJobWorker {
+public class WaitingJobTracker extends JobExecutor {
 	private static final Logger logger 	  = LoggerFactory.getLogger(WaitingJobTracker.class);
 	public WaitingJobTracker(JobManager jobManager) {
 		super(jobManager, jobManager.selectJobQueue(JobState.WAITING));

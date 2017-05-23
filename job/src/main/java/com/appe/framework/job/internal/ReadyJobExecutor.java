@@ -16,7 +16,7 @@ import com.appe.framework.job.ext.JobState;
  * @author ho
  *
  */
-public class ReadyJobExecutor extends GenericJobWorker {
+public class ReadyJobExecutor extends JobExecutor {
 	public ReadyJobExecutor(JobManager jobManager, JobPoller jobPoller) {
 		super(jobManager, jobPoller);
 	}

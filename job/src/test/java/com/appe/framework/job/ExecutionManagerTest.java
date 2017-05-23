@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.appe.framework.internal.GuiceTestCase;
-import com.appe.framework.job.internal.GenericJobWorker;
+import com.appe.framework.job.internal.JobExecutor;
 import com.appe.framework.util.Objects;
 
 /**
@@ -40,7 +40,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 		//WAITING FOR ALL JOBS TO FINISHES
 		while(true) {
 			Map<String, ExecutionStatus> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
-			if(ExecutionStatus.isCompleted(GenericJobWorker.resolveStatus(jobs))) {
+			if(ExecutionStatus.isCompleted(JobExecutor.resolveStatus(jobs))) {
 				break;
 			}
 			

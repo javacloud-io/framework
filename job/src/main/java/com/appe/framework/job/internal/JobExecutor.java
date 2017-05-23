@@ -17,9 +17,9 @@ import com.appe.framework.job.ext.JobWorker;
  * @author ho
  *
  */
-public abstract class GenericJobWorker extends JobWorker {
+public abstract class JobExecutor extends JobWorker {
 	protected JobManager jobManager;
-	public GenericJobWorker(JobManager jobManager, JobPoller jobPoller) {
+	public JobExecutor(JobManager jobManager, JobPoller jobPoller) {
 		super(jobPoller);
 		this.jobManager = jobManager;
 	}
