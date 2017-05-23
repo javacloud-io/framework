@@ -1,12 +1,12 @@
-package com.appe.framework.job.impl;
+package com.appe.framework.job.internal;
 
 import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionStatus;
-import com.appe.framework.job.internal.JobContext;
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobManager;
-import com.appe.framework.job.internal.JobPoller;
-import com.appe.framework.job.internal.JobState;
+import com.appe.framework.job.ext.JobContext;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobManager;
+import com.appe.framework.job.ext.JobPoller;
+import com.appe.framework.job.ext.JobState;
 /**
  * Make sure execution jobQueue has to be smart enough to redirect WAITING jobs to waiting queue.
  * 
@@ -16,8 +16,8 @@ import com.appe.framework.job.internal.JobState;
  * @author ho
  *
  */
-public class JobExecutor extends JobWorker {
-	public JobExecutor(JobManager jobManager, JobPoller jobPoller) {
+public class ReadyJobExecutor extends GenericJobWorker {
+	public ReadyJobExecutor(JobManager jobManager, JobPoller jobPoller) {
 		super(jobManager, jobPoller);
 	}
 	
@@ -27,7 +27,7 @@ public class JobExecutor extends JobWorker {
 	 * 
 	 * @param jobManager
 	 */
-	public JobExecutor(JobManager jobManager) {
+	public ReadyJobExecutor(JobManager jobManager) {
 		this(jobManager, jobManager.selectJobQueue(JobState.READY));
 	}
 	

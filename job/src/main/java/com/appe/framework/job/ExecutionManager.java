@@ -2,8 +2,6 @@ package com.appe.framework.job;
 
 import java.util.Map;
 
-import com.appe.framework.job.ExecutionContext.Parameters;
-
 /**
  * Using AppeRegistry to lookup JOB by its NAME with instance of JobExecutable
  * 
@@ -18,7 +16,7 @@ public interface ExecutionManager {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, Parameters parameters);
+	public String submitJob(String jobName, ExecutionAction.Parameters parameters);
 	
 	/**
 	 * Select some jobs and its status. If no jobs is specify, system will return SOME JOBS that haven't completed PROCESSING YET.

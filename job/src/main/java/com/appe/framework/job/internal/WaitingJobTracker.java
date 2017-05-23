@@ -1,4 +1,4 @@
-package com.appe.framework.job.impl;
+package com.appe.framework.job.internal;
 
 import java.util.Map;
 
@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionStatus;
-import com.appe.framework.job.internal.JobContext;
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobManager;
-import com.appe.framework.job.internal.JobState;
+import com.appe.framework.job.ext.JobContext;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobManager;
+import com.appe.framework.job.ext.JobState;
 
 /**
  * Basic logic for WAITING job tracking, the process starting by pooling JOB from WAITING queue then cross check
@@ -19,9 +19,9 @@ import com.appe.framework.job.internal.JobState;
  * @author ho
  *
  */
-public class JobTracker extends JobWorker {
-	private static final Logger logger 	  = LoggerFactory.getLogger(JobTracker.class);
-	public JobTracker(JobManager jobManager) {
+public class WaitingJobTracker extends GenericJobWorker {
+	private static final Logger logger 	  = LoggerFactory.getLogger(WaitingJobTracker.class);
+	public WaitingJobTracker(JobManager jobManager) {
 		super(jobManager, jobManager.selectJobQueue(JobState.WAITING));
 	}
 	

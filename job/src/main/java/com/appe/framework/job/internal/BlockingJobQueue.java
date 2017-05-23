@@ -1,11 +1,11 @@
-package com.appe.framework.job.impl;
+package com.appe.framework.job.internal;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobQueue;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobQueue;
 
 /**
  * Simple in memory blocking Queue, not respect the timeOu

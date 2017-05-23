@@ -1,15 +1,15 @@
-package com.appe.framework.job.impl;
+package com.appe.framework.job.internal;
 
 import java.util.Map;
 
 import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionStatus;
-import com.appe.framework.job.internal.JobContext;
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobManager;
-import com.appe.framework.job.internal.JobPoller;
-import com.appe.framework.job.internal.JobExecutable;
-import com.appe.framework.job.internal.JobState;
+import com.appe.framework.job.ext.JobContext;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobManager;
+import com.appe.framework.job.ext.JobPoller;
+import com.appe.framework.job.ext.JobState;
+import com.appe.framework.job.ext.JobWorker;
 
 /**
  * Integrate with JobManager to safely set the correct JOB STATE
@@ -17,9 +17,9 @@ import com.appe.framework.job.internal.JobState;
  * @author ho
  *
  */
-public abstract class JobWorker extends JobExecutable {
+public abstract class GenericJobWorker extends JobWorker {
 	protected JobManager jobManager;
-	public JobWorker(JobManager jobManager, JobPoller jobPoller) {
+	public GenericJobWorker(JobManager jobManager, JobPoller jobPoller) {
 		super(jobPoller);
 		this.jobManager = jobManager;
 	}

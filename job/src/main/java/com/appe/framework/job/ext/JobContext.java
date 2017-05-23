@@ -1,5 +1,6 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 
+import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionContext;
 import com.appe.framework.job.ExecutionStatus;
 /**
@@ -34,12 +35,12 @@ public abstract class JobContext implements ExecutionContext {
 	}
 
 	@Override
-	public Parameters getParameters() {
+	public ExecutionAction.Parameters getParameters() {
 		return null;
 	}
 
 	@Override
-	public Attributes getAttributes() {
+	public ExecutionAction.Attributes getAttributes() {
 		return null;
 	}
 	

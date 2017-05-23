@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 /**
  * 1. A job just submit will has CREATED state
  * 2. When job get pickup by worker it state will turn to READY

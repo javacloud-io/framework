@@ -1,4 +1,5 @@
 package com.appe.framework.job;
+
 /**
  * A unit of execution will be invoke by ExecutionManager when it's ready to be execute.
  * Mostly it's state less action, any states will be local within execution
@@ -7,6 +8,30 @@ package com.appe.framework.job;
  *
  */
 public interface ExecutionAction {
+	/**
+	 * Parameters to feed into JOB
+	 */
+	public interface Parameters {
+		/**
+		 * 
+		 * @param name
+		 * @return
+		 */
+		public <T> T get(String name);
+	}
+	
+	/**
+	 * Attributes to persist state, can passing down to children
+	 */
+	public interface Attributes extends Parameters {
+		/**
+		 * 
+		 * @param name
+		 * @param value
+		 */
+		public <T> void set(String name, T value);
+	}
+	
 	/**
 	 * Invoke when JOB is ready to execute, an execution return:
 	 * 

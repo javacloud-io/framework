@@ -10,30 +10,6 @@ import java.util.Map;
  */
 public interface ExecutionContext {
 	/**
-	 * parameters to feed into JOB
-	 */
-	public interface Parameters {
-		/**
-		 * 
-		 * @param name
-		 * @return
-		 */
-		public <T> T get(String name);
-	}
-	
-	/**
-	 * attributes to persist state, can passing down to generation/children
-	 */
-	public interface Attributes extends Parameters {
-		/**
-		 * 
-		 * @param name
-		 * @param value
-		 */
-		public <T> void set(String name, T value);
-	}
-	
-	/**
 	 * return UNIQUE execution ID if it still alive
 	 * 
 	 * @return
@@ -61,14 +37,14 @@ public interface ExecutionContext {
 	 * return current context parameters
 	 * @return
 	 */
-	public Parameters getParameters();
+	public ExecutionAction.Parameters getParameters();
 	
 	/**
 	 * return the current context attributes
 	 * 
 	 * @return
 	 */
-	public Attributes getAttributes();
+	public ExecutionAction.Attributes getAttributes();
 	
 	/**
 	 * return all children jobs or jobs with specific ID and its status if ANY FOUND.
@@ -85,5 +61,5 @@ public interface ExecutionContext {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, Parameters parameters);
+	public String submitJob(String jobName, ExecutionAction.Parameters parameters);
 }

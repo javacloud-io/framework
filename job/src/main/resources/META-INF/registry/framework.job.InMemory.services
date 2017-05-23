@@ -1,5 +1,5 @@
 # Default framework data InMemory registry
 #
 #
-com.appe.framework.job.internal.JobManager=com.appe.framework.job.impl.InMemoryJobManagerImpl
+com.appe.framework.job.ext.JobManager=com.appe.framework.job.impl.InMemoryJobManagerImpl
 com.appe.framework.job.ExecutionManager=com.appe.framework.job.impl.JobExecutionManagerImpl

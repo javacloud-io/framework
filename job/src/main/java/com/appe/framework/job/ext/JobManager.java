@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 
 import java.util.Map;
 
@@ -29,7 +29,7 @@ public abstract class JobManager {
 	public JobContext createJobContext(JobInfo job) {
 		return new JobContext(job) {
 			@Override
-			public String submitJob(String jobName, Parameters parameters) {
+			public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
 				JobInfo childJob = new JobInfo(jobName);
 				//TODO: set parentId, parameters, parent attributes
 				childJob.setParentId(getId());

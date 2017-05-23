@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 
 /**
  * Use to submit job back to processing queue

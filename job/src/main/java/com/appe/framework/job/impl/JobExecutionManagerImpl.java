@@ -10,13 +10,15 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.job.ExecutionContext.Parameters;
+import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionManager;
 import com.appe.framework.job.ExecutionStatus;
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobState;
-import com.appe.framework.job.internal.JobManager;
-import com.appe.framework.job.internal.JobSelector;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobManager;
+import com.appe.framework.job.ext.JobSelector;
+import com.appe.framework.job.ext.JobState;
+import com.appe.framework.job.internal.ReadyJobExecutor;
+import com.appe.framework.job.internal.WaitingJobTracker;
 import com.appe.framework.util.Objects;
 /**
  * Simple job execution with 2 different QEUEUE:
@@ -42,7 +44,7 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	 * Submit a job with NAME and parameters
 	 */
 	@Override
-	public String submitJob(String jobName, Parameters parameters) {
+	public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
 		JobInfo job = new JobInfo(jobName);
 		//TODO: add parameters
 		return jobManager.submitJob(job);
@@ -82,9 +84,9 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 		logger.info("Start executor with {} workers and {} tracker", numberOfWorkers, 1);
 		executorService = createExecutor(numberOfWorkers + 1);
 		for(int i = 0; i < numberOfWorkers; i ++) {
-			executorService.submit(new JobExecutor(jobManager));
+			executorService.submit(new ReadyJobExecutor(jobManager));
 		}
-		executorService.submit(new JobTracker(jobManager));
+		executorService.submit(new WaitingJobTracker(jobManager));
 		return true;
 	}
 	

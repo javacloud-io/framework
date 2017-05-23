@@ -6,11 +6,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Singleton;
 
 import com.appe.framework.job.ExecutionStatus;
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobManager;
-import com.appe.framework.job.internal.JobQueue;
-import com.appe.framework.job.internal.JobSelector;
-import com.appe.framework.job.internal.JobState;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobManager;
+import com.appe.framework.job.ext.JobQueue;
+import com.appe.framework.job.ext.JobSelector;
+import com.appe.framework.job.ext.JobState;
+import com.appe.framework.job.internal.BlockingJobQueue;
 import com.appe.framework.util.Objects;
 /**
  * Simple In-Memory JOB management

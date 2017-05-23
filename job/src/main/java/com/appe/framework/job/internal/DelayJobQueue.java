@@ -1,12 +1,12 @@
-package com.appe.framework.job.impl;
+package com.appe.framework.job.internal;
 
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.appe.framework.job.internal.JobInfo;
-import com.appe.framework.job.internal.JobQueue;
+import com.appe.framework.job.ext.JobInfo;
+import com.appe.framework.job.ext.JobQueue;
 import com.appe.framework.util.Objects;
 /**
  * 

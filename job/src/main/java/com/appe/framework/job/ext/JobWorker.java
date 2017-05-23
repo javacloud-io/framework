@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
  * @author ho
  *
  */
-public abstract class JobExecutable implements Runnable {
-	private static final Logger logger 	  = LoggerFactory.getLogger(JobExecutable.class);
+public abstract class JobWorker implements Runnable {
+	private static final Logger logger 	  = LoggerFactory.getLogger(JobWorker.class);
 	private static final int WAIT_TIMEOUT = (int)TimeUnit.SECONDS.convert(1, TimeUnit.HOURS);	//DEFAULT 1 HOUR EACH?
 	
 	private final JobPoller jobPoller;
-	protected JobExecutable(JobPoller jobPoller) {
+	protected JobWorker(JobPoller jobPoller) {
 		this.jobPoller = jobPoller;
 	}
 	
@@ -31,9 +31,9 @@ public abstract class JobExecutable implements Runnable {
 			try {
 				job =  jobPoller.poll(WAIT_TIMEOUT);
 				if(job != null) {
-					logger.debug("Executing job: {}", job);
+					logger.debug("Before executing job: {}", job);
 					execute(job);
-					logger.debug("Completed job: {}", job);
+					logger.debug("After executing job: {}", job);
 				}
 			} catch(InterruptedException ex) {
 				if(job == null || onInterrupted(job)) {

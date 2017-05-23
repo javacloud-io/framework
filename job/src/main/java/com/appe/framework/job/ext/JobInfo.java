@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.ext;
 
 import java.util.Date;
 
