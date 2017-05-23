@@ -20,7 +20,7 @@ public class HelloChildAction implements ExecutionAction {
 	}
 
 	@Override
-	public boolean onCompleted(ExecutionContext executionContext) {
+	public boolean onCompletion(ExecutionContext executionContext) {
 		System.out.println("Bye parents!!!");
 		return true;
 	}

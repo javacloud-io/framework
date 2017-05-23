@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public abstract class JobWorker implements Runnable {
-	private static final Logger logger 	  = LoggerFactory.getLogger(JobWorker.class);
+	protected static final Logger logger  = LoggerFactory.getLogger(JobWorker.class);
 	private static final int WAIT_TIMEOUT = (int)TimeUnit.SECONDS.convert(1, TimeUnit.HOURS);	//DEFAULT 1 HOUR EACH?
 	
 	private final JobPoller jobPoller;

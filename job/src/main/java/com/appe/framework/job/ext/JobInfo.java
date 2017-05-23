@@ -2,6 +2,7 @@ package com.appe.framework.job.ext;
 
 import java.util.Date;
 
+import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionStatus;
 import com.appe.framework.util.Identifiable;
 
@@ -14,18 +15,30 @@ import com.appe.framework.util.Identifiable;
 public class JobInfo extends Identifiable<String> {
 	private String name;
 	private int retryCount;
+	private JobParameters parameters;
+	private JobParameters attributes;
 	
 	private JobState state;
 	private ExecutionStatus status;
 	
 	private String parentId;
+	
 	private Date created;
 	private Date updated;
 	public JobInfo() {
 	}
-	public JobInfo(String name) {
+	
+	/**
+	 * 
+	 * @param name
+	 * @param parameters
+	 */
+	public JobInfo(String name, ExecutionAction.Parameters parameters) {
 		this.name = name;
+		this.parameters = JobParameters.wrap(parameters);
+		this.attributes = new JobParameters();
 	}
+	
 	/**
 	 * 
 	 * @return
@@ -43,6 +56,28 @@ public class JobInfo extends Identifiable<String> {
 	}
 	public void setRetryCount(int retryCount) {
 		this.retryCount = retryCount;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public JobParameters getParameters() {
+		return parameters;
+	}
+	public void setParameters(JobParameters parameters) {
+		this.parameters = parameters;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public JobParameters getAttributes() {
+		return attributes;
+	}
+	public void setAttributes(JobParameters attributes) {
+		this.attributes = attributes;
 	}
 	
 	/**
@@ -100,6 +135,9 @@ public class JobInfo extends Identifiable<String> {
 		this.updated = updated;
 	}
 	
+	/**
+	 * Not include the sensitive of parameters & attributes
+	 */
 	@Override
 	public String toString() {
 		return "{id=" + getId() + ", parentId=" + parentId + ", retryCount=" + retryCount + ", state=" + state + ", status=" + status + "}";

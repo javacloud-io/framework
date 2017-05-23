@@ -50,7 +50,7 @@ public abstract class JobExecutor extends JobWorker {
 		JobInfo job = jobContext.getJob();
 		
 		//IF JOB IS COMPLETED => NOTHING ELSE NEED TO BE DONE
-		if(jobAction.onCompleted(jobContext)) {
+		if(jobAction.onCompletion(jobContext)) {
 			job.setState(JobState.TERMINATED);
 			jobManager.syncJob(job);
 		} else {

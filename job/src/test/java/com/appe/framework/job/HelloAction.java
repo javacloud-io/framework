@@ -20,7 +20,7 @@ public class HelloAction implements ExecutionAction {
 	}
 
 	@Override
-	public boolean onCompleted(ExecutionContext executionContext) {
+	public boolean onCompletion(ExecutionContext executionContext) {
 		if(executionContext.getRetryCount() < 3) {
 			return false;
 		}

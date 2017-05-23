@@ -36,12 +36,12 @@ public abstract class JobContext implements ExecutionContext {
 
 	@Override
 	public ExecutionAction.Parameters getParameters() {
-		return null;
+		return job.getParameters();
 	}
 
 	@Override
 	public ExecutionAction.Attributes getAttributes() {
-		return null;
+		return job.getAttributes();
 	}
 	
 	/**

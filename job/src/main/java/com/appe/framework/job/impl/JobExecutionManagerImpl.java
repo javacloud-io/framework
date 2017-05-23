@@ -45,8 +45,7 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	 */
 	@Override
 	public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
-		JobInfo job = new JobInfo(jobName);
-		//TODO: add parameters
+		JobInfo job = new JobInfo(jobName, parameters);
 		return jobManager.submitJob(job);
 	}
 	

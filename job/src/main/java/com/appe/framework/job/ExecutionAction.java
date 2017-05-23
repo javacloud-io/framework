@@ -1,5 +1,7 @@
 package com.appe.framework.job;
 
+import java.util.Set;
+
 /**
  * A unit of execution will be invoke by ExecutionManager when it's ready to be execute.
  * Mostly it's state less action, any states will be local within execution
@@ -9,27 +11,34 @@ package com.appe.framework.job;
  */
 public interface ExecutionAction {
 	/**
-	 * Parameters to feed into JOB
+	 * Parameters to feed into JOB, T is simple type
 	 */
 	public interface Parameters {
 		/**
+		 * return READONLY keys
 		 * 
-		 * @param name
 		 * @return
 		 */
-		public <T> T get(String name);
+		public Set<String> keys();
+		
+		/**
+		 * 
+		 * @param key
+		 * @return
+		 */
+		public <T> T get(String key);
 	}
 	
 	/**
-	 * Attributes to persist state, can passing down to children
+	 * Attributes to persist state across RETRY
 	 */
 	public interface Attributes extends Parameters {
 		/**
 		 * 
-		 * @param name
+		 * @param key
 		 * @param value
 		 */
-		public <T> void set(String name, T value);
+		public <T> void set(String key, T value);
 	}
 	
 	/**
@@ -52,5 +61,5 @@ public interface ExecutionAction {
 	 * @param executionContext
 	 * @return
 	 */
-	public boolean onCompleted(ExecutionContext executionContext);
+	public boolean onCompletion(ExecutionContext executionContext);
 }

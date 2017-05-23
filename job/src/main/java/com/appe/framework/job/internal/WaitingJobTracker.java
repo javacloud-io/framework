@@ -2,9 +2,6 @@ package com.appe.framework.job.internal;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionStatus;
 import com.appe.framework.job.ext.JobContext;
@@ -20,7 +17,6 @@ import com.appe.framework.job.ext.JobState;
  *
  */
 public class WaitingJobTracker extends JobExecutor {
-	private static final Logger logger 	  = LoggerFactory.getLogger(WaitingJobTracker.class);
 	public WaitingJobTracker(JobManager jobManager) {
 		super(jobManager, jobManager.selectJobQueue(JobState.WAITING));
 	}
@@ -35,7 +31,7 @@ public class WaitingJobTracker extends JobExecutor {
 		
 		//RESOLVE FINAL RESULT
 		ExecutionStatus finalStatus = resolveStatus(childJobs);
-		logger.debug("Status: {}, waiting job: {}", finalStatus, job);
+		logger.debug("Tracking job: {} -> {}", job, finalStatus);
 		
 		job.setStatus(finalStatus);
 		if(!ExecutionStatus.isCompleted(finalStatus)) {

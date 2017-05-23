@@ -30,8 +30,8 @@ public abstract class JobManager {
 		return new JobContext(job) {
 			@Override
 			public String submitJob(String jobName, ExecutionAction.Parameters parameters) {
-				JobInfo childJob = new JobInfo(jobName);
-				//TODO: set parentId, parameters, parent attributes
+				//inherit a copy parent parameters
+				JobInfo childJob = new JobInfo(jobName, new JobParameters(getParameters()).set(parameters));
 				childJob.setParentId(getId());
 				
 				return JobManager.this.submitJob(childJob);
