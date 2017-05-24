@@ -1,6 +1,6 @@
 package com.appe.framework.job.internal;
 
-import java.util.Map;
+import java.util.List;
 
 import com.appe.framework.job.ExecutionAction;
 import com.appe.framework.job.ExecutionState;
@@ -73,11 +73,9 @@ public abstract class JobExecutor extends JobWorker {
 	 * @param childJobs
 	 * @return
 	 */
-	public static final ExecutionState resolveJobState(Map<String, ExecutionState> childJobs) {
+	public static final ExecutionState resolveJobState(List<ExecutionState> childJobs) {
 		ExecutionState finalState = null;
-		for(Map.Entry<String, ExecutionState> entry: childJobs.entrySet()) {
-			ExecutionState state = entry.getValue();
-			
+		for(ExecutionState state: childJobs) {
 			//STILL IN WAITING STATE => PUSH BACK TO QUEUE
 			if(!ExecutionState.Status.isCompleted(state.getStatus())) {
 				finalState = state;
@@ -102,7 +100,7 @@ public abstract class JobExecutor extends JobWorker {
 	 * @param childJobs
 	 * @return
 	 */
-	public static final ExecutionState.Status resolveJobStatus(Map<String, ExecutionState> childJobs) {
+	public static final ExecutionState.Status resolveJobStatus(List<ExecutionState> childJobs) {
 		ExecutionState finalState = resolveJobState(childJobs);
 		return (finalState == null? ExecutionState.Status.SUCCESS: finalState.getStatus());
 	}

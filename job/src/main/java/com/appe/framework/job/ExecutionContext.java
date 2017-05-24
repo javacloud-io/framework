@@ -1,6 +1,6 @@
 package com.appe.framework.job;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Job execution will have context parameters/attributes with NAME/VALUE
@@ -18,6 +18,7 @@ public interface ExecutionContext {
 	
 	/**
 	 * return NAME of execution action
+	 * 
 	 * @return
 	 */
 	public String getName();
@@ -52,7 +53,7 @@ public interface ExecutionContext {
 	 * @param jobIds
 	 * @return
 	 */
-	public Map<String, ExecutionState>  selectJobs(String...jobIds);
+	public List<ExecutionState>  selectJobs(String...jobIds);
 	
 	/**
 	 * Submit child jobs using parent context

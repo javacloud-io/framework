@@ -1,7 +1,6 @@
 package com.appe.framework.job.ext;
 
 import java.util.List;
-import java.util.Map;
 
 import com.appe.framework.AppeRegistry;
 import com.appe.framework.job.ExecutionAction;
@@ -37,13 +36,13 @@ public abstract class JobManager {
 				
 				return JobManager.this.submitJob(childJob);
 			}
+			
 			@Override
-			public Map<String, ExecutionState> selectJobs(String...jobIds) {
-				JobSelector selector = new JobSelector();
-				selector.setParentId(getId());
-				selector.setJobIds(Objects.asSet(jobIds));
-				
-				return toJobStates(JobManager.this.selectJobs(selector, selector.getJobIds().size()));
+			public List<ExecutionState> selectJobs(String...jobIds) {
+				JobSelector selector = new JobSelector()
+					.withParentId(getId())
+					.withJobIds(jobIds);
+				return Objects.cast(JobManager.this.selectJobs(selector, selector.getJobIds().size()));
 			}
 		};
 	}
@@ -77,7 +76,7 @@ public abstract class JobManager {
 		
 		//SYNC METADATA & SUBMIT TO CORRECT QUEUE
 		syncJob(job);
-		selectJobQueue(job.getState()).offer(job);
+		bindJobQueue(job.getState()).offer(job);
 		
 		return job.getId();
 	}
@@ -89,7 +88,7 @@ public abstract class JobManager {
 	 * @param state
 	 * @return
 	 */
-	public abstract JobQueue selectJobQueue(JobState state);
+	public abstract JobQueue bindJobQueue(JobState state);
 	
 	/**
 	 * return a map of JOBs and it status which satisfy the selector
@@ -108,18 +107,4 @@ public abstract class JobManager {
 	 * @param job
 	 */
 	public abstract void syncJob(JobInfo job);
-	
-	/**
-	 * return the job states as MAP
-	 * 
-	 * @param jobs
-	 * @return
-	 */
-	public static Map<String, ExecutionState> toJobStates(List<JobInfo> jobs) {
-		Map<String, ExecutionState> states = Objects.asMap();
-		for(JobInfo job: jobs) {
-			states.put(job.getId(), job);
-		}
-		return states;
-	}
 }

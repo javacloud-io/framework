@@ -1,6 +1,6 @@
 package com.appe.framework.job;
 
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -40,7 +40,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	public void shutdown() {
 		//WAITING FOR ALL JOBS TO FINISHES
 		while(true) {
-			Map<String, ExecutionState> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
+			List<ExecutionState> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
 			if(ExecutionState.Status.isCompleted(JobExecutor.resolveJobStatus(jobs))) {
 				break;
 			}

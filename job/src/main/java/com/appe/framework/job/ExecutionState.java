@@ -82,6 +82,11 @@ public interface ExecutionState {
 	}
 	
 	/**
+	 * JOB ID
+	 * @return
+	 */
+	public String getId();
+	/**
 	 * return the current status
 	 * 
 	 * @return

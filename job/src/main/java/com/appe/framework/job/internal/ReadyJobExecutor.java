@@ -28,7 +28,7 @@ public class ReadyJobExecutor extends JobExecutor {
 	 * @param jobManager
 	 */
 	public ReadyJobExecutor(JobManager jobManager) {
-		this(jobManager, jobManager.selectJobQueue(JobState.READY));
+		this(jobManager, jobManager.bindJobQueue(JobState.READY));
 	}
 	
 	/**

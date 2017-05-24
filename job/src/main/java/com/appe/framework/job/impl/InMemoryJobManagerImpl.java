@@ -30,7 +30,7 @@ public class InMemoryJobManagerImpl extends JobManager {
 	 * 
 	 */
 	@Override
-	public JobQueue selectJobQueue(JobState state) {
+	public JobQueue bindJobQueue(JobState state) {
 		if(state == JobState.WAITING) {
 			return trackerQueue;
 		}

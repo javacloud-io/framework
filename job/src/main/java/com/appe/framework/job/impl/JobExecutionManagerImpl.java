@@ -1,6 +1,6 @@
 package com.appe.framework.job.impl;
 
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -15,7 +15,6 @@ import com.appe.framework.job.ExecutionState;
 import com.appe.framework.job.ext.JobInfo;
 import com.appe.framework.job.ext.JobManager;
 import com.appe.framework.job.ext.JobSelector;
-import com.appe.framework.job.ext.JobState;
 import com.appe.framework.job.internal.ReadyJobExecutor;
 import com.appe.framework.job.internal.WaitingJobTracker;
 import com.appe.framework.util.Objects;
@@ -52,16 +51,16 @@ public class JobExecutionManagerImpl implements ExecutionManager {
 	 * return some jobs and its statuses
 	 */
 	@Override
-	public Map<String, ExecutionState> selectJobs(String... jobIds) {
+	public List<ExecutionState> selectJobs(String... jobIds) {
 		JobSelector selector = new JobSelector();
-		int limit = 10;
+		int limit;
 		if(Objects.isEmpty(jobIds)) {
-			selector.setStates(Objects.asSet(JobState.RETRYING, JobState.RUNNING, JobState.WAITING));
+			limit = 100;
 		} else {
 			selector.setJobIds(Objects.asSet(jobIds));
 			limit = selector.getJobIds().size();
 		}
-		return JobManager.toJobStates(jobManager.selectJobs(selector, limit));
+		return Objects.cast(jobManager.selectJobs(selector, limit));
 	}
 
 	/**

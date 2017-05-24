@@ -12,12 +12,14 @@ import com.appe.framework.job.ext.JobState;
  * Basic logic for WAITING job tracking, the process starting by pooling JOB from WAITING queue then cross check
  * to see if all its children terminated or not. Then combine STATUS for parent JOB.
  * 
+ * To be more efficient we need to change how to tracking JOB:
+ * 1. 
  * @author ho
  *
  */
 public class WaitingJobTracker extends JobExecutor {
 	public WaitingJobTracker(JobManager jobManager) {
-		super(jobManager, jobManager.selectJobQueue(JobState.WAITING));
+		super(jobManager, jobManager.bindJobQueue(JobState.WAITING));
 	}
 	
 	/**

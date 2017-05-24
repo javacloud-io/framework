@@ -85,6 +85,16 @@ public final class Objects {
 	}
 	
 	/**
+	 * Generic cast the OBJECT without warning
+	 * @param v
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T cast(Object v) {
+		return (T)v;
+	}
+	
+	/**
 	 * Assuming the coming list value doesn't have comma character.
 	 * 
 	 * @param name
