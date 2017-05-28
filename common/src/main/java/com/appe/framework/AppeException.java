@@ -1,8 +1,8 @@
 package com.appe.framework;
 
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.zip.CRC32;
+
+import com.appe.framework.util.Objects;
 
 /**
  * Unchecked exception to deal with most of the RUNTIME problem. Just to avoid alot of try cache.
@@ -96,13 +96,12 @@ public class AppeException extends RuntimeException {
 	 * @param causedBy
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static final <T extends Throwable> T findCause(Throwable t, Class<T> causedBy) {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
 			//OK, found it...
 			if(causedBy.isAssignableFrom(cause.getClass())) {
-				return (T)cause;
+				return Objects.cast(cause);
 			}
 			//OK, recursive
 			cause = cause.getCause();
@@ -147,21 +146,6 @@ public class AppeException extends RuntimeException {
 			crc.update(message.getBytes());
 		}
 		return Long.toHexString(crc.getValue()).toUpperCase();
-	}
-	
-	/**
-	 * Dump stack track to a writer in format of: message/n/trace
-	 * 
-	 * @param cause
-	 * @param writer
-	 */
-	public static final void dumpStackTrace(Throwable cause, Writer writer) {
-		PrintWriter printer = new PrintWriter(writer);
-		printer.print(cause.getMessage());
-		printer.println();
-		
-		cause.printStackTrace(printer);
-		printer.flush();
 	}
 	
 	/**

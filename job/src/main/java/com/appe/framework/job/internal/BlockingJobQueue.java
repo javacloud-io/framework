@@ -4,8 +4,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.appe.framework.job.ext.JobInfo;
-import com.appe.framework.job.ext.JobQueue;
+import com.appe.framework.job.execution.JobQueue;
+import com.appe.framework.job.execution.JobTask;
 
 /**
  * Simple in memory blocking Queue, not respect the timeOu
@@ -14,19 +14,19 @@ import com.appe.framework.job.ext.JobQueue;
  *
  */
 public class BlockingJobQueue implements JobQueue {
-	private BlockingQueue<JobInfo> queue;
+	private BlockingQueue<JobTask> queue;
 	/**
 	 * 
 	 */
 	public BlockingJobQueue() {
-		this(new LinkedBlockingQueue<JobInfo>());
+		this(new LinkedBlockingQueue<JobTask>());
 	}
 	
 	/**
 	 * 
 	 * @param queue
 	 */
-	public BlockingJobQueue(BlockingQueue<JobInfo> queue) {
+	public BlockingJobQueue(BlockingQueue<JobTask> queue) {
 		this.queue = queue;
 	}
 	
@@ -34,7 +34,7 @@ public class BlockingJobQueue implements JobQueue {
 	 * 
 	 */
 	@Override
-	public JobInfo poll(int timeoutSeconds) throws InterruptedException {
+	public JobTask poll(int timeoutSeconds) throws InterruptedException {
 		return queue.poll(timeoutSeconds, TimeUnit.SECONDS);
 	}
 	
@@ -42,7 +42,7 @@ public class BlockingJobQueue implements JobQueue {
 	 * IGNORING DELAY!!!
 	 */
 	@Override
-	public void offer(JobInfo job) {
+	public void offer(JobTask job) {
 		queue.offer(job);
 	}
 }

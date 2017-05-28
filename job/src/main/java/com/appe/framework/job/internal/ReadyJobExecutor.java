@@ -1,12 +1,12 @@
 package com.appe.framework.job.internal;
 
-import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionState;
-import com.appe.framework.job.ext.JobContext;
-import com.appe.framework.job.ext.JobInfo;
-import com.appe.framework.job.ext.JobManager;
-import com.appe.framework.job.ext.JobPoller;
-import com.appe.framework.job.ext.JobState;
+import com.appe.framework.job.ExecutionListener;
+import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.execution.JobContext;
+import com.appe.framework.job.execution.JobPoller;
+import com.appe.framework.job.execution.JobScheduler;
+import com.appe.framework.job.management.JobInfo;
+import com.appe.framework.job.management.JobState;
 /**
  * Make sure execution jobQueue has to be smart enough to redirect WAITING jobs to waiting queue.
  * 
@@ -17,47 +17,46 @@ import com.appe.framework.job.ext.JobState;
  *
  */
 public class ReadyJobExecutor extends JobExecutor {
-	public ReadyJobExecutor(JobManager jobManager, JobPoller jobPoller) {
-		super(jobManager, jobPoller);
-	}
-	
 	/**
 	 * CREATED or RETRYING should be using same processing QUEUE. Unless we using 2 set of workers
 	 * to process them separately which is NOT FAIL for the JOB which already QUEUED.
 	 * 
-	 * @param jobManager
+	 * @param jobScheduler
+	 * @param jobPoller
 	 */
-	public ReadyJobExecutor(JobManager jobManager) {
-		this(jobManager, jobManager.bindJobQueue(JobState.READY));
+	public ReadyJobExecutor(JobScheduler jobScheduler, JobPoller jobPoller) {
+		super(jobScheduler, jobPoller);
 	}
 	
 	/**
 	 * 
 	 */
 	@Override
-	protected void execute(JobInfo job) {
-		JobContext jobContext 		= jobManager.createJobContext(job);
-		ExecutionAction jobAction 	= jobManager.resolveJobExecution(job);
+	protected void execute(JobContext jobContext) {
+		JobInfo job = jobContext.getJob();
+		ExecutionListener jobListener	= jobScheduler.resolveJobListener(job);
 		
 		//SWITCH JOB TO RUNNING STATE
 		job.setState(JobState.RUNNING);
-		jobManager.syncJob(job);
-		ExecutionState.Status status = jobAction.onExecute(jobContext);
+		jobScheduler.getJobManager().syncJob(job);
 		
+		//EXECUTE & UPDATE STATE
+		ExecutionStatus status = jobListener.onExecute(jobContext);
 		job.setStatus(status);
-		if(ExecutionState.Status.isCompleted(status)) {
-			notifyCompletion(jobAction, jobContext);
-		} else if(status == ExecutionState.Status.WAIT) {
+		
+		if(ExecutionStatus.isCompleted(status)) {
+			notifyCompletion(jobListener, jobContext);
+		} else if(status == ExecutionStatus.WAIT) {
 			job.setState(JobState.WAITING);
 			
 			//PUSH JOB BACK TO WAITING QUEUE
-			jobManager.submitJob(job);
-		} else if(status == ExecutionState.Status.RETRY) {
+			jobScheduler.submitJob(job);
+		} else if(status == ExecutionStatus.RETRY) {
 			job.setState(JobState.RETRYING);
 			job.setRetryCount(job.getRetryCount() + 1);
 			
 			//PUSH JOB BACK TO JOB QUEUE
-			jobManager.submitJob(job);
+			jobScheduler.submitJob(job);
 		}
 	}
 }

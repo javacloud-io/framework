@@ -1,23 +1,17 @@
 package com.appe.framework.job.impl;
 
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.appe.framework.job.ExecutionManager;
-import com.appe.framework.job.ExecutionState;
-import com.appe.framework.job.ext.JobInfo;
-import com.appe.framework.job.ext.JobManager;
-import com.appe.framework.job.ext.JobSelector;
-import com.appe.framework.job.internal.ReadyJobExecutor;
-import com.appe.framework.job.internal.WaitingJobTracker;
-import com.appe.framework.util.Objects;
+import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.execution.JobScheduler;
+import com.appe.framework.job.management.JobInfo;
+import com.appe.framework.util.Dictionary;
+
 /**
  * Simple job execution with 2 different QEUEUE:
  * 
@@ -29,95 +23,35 @@ import com.appe.framework.util.Objects;
  */
 @Singleton
 public class JobExecutionManagerImpl implements ExecutionManager {
-	private static final Logger logger = LoggerFactory.getLogger(JobExecutionManagerImpl.class);
-	private ExecutorService executorService;
-	
-	private JobManager jobManager;
+	private JobScheduler	jobScheduler;
 	@Inject
-	public JobExecutionManagerImpl(JobManager jobManager) {
-		this.jobManager = jobManager;
+	public JobExecutionManagerImpl(JobScheduler	jobScheduler) {
+		this.jobScheduler = jobScheduler;
 	}
 	
+	/**
+	 * 
+	 */
+	@Override
+	public ExecutionStatus getJobStatus(String jobId) {
+		JobInfo job = jobScheduler.getJobManager().findJob(jobId);
+		return (job == null? null : job.getStatus());
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public boolean cancelJob(String jobId) {
+		return jobScheduler.cancelJob(jobId);
+	}
+
 	/**
 	 * Submit a job with NAME and parameters
 	 */
 	@Override
-	public String submitJob(String jobName, ExecutionState.Parameters parameters) {
-		JobInfo job = new JobInfo(jobName, parameters);
-		return jobManager.submitJob(job);
-	}
-	
-	/**
-	 * return some jobs and its statuses
-	 */
-	@Override
-	public List<ExecutionState> selectJobs(String... jobIds) {
-		JobSelector selector = new JobSelector();
-		int limit;
-		if(Objects.isEmpty(jobIds)) {
-			limit = 100;
-		} else {
-			selector.setJobIds(Objects.asSet(jobIds));
-			limit = selector.getJobIds().size();
-		}
-		return Objects.cast(jobManager.selectJobs(selector, limit));
-	}
-
-	/**
-	 * Executor only started from the worker NODE!
-	 * 
-	 * @param numberOfWorkers
-	 * @return
-	 */
-	@Override
-	public boolean startExecutor(int numberOfWorkers) {
-		//ALREADY STARTED => SHUTDOWN BEFORE RESTART
-		if(executorService != null) {
-			logger.warn("The service executor already started!");
-			return false;
-		}
-		
-		//START EXECUTION POOL
-		logger.info("Start executor with {} workers and {} tracker", numberOfWorkers, 1);
-		executorService = createExecutor(numberOfWorkers + 1);
-		for(int i = 0; i < numberOfWorkers; i ++) {
-			executorService.submit(new ReadyJobExecutor(jobManager));
-		}
-		executorService.submit(new WaitingJobTracker(jobManager));
-		return true;
-	}
-	
-	/**
-	 * Make sure to correctly persist JOBs state prior toe shutdown the execution. Half running JOB might
-	 * have unexpected behavior...
-	 * 
-	 * @param force
-	 */
-	@Override
-	public boolean shutdown(boolean force) {
-		//NOTHING TO SHUTDOWN FOE NOW
-		if(executorService == null) {
-			logger.warn("Execution service is already terminated!");
-			return false;
-		}
-		
-		//MAKE SURE TO gratefully shutdown
-		logger.debug("Shutting down the execution service...");
-		executorService.shutdownNow();
-		
-		//RESET THE EXECUTOR SERVICE
-		executorService = null;
-		logger.info("Execution service is gratefully terminated!");
-		return true;
-	}
-	
-	/**
-	 * Keep spin off new worker threads
-	 * 
-	 * @param numberOfWorker
-	 * @return
-	 */
-	protected ExecutorService createExecutor(int numberOfWorkers) {
-		return	Executors.newFixedThreadPool(numberOfWorkers);
+	public String submitJob(String jobName, Map<String, Object> parameters) {
+		JobInfo job = new JobInfo(jobName, new Dictionary(parameters));
+		return jobScheduler.submitJob(job);
 	}
 }

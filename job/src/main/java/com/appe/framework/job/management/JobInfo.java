@@ -1,8 +1,9 @@
-package com.appe.framework.job.ext;
+package com.appe.framework.job.management;
 
 import java.util.Date;
 
-import com.appe.framework.job.ExecutionState;
+import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Identifiable;
 
 /**
@@ -11,15 +12,16 @@ import com.appe.framework.util.Identifiable;
  * @author ho
  *
  */
-public class JobInfo extends Identifiable<String> implements ExecutionState {
+public class JobInfo extends Identifiable<String> {
 	private String name;
 	private int retryCount;
-	private JobParameters parameters;
-	private JobParameters attributes;
+	private Dictionary parameters;
+	private Dictionary attributes;
 	
 	private JobState state;
-	private Status status;
+	private ExecutionStatus status;
 	
+	//parentId if has one
 	private String parentId;
 	
 	private Date created;
@@ -32,10 +34,10 @@ public class JobInfo extends Identifiable<String> implements ExecutionState {
 	 * @param name
 	 * @param parameters
 	 */
-	public JobInfo(String name, ExecutionState.Parameters parameters) {
+	public JobInfo(String name, Dictionary parameters) {
 		this.name = name;
-		this.parameters = JobParameters.wrap(parameters);
-		this.attributes = new JobParameters();
+		this.parameters = (parameters == null? new Dictionary() : parameters);
+		this.attributes = new Dictionary();
 	}
 	
 	/**
@@ -61,10 +63,10 @@ public class JobInfo extends Identifiable<String> implements ExecutionState {
 	 * 
 	 * @return
 	 */
-	public JobParameters getParameters() {
+	public Dictionary getParameters() {
 		return parameters;
 	}
-	public void setParameters(JobParameters parameters) {
+	public void setParameters(Dictionary parameters) {
 		this.parameters = parameters;
 	}
 	
@@ -72,10 +74,10 @@ public class JobInfo extends Identifiable<String> implements ExecutionState {
 	 * 
 	 * @return
 	 */
-	public JobParameters getAttributes() {
+	public Dictionary getAttributes() {
 		return attributes;
 	}
-	public void setAttributes(JobParameters attributes) {
+	public void setAttributes(Dictionary attributes) {
 		this.attributes = attributes;
 	}
 	
@@ -94,10 +96,10 @@ public class JobInfo extends Identifiable<String> implements ExecutionState {
 	 * return execution status
 	 * @return
 	 */
-	public Status getStatus() {
+	public ExecutionStatus getStatus() {
 		return status;
 	}
-	public void setStatus(Status status) {
+	public void setStatus(ExecutionStatus status) {
 		this.status = status;
 	}
 	

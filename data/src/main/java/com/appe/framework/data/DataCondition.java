@@ -52,18 +52,16 @@ public abstract class DataCondition {
 	 * Multiple value
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T[] getValues() {
-		return (T[])values;
+		return Objects.cast(values);
 	}
 	
 	/**
 	 * In case of single value
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getValue() {
-		return (T)(values != null && values.length > 0? null: values[0]);
+		return Objects.cast(values != null && values.length > 0? null: values[0]);
 	}
 	
 	/**

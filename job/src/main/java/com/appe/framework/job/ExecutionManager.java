@@ -1,9 +1,8 @@
 package com.appe.framework.job;
 
-import java.util.List;
+import java.util.Map;
 
 /**
- * Using AppeRegistry to lookup JOB by its NAME with instance of JobExecutable
  * 
  * @author ho
  *
@@ -16,30 +15,20 @@ public interface ExecutionManager {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, ExecutionState.Parameters parameters);
+	public String submitJob(String jobName, Map<String, Object> parameters);
 	
 	/**
-	 * Select some jobs and its status. If no jobs is specify, system will return SOME JOBS that haven't completed PROCESSING YET.
-	 * @param completed
-	 * @param jobIds
-	 * @return
-	 */
-	public List<ExecutionState>  selectJobs(String...jobIds);
-	
-	/**
-	 * Only the worker nodes would need to do this. Assuming a worker node can process all tasks for now.
-	 * To be more efficient, each set of workers should handle set of JOB. This will definitely need to support.
+	 * return job execution status to see if it's completed
 	 * 
-	 * @param numberOfWorkers
+	 * @param jobId
 	 * @return
 	 */
-	public boolean startExecutor(int numberOfWorkers);
+	public ExecutionStatus getJobStatus(String jobId);
 	
 	/**
-	 * Make sure to shutdown correctly
 	 * 
-	 * @param force
+	 * @param jobId
 	 * @return
 	 */
-	public boolean shutdown(boolean force);
+	public boolean cancelJob(String jobId);
 }

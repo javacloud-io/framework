@@ -7,7 +7,7 @@ package com.appe.framework.job;
  * @author ho
  *
  */
-public interface ExecutionAction {
+public interface ExecutionListener {
 	/**
 	 * Invoke when JOB is ready to execute, an execution return:
 	 * 
@@ -18,7 +18,7 @@ public interface ExecutionAction {
 	 * @param executionContext
 	 * @return
 	 */
-	public ExecutionState.Status onExecute(ExecutionContext executionContext);
+	public ExecutionStatus onExecute(ExecutionContext executionContext);
 	
 	/**
 	 * When execution is DONE, then onCompleted will invoke to call back. 

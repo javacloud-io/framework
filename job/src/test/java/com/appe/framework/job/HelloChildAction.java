@@ -2,6 +2,9 @@ package com.appe.framework.job;
 
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.appe.framework.util.Objects;
 
 /**
@@ -10,18 +13,19 @@ import com.appe.framework.util.Objects;
  * @author ho
  *
  */
-public class HelloChildAction implements ExecutionAction {
-
+public class HelloChildAction implements ExecutionListener {
+	private static final Logger logger = LoggerFactory.getLogger(HelloChildAction.class);
+	
 	@Override
-	public ExecutionState.Status onExecute(ExecutionContext executionContext) {
-		System.out.println("Hello parents !");
+	public ExecutionStatus onExecute(ExecutionContext executionContext) {
+		logger.info("Hello parents !");
 		Objects.sleep(1, TimeUnit.SECONDS);
-		return ExecutionState.Status.SUCCESS;
+		return ExecutionStatus.SUCCESS;
 	}
 
 	@Override
 	public boolean onCompletion(ExecutionContext executionContext) {
-		System.out.println("Bye parents!!!");
+		logger.info("Bye parents!!!");
 		return true;
 	}
 }

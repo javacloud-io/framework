@@ -10,5 +10,5 @@ framework.common.services
 framework.job.InMemory.services
 
 #test jobs
-com.appe.framework.job.ExecutionAction#HelloAction=com.appe.framework.job.HelloAction
-com.appe.framework.job.ExecutionAction#HelloChildAction=com.appe.framework.job.HelloChildAction
+com.appe.framework.job.ExecutionListener#HelloAction=com.appe.framework.job.HelloAction
+com.appe.framework.job.ExecutionListener#HelloChildAction=com.appe.framework.job.HelloChildAction

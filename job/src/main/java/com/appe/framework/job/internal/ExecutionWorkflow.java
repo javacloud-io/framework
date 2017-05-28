@@ -1,8 +1,8 @@
 package com.appe.framework.job.internal;
 
-import com.appe.framework.job.ExecutionAction;
+import com.appe.framework.job.ExecutionListener;
 import com.appe.framework.job.ExecutionContext;
-import com.appe.framework.job.ExecutionState;
+import com.appe.framework.job.ExecutionStatus;
 /**
  * Using the RETRY to implement a simple workflow which has 2 set of ACTIONS:
  * 
@@ -14,7 +14,7 @@ import com.appe.framework.job.ExecutionState;
  * @author ho
  *
  */
-public abstract class ExecutionWorkflow implements ExecutionAction {
+public abstract class ExecutionWorkflow implements ExecutionListener {
 	protected ExecutionWorkflow() {
 	}
 	
@@ -23,12 +23,12 @@ public abstract class ExecutionWorkflow implements ExecutionAction {
 	 * 2. During the execution, if 
 	 */
 	@Override
-	public ExecutionState.Status onExecute(ExecutionContext executionContext) {
+	public ExecutionStatus onExecute(ExecutionContext executionContext) {
 		String nextAction = null;
 		if(nextAction == null) {
 			
 		}
-		return ExecutionState.Status.WAIT;
+		return ExecutionStatus.WAIT;
 	}
 	
 	/**
@@ -36,7 +36,7 @@ public abstract class ExecutionWorkflow implements ExecutionAction {
 	 */
 	@Override
 	public boolean onCompletion(ExecutionContext executionContext) {
-		Boolean completed = executionContext.getAttributes().get("completed");
+		Boolean completed = executionContext.getAttribute("completed");
 		return (completed != null && completed.booleanValue());
 	}
 }

@@ -33,9 +33,8 @@ public class DataKey implements Comparable<DataKey> {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <H> H getHashKey() {
-		return (H)hashKey;
+		return Objects.cast(hashKey);
 	}
 	
 	/**
@@ -60,9 +59,8 @@ public class DataKey implements Comparable<DataKey> {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <R> Comparable<R> getRangeKey() {
-		return (Comparable<R>)rangeKey;
+		return Objects.cast(rangeKey);
 	}
 	
 	/**

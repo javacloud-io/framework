@@ -50,12 +50,12 @@ public final class Dictionaries {
 	 * @return
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	public static Dictionary cast(Object obj) throws IOException {
 		if(obj instanceof Dictionary) {
 			return	(Dictionary)obj;
 		} else if(obj instanceof Map) {
-			return new Dictionary((Map<String, Object>)obj);
+			Map<String, Object> mo = Objects.cast(obj);
+			return new Dictionary(mo);
 		}
 		//TODO: SHOULD DOING DEP CONVERSION
 		return Objects.asDict("dict", obj);

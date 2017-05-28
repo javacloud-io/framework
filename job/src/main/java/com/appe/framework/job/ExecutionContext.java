@@ -1,9 +1,11 @@
 package com.appe.framework.job;
 
-import java.util.List;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
- * Job execution will have context parameters/attributes with NAME/VALUE
+ * Job execution will have context parameters/attributes with NAME/VALUE. A job can use context to submit child jobs
+ * as well as doing some basic child operation by select them.
  * 
  * @author ho
  *
@@ -17,16 +19,11 @@ public interface ExecutionContext {
 	public String getId();
 	
 	/**
-	 * return NAME of execution action
+	 * return NAME of execution to lookup listener
 	 * 
 	 * @return
 	 */
 	public String getName();
-	
-	/**
-	 * return the current status of the JOB is finish otherwise NULL
-	 */
-	public ExecutionState.Status getStatus();
 	
 	/**
 	 * return run id if being executed more than ONE. in case of RETRY/LOOP
@@ -34,33 +31,62 @@ public interface ExecutionContext {
 	 */
 	public int getRetryCount();
 	
+	
+	/**
+	 * return the current status of the JOB is finish otherwise NULL
+	 */
+	public ExecutionStatus getStatus();
+	
 	/**
 	 * return current context parameters
 	 * @return
 	 */
-	public ExecutionState.Parameters getParameters();
+	public <T> T getParameter(String name);
 	
 	/**
-	 * return the current context attributes
 	 * 
 	 * @return
 	 */
-	public ExecutionState.Attributes getAttributes();
+	public Enumeration<String> getParameterNames();
 	
 	/**
-	 * return all children jobs or jobs with specific ID and its status if ANY FOUND.
-	 * 
-	 * @param jobIds
+	 * return current context attributes, change to attribute will be persisted across RUN
 	 * @return
 	 */
-	public List<ExecutionState>  selectJobs(String...jobIds);
+	public <T> T getAttribute(String name);
 	
 	/**
-	 * Submit child jobs using parent context
+	 * 
+	 * @param name
+	 * @param value
+	 */
+	public <T> void setAttribute(String name, T value);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Enumeration<String> getAttributeNames();
+	
+	/**
+	 * Submit child jobs using parent context, parameters will be inherited by default
 	 * 
 	 * @param jobName
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, ExecutionState.Parameters parameters);
+	public String submitJob(String jobName, Map<String, Object> parameters);
+	
+	/**
+	 * Log activity message
+	 * @param message
+	 */
+	public void log(String message);
+	
+	/**
+	 * 
+	 * @param message
+	 * @param t
+	 */
+	public void log(String message, Throwable t);
 }

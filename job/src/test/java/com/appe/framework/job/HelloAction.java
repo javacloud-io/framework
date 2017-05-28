@@ -2,6 +2,9 @@ package com.appe.framework.job;
 
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.appe.framework.util.Objects;
 
 /**
@@ -9,14 +12,16 @@ import com.appe.framework.util.Objects;
  * @author ho
  *
  */
-public class HelloAction implements ExecutionAction {
-
+public class HelloAction implements ExecutionListener {
+	private static final Logger logger = LoggerFactory.getLogger(HelloAction.class);
 	@Override
-	public ExecutionState.Status onExecute(ExecutionContext executionContext) {
-		System.out.println("<" + executionContext.getRetryCount() + "> Hello world!");
+	public ExecutionStatus onExecute(ExecutionContext executionContext) {
+		logger.info("<" + executionContext.getRetryCount() + "> Hello world!");
+		
 		executionContext.submitJob("HelloChildAction", null);
+		
 		Objects.sleep(2, TimeUnit.SECONDS);
-		return ExecutionState.Status.WAIT;
+		return ExecutionStatus.WAIT;
 	}
 
 	@Override
@@ -24,7 +29,7 @@ public class HelloAction implements ExecutionAction {
 		if(executionContext.getRetryCount() < 3) {
 			return false;
 		}
-		System.out.println("Bye!!!");
+		logger.info("Bye!!!");
 		return true;
 	}
 }

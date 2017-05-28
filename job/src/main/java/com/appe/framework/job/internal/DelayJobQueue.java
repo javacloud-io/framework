@@ -5,8 +5,8 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.appe.framework.job.ext.JobInfo;
-import com.appe.framework.job.ext.JobQueue;
+import com.appe.framework.job.execution.JobQueue;
+import com.appe.framework.job.execution.JobTask;
 import com.appe.framework.util.Objects;
 /**
  * 
@@ -26,7 +26,7 @@ public class DelayJobQueue implements JobQueue {
 	 * Poll and wait until time out in seconds specified.
 	 */
 	@Override
-	public JobInfo poll(int timeoutSeconds) throws InterruptedException {
+	public JobTask poll(int timeoutSeconds) throws InterruptedException {
 		DelayedJob delayed = delayQueue.poll(timeoutSeconds, TimeUnit.SECONDS);
 		return (delayed == null? null : delayed.job);
 	}
@@ -35,8 +35,8 @@ public class DelayJobQueue implements JobQueue {
 	 * PUT TO THE QUEUE
 	 */
 	@Override
-	public void offer(JobInfo job) {
-		int delaySeconds = (job.getRetryCount() > 0? 0 : 0);
+	public void offer(JobTask job) {
+		int delaySeconds = 0;
 		delayQueue.offer(new DelayedJob(job, delaySeconds, SEQ.incrementAndGet()));
 	}
 	
@@ -47,10 +47,10 @@ public class DelayJobQueue implements JobQueue {
 	 * @param <T>
 	 */
 	static class DelayedJob implements Delayed {
-		final JobInfo job;
+		final JobTask job;
 		final long timer;
 		final long seq;
-		public DelayedJob(JobInfo job, int delaySeconds, long seq) {
+		public DelayedJob(JobTask job, int delaySeconds, long seq) {
 			this.job   = job;
 			this.timer = System.currentTimeMillis() + delaySeconds * 1000L;
 			this.seq  = seq;

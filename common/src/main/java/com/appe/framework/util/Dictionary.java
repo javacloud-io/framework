@@ -1,6 +1,8 @@
 package com.appe.framework.util;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Map;
@@ -31,9 +33,8 @@ public class Dictionary implements Map<String, Object> {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T get(String name) {
-		return (T)store.get(name);
+		return Objects.cast(store.get(name));
 	}
 	
 	/**
@@ -164,6 +165,14 @@ public class Dictionary implements Map<String, Object> {
 	public double getDouble(String name, double defaultValue) {
 		Double value = getDouble(name);
 		return (value == null ? defaultValue : value);
+	}
+	
+	/**
+	 * return all enumeration names
+	 * @return
+	 */
+	public Enumeration<String> keyNames() {
+		return Collections.enumeration(keySet());
 	}
 	
 	/**

@@ -1,4 +1,5 @@
-package com.appe.framework.job.ext;
+package com.appe.framework.job.execution;
+
 /**
  * An abstract job poller to feed job to worker. To support job canceling we need:
  * 1. Signal the canceling
@@ -16,5 +17,5 @@ public interface JobPoller {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public JobInfo poll(int timeoutSeconds) throws InterruptedException;
+	public JobTask poll(int timeoutSeconds) throws InterruptedException;
 }

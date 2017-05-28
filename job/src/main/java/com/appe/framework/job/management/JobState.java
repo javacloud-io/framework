@@ -1,4 +1,4 @@
-package com.appe.framework.job.ext;
+package com.appe.framework.job.management;
 /**
  * 1. A job just submit will has CREATED state
  * 2. When job get pickup by worker it state will turn to READY
@@ -12,11 +12,13 @@ package com.appe.framework.job.ext;
 public enum JobState {
 	CREATED,
 	RETRYING,
+	CANCELING,
 	
 	READY,
 	RUNNING,
 	WAITING,
 	
-	BLOCKED,
+	CANCELED,
+	FAILED,
 	TERMINATED
 }

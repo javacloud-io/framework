@@ -90,8 +90,8 @@ public final class Objects {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T cast(Object v) {
-		return (T)v;
+	public static <T> T cast(Object o) {
+		return (T)o;
 	}
 	
 	/**

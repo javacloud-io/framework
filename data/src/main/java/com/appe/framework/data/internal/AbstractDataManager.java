@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.appe.framework.data.DataManager;
 import com.appe.framework.data.DataSchema;
 import com.appe.framework.data.DataStore;
+import com.appe.framework.util.Objects;
 
 /**
  * 
@@ -22,7 +23,6 @@ public abstract class AbstractDataManager implements DataManager {
 	/**
 	 * BY DEFAULT WILL BE DEFAULT AS IT IS...
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> DataStore<T> bindStore(DataSchema<T> schema) {
 		if(!dataStores.containsKey(schema.getTable())) {
@@ -31,7 +31,7 @@ public abstract class AbstractDataManager implements DataManager {
 			//THEN ADD TO CACHE.
 			dataStores.putIfAbsent(schema.getTable(), createStore(schema));
 		}
-		return (DataStore<T>)dataStores.get(schema.getTable());
+		return Objects.cast(dataStores.get(schema.getTable()));
 	}
 	
 	/**

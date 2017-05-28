@@ -1,4 +1,4 @@
-package com.appe.framework.job.ext;
+package com.appe.framework.job.execution;
 
 /**
  * Use to submit job back to processing queue
@@ -12,5 +12,5 @@ public interface JobQueue extends JobPoller {
 	 * 
 	 * @param job
 	 */
-	public void offer(JobInfo job);
+	public void offer(JobTask job);
 }

@@ -1,6 +1,5 @@
 package com.appe.framework.job;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -11,8 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.appe.framework.internal.GuiceTestCase;
-import com.appe.framework.job.ext.JobParameters;
-import com.appe.framework.job.internal.JobExecutor;
+import com.appe.framework.job.execution.JobScheduler;
 import com.appe.framework.util.Objects;
 
 /**
@@ -23,6 +21,9 @@ import com.appe.framework.util.Objects;
 public class ExecutionManagerTest extends GuiceTestCase {
 	@Inject
 	private ExecutionManager executionManager;
+	@Inject
+	private JobScheduler jobScheduler;
+	
 	private Set<String> jobIds;
 	/**
 	 * START EXECUTION
@@ -30,7 +31,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	@Before
 	public void startExecutor() {
 		jobIds = Objects.asSet();
-		executionManager.startExecutor(2);
+		jobScheduler.startWorkers(2);
 	}
 	
 	/**
@@ -38,17 +39,20 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	 */
 	@After
 	public void shutdown() {
-		//WAITING FOR ALL JOBS TO FINISHES
-		while(true) {
-			List<ExecutionState> jobs = executionManager.selectJobs(jobIds.toArray(new String[0]));
-			if(ExecutionState.Status.isCompleted(JobExecutor.resolveJobStatus(jobs))) {
-				break;
+		//WAITING FOR ALL JOBS TO FINISH
+		boolean completed = false;
+		while(!completed) {
+			completed = true;
+			for(String jobId: jobIds) {
+				ExecutionStatus status = executionManager.getJobStatus(jobId);
+				if(!ExecutionStatus.isCompleted(status)) {
+					completed = false;
+					break;
+				}
 			}
-			
-			//TAKE A NAP
-			Objects.sleep(1, TimeUnit.SECONDS);
+			Objects.sleep(100, TimeUnit.MILLISECONDS);
 		}
-		executionManager.shutdown(true);
+		jobScheduler.shutdown(true);
 	}
 	
 	/**
@@ -57,7 +61,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	@Test
 	public void testHello() {
 		for(int i = 0; i < 10; i ++) {
-			String jobId = executionManager.submitJob("HelloAction", JobParameters.build("test", 123));
+			String jobId = executionManager.submitJob("HelloAction", Objects.asDict("test", 123));
 			jobIds.add(jobId);
 		}
 	}

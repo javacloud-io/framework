@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.appe.framework.cache.CacheManager;
 import com.appe.framework.cache.CacheRegion;
+import com.appe.framework.util.Objects;
 
 /**
  * It will add a little overhead to the usage... because of the calculation of cache....
@@ -35,10 +36,9 @@ public class NoCacheManagerImpl implements CacheManager {
 	/**
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> CacheRegion<T> bindCache(String name, Class<T> type) {
 		logger.debug("Create nocache region: {} -> {}", name, type);
-		return (CacheRegion<T>)NOCACHE;
+		return Objects.cast(NOCACHE);
 	}
 }

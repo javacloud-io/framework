@@ -1,48 +1,88 @@
 package com.appe.framework.job.internal;
 
 
-import com.appe.framework.job.ExecutionAction;
-import com.appe.framework.job.ExecutionState;
-import com.appe.framework.job.ext.JobContext;
-import com.appe.framework.job.ext.JobInfo;
-import com.appe.framework.job.ext.JobManager;
-import com.appe.framework.job.ext.JobState;
+import java.util.List;
+
+import com.appe.framework.job.ExecutionListener;
+import com.appe.framework.job.ExecutionStatus;
+import com.appe.framework.job.execution.JobContext;
+import com.appe.framework.job.execution.JobPoller;
+import com.appe.framework.job.execution.JobScheduler;
+import com.appe.framework.job.management.JobInfo;
+import com.appe.framework.job.management.JobFilter;
+import com.appe.framework.job.management.JobState;
 
 /**
  * Basic logic for WAITING job tracking, the process starting by pooling JOB from WAITING queue then cross check
  * to see if all its children terminated or not. Then combine STATUS for parent JOB.
  * 
- * To be more efficient we need to change how to tracking JOB:
- * 1. 
  * @author ho
  *
  */
 public class WaitingJobTracker extends JobExecutor {
-	public WaitingJobTracker(JobManager jobManager) {
-		super(jobManager, jobManager.bindJobQueue(JobState.WAITING));
+	/**
+	 * 
+	 * @param jobScheduler
+	 * @param jobPoller
+	 */
+	public WaitingJobTracker(JobScheduler jobScheduler, JobPoller jobPoller) {
+		super(jobScheduler, jobPoller);
 	}
 	
 	/**
 	 * Combine all child jobs status to decide the PARENTs. JOB already in WAITING STATE
 	 */
 	@Override
-	protected void execute(JobInfo job) {
-		JobContext jobContext 		= jobManager.createJobContext(job);
-		ExecutionState finalState 	= resolveJobState(jobContext.selectJobs());
+	protected void execute(JobContext jobContext) {
+		JobInfo job = jobContext.getJob();
 		
 		//RESOLVE FINAL RESULT
-		ExecutionState.Status finalStatus = (finalState == null? ExecutionState.Status.SUCCESS: finalState.getStatus());
+		ExecutionStatus finalStatus = resolveJobStatus(job);
 		logger.debug("Tracking job: {} -> {}", job, finalStatus);
 		
-		if(!ExecutionState.Status.isCompleted(finalStatus)) {
+		if(!ExecutionStatus.isCompleted(finalStatus)) {
 			job.setState(JobState.WAITING);
 			
 			//PUSH BACK TO WAITING QUEUE
-			jobManager.submitJob(job);
+			jobScheduler.submitJob(job);
 		} else {
 			job.setStatus(finalStatus);
-			ExecutionAction  jobAction = jobManager.resolveJobExecution(job);
-			notifyCompletion(jobAction, jobContext);
+			ExecutionListener  jobListener = jobScheduler.resolveJobListener(job);
+			notifyCompletion(jobListener, jobContext);
 		}
+	}
+	
+	/**
+	 * TODO: Job in WAITING tracker always has STATUS = WAIT, but for some reason such as: CANCEL its current STATUS
+	 * might already different...
+	 * 
+	 * @param job
+	 * @return
+	 */
+	protected ExecutionStatus resolveJobStatus(JobInfo job) {
+		JobFilter filter = new JobFilter();
+		filter.withParentId(job.getId())
+				.withStates(JobState.CREATED, JobState.RETRYING, JobState.CANCELING, JobState.READY, JobState.RUNNING, JobState.WAITING);
+		List<JobInfo> childJobs = jobScheduler.getJobManager().findJobs(filter, 1);
+		
+		//LOOK INTO CHILD JOBS
+		ExecutionStatus finalStatus = ExecutionStatus.SUCCESS;
+		for(JobInfo childJob: childJobs) {
+			ExecutionStatus status = childJob.getStatus();
+			
+			//STILL IN WAITING STATE => PUSH BACK TO QUEUE
+			if(!ExecutionStatus.isCompleted(status)) {
+				finalStatus = status;
+				break;
+			}
+			
+			//COMPLETION STATUS WARNING/FAIL
+			if(status == ExecutionStatus.FAIL) {
+				finalStatus = status;
+			} else if(status == ExecutionStatus.WARNING && finalStatus != ExecutionStatus.FAIL) {
+				finalStatus = status;
+			}
+		}
+		return finalStatus;
 	}
 }

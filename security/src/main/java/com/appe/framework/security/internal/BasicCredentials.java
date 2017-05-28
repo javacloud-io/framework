@@ -3,6 +3,7 @@ package com.appe.framework.security.internal;
 import com.appe.framework.security.Credentials;
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.Dictionary;
+import com.appe.framework.util.Objects;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.
  * 
@@ -77,8 +78,7 @@ public class BasicCredentials implements Credentials {
 	 * @param name
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T getAttribute(String name) {
-		return (T)(attributes == null? null : attributes.get(name));
+		return Objects.cast((attributes == null? null : attributes.get(name)));
 	}
 }
