@@ -22,10 +22,10 @@ import com.appe.framework.util.Dictionary;
  *
  */
 @Singleton
-public class JobExecutionManagerImpl implements ExecutionManager {
+public class ExecutionManagerImpl implements ExecutionManager {
 	private JobScheduler	jobScheduler;
 	@Inject
-	public JobExecutionManagerImpl(JobScheduler	jobScheduler) {
+	public ExecutionManagerImpl(JobScheduler	jobScheduler) {
 		this.jobScheduler = jobScheduler;
 	}
 	

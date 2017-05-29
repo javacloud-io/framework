@@ -74,7 +74,10 @@ public class LocalJobScheduler extends JobScheduler {
 	}
 	
 	/**
-	 * Terminate the executor
+	 * 1. Make sure to not pull more JOBs for processing
+	 * 2. If any jobs in process will => will wait until it all finished
+	 * 3. If force => signal jobs canceling and terminate all
+	 * 
 	 */
 	@Override
 	public boolean shutdown(boolean force) {

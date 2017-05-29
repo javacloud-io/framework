@@ -3,4 +3,4 @@
 #
 com.appe.framework.job.management.JobManager=com.appe.framework.job.impl.InMemoryJobManagerImpl
 com.appe.framework.job.execution.JobScheduler=com.appe.framework.job.impl.LocalJobScheduler
-com.appe.framework.job.ExecutionManager=com.appe.framework.job.impl.JobExecutionManagerImpl
+com.appe.framework.job.ExecutionManager=com.appe.framework.job.impl.ExecutionManagerImpl

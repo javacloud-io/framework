@@ -35,10 +35,9 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	}
 	
 	/**
-	 * SHUTDOWN THE EXECUTION
+	 * 
 	 */
-	@After
-	public void shutdown() {
+	protected void awaitForCompletion() {
 		//WAITING FOR ALL JOBS TO FINISH
 		boolean completed = false;
 		while(!completed) {
@@ -50,8 +49,18 @@ public class ExecutionManagerTest extends GuiceTestCase {
 					break;
 				}
 			}
-			Objects.sleep(100, TimeUnit.MILLISECONDS);
+			if(!completed) {
+				Objects.sleep(100, TimeUnit.MILLISECONDS);
+			}
 		}
+	}
+	
+	/**
+	 * SHUTDOWN THE EXECUTION
+	 */
+	@After
+	public void shutdown() {
+		awaitForCompletion();
 		jobScheduler.shutdown(true);
 	}
 	
