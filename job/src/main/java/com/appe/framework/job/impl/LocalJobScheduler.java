@@ -1,4 +1,4 @@
-package com.appe.framework.job.internal;
+package com.appe.framework.job.impl;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.appe.framework.job.execution.JobQueue;
 import com.appe.framework.job.execution.JobScheduler;
 import com.appe.framework.job.execution.JobTask;
+import com.appe.framework.job.internal.BlockingJobQueue;
+import com.appe.framework.job.internal.ReadyJobExecutor;
+import com.appe.framework.job.internal.WaitingJobTracker;
 import com.appe.framework.job.management.JobInfo;
 import com.appe.framework.job.management.JobManager;
 import com.appe.framework.job.management.JobState;
