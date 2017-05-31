@@ -36,6 +36,12 @@ public abstract class ExecutionWorkflow implements ExecutionListener {
 	 */
 	@Override
 	public boolean onCompletion(ExecutionContext executionContext) {
+		//IF WORKFLOW IS CANCEL -> NEED TO FIGURE OUT TO REVERT STUFF
+		if(ExecutionStatus.CANCEL == executionContext.getStatus()) {
+			return true;
+		}
+		
+		//KEEP GOING TIL DONE
 		Boolean completed = executionContext.getAttribute("completed");
 		return (completed != null && completed.booleanValue());
 	}
