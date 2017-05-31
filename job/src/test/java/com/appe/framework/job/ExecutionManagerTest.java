@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	private JobScheduler jobScheduler;
 	
 	private List<String> jobIds;
+	private String canceledJobId;
 	/**
 	 * START EXECUTION
 	 */
@@ -54,6 +56,8 @@ public class ExecutionManagerTest extends GuiceTestCase {
 				Objects.sleep(100, TimeUnit.MILLISECONDS);
 			}
 		}
+		//ASSERT CANCELED JOB
+		Assert.assertEquals(ExecutionStatus.CANCEL, executionManager.getJobStatus(canceledJobId));
 	}
 	
 	/**
@@ -77,6 +81,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 		
 		//TEST CANCELING
 		Collections.shuffle(jobIds);
-		executionManager.cancelJob(jobIds.get(0));
+		canceledJobId = jobIds.get(0);
+		executionManager.cancelJob(canceledJobId);
 	}
 }

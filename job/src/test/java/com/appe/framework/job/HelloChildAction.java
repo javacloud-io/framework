@@ -19,7 +19,7 @@ public class HelloChildAction implements ExecutionListener {
 	@Override
 	public ExecutionStatus onExecute(ExecutionContext executionContext) {
 		logger.info("Hello parents !");
-		Objects.sleep(1, TimeUnit.SECONDS);
+		Objects.sleep(100, TimeUnit.MILLISECONDS);
 		return ExecutionStatus.SUCCESS;
 	}
 
