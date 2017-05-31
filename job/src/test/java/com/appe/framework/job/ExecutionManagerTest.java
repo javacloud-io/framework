@@ -1,6 +1,7 @@
 package com.appe.framework.job;
 
-import java.util.Set;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -24,13 +25,13 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	@Inject
 	private JobScheduler jobScheduler;
 	
-	private Set<String> jobIds;
+	private List<String> jobIds;
 	/**
 	 * START EXECUTION
 	 */
 	@Before
 	public void startExecutor() {
-		jobIds = Objects.asSet();
+		jobIds = Objects.asList();
 		jobScheduler.startWorkers(2);
 	}
 	
@@ -44,7 +45,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 			completed = true;
 			for(String jobId: jobIds) {
 				ExecutionStatus status = executionManager.getJobStatus(jobId);
-				if(!ExecutionStatus.isCompleted(status)) {
+				if(!ExecutionStatus.isCompleted(status) && status != ExecutionStatus.CANCEL) {
 					completed = false;
 					break;
 				}
@@ -73,5 +74,9 @@ public class ExecutionManagerTest extends GuiceTestCase {
 			String jobId = executionManager.submitJob("HelloAction", Objects.asDict("test", 123));
 			jobIds.add(jobId);
 		}
+		
+		//TEST CANCELING
+		Collections.shuffle(jobIds);
+		executionManager.cancelJob(jobIds.get(0));
 	}
 }

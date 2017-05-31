@@ -3,7 +3,6 @@ package com.appe.framework.job.internal;
 
 import java.util.List;
 
-import com.appe.framework.job.ExecutionListener;
 import com.appe.framework.job.ExecutionStatus;
 import com.appe.framework.job.execution.JobContext;
 import com.appe.framework.job.execution.JobPoller;
@@ -36,19 +35,20 @@ public class WaitingJobTracker extends JobExecutor {
 	protected void execute(JobContext jobContext) {
 		JobInfo job = jobContext.getJob();
 		
-		//RESOLVE FINAL RESULT
+		//RESOLVE FINAL CHILD RESULT
 		ExecutionStatus finalStatus = resolveJobStatus(job);
 		logger.debug("Tracking job: {} -> {}", job, finalStatus);
 		
-		if(!ExecutionStatus.isCompleted(finalStatus)) {
-			job.setState(JobState.WAITING);
-			
-			//PUSH BACK TO WAITING QUEUE
-			jobScheduler.submitJob(job);
-		} else {
+		//COMPLETED => NOTIFY LISTENER
+		if(ExecutionStatus.isCompleted(finalStatus)) {
 			job.setStatus(finalStatus);
-			ExecutionListener  jobListener = jobScheduler.resolveJobListener(job);
-			notifyCompletion(jobListener, jobContext);
+			notifyCompletion(jobContext, null);
+		} else {
+			//LET CHILD JOB DOING NOTIFICATION
+			//job.setState(JobState.WAITING);
+			;
+			//PUSH BACK TO WAITING QUEUE
+			//jobScheduler.submitJob(job);
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class WaitingJobTracker extends JobExecutor {
 	protected ExecutionStatus resolveJobStatus(JobInfo job) {
 		JobFilter filter = new JobFilter();
 		filter.withParentId(job.getId())
-				.withStates(JobState.CREATED, JobState.RETRYING, JobState.CANCELING, JobState.READY, JobState.RUNNING, JobState.WAITING);
+				.withStates(JobState.CREATED, JobState.RETRYING, JobState.READY, JobState.RUNNING, JobState.WAITING);
 		List<JobInfo> childJobs = jobScheduler.getJobManager().findJobs(filter, 1);
 		
 		//LOOK INTO CHILD JOBS

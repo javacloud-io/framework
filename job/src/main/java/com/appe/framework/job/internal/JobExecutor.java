@@ -35,9 +35,37 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 	@Override
 	protected JobContext poll(int timeoutSeconds) throws InterruptedException {
 		JobTask task = jobPoller.poll(timeoutSeconds);
-		return (task == null? null: jobScheduler.createJobContext(task));
+		JobContext jobContext = (task == null? null: jobScheduler.createJobContext(task));
+		
+		//CHECK IF JOB NEED TO ABORT
+		return (jobContext != null? santityCheck(jobContext) : jobContext);
 	}
-
+	
+	/**
+	 * Check to see if JOB need to execute or NOT
+	 * 
+	 * @param jobContext
+	 * @return
+	 */
+	protected JobContext santityCheck(JobContext jobContext) {
+		JobInfo job = jobContext.getJob();
+		//ALREADY COMPLETED
+		if(job.getState() == JobState.TERMINATED || job.getState() == JobState.FAILED || job.getState() == JobState.CANCELED) {
+			logger.warn("Check job : {} -> COMPLETED", job);
+			return null;
+		}
+		
+		//CANCELING JOB
+		if(job.getState() == JobState.CANCELING) {
+			logger.debug("Check job : {} -> CANCEL", job);
+			
+			job.setStatus(ExecutionStatus.CANCEL);
+			notifyCompletion(jobContext, null);
+			return null;
+		}
+		return jobContext;
+	}
+	
 	/**
 	 * Make sure to set JOB STATE to FAIL with a correct stack trace...Job already take of the QUEUE and
 	 * will no longer submit back cause DONT know what todo.
@@ -58,16 +86,33 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 	/**
 	 * Make sure to re-submit JOB if it's
 	 * 
-	 * @param jobListener
 	 * @param jobContext
+	 * @param jobListener
 	 */
-	protected void notifyCompletion(ExecutionListener jobListener, JobContext jobContext) {
+	protected void notifyCompletion(JobContext jobContext, ExecutionListener jobListener) {
 		JobInfo job = jobContext.getJob();
+		if(jobListener == null) {
+			jobListener = jobScheduler.resolveJobListener(job);
+		}
 		
 		//IF JOB IS COMPLETED => NOTHING ELSE NEED TO BE DONE
 		if(jobListener.onCompletion(jobContext)) {
-			job.setState(JobState.TERMINATED);
+			boolean canceled = (job.getStatus() == ExecutionStatus.CANCEL); 
+			job.setState(canceled? JobState.CANCELED : JobState.TERMINATED);
 			jobScheduler.getJobManager().syncJob(job);
+			
+			//TODO: NOTIFY ALL CHILDS ABOUT CANCELING?
+			if(canceled) {
+				;
+			}
+			
+			//IF PARENT IS WAITING => NOTIFY FOR TRACKING
+			if(job.getParentId() != null) {
+				JobInfo jobp = jobScheduler.getJobManager().findJob(job.getParentId());
+				if(jobp.getState() == JobState.WAITING) {
+					jobScheduler.submitJob(jobp);
+				}
+			}
 		} else {
 			job.setState(JobState.RETRYING);
 			job.setStatus(ExecutionStatus.RETRY);

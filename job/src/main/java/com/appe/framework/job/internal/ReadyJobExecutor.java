@@ -45,7 +45,7 @@ public class ReadyJobExecutor extends JobExecutor {
 		job.setStatus(status);
 		
 		if(ExecutionStatus.isCompleted(status)) {
-			notifyCompletion(jobListener, jobContext);
+			notifyCompletion(jobContext, jobListener);
 		} else if(status == ExecutionStatus.WAIT) {
 			job.setState(JobState.WAITING);
 			

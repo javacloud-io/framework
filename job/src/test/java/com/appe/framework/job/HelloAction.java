@@ -26,6 +26,12 @@ public class HelloAction implements ExecutionListener {
 
 	@Override
 	public boolean onCompletion(ExecutionContext executionContext) {
+		//JOB IS CANCEL => DOING NOTHING
+		if(executionContext.getStatus() == ExecutionStatus.CANCEL) {
+			return true;
+		}
+		
+		//KEEP RE-TRY
 		if(executionContext.getRetryCount() < 3) {
 			return false;
 		}

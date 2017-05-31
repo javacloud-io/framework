@@ -10,6 +10,8 @@ public enum ExecutionStatus {
 	WARNING,
 	FAIL,
 	
+	CANCEL,
+	
 	WAIT,
 	RETRY;
 	
