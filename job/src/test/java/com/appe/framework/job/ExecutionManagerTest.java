@@ -75,7 +75,7 @@ public class ExecutionManagerTest extends GuiceTestCase {
 	@Test
 	public void testHello() {
 		for(int i = 0; i < 10; i ++) {
-			String jobId = executionManager.submitJob("HelloAction", Objects.asDict("test", 123));
+			String jobId = executionManager.scheduleJob("HelloAction", Objects.asDict("test", 123));
 			jobIds.add(jobId);
 		}
 		

@@ -18,7 +18,7 @@ public class HelloAction implements ExecutionListener {
 	public ExecutionStatus onExecute(ExecutionContext executionContext) {
 		logger.info("<" + executionContext.getRetryCount() + "> Hello world!");
 		
-		executionContext.submitJob("HelloChildAction", null);
+		executionContext.scheduleJob("HelloChildAction", null);
 		
 		Objects.sleep(2, TimeUnit.SECONDS);
 		return ExecutionStatus.WAIT;

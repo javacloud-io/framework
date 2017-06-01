@@ -15,7 +15,7 @@ public interface ExecutionManager {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, Map<String, Object> parameters);
+	public String scheduleJob(String jobName, Map<String, Object> parameters);
 	
 	/**
 	 * return job execution status to see if it's completed

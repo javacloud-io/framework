@@ -58,7 +58,7 @@ public abstract class JobScheduler {
 		//CREATE DEFAULT JOB CONTEXT
 		return new JobContext(job) {
 			@Override
-			public String submitJob(String jobName, Map<String, Object> parameters) {
+			public String scheduleJob(String jobName, Map<String, Object> parameters) {
 				Dictionary jobParameters = new Dictionary();
 				//inherit a copy parent parameters
 				for(Enumeration<String> iter = getParameterNames(); iter.hasMoreElements(); ) {
@@ -73,7 +73,7 @@ public abstract class JobScheduler {
 				childJob.setParentId(getId());
 				
 				//submit child job
-				return JobScheduler.this.submitJob(childJob);
+				return JobScheduler.this.scheduleJob(childJob);
 			}
 			
 			//LOG TO LOGGER & ADD ACTIVITY
@@ -117,7 +117,7 @@ public abstract class JobScheduler {
 	 * @param job
 	 * @return
 	 */
-	public String submitJob(JobInfo job) {
+	public String scheduleJob(JobInfo job) {
 		//FILL IN MISSING INFO
 		if(job.getState() == null) {
 			job.setState(JobState.CREATED);
@@ -127,7 +127,7 @@ public abstract class JobScheduler {
 		jobManager.syncJob(job);
 		
 		//ROUTE TO CORRECT QUEUE
-		return scheduleJob(job);
+		return submitJob(job);
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public abstract class JobScheduler {
 	 * @param job
 	 * @return
 	 */
-	protected abstract String scheduleJob(JobInfo job);
+	protected abstract String submitJob(JobInfo job);
 	
 	/**
 	 * Start the schedule to handle WORKERS

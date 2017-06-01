@@ -49,14 +49,14 @@ public class ReadyJobExecutor extends JobExecutor {
 		} else if(status == ExecutionStatus.WAIT) {
 			job.setState(JobState.WAITING);
 			
-			//PUSH JOB BACK TO WAITING QUEUE
-			jobScheduler.submitJob(job);
+			//PUSH JOB BACK TO WAITING QUEUE?
+			jobScheduler.scheduleJob(job);
 		} else if(status == ExecutionStatus.RETRY) {
 			job.setState(JobState.RETRYING);
 			job.setRetryCount(job.getRetryCount() + 1);
 			
 			//PUSH JOB BACK TO JOB QUEUE
-			jobScheduler.submitJob(job);
+			jobScheduler.scheduleJob(job);
 		}
 	}
 }

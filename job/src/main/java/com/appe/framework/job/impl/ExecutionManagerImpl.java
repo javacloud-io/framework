@@ -50,8 +50,8 @@ public class ExecutionManagerImpl implements ExecutionManager {
 	 * Submit a job with NAME and parameters
 	 */
 	@Override
-	public String submitJob(String jobName, Map<String, Object> parameters) {
+	public String scheduleJob(String jobName, Map<String, Object> parameters) {
 		JobInfo job = new JobInfo(jobName, new Dictionary(parameters));
-		return jobScheduler.submitJob(job);
+		return jobScheduler.scheduleJob(job);
 	}
 }

@@ -110,7 +110,8 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 			if(job.getParentId() != null) {
 				JobInfo jobp = jobScheduler.getJobManager().findJob(job.getParentId());
 				if(jobp.getState() == JobState.WAITING) {
-					jobScheduler.submitJob(jobp);
+					logger.debug("Notify parent job: {}", jobp);
+					jobScheduler.scheduleJob(jobp);
 				}
 			}
 		} else {
@@ -119,7 +120,7 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 			job.setRetryCount(job.getRetryCount() + 1);
 			
 			//SCHEDULE JOB BACK TO RETRY
-			jobScheduler.submitJob(job);
+			jobScheduler.scheduleJob(job);
 		}
 	}
 }

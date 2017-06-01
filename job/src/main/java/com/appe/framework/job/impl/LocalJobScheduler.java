@@ -43,7 +43,7 @@ public class LocalJobScheduler extends JobScheduler {
 	 * @return
 	 */
 	@Override
-	protected String scheduleJob(JobInfo job) {
+	protected String submitJob(JobInfo job) {
 		if(job.getState() == JobState.WAITING) {
 			trackerQueue.offer(new JobTask(job));
 		} else {
@@ -65,7 +65,7 @@ public class LocalJobScheduler extends JobScheduler {
 		
 		//START WORKERS POOL
 		logger.info("Start executor with {} workers", numberOfWorkers);
-		executorService = Executors.newFixedThreadPool(numberOfWorkers + 1);
+		executorService = Executors.newCachedThreadPool();
 		for(int i = 0; i < numberOfWorkers; i ++) {
 			executorService.submit(new ReadyJobExecutor(this, executorQueue));
 		}

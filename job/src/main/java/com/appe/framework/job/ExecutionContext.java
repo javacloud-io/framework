@@ -75,7 +75,7 @@ public interface ExecutionContext {
 	 * @param parameters
 	 * @return
 	 */
-	public String submitJob(String jobName, Map<String, Object> parameters);
+	public String scheduleJob(String jobName, Map<String, Object> parameters);
 	
 	/**
 	 * Log activity message
