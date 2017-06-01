@@ -65,7 +65,7 @@ public class LocalJobScheduler extends JobScheduler {
 		
 		//START WORKERS POOL
 		logger.info("Start executor with {} workers", numberOfWorkers);
-		executorService = Executors.newCachedThreadPool();
+		executorService = Executors.newFixedThreadPool(numberOfWorkers + 1);
 		for(int i = 0; i < numberOfWorkers; i ++) {
 			executorService.submit(new ReadyJobExecutor(this, executorQueue));
 		}

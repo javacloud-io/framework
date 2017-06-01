@@ -122,5 +122,6 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 			//SCHEDULE JOB BACK TO RETRY
 			jobScheduler.scheduleJob(job);
 		}
+		logger.debug("Completion job: {} -> {}", job, job.getStatus());
 	}
 }
