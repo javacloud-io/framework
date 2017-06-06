@@ -16,7 +16,7 @@ import com.appe.framework.job.management.JobState;
  * @author ho
  *
  */
-public class ReadyJobExecutor extends JobExecutor {
+public class ReadyJobExecutor extends GenericJobExecutor {
 	/**
 	 * CREATED or RETRYING should be using same processing QUEUE. Unless we using 2 set of workers
 	 * to process them separately which is NOT FAIL for the JOB which already QUEUED.

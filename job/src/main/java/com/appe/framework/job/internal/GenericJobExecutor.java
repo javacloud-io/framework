@@ -6,7 +6,7 @@ import com.appe.framework.job.execution.JobContext;
 import com.appe.framework.job.execution.JobTask;
 import com.appe.framework.job.execution.JobPoller;
 import com.appe.framework.job.execution.JobScheduler;
-import com.appe.framework.job.execution.JobWorker;
+import com.appe.framework.job.execution.JobExecutor;
 import com.appe.framework.job.management.JobInfo;
 import com.appe.framework.job.management.JobState;
 
@@ -16,7 +16,7 @@ import com.appe.framework.job.management.JobState;
  * @author ho
  *
  */
-public abstract class JobExecutor extends JobWorker<JobContext> {
+public abstract class GenericJobExecutor extends JobExecutor<JobContext> {
 	protected JobScheduler 	jobScheduler;
 	protected JobPoller 	jobPoller;
 	/**
@@ -24,7 +24,7 @@ public abstract class JobExecutor extends JobWorker<JobContext> {
 	 * @param jobScheduler
 	 * @param jobPoller
 	 */
-	public JobExecutor(JobScheduler jobScheduler, JobPoller jobPoller) {
+	public GenericJobExecutor(JobScheduler jobScheduler, JobPoller jobPoller) {
 		this.jobScheduler	= jobScheduler;
 		this.jobPoller		= jobPoller;
 	}

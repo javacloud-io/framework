@@ -18,7 +18,7 @@ import com.appe.framework.job.management.JobState;
  * @author ho
  *
  */
-public class WaitingJobTracker extends JobExecutor {
+public class WaitingJobTracker extends GenericJobExecutor {
 	/**
 	 * 
 	 * @param jobScheduler

@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  * @author ho
  *
  */
-public abstract class JobWorker<Job> implements Runnable {
-	protected static final Logger logger  = LoggerFactory.getLogger(JobWorker.class);
+public abstract class JobExecutor<Job> implements Runnable {
+	protected static final Logger logger  = LoggerFactory.getLogger(JobExecutor.class);
 	private static final int WAIT_TIMEOUT = (int)TimeUnit.SECONDS.convert(1, TimeUnit.HOURS);	//DEFAULT 1 HOUR EACH?
 	
-	protected JobWorker() {
+	protected JobExecutor() {
 	}
 	
 	/**
