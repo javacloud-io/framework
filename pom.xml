@@ -41,10 +41,9 @@
     <module>config</module>
     <module>data</module>
     <module>cache</module>
-    <module>job</module>
     <module>security</module>
-    <module>activity</module>
     <!--module>ssl</module-->
+    
     <module>client</module>
     <module>server-test</module>
     <module>server</module>
