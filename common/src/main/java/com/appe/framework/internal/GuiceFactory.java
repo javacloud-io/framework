@@ -90,7 +90,7 @@ public final class GuiceFactory {
 							if(Objects.isEmpty(binding.name())) {
 								bindingBuilder = bind(binding.typeClass());
 							} else {
-								bindingBuilder = bindNamed(binding.typeClass(), binding.name());
+								bindingBuilder = bindToName(binding.typeClass(), binding.name());
 							}
 							
 							//BIND TO IMPL IF VALID

@@ -26,7 +26,7 @@ public class TestModule extends GuiceModule {
 		bind(TestService.class).to(TestServiceImpl.class);
 		bind(TestInject.class);
 		
-		bindNamed(TestService.class, "named").to(TestServiceImpl.class);
+		bindToName(TestService.class, "named").to(TestServiceImpl.class);
 		bind(TestInjectNamed.class);
 	}
 	
