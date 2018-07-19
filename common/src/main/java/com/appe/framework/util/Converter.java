@@ -170,7 +170,7 @@ public interface Converter<T> {
 			}
 			//USING ISO DATE
 			try {
-				return (value != null? DateFormats.getUTC(DateFormats.ISO8601_SSS).parse((String)value) : null);
+				return (value != null? DateFormats.getUTC(DateFormats.ISO8601_S3).parse((String)value) : null);
 			}catch(ParseException ex) {
 				throw AppeException.wrap(ex);
 			}
@@ -183,7 +183,7 @@ public interface Converter<T> {
 			if(value instanceof String) {
 				return	(String)value;
 			} else if(value instanceof Date) {
-				return DateFormats.getUTC(DateFormats.ISO8601_SSS).format((Date)value);
+				return DateFormats.getUTC(DateFormats.ISO8601_S3).format((Date)value);
 			} else if(value instanceof byte[]) {
 				return Codecs.encodeBase64((byte[])value, false);
 			} else if(value instanceof Object[]) {

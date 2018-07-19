@@ -23,7 +23,8 @@ public enum DataType {
 	DATE,
 	
 	COUNTER,	//MAP to double counter
-	BYTEB;		//RAW BYTEs or BASE64 ENCODED.
+	BYTEB,		//RAW BYTEs or BASE64 ENCODED.
+	LMAP;		//INDEXABLE map name/value for tag/label purpose
 	
 	//MAP PRIMARY DATA TYPE
 	private static final Map<Class<?>, DataType> PRIMITIVES = Objects.asMap(
@@ -42,7 +43,8 @@ public enum DataType {
 		String.class,		UTF8,
 		Date.class,			DATE,
 		byte[].class,		BYTEB,
-		ByteBuffer.class,	BYTEB);
+		ByteBuffer.class,	BYTEB,
+		Map.class,			LMAP);
 	
 	//ENUM is SPECIAL
 	public static DataType get(Class<?> type) {

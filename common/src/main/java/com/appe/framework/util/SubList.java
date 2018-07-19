@@ -9,18 +9,30 @@ import java.util.List;
  *
  * @param <T>
  */
-public class ItemList<T> {
+public class SubList<T> {
 	private int count;
 	private List<T> items;
-	public ItemList() {
+	public SubList() {
 	}
 	
 	/**
-	 * 
+	 * return a total sublist
 	 * @param items
 	 */
-	public ItemList(List<T> items) {
+	public SubList(List<T> items) {
 		this.items = items;
+		this.count = (items == null? 0 : items.size());
+	}
+	
+	/**
+	 * return partial sublist
+	 * 
+	 * @param items
+	 * @param fromIndex
+	 * @param toIndex
+	 */
+	public SubList(List<T> items, int fromIndex, int toIndex) {
+		this.items = (items == null? null : items.subList(fromIndex, toIndex));
 		this.count = (items == null? 0 : items.size());
 	}
 	
@@ -41,7 +53,7 @@ public class ItemList<T> {
 	 * @param count
 	 * @return
 	 */
-	public ItemList<T> withCount(int count) {
+	public SubList<T> withCount(int count) {
 		setCount(count);
 		return this;
 	}
@@ -63,7 +75,7 @@ public class ItemList<T> {
 	 * @param items
 	 * @return
 	 */
-	public ItemList<T> withItems(List<T> items) {
+	public SubList<T> withItems(List<T> items) {
 		setItems(items);
 		return this;
 	}

@@ -106,7 +106,7 @@ public abstract class DataMapper<T> {
 		public POJO(Class<T> type, Object...columns) {
 			this.type = type;
 			
-			//AUTO DISCOVER READ/WRITE PROPERTIES IF NONE SPECIFIED
+			//AUTO DISCOVER READ/WRITE COLUMES ONLY IF NONE SPECIFIED
 			if(columns != null && columns.length > 1) {
 				this.columns = Objects.asMap(columns);
 				introspectColumns(false);
@@ -129,7 +129,6 @@ public abstract class DataMapper<T> {
 			}
 		}
 		
-		//TODO: SHOULD THROW EXCEPTION IF NOT FOUND?
 		@Override
 		public void setColumn(T model, String column, Object value) {
 			try {
@@ -137,6 +136,7 @@ public abstract class DataMapper<T> {
 				if(descr != null) {
 					descr.getKey().invoke(model, value);
 				}
+				//FIXME: SHOULD THROW EXCEPTION IF NOT FOUND?
 			} catch(IllegalAccessException | IllegalArgumentException | SecurityException | InvocationTargetException ex) {
 				throw DataException.wrap(ex);
 			}
@@ -157,7 +157,7 @@ public abstract class DataMapper<T> {
 		 * Inspect more columns from the class & cache getter/setter method.
 		 * Subclass override to exclude unwanted field.
 		 */
-		protected void introspectColumns(boolean discover) {
+		protected void introspectColumns(boolean discoverType) {
 			try {
 				PropertyDescriptor[] descriptors = Introspector.getBeanInfo(type).getPropertyDescriptors();
 				for(PropertyDescriptor descr: descriptors) {
@@ -168,7 +168,7 @@ public abstract class DataMapper<T> {
 					}
 					
 					//FIND THE CORRECT TYPE MAPPING
-					if(discover) {
+					if(discoverType) {
 						DataType dt = DataType.get(descr.getPropertyType());
 						
 						//ADD DATA TYPE IF FOUND
