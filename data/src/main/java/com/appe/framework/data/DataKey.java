@@ -1,6 +1,6 @@
 package com.appe.framework.data;
 
-import com.appe.framework.util.Converter;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 
 /**
@@ -145,7 +145,7 @@ public class DataKey implements Comparable<DataKey> {
 	 */
 	@Override
 	public String toString() {
-		return Converter.STRING.convert(hashKey)
-					+ (rangeKey != null? "#" + Converter.STRING.convert(rangeKey) : "");
+		return Converters.STRING.to(hashKey)
+					+ (rangeKey != null? "#" + Converters.STRING.to(rangeKey) : "");
 	}
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
 import com.appe.framework.AppeException;
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.security.AccessDeniedException;
 import com.appe.framework.security.AuthenticationException;
 import com.appe.framework.security.AccessGrant;
@@ -17,7 +18,6 @@ import com.appe.framework.security.InvalidCredentialsException;
 import com.appe.framework.security.internal.Permissions;
 import com.appe.framework.server.internal.RequestWrapper;
 import com.appe.framework.util.Dictionaries;
-import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 
 /**

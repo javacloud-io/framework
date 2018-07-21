@@ -1,5 +1,7 @@
-package com.appe.framework.util;
+package com.appe.framework.io;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -9,31 +11,27 @@ import java.util.List;
  *
  * @param <T>
  */
-public class SubList<T> {
+public class ResultList<T> implements Iterable<T> {
 	private int count;
 	private List<T> items;
-	public SubList() {
+	public ResultList() {
 	}
-	
 	/**
 	 * return a total sublist
 	 * @param items
 	 */
-	public SubList(List<T> items) {
-		this.items = items;
-		this.count = (items == null? 0 : items.size());
+	public ResultList(List<T> items) {
+		this(items, items == null? 0 : items.size());
 	}
 	
 	/**
-	 * return partial sublist
 	 * 
 	 * @param items
-	 * @param fromIndex
-	 * @param toIndex
+	 * @param count
 	 */
-	public SubList(List<T> items, int fromIndex, int toIndex) {
-		this.items = (items == null? null : items.subList(fromIndex, toIndex));
-		this.count = (items == null? 0 : items.size());
+	public ResultList(List<T> items, int count) {
+		this.count = count;
+		this.items = items;
 	}
 	
 	/**
@@ -53,7 +51,7 @@ public class SubList<T> {
 	 * @param count
 	 * @return
 	 */
-	public SubList<T> withCount(int count) {
+	public ResultList<T> withCount(int count) {
 		setCount(count);
 		return this;
 	}
@@ -75,8 +73,22 @@ public class SubList<T> {
 	 * @param items
 	 * @return
 	 */
-	public SubList<T> withItems(List<T> items) {
+	public ResultList<T> withItems(List<T> items) {
 		setItems(items);
 		return this;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public Iterator<T> iterator() {
+		Iterator<T> iter;
+		if(items == null) {
+			iter = Collections.emptyIterator();
+		} else {
+			iter = items.iterator();
+		}
+		return iter;
 	}
 }

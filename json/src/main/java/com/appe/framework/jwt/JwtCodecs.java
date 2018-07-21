@@ -11,10 +11,10 @@ import java.security.SignatureException;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import com.appe.framework.json.Externalizer;
-import com.appe.framework.json.internal.JacksonConverter;
+import com.appe.framework.io.Dictionary;
+import com.appe.framework.io.Externalizer;
+import com.appe.framework.json.JacksonConverter;
 import com.appe.framework.util.Codecs;
-import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Hmacs;
 import com.appe.framework.util.Objects;
 
@@ -183,7 +183,7 @@ public final class JwtCodecs {
 		try {
 			Dictionary header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true), Dictionary.class);
 			Dictionary claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Dictionary.class);
-			return new JwtToken(header.getString("typ"), header.getString("alg"), claims);
+			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
 		} catch(IOException ex) {
 			throw new JwtException(ex);
 		}

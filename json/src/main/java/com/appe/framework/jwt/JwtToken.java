@@ -1,6 +1,6 @@
 package com.appe.framework.jwt;
 
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 
 /**
  * Simple token representation with Dictionary claims set.

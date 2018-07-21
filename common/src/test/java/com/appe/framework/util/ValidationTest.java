@@ -1,5 +1,7 @@
 package com.appe.framework.util;
 
+import com.appe.framework.io.ValidationException;
+
 import junit.framework.TestCase;
 /**
  * 

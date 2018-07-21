@@ -2,7 +2,7 @@ package com.appe.framework.data.impl;
 
 import com.appe.framework.data.DataMapper;
 import com.appe.framework.data.DataType;
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 
 import junit.framework.TestCase;
 /**

@@ -2,7 +2,7 @@ package com.appe.framework.ssl.internal;
 
 import java.util.Date;
 
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 
 /**
  * Simple certificate information request

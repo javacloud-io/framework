@@ -17,7 +17,7 @@ package com.appe.framework.util;
 
 import org.junit.Assert;
 
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.util.Objects;
 
 import junit.framework.TestCase;

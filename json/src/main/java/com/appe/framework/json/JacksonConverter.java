@@ -1,12 +1,12 @@
-package com.appe.framework.json.internal;
+package com.appe.framework.json;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.appe.framework.io.BytesInputStream;
-import com.appe.framework.io.BytesOutputStream;
-import com.appe.framework.json.Externalizer;
+import com.appe.framework.io.Externalizer;
+import com.appe.framework.nio.BytesInputStream;
+import com.appe.framework.nio.BytesOutputStream;
 import com.appe.framework.util.Codecs;
 
 /**
@@ -25,8 +25,8 @@ public final class JacksonConverter implements Externalizer {
 	 * 
 	 */
 	@Override
-	public String contentType() {
-		return externalizer.contentType();
+	public String type() {
+		return externalizer.type();
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package com.appe.framework.json;
+package com.appe.framework.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ public interface Externalizer {
 	 * return content type identifier
 	 * @return
 	 */
-	public String contentType();
+	public String type();
 	
 	/**
 	 * 

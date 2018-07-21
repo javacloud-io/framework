@@ -1,4 +1,4 @@
-package com.appe.framework.util;
+package com.appe.framework.io;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,6 +6,8 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Map;
+
+import com.appe.framework.util.Objects;
 /**
  * Implements Config using MAP. Make sure it's OK on the other side of the PROJECT.
  * 
@@ -38,133 +40,23 @@ public class Dictionary implements Map<String, Object> {
 	}
 	
 	/**
+	 * 
+	 * @param name
+	 * @param defaultValue
+	 * @return
+	 */
+	public final <T> T get(String name, T defaultValue) {
+		T value = get(name);
+		return (value == null ? defaultValue : value);
+	}
+	
+	/**
 	 * No value return AT ALL.
 	 * @param name
 	 * @param value
 	 */
 	public final void set(String name, Object value) {
 		put(name, value);
-	}
-	
-	/**
-	 * Trying to return the string for this OBJECT.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public String getString(String name) {
-		return Converter.STRING.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public String getString(String name, String defaultValue) {
-		String value = getString(name);
-		return (value == null ? defaultValue : value);
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public Boolean getBoolean(String name) {
-		return Converter.BOOLEAN.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public boolean getBoolean(String name, boolean defaultValue) {
-		Boolean value = getBoolean(name);
-		return (value == null ? defaultValue : value);
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public Integer getInteger(String name) {
-		return Converter.INTEGER.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public int getInteger(String name, int defaultValue) {
-		Integer value = getInteger(name);
-		return (value == null ? defaultValue : value);
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public Long getLong(String name) {
-		return Converter.LONG.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public long getLong(String name, long defaultValue) {
-		Long value = getLong(name);
-		return (value == null ? defaultValue : value);
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public Float getFloat(String name) {
-		return Converter.FLOAT.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public float getFloat(String name, float defaultValue) {
-		Float value = getFloat(name);
-		return (value == null ? defaultValue : value);
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public Double getDouble(String name) {
-		return Converter.DOUBLE.convert(get(name));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param defaultValue
-	 * @return
-	 */
-	public double getDouble(String name, double defaultValue) {
-		Double value = getDouble(name);
-		return (value == null ? defaultValue : value);
 	}
 	
 	/**

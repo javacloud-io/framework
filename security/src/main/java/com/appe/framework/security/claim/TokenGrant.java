@@ -3,8 +3,8 @@ package com.appe.framework.security.claim;
 import java.security.Principal;
 import java.util.Date;
 
+import com.appe.framework.io.Identifiable;
 import com.appe.framework.security.IdParameters;
-import com.appe.framework.util.Identifiable;
 /**
  * User access token, use on behalf of user credentials. System always lookup the user when such one is provided.
  * Just simply using type to enforce token used at the moment.

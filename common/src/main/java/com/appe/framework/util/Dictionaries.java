@@ -31,6 +31,8 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.appe.framework.io.Dictionary;
+
 /**
  * It's much more powerful to use XML Plist instead of java properties file.
  * 
@@ -73,7 +75,7 @@ public final class Dictionaries {
 	public static String encodeURL(Dictionary params) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		for(String name: params.keySet()) {
-			String value = params.getString(name);
+			String value = Converters.STRING.to(params.get(name));
 			if(value == null) {
 				continue;
 			}

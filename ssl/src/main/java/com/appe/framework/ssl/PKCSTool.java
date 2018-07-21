@@ -28,7 +28,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.appe.framework.io.BytesInputStream;
+import com.appe.framework.nio.BytesInputStream;
 import com.appe.framework.ssl.internal.SunPKCS1;
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.PRNG;

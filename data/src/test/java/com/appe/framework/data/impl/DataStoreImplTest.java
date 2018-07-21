@@ -12,7 +12,7 @@ import com.appe.framework.data.DataResult;
 import com.appe.framework.data.DataSchema;
 import com.appe.framework.data.DataStore;
 import com.appe.framework.data.DataType;
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.util.Objects;
 
 import junit.framework.TestCase;
@@ -70,8 +70,8 @@ public abstract class DataStoreImplTest extends TestCase {
 		for(int i = 0; i < 100; i ++) {
 			model = dataStore.get(new DataKey("id-" + i));
 			
-			assertEquals(model.getString("ai"), String.valueOf(i));
-			assertEquals(model.getString("a2i"), String.valueOf(2 * i));
+			assertEquals(model.get("ai"), String.valueOf(i));
+			assertEquals(model.get("a2i"), String.valueOf(2 * i));
 		}
 		
 		//test to list
@@ -120,8 +120,8 @@ public abstract class DataStoreImplTest extends TestCase {
 		//OK, TRY TO QUERY
 		for(int i = 0; i < 10; i ++) {
 			model = dataStore.get(new DataKey("id-" + i, i));
-			assertEquals(model.getString("ai"), String.valueOf(i));
-			assertEquals(model.getString("a2i"), String.valueOf(2 * i));
+			assertEquals(model.get("ai"), String.valueOf(i));
+			assertEquals(model.get("a2i"), String.valueOf(2 * i));
 		}
 		
 		//test to list
@@ -172,8 +172,8 @@ public abstract class DataStoreImplTest extends TestCase {
 		//OK, TRY TO QUERY
 		for(int i = 0; i < 10; i ++) {
 			model = dataStore.get(new DataKey("id-" + i, i));
-			assertEquals(model.getString("ai"), String.valueOf(i));
-			assertEquals(model.getString("a2i"), String.valueOf(2 * i));
+			assertEquals(model.get("ai"), String.valueOf(i));
+			assertEquals(model.get("a2i"), String.valueOf(2 * i));
 		}
 		
 		//test to list

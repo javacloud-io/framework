@@ -1,4 +1,4 @@
-package com.appe.framework.json.internal;
+package com.appe.framework.json;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,9 +7,9 @@ import java.util.Map;
 
 import javax.inject.Singleton;
 
-import com.appe.framework.json.Externalizer;
+import com.appe.framework.io.Dictionary;
+import com.appe.framework.io.Externalizer;
 import com.appe.framework.util.DateFormats;
-import com.appe.framework.util.Dictionary;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -100,10 +100,10 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * JSON
 	 */
 	@Override
-	public String contentType() {
+	public String type() {
 		return JSON;
 	}
 	

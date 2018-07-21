@@ -1,4 +1,4 @@
-package com.appe.framework.io;
+package com.appe.framework.nio;
 
 import java.io.IOException;
 import java.io.InputStream;

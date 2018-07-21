@@ -7,8 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.util.Dictionaries;
-import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 /**
  * Only parsing out request parameters from QUERY to avoid touching the BODY in case of:
@@ -34,7 +34,7 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getParameter(String name) {
-		return parameterMap.getString(name);
+		return parameterMap.get(name);
 	}
 	
 	/**

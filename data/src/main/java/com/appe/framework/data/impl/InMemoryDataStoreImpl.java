@@ -21,7 +21,7 @@ import com.appe.framework.data.DataType;
 import com.appe.framework.data.internal.AbstractDataStore;
 import com.appe.framework.data.util.DataProjection;
 import com.appe.framework.data.util.DataResultList;
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.util.Objects;
 /**
  * Simple in memory implementation of DataStore. DataModel are hashed by HASH KEY and index by RANGE KEY.

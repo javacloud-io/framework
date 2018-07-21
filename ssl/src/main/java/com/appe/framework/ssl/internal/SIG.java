@@ -2,7 +2,7 @@ package com.appe.framework.ssl.internal;
 
 import java.security.cert.X509Certificate;
 
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 
 /**
  * Simple envelop signature & it's certificate embedded for signing purpose.

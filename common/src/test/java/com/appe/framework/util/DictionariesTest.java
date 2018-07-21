@@ -15,8 +15,8 @@
  */
 package com.appe.framework.util;
 
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.util.Dictionaries;
-import com.appe.framework.util.Dictionary;
 
 import junit.framework.TestCase;
 /**

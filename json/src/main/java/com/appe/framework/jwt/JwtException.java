@@ -1,6 +1,6 @@
 package com.appe.framework.jwt;
 
-import com.appe.framework.util.ValidationException;
+import com.appe.framework.io.ValidationException;
 /**
  * 
  * @author ho

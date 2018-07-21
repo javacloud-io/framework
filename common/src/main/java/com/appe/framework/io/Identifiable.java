@@ -1,4 +1,4 @@
-package com.appe.framework.util;
+package com.appe.framework.io;
 /**
  * Something unique identify the OBJECT, mostly is automatically generated OBJECT.
  * 

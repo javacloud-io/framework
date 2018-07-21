@@ -5,8 +5,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.resource.internal.ConfigBundleHandler;
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 
 /**
@@ -65,10 +66,10 @@ public class ConfigBundleHandlerImpl extends ConfigBundleHandler {
 		if(useSystemProperties) {
 			value = System.getProperty(key);
 			if(Objects.isEmpty(value)) {
-				value = config.getString(key, defaultValue);
+				value = Converters.STRING.to(config.get(key, defaultValue));
 			}
 		} else {
-			value = config.getString(key, defaultValue);
+			value = Converters.STRING.to(config.get(key, defaultValue));
 		}
 		return value;
 	}

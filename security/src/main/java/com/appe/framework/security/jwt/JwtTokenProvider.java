@@ -2,7 +2,8 @@ package com.appe.framework.security.jwt;
 
 import java.util.Date;
 
-import com.appe.framework.json.Externalizer;
+import com.appe.framework.io.Dictionary;
+import com.appe.framework.io.Externalizer;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtSigner;
 import com.appe.framework.jwt.JwtToken;
@@ -10,7 +11,6 @@ import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.claim.TokenGrant;
 import com.appe.framework.security.claim.TokenProvider;
-import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 
 /**

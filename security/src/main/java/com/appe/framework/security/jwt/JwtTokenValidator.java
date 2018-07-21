@@ -9,7 +9,8 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.appe.framework.json.Externalizer;
+import com.appe.framework.io.Dictionary;
+import com.appe.framework.io.Externalizer;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtException;
 import com.appe.framework.jwt.JwtToken;
@@ -20,7 +21,7 @@ import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.InvalidCredentialsException;
 import com.appe.framework.security.claim.TokenGrant;
 import com.appe.framework.security.claim.TokenValidator;
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.util.Converters;
 
 /**
  * Simple implementation of a JWT validation with a trusted signer, assuming sharing the signing key or public/private
@@ -73,14 +74,14 @@ public class JwtTokenValidator implements TokenValidator {
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
 		TokenGrant grantToken = new TokenGrant();
 		grantToken.setId(token);
-		grantToken.setType(IdParameters.GrantType.valueOf(claims.getString(JWT_TYPE)));
-		grantToken.setSubject(claims.getString(JWT_SUBJECT));
-		grantToken.setAudience(claims.getString(JWT_AUDIENCE));
-		grantToken.setScope(claims.getString(JWT_SCOPE));
-		grantToken.setRoles(claims.getString(JWT_ROLES));
+		grantToken.setType(IdParameters.GrantType.valueOf((String)claims.get(JWT_TYPE)));
+		grantToken.setSubject((String)claims.get(JWT_SUBJECT));
+		grantToken.setAudience((String)claims.get(JWT_AUDIENCE));
+		grantToken.setScope((String)claims.get(JWT_SCOPE));
+		grantToken.setRoles((String)claims.get(JWT_ROLES));
 		
-		grantToken.setExpireAt(new Date(claims.getLong(JWT_EXPIRATION)));
-		grantToken.setIssuedAt(new Date(claims.getLong(JWT_ISSUEDAT)));
+		grantToken.setExpireAt(new Date(Converters.LONG.to(claims.get(JWT_EXPIRATION))));
+		grantToken.setIssuedAt(new Date(Converters.LONG.to(claims.get(JWT_ISSUEDAT))));
 		if(TokenGrant.isExpired(grantToken)) {
 			throw new AccessDeniedException(AccessDeniedException.EXPIRED_CREDENTIALS);
 		}

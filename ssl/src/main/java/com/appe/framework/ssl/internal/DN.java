@@ -10,7 +10,7 @@ import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import javax.naming.ldap.Rdn;
 
-import com.appe.framework.util.Dictionary;
+import com.appe.framework.io.Dictionary;
 
 /**
  * Use to construct DN, it's just have a single VALUE. It's representation in nature ORDER.

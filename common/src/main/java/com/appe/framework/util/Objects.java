@@ -12,6 +12,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import com.appe.framework.io.Converter;
+import com.appe.framework.io.Dictionary;
+
 /**
  * Basic primary object converter
  * 
@@ -21,27 +24,27 @@ import java.util.concurrent.TimeUnit;
 public final class Objects {
 	//PRIMITIVES MAP
 	public static final Map<Class<?>, Converter<?>> PRIMITIVES = asMap(
-			boolean.class, 	Converter.BOOLEAN,
-			Boolean.class, 	Converter.BOOLEAN,
-			byte.class,    	Converter.BYTE,
-			Byte.class, 	Converter.BYTE,
-			char.class,		Converter.CHARACTER,
-			Character.class,Converter.CHARACTER,
-			short.class,	Converter.SHORT,
-			Short.class,	Converter.SHORT,
-			int.class,		Converter.INTEGER,
-			Integer.class,	Converter.INTEGER,
-			long.class,		Converter.LONG,
-			Long.class,		Converter.LONG,
-			float.class,	Converter.FLOAT,
-			Float.class,	Converter.FLOAT,
-			double.class,	Converter.DOUBLE,
-			Double.class,	Converter.DOUBLE,
-			String.class,	Converter.STRING,
-			Date.class,		Converter.DATE,
-			byte[].class,	Converter.BYTES,
-			ByteBuffer.class,Converter.BYTEB
-		);
+			boolean.class, 	Converters.BOOLEAN,
+			Boolean.class, 	Converters.BOOLEAN,
+			byte.class,    	Converters.BYTE,
+			Byte.class, 	Converters.BYTE,
+			char.class,		Converters.CHARACTER,
+			Character.class,Converters.CHARACTER,
+			short.class,	Converters.SHORT,
+			Short.class,	Converters.SHORT,
+			int.class,		Converters.INTEGER,
+			Integer.class,	Converters.INTEGER,
+			long.class,		Converters.LONG,
+			Long.class,		Converters.LONG,
+			float.class,	Converters.FLOAT,
+			Float.class,	Converters.FLOAT,
+			double.class,	Converters.DOUBLE,
+			Double.class,	Converters.DOUBLE,
+			String.class,	Converters.STRING,
+			Date.class,		Converters.DATE,
+			byte[].class,	Converters.BYTES,
+			ByteBuffer.class,Converters.BYTEB
+	);
 	/**
 	 * Generic comparing 2 objects. It has to be comparable some how.
 	 * NULL <= NULL < NOT NULL
@@ -95,6 +98,15 @@ public final class Objects {
 	}
 	
 	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String toString(Object value) {
+		return Converters.STRING.to(value);
+	}
+	
+	/**
 	 * Assuming the coming list value doesn't have comma character.
 	 * 
 	 * @param name
@@ -108,10 +120,10 @@ public final class Objects {
 		
 		//Build the list with comma separated.
 		StringBuilder buf = new StringBuilder();
-		buf.append(Converter.STRING.convert(list[0]));
+		buf.append(Converters.STRING.to(list[0]));
 		for(int i = 1; i < list.length; i ++) {
 			buf.append(sep)
-				.append(Converter.STRING.convert(list[i]));
+			   .append(Converters.STRING.to(list[i]));
 		}
 		return buf.toString();
 	}

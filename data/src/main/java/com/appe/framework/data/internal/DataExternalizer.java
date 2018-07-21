@@ -7,9 +7,9 @@ import java.util.Map;
 import com.appe.framework.data.DataException;
 import com.appe.framework.data.DataMapper;
 import com.appe.framework.data.DataType;
-import com.appe.framework.io.BytesInputStream;
-import com.appe.framework.io.BytesOutputStream;
-import com.appe.framework.json.Externalizer;
+import com.appe.framework.io.Externalizer;
+import com.appe.framework.nio.BytesInputStream;
+import com.appe.framework.nio.BytesOutputStream;
 import com.appe.framework.util.Codecs;
 import com.appe.framework.util.Objects;
 

@@ -8,8 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
+import com.appe.framework.io.Pair;
 import com.appe.framework.util.Objects;
-import com.appe.framework.util.Pair;
 
 /**
  * Data schema interface to be able to support mapping data from underline source. By default, using MAP or POJO mapping.

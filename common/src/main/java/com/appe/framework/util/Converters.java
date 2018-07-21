@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import com.appe.framework.AppeException;
+import com.appe.framework.io.Converter;
 
 /**
  * Converting from something to something else. String to bytes[] will automatically assuming base64 encoded!!!
@@ -13,18 +14,14 @@ import com.appe.framework.AppeException;
  * @author tobi
  * @param <T>
  */
-public interface Converter<T> {
-	/**
-	 * Convert an object v to any type T, value is string or sub type of T.
-	 * @param value
-	 * @return
-	 */
-	public T convert(Object value);
+public final class Converters {
+	private Converters() {
+	}
 	
 	//ANYTHING
 	public static final Converter<Object> OBJECT = new Converter<Object>() {
 		@Override
-		public Object convert(Object value) {
+		public Object to(Object value) {
 			return value;
 		}
 	};
@@ -32,7 +29,7 @@ public interface Converter<T> {
 	//BOOLEAN | NUMBER | STRING
 	public static final Converter<Boolean> BOOLEAN = new Converter<Boolean>() {
 		@Override
-		public Boolean convert(Object value) {
+		public Boolean to(Object value) {
 			if(value instanceof Boolean) {
 				return (Boolean)value;
 			} else if(value instanceof Number) {
@@ -44,7 +41,7 @@ public interface Converter<T> {
 	//BYTE | NUMBER | STRING
 	public static final Converter<Byte> BYTE = new Converter<Byte>() {
 		@Override
-		public Byte convert(Object value) {
+		public Byte to(Object value) {
 			if(value instanceof Byte) {
 				return (Byte)value;
 			} else if(value instanceof Number) {
@@ -56,7 +53,7 @@ public interface Converter<T> {
 	//CHAR | NUMBER | STRING
 	public static final Converter<Character> CHARACTER = new Converter<Character>() {
 		@Override
-		public Character convert(Object value) {
+		public Character to(Object value) {
 			if(value instanceof Character) {
 				return (Character)value;
 			} else if(value instanceof Number) {
@@ -68,7 +65,7 @@ public interface Converter<T> {
 	//INTEGER  | NUMBER | STRING
 	public static final Converter<Integer> INTEGER = new Converter<Integer>() {
 		@Override
-		public Integer convert(Object value) {
+		public Integer to(Object value) {
 			if(value instanceof Integer) {
 				return (Integer)value;
 			} else if(value instanceof Number) {
@@ -80,7 +77,7 @@ public interface Converter<T> {
 	//SHORT | NUMBER | STRING
 	public static final Converter<Short> SHORT = new Converter<Short>() {
 		@Override
-		public Short convert(Object value) {
+		public Short to(Object value) {
 			if(value instanceof Short) {
 				return (Short)value;
 			} else if(value instanceof Number) {
@@ -92,7 +89,7 @@ public interface Converter<T> {
 	//LONG | NUMBER | DATE | STRING
 	public static final Converter<Long> LONG = new Converter<Long>() {
 		@Override
-		public Long convert(Object value) {
+		public Long to(Object value) {
 			if(value instanceof Long) {
 				return (Long)value;
 			} else if(value instanceof Number) {
@@ -106,7 +103,7 @@ public interface Converter<T> {
 	//FLOAT | NUMBER | STRING
 	public static final Converter<Float> FLOAT = new Converter<Float>() {
 		@Override
-		public Float convert(Object value) {
+		public Float to(Object value) {
 			if(value instanceof Float) {
 				return (Float)value;
 			} else if(value instanceof Number) {
@@ -118,7 +115,7 @@ public interface Converter<T> {
 	//DOUBLE | NUMBER | STRING
 	public static final Converter<Double> DOUBLE = new Converter<Double>() {
 		@Override
-		public Double convert(Object value) {
+		public Double to(Object value) {
 			if(value instanceof Double) {
 				return (Double)value;
 			} else if(value instanceof Number) {
@@ -131,7 +128,7 @@ public interface Converter<T> {
 	//BYTES | BYTEB | BASE64 ENCODED
 	public static final Converter<ByteBuffer> BYTEB = new Converter<ByteBuffer>() {
 		@Override
-		public ByteBuffer convert(Object value) {
+		public ByteBuffer to(Object value) {
 			if(value instanceof ByteBuffer) {
 				return (ByteBuffer)value;
 			} else if(value instanceof byte[]) {
@@ -145,7 +142,7 @@ public interface Converter<T> {
 	//BYTES | BYTEB | BASE64 ENCODED
 	public static final Converter<byte[]> BYTES = new Converter<byte[]>() {
 		@Override
-		public byte[] convert(Object value) {
+		public byte[] to(Object value) {
 			if(value instanceof ByteBuffer) {
 				ByteBuffer buf = (ByteBuffer)value;
 				byte[] dst = new byte[buf.remaining()];
@@ -162,7 +159,7 @@ public interface Converter<T> {
 	//DATE
 	public static final Converter<Date> DATE = new Converter<Date>() {
 		@Override
-		public Date convert(Object value) {
+		public Date to(Object value) {
 			if(value instanceof Date) {
 				return	(Date)value;
 			} else if(value instanceof Number) {
@@ -179,7 +176,7 @@ public interface Converter<T> {
 	//STRING
 	public static final Converter<String> STRING = new Converter<String>() {
 		@Override
-		public String convert(Object value) {
+		public String to(Object value) {
 			if(value instanceof String) {
 				return	(String)value;
 			} else if(value instanceof Date) {

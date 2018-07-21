@@ -20,8 +20,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
+import com.appe.framework.io.Converter;
 import com.appe.framework.resource.ConfigBundle;
-import com.appe.framework.util.Converter;
 import com.appe.framework.util.Objects;
 /**
  * Quick implementation using properties, make sure to be able to convert the message.
@@ -112,7 +112,7 @@ public class ConfigBundleHandler implements InvocationHandler {
 		//PRIMITIVES
 		Converter<?> c = Objects.PRIMITIVES.get(type);
 		if(c != null) {
-			return c.convert(value);
+			return c.to(value);
 		}
 		
 		//ARRAYS

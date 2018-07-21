@@ -1,8 +1,8 @@
 package com.appe.framework.security.internal;
 
+import com.appe.framework.io.Dictionary;
 import com.appe.framework.security.Credentials;
 import com.appe.framework.util.Codecs;
-import com.appe.framework.util.Dictionary;
 import com.appe.framework.util.Objects;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.

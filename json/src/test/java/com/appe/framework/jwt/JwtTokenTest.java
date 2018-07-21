@@ -4,7 +4,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
-import com.appe.framework.json.internal.JacksonMapper;
+import com.appe.framework.json.JacksonMapper;
 import com.appe.framework.jwt.JwtCodecs;
 import com.appe.framework.jwt.JwtToken;
 import com.appe.framework.util.Codecs;

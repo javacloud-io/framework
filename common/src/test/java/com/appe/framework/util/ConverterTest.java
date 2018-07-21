@@ -17,8 +17,6 @@ package com.appe.framework.util;
 
 import java.util.Date;
 
-import com.appe.framework.util.Converter;
-
 import junit.framework.TestCase;
 /**
  * 
@@ -27,7 +25,7 @@ import junit.framework.TestCase;
  */
 public class ConverterTest extends TestCase {
 	public void testString() {
-		String date = Converter.STRING.convert(new Date());
-		Converter.DATE.convert(date);
+		String date = Converters.STRING.to(new Date());
+		Converters.DATE.to(date);
 	}
 }

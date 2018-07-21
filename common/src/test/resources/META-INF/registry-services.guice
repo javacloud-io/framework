@@ -4,7 +4,7 @@
 # module-class
 # implementation-class
 # interface-class=implementation-class
-# interface-class#named=implementation-class
+# interface-class:named=implementation-class
 
 framework.common.services
 com.appe.framework.TestModule
