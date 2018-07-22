@@ -20,9 +20,8 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
 
-import com.appe.framework.io.Converter;
 import com.appe.framework.resource.ConfigBundle;
-import com.appe.framework.util.Objects;
+import com.appe.framework.util.Converters;
 /**
  * Quick implementation using properties, make sure to be able to convert the message.
  * Make sure special method is not route to invoke()
@@ -97,31 +96,8 @@ public class ConfigBundleHandler implements InvocationHandler {
 	 * @param type
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	protected Object convertValue(String value, Class<?> type) {
-		//NOTHING TO CONVERT AT ALL
-		if(type == String.class) {
-			return value;
-		}
-		
-		//ENUM TYPE
-		if(type.isEnum()) {
-			return	Enum.valueOf(type.asSubclass(Enum.class), value);
-		}
-		
-		//PRIMITIVES
-		Converter<?> c = Objects.PRIMITIVES.get(type);
-		if(c != null) {
-			return c.to(value);
-		}
-		
-		//ARRAYS
-		if(type == String[].class) {
-			return Objects.toArray(value, ",", true);
-		}
-		
-		//UNKNOW TYPE => RETURN STRING?
-		return value;
+		return Converters.toObject(value, type);
 	}
 	
 	/**

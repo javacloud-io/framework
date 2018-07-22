@@ -17,6 +17,7 @@ import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.InvalidCredentialsException;
 import com.appe.framework.security.internal.Permissions;
 import com.appe.framework.server.internal.RequestWrapper;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Dictionaries;
 import com.appe.framework.util.Objects;
 
@@ -77,7 +78,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 		//ROLES
 		String roles = getInitParameter("permissions");
 		if(roles != null) {
-			this.permissions = Objects.toArray(roles, ",", true);
+			this.permissions = Converters.toArray(roles, ",", true);
 		}
 	}
 	

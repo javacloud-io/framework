@@ -21,6 +21,7 @@ import com.appe.framework.security.internal.ClientCredentials;
 import com.appe.framework.security.internal.TokenCredentials;
 import com.appe.framework.server.internal.RequestWrapper;
 import com.appe.framework.server.internal.W3RequestWrapper;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 
 /**
@@ -63,7 +64,7 @@ public class SecurityContextFilter extends ServletFilter {
 		if(Objects.isEmpty(authenticator)) {
 			authenticators = Objects.asList(AppeRegistry.get().getInstance(Authenticator.class));
 		} else {
-			authenticators = AppeRegistry.get().getInstances(Authenticator.class, Objects.toArray(authenticator, ",", true));
+			authenticators = AppeRegistry.get().getInstances(Authenticator.class, Converters.toArray(authenticator, ",", true));
 		}
 		this.authenticator = new AuthenticatorManager(authenticators);
 	}

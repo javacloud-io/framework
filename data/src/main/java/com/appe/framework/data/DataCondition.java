@@ -1,5 +1,6 @@
 package com.appe.framework.data;
 
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 
 /**
@@ -73,7 +74,7 @@ public abstract class DataCondition {
 		StringBuilder sb = new StringBuilder(op.toString());
 		if(op == Op.IN || op == Op.BETWEEN) {
 			sb.append(" [")
-			.append(Objects.toString(",", values))
+			.append(Converters.toString(",", values))
 			.append("]");
 		} else if(op != Op.NULL && op != Op.NOT_NULL) {
 			sb.append(" ").append((Object)getValue());

@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 
 import com.appe.framework.AppeException;
 import com.appe.framework.io.Converter;
@@ -189,4 +190,117 @@ public final class Converters {
 			return (value != null? value.toString() : null);
 		}
 	};
+	
+	//PRIMITIVES MAP
+	public static final Map<Class<?>, Converter<?>> TYPES = Objects.asMap(
+			boolean.class, 		BOOLEAN,
+			Boolean.class, 		BOOLEAN,
+			byte.class,    		BYTE,
+			Byte.class, 		BYTE,
+			char.class,			CHARACTER,
+			Character.class,	CHARACTER,
+			short.class,		SHORT,
+			Short.class,		SHORT,
+			int.class,			INTEGER,
+			Integer.class,		INTEGER,
+			long.class,			LONG,
+			Long.class,			LONG,
+			float.class,		FLOAT,
+			Float.class,		FLOAT,
+			double.class,		DOUBLE,
+			Double.class,		DOUBLE,
+			String.class,		STRING,
+			Date.class,			DATE,
+			byte[].class,		BYTES,
+			ByteBuffer.class,	BYTEB
+	);
+	
+	/**
+	 * Convert primitive string to Object
+	 * 
+	 * @param value
+	 * @param type
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Object toObject(String value, Class<?> type) {
+		//NOTHING TO CONVERT AT ALL
+		if(type == String.class) {
+			return value;
+		}
+		
+		//ENUM TYPE
+		if(type.isEnum()) {
+			return	Enum.valueOf(type.asSubclass(Enum.class), value);
+		}
+		
+		//PRIMITIVES
+		Converter<?> c = TYPES.get(type);
+		if(c != null) {
+			return c.to(value);
+		}
+		
+		//ARRAYS
+		if(type == String[].class) {
+			return toArray(value, ",", true);
+		}
+		
+		//UNKNOW TYPE => RETURN STRING?
+		return value;
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static String toString(Object value) {
+		return Converters.STRING.to(value);
+	}
+	
+	/**
+	 * Assuming the coming list value doesn't have comma character.
+	 * 
+	 * @param name
+	 * @param list
+	 */
+	public static String toString(String sep, Object... list) {
+		//Don't write anything
+		if(list == null || list.length == 0) {
+			return null;
+		}
+		
+		//Build the list with comma separated.
+		StringBuilder buf = new StringBuilder();
+		buf.append(Converters.STRING.to(list[0]));
+		for(int i = 1; i < list.length; i ++) {
+			buf.append(sep)
+			   .append(Converters.STRING.to(list[i]));
+		}
+		return buf.toString();
+	}
+	
+	/**
+	 * Convert the string value back to ARRAY.
+	 * 
+	 * @param value
+	 * @param sep
+	 * @param trim
+	 * @return
+	 */
+	public static String[] toArray(String value, String sep, boolean trim) {
+		//MAKE SURE RETURN EMPTY LIST
+		if(value == null) {
+			return new String[0];
+		}
+		
+		//SPLIT IT UP
+		String[] list = value.split(sep);
+		if(trim) {
+			for(int i = 0; i < list.length; i ++) {
+				list[i] = list[i].trim();
+			}
+		}
+		return list;
+	}
 }

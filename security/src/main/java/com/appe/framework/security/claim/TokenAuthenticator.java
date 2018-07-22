@@ -11,6 +11,7 @@ import com.appe.framework.security.claim.TokenGrant;
 import com.appe.framework.security.internal.AuthorizationGrant;
 import com.appe.framework.security.internal.Permissions;
 import com.appe.framework.security.internal.TokenCredentials;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 /**
  * Keeping the JWT token within processing to be able to access other services on behalf of a principal if need.
@@ -58,7 +59,7 @@ public class TokenAuthenticator implements Authenticator {
 		if(Objects.isEmpty(token.getRoles())) {
 			roles = Permissions.EMPTY_ROLES;
 		} else {
-			roles = Objects.asSet(Objects.toArray(token.getRoles(), " ", true));
+			roles = Objects.asSet(Converters.toArray(token.getRoles(), " ", true));
 		}
 		
 		//SIMPLE GRANT TO CARRY SCOPE

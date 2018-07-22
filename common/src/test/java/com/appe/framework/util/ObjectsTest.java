@@ -48,12 +48,12 @@ public class ObjectsTest extends TestCase {
 	}
 	
 	public void testToString() {
-		String s = Objects.toString(",", 1,2,3,4);
+		String s = Converters.toString(",", 1,2,3,4);
 		Assert.assertEquals("1,2,3,4", s);
 	}
 	
 	public void testToArray() {
-		String[] a = Objects.toArray("1,2,3,4", ",", true);
+		String[] a = Converters.toArray("1,2,3,4", ",", true);
 		Assert.assertArrayEquals(new String[]{"1","2","3","4"}, a);
 	}
 }

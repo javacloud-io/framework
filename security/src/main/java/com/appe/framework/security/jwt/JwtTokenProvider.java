@@ -11,6 +11,7 @@ import com.appe.framework.security.AccessGrant;
 import com.appe.framework.security.IdParameters;
 import com.appe.framework.security.claim.TokenGrant;
 import com.appe.framework.security.claim.TokenProvider;
+import com.appe.framework.util.Converters;
 import com.appe.framework.util.Objects;
 
 /**
@@ -46,7 +47,7 @@ public abstract class JwtTokenProvider implements TokenProvider {
 		//SCOPE/ROLES
 		token.setScope(authzGrant.getScope());
 		if(!Objects.isEmpty(authzGrant.getRoles())) {
-			token.setRoles(Objects.toString(" ", authzGrant.getRoles().toArray()));
+			token.setRoles(Converters.toString(" ", authzGrant.getRoles().toArray()));
 		}
 		
 		//EXPIRATION

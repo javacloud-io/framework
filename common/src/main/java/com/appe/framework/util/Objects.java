@@ -1,10 +1,8 @@
 package com.appe.framework.util;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.appe.framework.io.Converter;
 import com.appe.framework.io.Dictionary;
 
 /**
@@ -22,29 +19,6 @@ import com.appe.framework.io.Dictionary;
  *
  */
 public final class Objects {
-	//PRIMITIVES MAP
-	public static final Map<Class<?>, Converter<?>> PRIMITIVES = asMap(
-			boolean.class, 	Converters.BOOLEAN,
-			Boolean.class, 	Converters.BOOLEAN,
-			byte.class,    	Converters.BYTE,
-			Byte.class, 	Converters.BYTE,
-			char.class,		Converters.CHARACTER,
-			Character.class,Converters.CHARACTER,
-			short.class,	Converters.SHORT,
-			Short.class,	Converters.SHORT,
-			int.class,		Converters.INTEGER,
-			Integer.class,	Converters.INTEGER,
-			long.class,		Converters.LONG,
-			Long.class,		Converters.LONG,
-			float.class,	Converters.FLOAT,
-			Float.class,	Converters.FLOAT,
-			double.class,	Converters.DOUBLE,
-			Double.class,	Converters.DOUBLE,
-			String.class,	Converters.STRING,
-			Date.class,		Converters.DATE,
-			byte[].class,	Converters.BYTES,
-			ByteBuffer.class,Converters.BYTEB
-	);
 	/**
 	 * Generic comparing 2 objects. It has to be comparable some how.
 	 * NULL <= NULL < NOT NULL
@@ -95,61 +69,6 @@ public final class Objects {
 	@SuppressWarnings("unchecked")
 	public static <T> T cast(Object o) {
 		return (T)o;
-	}
-	
-	/**
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static String toString(Object value) {
-		return Converters.STRING.to(value);
-	}
-	
-	/**
-	 * Assuming the coming list value doesn't have comma character.
-	 * 
-	 * @param name
-	 * @param list
-	 */
-	public static String toString(String sep, Object... list) {
-		//Don't write anything
-		if(list == null || list.length == 0) {
-			return null;
-		}
-		
-		//Build the list with comma separated.
-		StringBuilder buf = new StringBuilder();
-		buf.append(Converters.STRING.to(list[0]));
-		for(int i = 1; i < list.length; i ++) {
-			buf.append(sep)
-			   .append(Converters.STRING.to(list[i]));
-		}
-		return buf.toString();
-	}
-	
-	/**
-	 * Convert the string value back to ARRAY.
-	 * 
-	 * @param value
-	 * @param sep
-	 * @param trim
-	 * @return
-	 */
-	public static String[] toArray(String value, String sep, boolean trim) {
-		//MAKE SURE RETURN EMPTY LIST
-		if(value == null) {
-			return new String[0];
-		}
-		
-		//SPLIT IT UP
-		String[] list = value.split(sep);
-		if(trim) {
-			for(int i = 0; i < list.length; i ++) {
-				list[i] = list[i].trim();
-			}
-		}
-		return list;
 	}
 	
 	/**
