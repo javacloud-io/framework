@@ -120,7 +120,7 @@ public final class Objects {
 	}
 	
 	/**
-	 * Quick wrapping dictionary object.
+	 * Quick wrapping dictionary object from name/value.
 	 * @param values
 	 * @return
 	 */

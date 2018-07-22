@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import com.appe.framework.io.Dictionary;
 import com.appe.framework.io.Externalizer;
 import com.appe.framework.util.DateFormats;
+import com.appe.framework.util.Dictionaries;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -74,7 +75,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 * @param module
 	 * @return
 	 */
-	@SuppressWarnings({ "deprecation", "serial" , "unchecked"})
+	@SuppressWarnings({ "deprecation", "serial"})
 	protected void configure(SimpleModule module) {
 		final UntypedObjectDeserializer deserializer = new UntypedObjectDeserializer() {
 			@Override
@@ -83,7 +84,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 				Object result = super.mapObject(jp, ctxt);
 				//MAKE SURE TO WRAP THE CORRECT OBJECT
 				if(result instanceof Map) {
-					return new Dictionary((Map<String, Object>)result);
+					return Dictionaries.asDict(result);
 				}
 				return result;
 			}
@@ -100,7 +101,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	}
 	
 	/**
-	 * JSON
+	 * return JSON as externalizer type
 	 */
 	@Override
 	public String type() {

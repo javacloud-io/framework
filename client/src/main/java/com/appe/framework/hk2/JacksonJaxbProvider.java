@@ -2,6 +2,7 @@ package com.appe.framework.hk2;
 
 import javax.inject.Inject;
 
+import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Make sure jackson using custom object mapper.
@@ -9,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author tobi
  *
  */
-public class JacksonJaxbProvider extends com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider {
+public class JacksonJaxbProvider extends JacksonJaxbJsonProvider {
 	/**
 	 * Inject from registry
 	 * 

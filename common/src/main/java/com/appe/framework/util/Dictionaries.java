@@ -52,14 +52,14 @@ public final class Dictionaries {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Dictionary cast(Object obj) throws IOException {
+	public static Dictionary asDict(Object obj) throws IOException {
 		if(obj instanceof Dictionary) {
 			return	(Dictionary)obj;
 		} else if(obj instanceof Map) {
 			Map<String, Object> mo = Objects.cast(obj);
 			return new Dictionary(mo);
 		}
-		//TODO: SHOULD DOING DEP CONVERSION
+		//FIXME: SHOULD DOING DEP CONVERSION
 		return Objects.asDict("dict", obj);
 	}
 	

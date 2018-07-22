@@ -3,7 +3,7 @@
   <parent>
   	<groupId>com.appe.framework</groupId>
   	<artifactId>framework</artifactId>
-  	<version>0.1</version>
+  	<version>0.2</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
@@ -75,19 +75,9 @@
         <artifactId>appe-config</artifactId>
         <version>${project.version}</version>
     </dependency>
-    <dependency>
-        <groupId>com.appe.framework</groupId>
-        <artifactId>appe-data</artifactId>
-        <version>${project.version}</version>
-    </dependency>
   	<dependency>
         <groupId>com.appe.framework</groupId>
         <artifactId>appe-security</artifactId>
-        <version>${project.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.appe.framework</groupId>
-        <artifactId>appe-activity</artifactId>
         <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -105,6 +95,10 @@
 		<groupId>org.glassfish.jersey.media</groupId>
 		<artifactId>jersey-media-json-jackson</artifactId>
 	</dependency>
+	<dependency>
+        <groupId>org.glassfish.jersey.inject</groupId>
+        <artifactId>jersey-hk2</artifactId>
+    </dependency>
 	<dependency>
     	<groupId>org.glassfish.hk2</groupId>
       	<artifactId>guice-bridge</artifactId>
