@@ -3,7 +3,9 @@ package com.appe.framework.hk2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.appe.framework.AppeException;
 import com.appe.framework.AppeLoader;
@@ -16,7 +18,7 @@ import com.appe.framework.util.Objects;
  *
  */
 public final class ComponentFactory {
-	private static final Logger logger = Logger.getLogger(ComponentFactory.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ComponentFactory.class);
 	static final String JERSEY_COMPONENTS 	= "META-INF/jersey/";
 	
 	private ComponentFactory() {
@@ -34,7 +36,7 @@ public final class ComponentFactory {
 			ClassLoader loader = AppeLoader.getClassLoader();
 			List<AppeLoader.Binding> bindings = AppeLoader.loadBindings(resource, loader);
 			if(Objects.isEmpty(bindings)) {
-				logger.fine("Not found components or resource file: " + resource);
+				logger.debug("Not found components or resource file: {}", resource);
 				return Objects.asList();
 			}
 			
@@ -47,10 +49,10 @@ public final class ComponentFactory {
 					Package pkg = Package.getPackage(binding.name());
 					if(pkg == null) {
 						String subresource = JERSEY_COMPONENTS + binding.name();
-						logger.fine("Including components from resource file: " + subresource);
+						logger.debug("Including components from resource file: {}", subresource);
 						zcomponents.addAll(loadComponents(subresource));
 					} else {
-						logger.fine("Including components from package: " + pkg);
+						logger.debug("Including components from package: {}", pkg);
 						zcomponents.add(pkg);
 					}
 				} else {
