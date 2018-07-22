@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>appe-server-test</artifactId>
   <packaging>jar</packaging>
-  <name>Framework restFull test server</name>
+  <name>Framework jersey test server</name>
   
   <build>
 	<plugins>
