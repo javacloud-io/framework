@@ -603,29 +603,6 @@
             <artifactId>grizzly-http-servlet</artifactId>
             <version>${grizzly.version}</version>
         </dependency>
-        
-		<!-- AWS -->
-		<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.10.22</version>
-			<exclusions>
-    			<exclusion>
-    				<groupId>commons-logging</groupId>
-      				<artifactId>commons-logging</artifactId>
-    			</exclusion>
-    		</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.zeromq</groupId>
-			<artifactId>jzmq</artifactId>
-			<version>3.10</version>
-		</dependency>
-		<dependency>
-			<groupId>org.yaml</groupId>
-			<artifactId>snakeyaml</artifactId>
-			<version>1.16</version>
-		</dependency>
 	</dependencies>
   </dependencyManagement>
 </project>
