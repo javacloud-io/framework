@@ -1,0 +1,17 @@
+io/javacloud/framework/server/filter/I18nLocaleFilter.class
+io/javacloud/framework/server/impl/GuiceHK2Feature$1.class
+io/javacloud/framework/server/view/JspRootViewRender.class
+io/javacloud/framework/server/internal/RequestWrapper.class
+io/javacloud/framework/server/internal/W3RequestWrapper.class
+io/javacloud/framework/server/filter/ServletFilter.class
+io/javacloud/framework/server/impl/DefaultExceptionMapper.class
+io/javacloud/framework/server/filter/WebAuthorizationFilter.class
+io/javacloud/framework/server/filter/NamespaceFilter.class
+io/javacloud/framework/server/GenericExceptionMapper.class
+io/javacloud/framework/server/view/JspViewRender.class
+io/javacloud/framework/server/impl/SecurityHK2Factory.class
+io/javacloud/framework/server/impl/GuiceServletListener.class
+io/javacloud/framework/server/impl/GuiceHK2Feature.class
+io/javacloud/framework/server/RestApplication.class
+io/javacloud/framework/server/filter/SecurityContextFilter$1.class
+io/javacloud/framework/server/filter/SecurityContextFilter.class

@@ -1,0 +1,3 @@
+# Default framework common registry
+#
+io.javacloud.framework.data.ContextNamespace=io.javacloud.framework.impl.ContextNamespaceImpl

@@ -1,0 +1,6 @@
+com/appe/framework/server/internal/DelegateTestContainerFactory$TestContainerImpl.class
+com/appe/framework/server/internal/DelegateTestContainerFactory.class
+com/appe/framework/server/IntegrationServerTest.class
+com/appe/framework/server/internal/IntegrationTestContainerFactory.class
+com/appe/framework/server/DefaultServerTest.class
+com/appe/framework/server/internal/IntegrationTestContainerFactory$TestContainerImpl.class

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.appe.framework.server.HelloworldResourceTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.101 s - in com.appe.framework.server.HelloworldResourceTest

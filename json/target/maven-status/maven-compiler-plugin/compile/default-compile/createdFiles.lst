@@ -1,0 +1,13 @@
+io/javacloud/framework/json/impl/JacksonMapper.class
+io/javacloud/framework/json/JwtVerifier.class
+io/javacloud/framework/json/internal/JwtCodecs$RS256S.class
+io/javacloud/framework/json/internal/JwtCodecs.class
+io/javacloud/framework/json/internal/JacksonConverter.class
+io/javacloud/framework/json/JwtSigner.class
+io/javacloud/framework/json/internal/JwtCodecs$NONE.class
+io/javacloud/framework/json/internal/JwtCodecs$RS256V.class
+io/javacloud/framework/json/internal/JwtToken.class
+io/javacloud/framework/json/internal/JwtCodecs$HS256.class
+io/javacloud/framework/json/JwtException.class
+io/javacloud/framework/json/impl/JacksonMapper$2.class
+io/javacloud/framework/json/impl/JacksonMapper$1.class

@@ -1,0 +1,9 @@
+io/javacloud/framework/i18n/impl/ContextLocaleImpl.class
+io/javacloud/framework/i18n/internal/MessageBundles$1.class
+io/javacloud/framework/i18n/MessageFactory.class
+io/javacloud/framework/i18n/internal/MessageBundlesControl.class
+io/javacloud/framework/i18n/internal/MessageInvocationHandler.class
+io/javacloud/framework/i18n/impl/MessageFactoryImpl.class
+io/javacloud/framework/i18n/impl/MessageInvocationHandlerImpl.class
+io/javacloud/framework/i18n/internal/MessageBundles.class
+io/javacloud/framework/i18n/ContextLocale.class

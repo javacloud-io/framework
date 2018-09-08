@@ -1,0 +1,5 @@
+com/appe/framework/hk2/ComponentFactory.class
+com/appe/framework/hk2/GuiceHK2Feature.class
+com/appe/framework/hk2/JacksonJaxbProvider.class
+com/appe/framework/hk2/JacksonFeature.class
+com/appe/framework/client/HttpClientProvider.class

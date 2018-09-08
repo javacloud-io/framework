@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: io.javacloud.framework.cdi.ServiceRegistryTest
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.306 s - in io.javacloud.framework.cdi.ServiceRegistryTest

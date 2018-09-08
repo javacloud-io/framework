@@ -1,0 +1,6 @@
+io/javacloud/framework/server/test/JerseyTestContainerFactory.class
+io/javacloud/framework/server/test/RestApplicationTest.class
+io/javacloud/framework/server/test/JerseyApplicationTest.class
+io/javacloud/framework/server/test/JerseyTestContainerFactory$TestContainerImpl.class
+io/javacloud/framework/server/test/TestContainerFactoryImpl$TestContainerImpl.class
+io/javacloud/framework/server/test/TestContainerFactoryImpl.class

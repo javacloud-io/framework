@@ -1,0 +1,7 @@
+# Basic features
+com.appe.framework.server.hk2.GuiceHK2Feature
+com.appe.framework.hk2.JacksonFeature
+com.appe.framework.server.DefaultExceptionMapper
+
+# Authorization
+org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
