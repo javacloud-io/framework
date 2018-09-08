@@ -1,4 +1,0 @@
-# Default framework data InMemory registry
-#
-#
-javax.ws.rs.client.Client=com.appe.framework.client.HttpClientProvider
