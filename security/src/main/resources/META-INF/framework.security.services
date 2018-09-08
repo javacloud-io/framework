@@ -1,0 +1,5 @@
+# Default framework security registry
+#
+# SP only need JWT AccessToken authenticator
+io.javacloud.framework.security.claim.TokenValidator=io.javacloud.framework.security.jwt.JwtTokenValidator
+io.javacloud.framework.security.Authenticator#access_token=io.javacloud.framework.security.impl.AccessTokenAuthenticator

@@ -1,0 +1,11 @@
+######### List of modules or services binding ########
+
+# include-resource.services
+# module-class
+# implementation-class
+# interface-class=implementation-class
+# interface-class#named=implementation-class
+
+framework.common.services
+framework.config.services
+framework.i18n.services

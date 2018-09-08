@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-  	<groupId>com.appe.framework</groupId>
+  	<groupId>io.javacloud.framework</groupId>
   	<artifactId>framework</artifactId>
   	<version>0.2</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-server</artifactId>
+  <artifactId>javacloud-server</artifactId>
   <packaging>jar</packaging>
   <name>Framework jersey server</name>
   
@@ -29,28 +29,6 @@
       	<groupId>junit</groupId>
       	<artifactId>junit</artifactId>
     </dependency>
-    
-  	<!-- Logging -->
-  	<dependency>
-    	<groupId>org.slf4j</groupId>
-   		<artifactId>slf4j-api</artifactId>
-  	</dependency>
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>jcl-over-slf4j</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>org.slf4j</groupId>
-		<artifactId>log4j-over-slf4j</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>ch.qos.logback</groupId>
-		<artifactId>logback-core</artifactId>
-	</dependency>
-    <dependency>
-		<groupId>ch.qos.logback</groupId>
-		<artifactId>logback-classic</artifactId>
-	</dependency>
 	
 	<!-- Servlet -->
     <dependency>
@@ -58,31 +36,43 @@
 		<artifactId>javax.servlet-api</artifactId>
 		<scope>provided</scope>
 	</dependency>
+	
+	<!-- GuiceServlet -->
 	<dependency>
      	<groupId>com.google.inject.extensions</groupId>
       	<artifactId>guice-servlet</artifactId>
       	<scope>provided</scope>
 	</dependency>
     
-    <!-- APPE -->
+    <!-- JavaCloud -->
     <dependency>
-    	<groupId>com.appe.framework</groupId>
-   		<artifactId>appe-common</artifactId>
+    	<groupId>io.javacloud.framework</groupId>
+   		<artifactId>javacloud-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
   	<dependency>
-        <groupId>com.appe.framework</groupId>
-        <artifactId>appe-config</artifactId>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
         <version>${project.version}</version>
     </dependency>
   	<dependency>
-        <groupId>com.appe.framework</groupId>
-        <artifactId>appe-security</artifactId>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-config</artifactId>
         <version>${project.version}</version>
     </dependency>
     <dependency>
-        <groupId>com.appe.framework</groupId>
-        <artifactId>appe-client</artifactId>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-i18n</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+  	<dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-security</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-jaxrs</artifactId>
         <version>${project.version}</version>
     </dependency>
     

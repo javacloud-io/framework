@@ -1,5 +1,7 @@
 package com.appe.framework.server;
 
+import io.javacloud.framework.server.GenericExceptionMapper;
+
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;

@@ -2,16 +2,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.appe.framework</groupId>
+  <groupId>io.javacloud.framework</groupId>
   <artifactId>framework</artifactId>
   <version>0.2</version>
   <packaging>pom</packaging>
   
-  <name>Appe project</name>
-  <url>www.appe.io</url>
+  <name>JavaCloud project</name>
+  <url>www.javacloud.io</url>
   
   <scm>
-    <url>scm:git:https://github.com/appespace/framework.git</url>
+    <url>scm:git:https://github.com/javacloud/framework.git</url>
   </scm>
 
   <licenses>
@@ -38,11 +38,14 @@
   
   <modules>
     <module>common</module>
-    <module>json</module>
+    <module>logging</module>
+    <module>cdi</module>
     <module>config</module>
+    <module>i18n</module>
+    <module>json</module>
     <module>security</module>
 
-    <module>client</module>
+    <module>jaxrs</module>
     <module>server-test</module>
     <module>server</module>
     <module>assembly</module>
@@ -603,6 +606,7 @@
             <artifactId>grizzly-http-servlet</artifactId>
             <version>${grizzly.version}</version>
         </dependency>
+        
 	</dependencies>
   </dependencyManagement>
 </project>

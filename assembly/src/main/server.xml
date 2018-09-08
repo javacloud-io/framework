@@ -13,14 +13,14 @@
     		<unpack>true</unpack>
     		<useProjectArtifact>false</useProjectArtifact>
     		<includes>
-                <include>com.appe.framework:appe-common</include>
-                <include>com.appe.framework:appe-config</include>
-                <include>com.appe.framework:appe-data</include>
-                <include>com.appe.framework:appe-activity</include>
-                <include>com.appe.framework:appe-cache</include>
-                <include>com.appe.framework:appe-security</include>
-                <include>com.appe.framework:appe-client</include>
-                <include>com.appe.framework:appe-server</include>
+                <include>io.javacloud.framework:javacloud-common</include>
+                <include>io.javacloud.framework:javacloud-logging</include>
+                <include>io.javacloud.framework:javacloud-json</include>
+                <include>io.javacloud.framework:javacloud-config</include>
+                <include>io.javacloud.framework:javacloud-i18n</include>
+                <include>io.javacloud.framework:javacloud-security</include>
+                <include>io.javacloud.framework:javacloud-jaxrs</include>
+                <include>io.javacloud.framework:javacloud-server</include>
             </includes>
     	</dependencySet>
 	</dependencySets>

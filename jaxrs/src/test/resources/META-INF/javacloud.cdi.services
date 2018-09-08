@@ -1,0 +1,6 @@
+######### List of modules or services binding ########
+
+framework.common.services
+framework.config.services
+framework.json.services
+framework.jaxrs.services

@@ -1,0 +1,5 @@
+# Basic features
+io.javacloud.framework.jaxrs.impl.GuiceHK2Feature
+io.javacloud.framework.jaxrs.impl.JacksonFeature
+
+#org.glassfish.jersey.filter.LoggingFilter

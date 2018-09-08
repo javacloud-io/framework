@@ -1,0 +1,5 @@
+# Default framework json services
+#
+com.fasterxml.jackson.databind.ObjectMapper=io.javacloud.framework.json.impl.JacksonMapper
+io.javacloud.framework.data.Externalizer=io.javacloud.framework.json.impl.JacksonMapper
+io.javacloud.framework.data.Externalizer#json=io.javacloud.framework.json.impl.JacksonMapper

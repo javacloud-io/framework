@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-  	<groupId>com.appe.framework</groupId>
+  	<groupId>io.javacloud.framework</groupId>
   	<artifactId>framework</artifactId>
   	<version>0.2</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>appe-assemply</artifactId>
+  <artifactId>javacloud-assemply</artifactId>
   <packaging>pom</packaging>
-  <name>Framework jersey</name>
+  <name>Framework assembly</name>
   
   <build>
 	<plugins>
@@ -27,13 +27,13 @@
   
   <dependencies>
 	<dependency>
-    	<groupId>com.appe.framework</groupId>
-      	<artifactId>appe-client</artifactId>
+    	<groupId>io.javacloud.framework</groupId>
+      	<artifactId>javacloud-jaxrs</artifactId>
       	<version>${project.version}</version>
 	</dependency>
 	<dependency>
-    	<groupId>com.appe.framework</groupId>
-    	<artifactId>appe-server</artifactId>
+    	<groupId>io.javacloud.framework</groupId>
+    	<artifactId>javacloud-server</artifactId>
     	<version>${project.version}</version>
 	</dependency>
   </dependencies>
