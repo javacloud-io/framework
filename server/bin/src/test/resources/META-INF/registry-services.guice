@@ -1,4 +1,0 @@
-######### List of modules or services binding ########
-
-framework.server.services
-framework.data.InMemory.services
