@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: io.javacloud.framework.util.ConverterTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.035 s - in io.javacloud.framework.util.ConverterTest

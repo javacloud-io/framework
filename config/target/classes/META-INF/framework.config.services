@@ -1,3 +1,0 @@
-# Default framework configure factory services
-#
-io.javacloud.framework.config.ConfigFactory=io.javacloud.framework.config.impl.ConfigFactoryImpl

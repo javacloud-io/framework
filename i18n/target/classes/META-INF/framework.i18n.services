@@ -1,3 +1,0 @@
-#
-io.javacloud.framework.i18n.ContextLocale=io.javacloud.framework.i18n.impl.ContextLocaleImpl
-io.javacloud.framework.i18n.MessageFactory=io.javacloud.framework.i18n.impl.MessageFactoryImpl
