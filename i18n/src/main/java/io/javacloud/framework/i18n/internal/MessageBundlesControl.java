@@ -1,6 +1,6 @@
 package io.javacloud.framework.i18n.internal;
 
-import io.javacloud.framework.i18n.ContextLocale;
+import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.util.ResourceLoader;
 
 import java.io.IOException;
@@ -20,10 +20,10 @@ import java.util.concurrent.ConcurrentSkipListSet;
  *
  */
 public class MessageBundlesControl extends ResourceBundle.Control {
-	private final ContextLocale contextLocale;
+	private final LocaleContext contextLocale;
 	private Set<String> bundleNames = new ConcurrentSkipListSet<>();
 	
-	public MessageBundlesControl(ContextLocale contextLocale) {
+	public MessageBundlesControl(LocaleContext contextLocale) {
 		this.contextLocale = contextLocale;
 	}
 	

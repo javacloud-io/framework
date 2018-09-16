@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
-import io.javacloud.framework.data.ContextNamespace;
+import io.javacloud.framework.data.NamespaceContext;
 import io.javacloud.framework.server.internal.W3RequestWrapper;
 import io.javacloud.framework.util.Objects;
 /**
@@ -21,7 +21,7 @@ public class NamespaceFilter extends ServletFilter {
 	public static final String PARAM_NAMESPACE	= "_namespace_";
 	public static final String HEADER_NAMESPACE	= "X-NAMESPACE";
 	
-	private ContextNamespace contextNamespace;
+	private NamespaceContext namespaceContext;
 	public NamespaceFilter() {
 	}
 	
@@ -30,7 +30,7 @@ public class NamespaceFilter extends ServletFilter {
 	 */
 	@Override
 	protected void init() throws ServletException {
-		this.contextNamespace = ServiceRegistry.get().getInstance(ContextNamespace.class);
+		this.namespaceContext = ServiceRegistry.get().getInstance(NamespaceContext.class);
 	}
 	
 	/**
@@ -40,10 +40,10 @@ public class NamespaceFilter extends ServletFilter {
 	public void doFilter(HttpServletRequest req, HttpServletResponse resp,
 			FilterChain chain) throws ServletException, IOException {
 		try {
-			contextNamespace.set(requestNamespace(new W3RequestWrapper(req)));
+			namespaceContext.set(requestNamespace(new W3RequestWrapper(req)));
 			chain.doFilter(req, resp);
 		} finally {
-			contextNamespace.clear();
+			namespaceContext.clear();
 		}
 		
 	}

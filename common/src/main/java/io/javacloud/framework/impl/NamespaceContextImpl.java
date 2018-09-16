@@ -1,6 +1,6 @@
 package io.javacloud.framework.impl;
 
-import io.javacloud.framework.data.ContextNamespace;
+import io.javacloud.framework.data.NamespaceContext;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Digests;
 
@@ -16,14 +16,14 @@ import javax.inject.Singleton;
  * @author tobi
  */
 @Singleton
-public class ContextNamespaceImpl implements ContextNamespace {
+public class NamespaceContextImpl implements NamespaceContext {
 	private static final ThreadLocal<String> LOCAL = new ThreadLocal<String>();	//NAMESPACE
 	private static final byte SP = (byte)0x0A;
 	
 	/**
 	 * 
 	 */
-	public ContextNamespaceImpl() {
+	public NamespaceContextImpl() {
 	}
 	
 	/**

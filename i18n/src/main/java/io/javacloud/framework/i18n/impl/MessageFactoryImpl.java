@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.javacloud.framework.i18n.ContextLocale;
+import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.i18n.MessageFactory;
 import io.javacloud.framework.i18n.internal.MessageBundlesControl;
 import io.javacloud.framework.util.Objects;
@@ -25,14 +25,14 @@ import io.javacloud.framework.util.UncheckedException;
 public class MessageFactoryImpl implements MessageFactory {
 	private static final Logger logger = Logger.getLogger(MessageFactoryImpl.class.getName());
 	
-	private final ContextLocale contextLocale;
+	private final LocaleContext contextLocale;
 	private final MessageBundlesControl bundlesControl;
 	/**
 	 * 
 	 * @param contextLocale
 	 */
 	@Inject
-	public MessageFactoryImpl(ContextLocale contextLocale) {
+	public MessageFactoryImpl(LocaleContext contextLocale) {
 		this.contextLocale = contextLocale;
 		this.bundlesControl= new MessageBundlesControl(contextLocale);
 		

@@ -16,7 +16,7 @@
 package io.javacloud.framework.i18n.internal;
 
 import io.javacloud.framework.config.internal.ConfigInvocationHandler;
-import io.javacloud.framework.i18n.ContextLocale;
+import io.javacloud.framework.i18n.LocaleContext;
 
 import java.text.MessageFormat;
 
@@ -27,8 +27,8 @@ import java.text.MessageFormat;
  *
  */
 public abstract class MessageInvocationHandler extends ConfigInvocationHandler {
-	protected final ContextLocale contextLocale;
-	protected MessageInvocationHandler(ContextLocale contextLocale) {
+	protected final LocaleContext contextLocale;
+	protected MessageInvocationHandler(LocaleContext contextLocale) {
 		this.contextLocale = contextLocale;
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Locale;
  * @author ho
  *
  */
-public interface ContextLocale {
+public interface LocaleContext {
 	/**
 	 * Set list of prefer locale in order of important
 	 * 

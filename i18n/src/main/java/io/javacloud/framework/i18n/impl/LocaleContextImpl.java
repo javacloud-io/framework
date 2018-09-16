@@ -1,6 +1,6 @@
 package io.javacloud.framework.i18n.impl;
 
-import io.javacloud.framework.i18n.ContextLocale;
+import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.util.Objects;
 
 import java.util.Locale;
@@ -12,9 +12,9 @@ import javax.inject.Singleton;
  *
  */
 @Singleton
-public class ContextLocaleImpl implements ContextLocale {
+public class LocaleContextImpl implements LocaleContext {
 	private static final ThreadLocal<Locale[]> LOCALES = new ThreadLocal<Locale[]>();
-	public ContextLocaleImpl() {
+	public LocaleContextImpl() {
 		
 	}
 	

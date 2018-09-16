@@ -5,7 +5,7 @@ package io.javacloud.framework.data;
  * 
  * @author tobi
  */
-public interface ContextNamespace {
+public interface NamespaceContext {
 	/**
 	 * Set new namespace to current context
 	 * 

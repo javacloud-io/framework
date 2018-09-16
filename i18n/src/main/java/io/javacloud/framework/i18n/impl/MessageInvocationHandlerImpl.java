@@ -3,7 +3,7 @@ package io.javacloud.framework.i18n.impl;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import io.javacloud.framework.i18n.ContextLocale;
+import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.i18n.internal.MessageBundlesControl;
 import io.javacloud.framework.i18n.internal.MessageInvocationHandler;
 import io.javacloud.framework.util.Objects;
@@ -15,7 +15,7 @@ import io.javacloud.framework.util.ResourceLoader;
  */
 public class MessageInvocationHandlerImpl extends MessageInvocationHandler {
 	private final MessageBundlesControl bundlesControl;
-	protected MessageInvocationHandlerImpl(ContextLocale contextLocale, MessageBundlesControl bundlesControl) {
+	protected MessageInvocationHandlerImpl(LocaleContext contextLocale, MessageBundlesControl bundlesControl) {
 		super(contextLocale);
 		this.bundlesControl = bundlesControl;
 	}
