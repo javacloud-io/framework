@@ -13,5 +13,5 @@ public interface JavaCompiler {
 	 * @param collector
 	 * @return
 	 */
-	public boolean compile(Iterable<? extends JavaSource> sources, ClassCollector collector);
+	public boolean compile(Iterable<JavaSource> sources, ClassCollector collector);
 }

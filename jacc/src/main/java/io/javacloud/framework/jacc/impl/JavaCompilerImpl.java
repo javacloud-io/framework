@@ -50,7 +50,7 @@ public class JavaCompilerImpl implements JavaCompiler {
 	 * 
 	 */
 	@Override
-	public boolean compile(Iterable<? extends JavaSource> sources, ClassCollector collector) {
+	public boolean compile(Iterable<JavaSource> sources, ClassCollector collector) {
 		//COMPILATION UNITS
 		List<JavaSourceFileAdapter> compilationUnits = new ArrayList<>();
 		for(JavaSource src: sources) {
@@ -65,7 +65,7 @@ public class JavaCompilerImpl implements JavaCompiler {
 		try {
 			JavaClassFileManager classFileManager = new JavaClassFileManager(fileManager, collector);
 		
-			//FIXME: supporting compiling option
+			//FIXME: supporting compiling options
 			return impl.getTask(null, classFileManager, diagnosticAdapter, null, null, compilationUnits).call();
 		} finally {
 			Objects.closeQuietly(fileManager);

@@ -2,11 +2,10 @@ package io.javacloud.framework.jacc.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.Channels;
 
 import javax.tools.SimpleJavaFileObject;
 
-import io.javacloud.framework.internal.BytesChannelReader;
+import io.javacloud.framework.internal.BytesInputStream;
 import io.javacloud.framework.jacc.JavaSource;
 
 /**
@@ -27,18 +26,18 @@ public class JavaSourceFileAdapter extends SimpleJavaFileObject {
 	}
 	
 	/**
-	 * return input stream
+	 * Just wrap around the char sequence
 	 */
 	@Override
 	public InputStream openInputStream() throws IOException {
-		return Channels.newInputStream(source.asReader());
+		return new BytesInputStream(source.asSequence().toString());
 	}
-	
+
 	/**
 	 * return char content
 	 */
 	@Override
 	public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
-		return BytesChannelReader.toBytesStream(source.asReader()).toString();
+		return source.asSequence();
 	}
 }

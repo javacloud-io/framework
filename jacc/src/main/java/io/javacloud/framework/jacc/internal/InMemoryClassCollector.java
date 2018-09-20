@@ -3,12 +3,12 @@ package io.javacloud.framework.jacc.internal;
 import io.javacloud.framework.internal.BytesOutputStream;
 import io.javacloud.framework.jacc.ClassCollector;
 
+import java.io.OutputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.WritableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * Capture the class byte code in memory for just in time lookup.
  * 
@@ -24,10 +24,10 @@ public class InMemoryClassCollector extends DiagnosticCollector implements Class
 	 * return a writer byte stream
 	 */
 	@Override
-	public WritableByteChannel asWriter(String className, URI file) {
+	public OutputStream asStream(String className, URI file) {
 		BytesOutputStream bytes = new BytesOutputStream(1024);
 		bytesCode.put(className, bytes);
-		return Channels.newChannel(bytes);
+		return bytes;
 	}
 	
 	/**

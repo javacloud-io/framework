@@ -1,6 +1,8 @@
 package io.javacloud.framework.jacc;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -12,7 +14,6 @@ import io.javacloud.framework.jacc.JavaCompiler;
 import io.javacloud.framework.jacc.internal.InMemoryClassCollector;
 import io.javacloud.framework.jacc.internal.InMemoryClassLoader;
 import io.javacloud.framework.jacc.internal.JavaSourceFile;
-import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -32,7 +33,9 @@ public class CompilerTest extends ServiceTest {
 	public void testCompile() throws Exception {
 		long starts = System.currentTimeMillis();
 		try {
-			Iterable<JavaSourceFile> sources = Objects.asList(new JavaSourceFile("io.test.Hello", CODE));
+			List<JavaSource> sources = new ArrayList<JavaSource>();
+			sources.add(new JavaSourceFile("io.test.Hello", CODE));
+			
 			InMemoryClassCollector collector = new InMemoryClassCollector();
 			boolean success = javaCompiler.compile(sources, collector);
 			if(!success) {

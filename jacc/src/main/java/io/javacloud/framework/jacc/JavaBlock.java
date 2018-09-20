@@ -1,7 +1,5 @@
 package io.javacloud.framework.jacc;
 
-import java.nio.channels.ReadableByteChannel;
-
 /**
  * A piece of code block that can be: a file, class, method, constructor...
  * 
@@ -10,9 +8,9 @@ import java.nio.channels.ReadableByteChannel;
  */
 public interface JavaBlock {
 	/**
-	 * return a reader to process content
+	 * return a reader to process content for reading
 	 * 
 	 * @return
 	 */
-	public ReadableByteChannel asReader();
+	public CharSequence asSequence();
 }

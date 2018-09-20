@@ -1,10 +1,7 @@
 package io.javacloud.framework.jacc.internal;
 
 import java.net.URI;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 
-import io.javacloud.framework.internal.BytesInputStream;
 import io.javacloud.framework.jacc.JavaSource;
 import io.javacloud.framework.util.Codecs;
 /**
@@ -14,13 +11,13 @@ import io.javacloud.framework.util.Codecs;
  */
 public class JavaSourceFile implements JavaSource {
 	private final URI uri;
-	private final byte[] source;
+	private final CharSequence source;
 	/**
 	 * 
 	 * @param className
 	 * @param source
 	 */
-	public JavaSourceFile(String className, byte[] source) {
+	public JavaSourceFile(String className, CharSequence source) {
 		if(className.endsWith(".java")) {
 			className = className.substring(0, className.length() - 5);
 		}
@@ -29,16 +26,16 @@ public class JavaSourceFile implements JavaSource {
 	}
 	
 	/**
-	 * 
+	 * Read source file into memory prior to parsing
 	 * @param className
 	 * @param source
 	 */
-	public JavaSourceFile(String className, String source) {
-		this(className, Codecs.toBytes(source));
+	public JavaSourceFile(String className, byte[] source) {
+		this(className, Codecs.toUTF8(source));
 	}
 	
 	/**
-	 * 
+	 * return file location
 	 */
 	@Override
 	public URI file() {
@@ -46,10 +43,10 @@ public class JavaSourceFile implements JavaSource {
 	}
 	
 	/**
-	 * 
+	 * return an input stream for reading
 	 */
 	@Override
-	public ReadableByteChannel asReader() {
-		return Channels.newChannel(new BytesInputStream(source));
+	public CharSequence asSequence() {
+		return source;
 	}
 }

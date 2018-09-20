@@ -3,7 +3,7 @@ package io.javacloud.framework.jacc;
 import java.net.URI;
 
 /**
- * 
+ * A representation of a source file with URI
  * @author ho
  *
  */

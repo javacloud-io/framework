@@ -4,7 +4,6 @@ import io.javacloud.framework.jacc.ClassCollector;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.channels.Channels;
 
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
@@ -34,7 +33,7 @@ public class JavaClassFileManager extends ForwardingJavaFileManager<JavaFileMana
 		return new SimpleJavaFileObject(sibling.toUri(), kind) {
 			@Override
 			public OutputStream openOutputStream() throws IOException {
-				return Channels.newOutputStream(collector.asWriter(className, uri));
+				return collector.asStream(className, uri);
 			}
 		};
 	}
