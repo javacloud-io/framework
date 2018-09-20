@@ -1,4 +1,4 @@
-package io.javacloud.framework.impl;
+package io.javacloud.framework.internal;
 
 import io.javacloud.framework.util.Objects;
 

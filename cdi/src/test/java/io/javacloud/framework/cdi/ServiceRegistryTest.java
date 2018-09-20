@@ -2,6 +2,7 @@ package io.javacloud.framework.cdi;
 
 import io.javacloud.framework.cdi.ServiceTest;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -51,5 +52,14 @@ public class ServiceRegistryTest extends ServiceTest {
 	public void testInstances() {
 		List<TestService> services = ServiceRegistry.get().getInstances(TestService.class);
 		Assert.assertEquals(2, services.size());
+	}
+	
+	/**
+	 * 
+	 * @throws InvocationTargetException
+	 */
+	@Test
+	public void testRunner() throws InvocationTargetException {
+		ServiceRunner.get().runMethod(ServiceRegistryTest.class, "testInstances");
 	}
 }

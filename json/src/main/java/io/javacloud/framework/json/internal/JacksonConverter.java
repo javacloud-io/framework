@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import io.javacloud.framework.data.Externalizer;
-import io.javacloud.framework.impl.BytesInputStream;
-import io.javacloud.framework.impl.BytesOutputStream;
+import io.javacloud.framework.internal.BytesInputStream;
+import io.javacloud.framework.internal.BytesOutputStream;
 import io.javacloud.framework.util.Codecs;
 
 /**

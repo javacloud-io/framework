@@ -48,6 +48,8 @@
     <module>jaxrs</module>
     <module>server-test</module>
     <module>server</module>
+
+    <module>jacc</module>
     <module>assembly</module>
   </modules>
   

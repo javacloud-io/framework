@@ -1,0 +1,38 @@
+package io.javacloud.framework.jacc.impl;
+
+import java.util.Locale;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
+
+import io.javacloud.framework.jacc.DiagnosticListener;
+/**
+ * 
+ * @author ho
+ *
+ */
+@SuppressWarnings("restriction")
+public class JavaDiagnosticAdapter implements javax.tools.DiagnosticListener<JavaFileObject> {
+	private final DiagnosticListener listener;
+	private final Locale locale;
+	/**
+	 * 
+	 * @param listener
+	 * @param locale
+	 */
+	public JavaDiagnosticAdapter(DiagnosticListener listener, Locale locale) {
+		this.listener = listener;
+		this.locale = locale;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
+		listener.onFailure(diagnostic.getSource().toUri(),
+							(int)diagnostic.getLineNumber(),
+							(int)diagnostic.getColumnNumber(),
+							diagnostic.getMessage(locale));
+	}
+}

@@ -17,7 +17,7 @@ package io.javacloud.framework.config.internal;
 
 import io.javacloud.framework.config.ConfigProperty;
 import io.javacloud.framework.data.Converters;
-import io.javacloud.framework.impl.ProxyInvocationHandler;
+import io.javacloud.framework.internal.ProxyInvocationHandler;
 import io.javacloud.framework.util.Objects;
 
 import java.beans.Introspector;

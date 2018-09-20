@@ -1,9 +1,8 @@
-package io.javacloud.framework.impl;
+package io.javacloud.framework.internal;
 
 import io.javacloud.framework.util.Codecs;
 
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 /**
  * 
@@ -48,9 +47,8 @@ public class BytesInputStream extends ByteArrayInputStream {
 	/**
 	 * Assuming UTF8
 	 * @param buf
-	 * @throws UnsupportedEncodingException
 	 */
-	public BytesInputStream(String buf) throws UnsupportedEncodingException {
+	public BytesInputStream(String buf) {
 		super(buf == null? new byte[0] : Codecs.toBytes(buf));
 	}
 }

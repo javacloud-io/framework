@@ -1,7 +1,7 @@
 
 package io.javacloud.framework.jaxrs.internal;
 
-import io.javacloud.framework.impl.ProxyInvocationHandler;
+import io.javacloud.framework.internal.ProxyInvocationHandler;
 
 
 /**

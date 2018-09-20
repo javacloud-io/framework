@@ -1,2 +1,2 @@
 #Load the default namespace
-io.javacloud.framework.impl.NamespaceContextImpl
+io.javacloud.framework.internal.NamespaceContextImpl
