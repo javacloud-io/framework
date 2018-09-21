@@ -2,10 +2,9 @@ package io.javacloud.framework.security.internal;
 
 import io.javacloud.framework.security.AccessDeniedException;
 import io.javacloud.framework.security.AccessGrant;
+import io.javacloud.framework.util.Objects;
 
 import java.util.Set;
-
-import io.javacloud.framework.util.Objects;
 
 
 /**

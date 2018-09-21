@@ -6,12 +6,12 @@ import io.javacloud.framework.json.JwtVerifier;
 import io.javacloud.framework.json.impl.JacksonMapper;
 import io.javacloud.framework.json.internal.JwtCodecs;
 import io.javacloud.framework.json.internal.JwtToken;
+import io.javacloud.framework.util.Codecs;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
-import io.javacloud.framework.util.Codecs;
 import junit.framework.TestCase;
 /**
  * 

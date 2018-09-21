@@ -14,6 +14,8 @@ import org.junit.Test;
 public class MessageFactoryTest extends ServiceTest {
 	@Inject
 	MessageFactory messageFactory;
+	@Inject
+	LocaleContext localeContext;
 	
 	@Test
 	public void testMessages() {
@@ -23,5 +25,7 @@ public class MessageFactoryTest extends ServiceTest {
 	
 	@Test
 	public void testBundles() {
+		localeContext.set("en-US");
+		Assert.assertEquals("en_US", localeContext.get().toString());
 	}
 }

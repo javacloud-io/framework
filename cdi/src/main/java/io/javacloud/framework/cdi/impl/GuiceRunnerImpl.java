@@ -49,9 +49,13 @@ public class GuiceRunnerImpl extends ServiceRunner {
 	 */
 	private Method findMethod(Class<?> zclass, String methodName, Class<?>[] types) {
 		for(Method m: zclass.getMethods()) {
-			//MATCH NAME & NUMBER OF PARAMS
-			if(m.getName().equals(methodName) && m.getParameterCount() == types.length) {
-				//TODO: RETURN ONLY IF THIS IS THE BEST MATCHES
+			//MATCH NAME
+			if(!m.getName().equals(methodName)) {
+				continue;
+			}
+			
+			//FIXME: BEST MATCHES IS NOT EXACT
+			if(m.getParameterCount() == types.length) {
 				return m;
 			}
 		}

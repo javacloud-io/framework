@@ -1,7 +1,5 @@
 package io.javacloud.framework.security.jwt;
 
-import io.javacloud.framework.data.Converters;
-import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.security.AccessDeniedException;
 import io.javacloud.framework.security.AuthenticationException;
 import io.javacloud.framework.security.IdParameters;
@@ -17,6 +15,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import io.javacloud.framework.data.Converters;
+import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.json.JwtException;
 import io.javacloud.framework.json.JwtVerifier;

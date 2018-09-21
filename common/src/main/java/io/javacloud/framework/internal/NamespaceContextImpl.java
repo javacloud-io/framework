@@ -17,7 +17,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class NamespaceContextImpl implements NamespaceContext {
-	private static final ThreadLocal<String> LOCAL = new ThreadLocal<String>();	//NAMESPACE
+	private static final ThreadLocal<String> NAMESPACE = new ThreadLocal<String>();	//NAMESPACE
 	private static final byte SP = (byte)0x0A;
 	
 	/**
@@ -32,7 +32,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 	 */
 	@Override
 	public void set(String namespace) {
-		LOCAL.set(namespace);
+		NAMESPACE.set(namespace);
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 	 */
 	@Override
 	public String get() {
-		return LOCAL.get();
+		return NAMESPACE.get();
 	}
 	
 	/**
@@ -83,6 +83,6 @@ public class NamespaceContextImpl implements NamespaceContext {
 	 */
 	@Override
 	public void clear() {
-		LOCAL.remove();
+		NAMESPACE.remove();
 	}
 }

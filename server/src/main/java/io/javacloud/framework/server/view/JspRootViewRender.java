@@ -1,12 +1,12 @@
 package io.javacloud.framework.server.view;
 
+import io.javacloud.framework.util.Objects;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import io.javacloud.framework.util.Objects;
 /**
  * Root view is special one, it supports push state redirect in modern JavaScript framework.
  * 

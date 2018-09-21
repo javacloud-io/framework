@@ -14,13 +14,13 @@ import io.javacloud.framework.jacc.JavaSource;
  *
  */
 @SuppressWarnings("restriction")
-public class JavaSourceFileAdapter extends SimpleJavaFileObject {
+public class JdkSourceFileAdapter extends SimpleJavaFileObject {
 	private final JavaSource source;
 	/**
 	 * 
 	 * @param source
 	 */
-	public JavaSourceFileAdapter(JavaSource source) {
+	public JdkSourceFileAdapter(JavaSource source) {
 		super(source.file(), Kind.SOURCE);
 		this.source = source;
 	}

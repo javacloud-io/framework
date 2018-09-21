@@ -1,5 +1,7 @@
 package io.javacloud.framework.ssl;
 
+import io.javacloud.framework.util.Objects;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStore;
@@ -20,8 +22,6 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
-
-import io.javacloud.framework.util.Objects;
 /**
  * Key chain is a simple PRIVATE + CERTIFICATE ASSOCIATED WITH.
  * 

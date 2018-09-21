@@ -1,8 +1,7 @@
 package io.javacloud.framework.security.internal;
 
-import io.javacloud.framework.security.Credentials;
-
 import io.javacloud.framework.data.Dictionary;
+import io.javacloud.framework.security.Credentials;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Objects;
 /**

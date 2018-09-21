@@ -1,5 +1,9 @@
 package io.javacloud.framework.data;
 
+import io.javacloud.framework.util.Codecs;
+import io.javacloud.framework.util.DateFormats;
+import io.javacloud.framework.util.Objects;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,10 +33,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import io.javacloud.framework.util.Codecs;
-import io.javacloud.framework.util.DateFormats;
-import io.javacloud.framework.util.Objects;
 /**
  * It's much more powerful to use XML Plist instead of java properties file.
  * 

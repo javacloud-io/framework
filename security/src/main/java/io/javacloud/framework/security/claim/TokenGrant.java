@@ -1,11 +1,10 @@
 package io.javacloud.framework.security.claim;
 
+import io.javacloud.framework.data.Identifiable;
 import io.javacloud.framework.security.IdParameters;
 
 import java.security.Principal;
 import java.util.Date;
-
-import io.javacloud.framework.data.Identifiable;
 /**
  * User access token, use on behalf of user credentials. System always lookup the user when such one is provided.
  * Just simply using type to enforce token used at the moment.

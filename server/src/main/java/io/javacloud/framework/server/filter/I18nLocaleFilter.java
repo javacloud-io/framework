@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
+import io.javacloud.framework.i18n.CharsetContext;
 import io.javacloud.framework.i18n.LocaleContext;
 /**
  * ALL APIs SHOULD PASSING THROUGH THE MAIN FILTER IF WOULD LIKE TO TRACK EVENT....
@@ -20,6 +21,7 @@ import io.javacloud.framework.i18n.LocaleContext;
  */
 public class I18nLocaleFilter extends ServletFilter {
 	private LocaleContext localeContext;
+	private CharsetContext charsetContext;
 	public I18nLocaleFilter() {
 	}
 	
@@ -29,6 +31,7 @@ public class I18nLocaleFilter extends ServletFilter {
 	@Override
 	protected void init() throws ServletException {
 		this.localeContext = ServiceRegistry.get().getInstance(LocaleContext.class);
+		this.charsetContext= ServiceRegistry.get().getInstance(CharsetContext.class);
 	}
 	
 	/**
@@ -40,10 +43,12 @@ public class I18nLocaleFilter extends ServletFilter {
 		try {
 			List<Locale> locales = Collections.list(req.getLocales());
 			localeContext.set(locales.toArray(new Locale[locales.size()]));
+			charsetContext.set(req.getCharacterEncoding());
 			
 			chain.doFilter(req, resp);
 		} finally {
 			localeContext.clear();
+			charsetContext.clear();
 		}
 	}
 }

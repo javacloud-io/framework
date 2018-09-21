@@ -17,6 +17,13 @@ public interface LocaleContext {
 	public void set(Locale... locales);
 	
 	/**
+	 * for well-formed BCP 47 language tag separated by comma
+	 * 
+	 * @param tags
+	 */
+	public void set(String tags);
+	
+	/**
 	 * return the first locale
 	 * 
 	 * @return

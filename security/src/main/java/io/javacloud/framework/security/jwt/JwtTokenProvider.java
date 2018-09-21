@@ -4,6 +4,7 @@ import io.javacloud.framework.security.AccessGrant;
 import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.claim.TokenProvider;
+import io.javacloud.framework.util.Objects;
 
 import java.util.Date;
 
@@ -14,7 +15,6 @@ import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.json.JwtSigner;
 import io.javacloud.framework.json.internal.JwtCodecs;
 import io.javacloud.framework.json.internal.JwtToken;
-import io.javacloud.framework.util.Objects;
 
 /**
  * Basic implementation of JTW token which is compatible with validator.

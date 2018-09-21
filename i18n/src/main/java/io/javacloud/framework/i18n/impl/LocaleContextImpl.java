@@ -1,5 +1,6 @@
 package io.javacloud.framework.i18n.impl;
 
+import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.util.Objects;
 
@@ -27,6 +28,22 @@ public class LocaleContextImpl implements LocaleContext {
 	}
 	
 	/**
+	 * Support list of language tags such as: en-US_xxx,
+	 */
+	@Override
+	public void set(String tags) {
+		Locale[] locales = null;
+		if(!Objects.isEmpty(tags)) {
+			String[] ltags = Converters.toArray(tags, ",", true);
+			locales = new Locale[ltags.length];
+			for(int i = 0; i < ltags.length; i ++) {
+				locales[i] = Locale.forLanguageTag(ltags[i]);
+			}
+		}
+		set(locales);
+	}
+
+	/**
 	 * return the current or default ONE
 	 */
 	@Override
@@ -41,7 +58,7 @@ public class LocaleContextImpl implements LocaleContext {
 	@Override
 	public Locale next(Locale locale) {
 		Locale[] locales = LOCALES.get();
-		if(Objects.isEmpty(locales) || locale == null) {
+		if(locale == null || Objects.isEmpty(locales)) {
 			return null;
 		}
 		//return previous one if next match

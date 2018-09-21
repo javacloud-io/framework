@@ -12,7 +12,7 @@ import io.javacloud.framework.jacc.DiagnosticListener;
  *
  */
 @SuppressWarnings("restriction")
-public class JavaDiagnosticAdapter implements javax.tools.DiagnosticListener<JavaFileObject> {
+public class JdkDiagnosticAdapter implements javax.tools.DiagnosticListener<JavaFileObject> {
 	private final DiagnosticListener listener;
 	private final Locale locale;
 	/**
@@ -20,7 +20,7 @@ public class JavaDiagnosticAdapter implements javax.tools.DiagnosticListener<Jav
 	 * @param listener
 	 * @param locale
 	 */
-	public JavaDiagnosticAdapter(DiagnosticListener listener, Locale locale) {
+	public JdkDiagnosticAdapter(DiagnosticListener listener, Locale locale) {
 		this.listener = listener;
 		this.locale = locale;
 	}

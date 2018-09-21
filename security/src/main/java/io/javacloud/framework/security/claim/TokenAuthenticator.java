@@ -10,10 +10,9 @@ import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.internal.AuthorizationGrant;
 import io.javacloud.framework.security.internal.Permissions;
 import io.javacloud.framework.security.internal.TokenCredentials;
+import io.javacloud.framework.util.Objects;
 
 import java.util.Set;
-
-import io.javacloud.framework.util.Objects;
 /**
  * Keeping the JWT token within processing to be able to access other services on behalf of a principal if need.
  * 
