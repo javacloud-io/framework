@@ -33,7 +33,13 @@
    		<artifactId>javacloud-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
-  	
+  	<dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    
   	<!-- JACKSON -->
     <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>

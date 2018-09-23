@@ -12,9 +12,6 @@ import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.data.Dictionaries;
 import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
-import io.javacloud.framework.json.JwtSigner;
-import io.javacloud.framework.json.internal.JwtCodecs;
-import io.javacloud.framework.json.internal.JwtToken;
 
 /**
  * Basic implementation of JTW token which is compatible with validator.

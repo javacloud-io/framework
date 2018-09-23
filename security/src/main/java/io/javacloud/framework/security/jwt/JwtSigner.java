@@ -1,4 +1,4 @@
-package io.javacloud.framework.json;
+package io.javacloud.framework.security.jwt;
 
 /**
  * Take a token content and sign with the correct ALGORITHM. N

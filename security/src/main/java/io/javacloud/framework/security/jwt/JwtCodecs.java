@@ -1,4 +1,4 @@
-package io.javacloud.framework.json.internal;
+package io.javacloud.framework.security.jwt;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -8,15 +8,15 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.crypto.spec.SecretKeySpec;
 
 import io.javacloud.framework.data.Dictionaries;
 import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
-import io.javacloud.framework.json.JwtException;
-import io.javacloud.framework.json.JwtSigner;
-import io.javacloud.framework.json.JwtVerifier;
+import io.javacloud.framework.json.internal.JacksonConverter;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Hmacs;
 import io.javacloud.framework.util.Objects;
@@ -28,6 +28,7 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public final class JwtCodecs {
+	private static final Logger logger = Logger.getLogger(JwtCodecs.class.getName());
 	private static final String SHA256withRSA = "SHA256withRSA";
 	/**
 	 * NONE
@@ -96,7 +97,7 @@ public final class JwtCodecs {
 				sig.update(Codecs.toBytes(payload));
 				return Codecs.encodeBase64(sig.sign(), true);
 			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
-				throw new JwtException();
+				throw new JwtInvalidException();
 			}
 		}
 	}
@@ -117,7 +118,7 @@ public final class JwtCodecs {
 				sig.update(Codecs.toBytes(payload));
 				return sig.verify(Codecs.decodeBase64(signature, true));
 			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
-				throw new JwtException();
+				throw new JwtInvalidException();
 			}
 		}
 	}
@@ -137,7 +138,7 @@ public final class JwtCodecs {
 	 * @return
 	 * @throws JwtException
 	 */
-	public String encodeJWT(JwtToken token, JwtSigner signer) throws JwtException {
+	public String encodeJWT(JwtToken token, JwtSigner signer) throws JwtInvalidException {
 		try {
 			byte[] header = converter.toBytes(
 					Dictionaries.asDict("typ", token.getType(), "alg", signer.getAlgorithm())
@@ -149,7 +150,8 @@ public final class JwtCodecs {
 			
 			return payload + "." + signer.sign(payload);
 		} catch(IOException ex) {
-			throw new JwtException(ex);
+			logger.log(Level.WARNING, "Problem encode JWT token", ex);
+			throw new JwtInvalidException();
 		}
 	}
 	
@@ -162,33 +164,34 @@ public final class JwtCodecs {
 	 * 
 	 * @throws JwtException
 	 */
-	public JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtException {
+	public JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtInvalidException {
 		if(Objects.isEmpty(token)) {
-			throw new JwtException();
+			throw new JwtInvalidException();
 		}
 		int idot = token.lastIndexOf('.');
 		if(idot < 0) {
-			throw new JwtException();
+			throw new JwtInvalidException();
 		}
 		
 		//VALIDATE THE PAYLOAD BEFORE CONTINUE
 		String payload  = token.substring(0, idot);
 		String signature= token.substring(idot + 1);
 		if(!verifier.verify(payload, signature)) {
-			throw new JwtException();
+			throw new JwtInvalidException();
 		}
 		
 		//DECODE PAYLOAD TO JSON
 		idot = payload.indexOf('.');
 		if(idot < 0) {
-			throw new JwtException();
+			throw new JwtInvalidException();
 		}
 		try {
 			Dictionary header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true), Dictionary.class);
 			Dictionary claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Dictionary.class);
 			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
 		} catch(IOException ex) {
-			throw new JwtException(ex);
+			logger.log(Level.WARNING, "Problem decode JWT token", ex);
+			throw new JwtInvalidException();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package io.javacloud.framework.json.internal;
+package io.javacloud.framework.security.jwt;
 
 import io.javacloud.framework.data.Dictionary;
 

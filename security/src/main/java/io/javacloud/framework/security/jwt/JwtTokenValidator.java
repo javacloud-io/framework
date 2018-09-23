@@ -1,15 +1,6 @@
 package io.javacloud.framework.security.jwt;
 
-import io.javacloud.framework.security.AccessDeniedException;
-import io.javacloud.framework.security.AuthenticationException;
-import io.javacloud.framework.security.IdParameters;
-import io.javacloud.framework.security.InvalidCredentialsException;
-import io.javacloud.framework.security.claim.TokenGrant;
-import io.javacloud.framework.security.claim.TokenValidator;
-
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,10 +9,12 @@ import javax.inject.Singleton;
 import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
-import io.javacloud.framework.json.JwtException;
-import io.javacloud.framework.json.JwtVerifier;
-import io.javacloud.framework.json.internal.JwtToken;
-import io.javacloud.framework.json.internal.JwtCodecs;
+
+import io.javacloud.framework.security.AccessDeniedException;
+import io.javacloud.framework.security.AuthenticationException;
+import io.javacloud.framework.security.IdParameters;
+import io.javacloud.framework.security.claim.TokenGrant;
+import io.javacloud.framework.security.claim.TokenValidator;
 
 /**
  * Simple implementation of a JWT validation with a trusted signer, assuming sharing the signing key or public/private
@@ -31,8 +24,6 @@ import io.javacloud.framework.json.internal.JwtCodecs;
  */
 @Singleton
 public class JwtTokenValidator implements TokenValidator {
-	private static final Logger logger = Logger.getLogger(JwtTokenValidator.class.getName());
-	
 	public static final String JWT_ISSUER 		= "iss";
 	public static final String JWT_SUBJECT 		= "sub";
 	public static final String JWT_AUDIENCE		= "aud";
@@ -63,15 +54,9 @@ public class JwtTokenValidator implements TokenValidator {
 	 */
 	@Override
 	public TokenGrant validateToken(String token) throws AuthenticationException {
-		Dictionary claims;
-		try {
-			JwtToken jwtToken = jwtCodecs.decodeJWT(token, jwtVerifier);
-			claims = jwtToken.getClaims();
-		} catch (JwtException ex) {
-			logger.log(Level.WARNING, "Problem decoding JWT Token: " + token, ex);
-			throw new InvalidCredentialsException();
-		}
-		
+		JwtToken jwtToken = jwtCodecs.decodeJWT(token, jwtVerifier);
+		Dictionary claims = jwtToken.getClaims();
+			
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
 		TokenGrant grantToken = new TokenGrant();
 		grantToken.setId(token);

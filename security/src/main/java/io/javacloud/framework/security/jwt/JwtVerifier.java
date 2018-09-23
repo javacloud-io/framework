@@ -1,4 +1,4 @@
-package io.javacloud.framework.json;
+package io.javacloud.framework.security.jwt;
 /**
  * Verify the signed payload with signature
  * 
