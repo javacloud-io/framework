@@ -1,6 +1,6 @@
 package io.javacloud.framework.jaxrs;
 /**
- * return a client with given type implementation
+ * return a client with given type implementation. The default javax.ws.rs.client.Client is injectable directly.
  * 
  * @author ho
  *
