@@ -1,29 +1,20 @@
 package io.javacloud.framework.json.impl;
 
-import io.javacloud.framework.data.Dictionaries;
-import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.util.DateFormats;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 
 /**
  * Baseline for JACKSON object mapping, make sure ALWAYS NICE AND POJO!
@@ -35,18 +26,10 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 public class JacksonMapper extends ObjectMapper implements Externalizer {
 	private static final long serialVersionUID = -6439745503024511184L;
 	/**
-	 * 
+	 * DEFAULT FEATURES
 	 */
 	public JacksonMapper() {
-		//DEFAULT FEATURES
 		configure();
-		
-		//CONFIGURE CUSTOM MODULE
-		SimpleModule module = new SimpleModule("javacloud.json");
-		configure(module);
-		
-		//REGISTER CUSTOM MODULE
-		registerModule(module);
 	}
 	
 	/**
@@ -68,37 +51,6 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		//DEFAULT DATE FORMAT
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601));
-	}
-	
-	/**
-	 * Register custom module for special enhancing of Dictionary.
-	 * 
-	 * @param module
-	 * @return
-	 */
-	@SuppressWarnings({ "deprecation", "serial"})
-	protected void configure(SimpleModule module) {
-		final UntypedObjectDeserializer deserializer = new UntypedObjectDeserializer() {
-			@Override
-			protected Object mapObject(JsonParser jp, DeserializationContext ctxt)
-					throws IOException, JsonProcessingException {
-				Object result = super.mapObject(jp, ctxt);
-				//MAKE SURE TO WRAP THE CORRECT OBJECT
-				if(result instanceof Map) {
-					return Dictionaries.asDict(result);
-				}
-				return result;
-			}
-		};
-		
-		//CUSTOME MODULE
-		module.addDeserializer(Map.class, new JsonDeserializer<Dictionary>() {
-			@Override
-			public Dictionary deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-					JsonProcessingException {
-				return	(Dictionary)deserializer.deserialize(jp, ctxt);
-			}
-		});
 	}
 	
 	/**

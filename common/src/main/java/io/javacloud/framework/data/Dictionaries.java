@@ -57,22 +57,22 @@ public final class Dictionaries {
 			return new Dictionary();
 		}
 		
-		//CONVERSION
+		//PACK AS MAP
+		Map<String, Object> mo;
 		if(values.length == 1) {
 			Object obj = values[0];
 			if(obj instanceof Dictionary) {
 				return	(Dictionary)obj;
 			} else if(obj instanceof Map) {
-				Map<String, Object> mo = Objects.cast(obj);
-				return new Dictionary(mo);
+				mo = Objects.cast(obj);
 			} else {
-				Map<String, Object> mo = Objects.asMap("dict", obj);
-				new Dictionary(mo);
+				mo = Objects.asMap("dict", obj);
 			}
+		} else {
+			mo = Objects.asMap(values);
 		}
 		
-		//PACK AS MAP
-		Map<String, Object> mo = Objects.asMap(values);
+		//PACK AS DICT
 		return new Dictionary(mo);
 	}
 	
