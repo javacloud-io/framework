@@ -5,7 +5,7 @@ package io.javacloud.framework.jaxrs;
  * @author ho
  *
  */
-public interface ClientRegistry {
+public interface ClientManager {
 	/**
 	 * return a client with default settings
 	 * 

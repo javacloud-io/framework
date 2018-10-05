@@ -14,7 +14,7 @@ import io.javacloud.framework.util.ResourceLoader;
  */
 public class ConfigRegistryTest extends ServiceTest {
 	@Inject
-	ConfigRegistry configRegistry;
+	ConfigManager configRegistry;
 	@Test
 	public void testProperties() {
 		SimpleConfig config = configRegistry.getConfig(SimpleConfig.class);
@@ -33,6 +33,6 @@ public class ConfigRegistryTest extends ServiceTest {
 	 */
 	@Test
 	public void testLoader() {
-		Assert.assertNotNull(ResourceLoader.loadService(ConfigRegistry.class));
+		Assert.assertNotNull(ResourceLoader.loadService(ConfigManager.class));
 	}
 }

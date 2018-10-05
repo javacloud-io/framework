@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 
-import io.javacloud.framework.jaxrs.ClientRegistry;
+import io.javacloud.framework.jaxrs.ClientManager;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.ResourceLoader;
 /**
@@ -16,10 +16,10 @@ import io.javacloud.framework.util.ResourceLoader;
  *
  */
 @Singleton
-public class ClientRegistryImpl implements ClientRegistry {
+public class ClientManagerImpl implements ClientManager {
 	private final Client client;
 	@Inject
-	public ClientRegistryImpl(Client client) {
+	public ClientManagerImpl(Client client) {
 		this.client = client;
 	}
 	
