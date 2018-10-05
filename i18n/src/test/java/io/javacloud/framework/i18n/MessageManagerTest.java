@@ -11,9 +11,9 @@ import org.junit.Test;
  * @author ho
  *
  */
-public class MessageFactoryTest extends ServiceTest {
+public class MessageManagerTest extends ServiceTest {
 	@Inject
-	MessageFactory messageFactory;
+	MessageManager messageFactory;
 	@Inject
 	LocaleContext localeContext;
 	

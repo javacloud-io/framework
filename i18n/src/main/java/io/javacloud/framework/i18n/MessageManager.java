@@ -5,7 +5,7 @@ package io.javacloud.framework.i18n;
  * @author ho
  *
  */
-public interface MessageFactory {
+public interface MessageManager {
 	/**
 	 * return a message for given key at current locale
 	 * 

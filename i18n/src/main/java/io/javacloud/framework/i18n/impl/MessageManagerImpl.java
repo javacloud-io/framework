@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.javacloud.framework.i18n.LocaleContext;
-import io.javacloud.framework.i18n.MessageFactory;
+import io.javacloud.framework.i18n.MessageManager;
 import io.javacloud.framework.i18n.internal.MessageBundlesControl;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.ResourceLoader;
@@ -22,8 +22,8 @@ import io.javacloud.framework.util.UncheckedException;
  *
  */
 @Singleton
-public class MessageFactoryImpl implements MessageFactory {
-	private static final Logger logger = Logger.getLogger(MessageFactoryImpl.class.getName());
+public class MessageManagerImpl implements MessageManager {
+	private static final Logger logger = Logger.getLogger(MessageManagerImpl.class.getName());
 	
 	private final LocaleContext contextLocale;
 	private final MessageBundlesControl bundlesControl;
@@ -32,10 +32,10 @@ public class MessageFactoryImpl implements MessageFactory {
 	 * @param contextLocale
 	 */
 	@Inject
-	public MessageFactoryImpl(LocaleContext contextLocale) {
+	public MessageManagerImpl(LocaleContext contextLocale) {
 		this.contextLocale = contextLocale;
 		this.bundlesControl= new MessageBundlesControl(contextLocale);
-		
+		//FIXME: bundle should be discovers using right class loader
 		discoverBundles();
 	}
 	
