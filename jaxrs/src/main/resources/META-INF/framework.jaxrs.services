@@ -2,4 +2,4 @@
 #
 #
 javax.ws.rs.client.Client=io.javacloud.framework.jaxrs.impl.HttpClientProvider
-io.javacloud.framework.jaxrs.ClientFactory=io.javacloud.framework.jaxrs.impl.ClientFactoryImpl
+io.javacloud.framework.jaxrs.ClientRegistry=io.javacloud.framework.jaxrs.impl.ClientRegistryImpl

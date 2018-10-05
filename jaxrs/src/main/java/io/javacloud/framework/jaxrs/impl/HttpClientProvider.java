@@ -1,6 +1,6 @@
 package io.javacloud.framework.jaxrs.impl;
 
-import io.javacloud.framework.config.ConfigFactory;
+import io.javacloud.framework.config.ConfigRegistry;
 import io.javacloud.framework.jaxrs.ClientSettings;
 import io.javacloud.framework.jaxrs.internal.ComponentBuilder;
 import io.javacloud.framework.ssl.BlindTrustProvider;
@@ -33,8 +33,8 @@ public class HttpClientProvider implements Provider<Client> {
 	private final ClientSettings settings;
 	
 	@Inject
-	public HttpClientProvider(ConfigFactory configFactory) {
-		this.settings = configFactory.getConfig(ClientSettings.class);
+	public HttpClientProvider(ConfigRegistry configRegistry) {
+		this.settings = configRegistry.getConfig(ClientSettings.class);
 	}
 	
 	/**

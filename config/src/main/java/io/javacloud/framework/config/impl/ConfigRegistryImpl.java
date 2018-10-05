@@ -5,7 +5,7 @@ import java.lang.reflect.Proxy;
 
 import javax.inject.Singleton;
 
-import io.javacloud.framework.config.ConfigFactory;
+import io.javacloud.framework.config.ConfigRegistry;
 import io.javacloud.framework.config.ConfigSource;
 import io.javacloud.framework.config.internal.ConfigSourceResolver;
 import io.javacloud.framework.config.internal.DefaultConfigSource;
@@ -21,11 +21,11 @@ import io.javacloud.framework.util.ResourceLoader;
  *
  */
 @Singleton
-public class ConfigFactoryImpl implements ConfigFactory {
+public class ConfigRegistryImpl implements ConfigRegistry {
 	private static final String MAIN_CONFIG = "META-INF/javacloud.config.properties";
 	
 	private final ConfigSourceResolver sourceResolver;
-	public ConfigFactoryImpl() {
+	public ConfigRegistryImpl() {
 		//DEFAULT SOURCES FROM PROPERTIES
 		this.sourceResolver = new ConfigSourceResolver(new DefaultConfigSource(MAIN_CONFIG, ResourceLoader.getClassLoader()))
 			.overrideBy(new DefaultConfigSource(System.getProperties()));

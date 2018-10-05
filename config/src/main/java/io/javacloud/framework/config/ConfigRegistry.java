@@ -5,7 +5,7 @@ package io.javacloud.framework.config;
  * @author ho
  *
  */
-public interface ConfigFactory {
+public interface ConfigRegistry {
 	/**
 	 * 
 	 * @param name

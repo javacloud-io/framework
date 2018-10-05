@@ -1,7 +1,7 @@
 package io.javaworld.framework.jaxrs;
 
 import io.javacloud.framework.cdi.ServiceTest;
-import io.javacloud.framework.jaxrs.ClientFactory;
+import io.javacloud.framework.jaxrs.ClientRegistry;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -17,12 +17,12 @@ public class ClientTest extends ServiceTest {
 	@Inject
 	private Client client;
 	
-	@Inject ClientFactory clientFactory;
+	@Inject ClientRegistry clientRegistry;
 	@Test
 	public void testClient() {
 		client.target("https://172.217.5.196").request().get();
 		
-		Client c = clientFactory.getClient(Client.class);
+		Client c = clientRegistry.getClient(Client.class);
 		Assert.assertSame(client, c);
 	}
 }

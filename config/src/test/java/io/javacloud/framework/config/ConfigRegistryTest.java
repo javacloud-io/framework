@@ -6,17 +6,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import io.javacloud.framework.cdi.ServiceTest;
+import io.javacloud.framework.util.ResourceLoader;
 /**
  * 
  * @author ho
  *
  */
-public class ConfigFactoryTest extends ServiceTest {
+public class ConfigRegistryTest extends ServiceTest {
 	@Inject
-	ConfigFactory configFactory;
+	ConfigRegistry configRegistry;
 	@Test
 	public void testProperties() {
-		SimpleConfig config = configFactory.getConfig(SimpleConfig.class);
+		SimpleConfig config = configRegistry.getConfig(SimpleConfig.class);
 		Assert.assertNull(config.getAutoName());
 		
 		Assert.assertEquals("123", config.getNiceName());
@@ -25,5 +26,13 @@ public class ConfigFactoryTest extends ServiceTest {
 		
 		//test native implementation
 		Assert.assertNotEquals(0, config.hashCode());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testLoader() {
+		Assert.assertNotNull(ResourceLoader.loadService(ConfigRegistry.class));
 	}
 }
