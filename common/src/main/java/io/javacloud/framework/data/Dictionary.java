@@ -130,4 +130,9 @@ public final class Dictionary implements Map<String, Object> {
 	public Set<Map.Entry<String, Object>> entrySet() {
 		return impl.entrySet();
 	}
+	
+	@Override
+	public String toString() {
+		return impl.toString();
+	}
 }

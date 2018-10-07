@@ -51,7 +51,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		//DEBUG DETAILS
 		Dictionary entity = toEntity(exception);
 		if(status >= 500) {
-			logger.log(Level.SEVERE, "HTTP status: " + status + "details: " + entity, exception);
+			logger.log(Level.SEVERE, "HTTP status: " + status + ", details: " + entity, exception);
 		}
 		return Response.status(status).entity(entity).build();
 	}
@@ -98,9 +98,9 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		String error;
 		//REASON ERROR
 		if(exception instanceof UncheckedException) {
-			error = ((UncheckedException)exception).getReason();
+			error = ((UncheckedException)exception).getCode();
 		} else {
-			error = UncheckedException.findReason(exception);
+			error = UncheckedException.resolveCode(exception);
 		}
 		
 		//DETAILS MESSAGE LOCALE

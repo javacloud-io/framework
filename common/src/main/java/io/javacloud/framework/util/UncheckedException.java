@@ -53,9 +53,9 @@ public class UncheckedException extends RuntimeException {
 	 * 
 	 * @return
 	 */
-	public String getReason() {
+	public String getCode() {
 		Throwable cause = findRootCause(this);
-		return findReason(cause);
+		return crc32Code(cause);
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class UncheckedException extends RuntimeException {
 				return Objects.cast(cause);
 			}
 			//OK, recursive
-			cause = cause.getCause();
+			t = cause.getCause();
 		}
 		return null;
 	}
@@ -116,7 +116,7 @@ public class UncheckedException extends RuntimeException {
 	 */
 	public static final boolean isCausedBy(Throwable t, Class<? extends Throwable> causedBy) {
 		//BASIC CHECK
-		if(t == null) {
+		if(t == null || causedBy == null) {
 			return false;
 		}
 		if(causedBy.isAssignableFrom(t.getClass())) {
@@ -127,12 +127,24 @@ public class UncheckedException extends RuntimeException {
 	}
 	
 	/**
-	 * return the reason code for given exception. Consistent hash using crc32 is OK.
+	 * return the reason code for given exception.
 	 * 
 	 * @param t
 	 * @return
 	 */
-	public static final String findReason(Throwable cause) {
+	public static final String resolveCode(Throwable cause) {
+		if(cause instanceof UncheckedException) {
+			return ((UncheckedException)cause).getCode();
+		}
+		return crc32Code(cause);
+	}
+	
+	/**
+	 * Consistent hash using crc32 is OK.
+	 * @param cause
+	 * @return
+	 */
+	static final String crc32Code(Throwable cause) {
 		CRC32 crc = new CRC32();
 		//CLASS NAME
 		String message = cause.getClass().getName();

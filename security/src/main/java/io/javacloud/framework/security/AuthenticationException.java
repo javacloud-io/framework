@@ -36,8 +36,8 @@ public class AuthenticationException extends UncheckedException {
 	 * ALWAYS USING MESSAGE AS REASON CODE
 	 */
 	@Override
-	public String getReason() {
+	public String getCode() {
 		String message = super.getMessage();
-		return Objects.isEmpty(message) ? super.getReason() : message;
+		return Objects.isEmpty(message) ? super.getCode() : message;
 	}
 }
