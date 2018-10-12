@@ -33,7 +33,7 @@ public class ComponentBuilder {
 		try {
 			List<ResourceLoader.Binding> bindings = ResourceLoader.loadBindings(resource, loader);
 			if(Objects.isEmpty(bindings)) {
-				logger.log(Level.FINE, "Not found components or resource file: {0}", resource);
+				logger.log(Level.FINE, "Not found components or resource: {0}", resource);
 				return Objects.asList();
 			}
 			//

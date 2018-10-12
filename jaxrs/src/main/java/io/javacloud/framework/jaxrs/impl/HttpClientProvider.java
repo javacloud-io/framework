@@ -69,7 +69,7 @@ public class HttpClientProvider implements Provider<Client> {
 	 */
 	protected ClientConfig configure() {
 		List<?> components = new ComponentBuilder().build(ResourceLoader.META_INF + "javacloud.client.components", ResourceLoader.getClassLoader());
-		logger.log(Level.FINE, "Registered jersey client components: {0}", components);
+		logger.log(Level.FINE, "Registering client components: {0}", components);
 		
 		ClientConfig config = new ClientConfig();
 		for(Object c: components) {

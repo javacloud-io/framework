@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.javacloud.framework.cdi.ServiceTest;
+import io.javacloud.framework.cdi.test.ServiceTest;
 import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.json.internal.JacksonConverter;

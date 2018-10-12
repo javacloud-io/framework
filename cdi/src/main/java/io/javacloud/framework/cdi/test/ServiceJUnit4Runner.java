@@ -1,4 +1,6 @@
-package io.javacloud.framework.cdi;
+package io.javacloud.framework.cdi.test;
+
+import io.javacloud.framework.cdi.internal.GuiceRegistry;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
@@ -24,7 +26,9 @@ public class ServiceJUnit4Runner extends BlockJUnit4ClassRunner {
 	@Override
 	protected Object createTest() throws Exception {
 		Object instance = super.createTest();
-		ServiceRegistry.get().injectMembers(instance);
+		
+		//FIXME: AUTO DETECT INJECTOR
+		GuiceRegistry.getInjector().injectMembers(instance);
 		return instance;
 	}
 }

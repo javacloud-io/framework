@@ -70,14 +70,6 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 			return instances;
 		}
 	}
-	
-	/**
-	 * Inject the instance
-	 */
-	@Override
-	protected void injectMembers(Object instance) {
-		injector.injectMembers(instance);
-	}
 
 	/**
 	 * return internal injector of guice registry

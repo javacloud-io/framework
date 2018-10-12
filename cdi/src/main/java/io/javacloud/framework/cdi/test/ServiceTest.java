@@ -1,4 +1,4 @@
-package io.javacloud.framework.cdi;
+package io.javacloud.framework.cdi.test;
 
 import org.junit.runner.RunWith;
 /**

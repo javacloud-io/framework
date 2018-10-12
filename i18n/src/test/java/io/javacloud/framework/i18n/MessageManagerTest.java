@@ -1,6 +1,6 @@
 package io.javacloud.framework.i18n;
 
-import io.javacloud.framework.cdi.ServiceTest;
+import io.javacloud.framework.cdi.test.ServiceTest;
 
 import javax.inject.Inject;
 

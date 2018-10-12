@@ -41,7 +41,7 @@ public abstract class GuiceBuilder {
 	 * @return
 	 */
 	public Injector build(String resource, ClassLoader loader) {
-		logger.info("Loading modules from resource file: " + resource);
+		logger.info("Registering service modules from resource: " + resource);
 		List<Module> modules = loadModules(resource, loader);
 		
 		//ALWAYS MAKE SURE IT AT LEAST EMPTY
@@ -133,7 +133,7 @@ public abstract class GuiceBuilder {
 	
 	//
 	//IMPLEMENT BUILDER BY STAGE
-	public static final class StageBuilder extends GuiceBuilder {
+	public static class StageBuilder extends GuiceBuilder {
 		private Stage stage;
 		public StageBuilder(Stage stage) {
 			this.stage = stage;
@@ -150,7 +150,7 @@ public abstract class GuiceBuilder {
 	
 	//
 	//IMPLEMENT BUILDER BY PARENT
-	public static final class InheritBuilder extends GuiceBuilder {
+	public static class InheritBuilder extends GuiceBuilder {
 		private Injector parent;
 		public InheritBuilder(Injector parent) {
 			this.parent = parent;

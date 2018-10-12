@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import io.javacloud.framework.cdi.ServiceTest;
+import io.javacloud.framework.cdi.test.ServiceTest;
 import io.javacloud.framework.util.ResourceLoader;
 /**
  * 

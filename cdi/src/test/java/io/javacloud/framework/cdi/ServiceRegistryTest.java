@@ -1,12 +1,13 @@
 package io.javacloud.framework.cdi;
 
-import io.javacloud.framework.cdi.ServiceTest;
+import io.javacloud.framework.cdi.test.ServiceTest;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,6 +18,9 @@ import org.junit.Test;
  */
 public class ServiceRegistryTest extends ServiceTest {
 	@Inject
+	Provider<TestService> testProvider;
+	
+	@Inject
 	TestService testService;
 	
 	@Inject @Named("named")
@@ -25,6 +29,7 @@ public class ServiceRegistryTest extends ServiceTest {
 	public void testInject() {
 		Assert.assertNotNull(testService);
 		Assert.assertNotNull(namedService);
+		Assert.assertSame(testProvider.get(), testService);
 	}
 	
 	/**

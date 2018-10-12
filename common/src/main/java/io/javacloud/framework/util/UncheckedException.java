@@ -98,7 +98,7 @@ public class UncheckedException extends RuntimeException {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
 			//OK, found it...
-			if(causedBy.isAssignableFrom(cause.getClass())) {
+			if(causedBy.isInstance(cause.getClass())) {
 				return Objects.cast(cause);
 			}
 			//OK, recursive
@@ -119,7 +119,7 @@ public class UncheckedException extends RuntimeException {
 		if(t == null || causedBy == null) {
 			return false;
 		}
-		if(causedBy.isAssignableFrom(t.getClass())) {
+		if(causedBy.isInstance(t)) {
 			return true;
 		}
 		//Hunt it down.

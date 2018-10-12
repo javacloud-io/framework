@@ -50,11 +50,4 @@ public abstract class ServiceRegistry {
 	 * @return
 	 */
 	public abstract <T> List<T> getInstances(Class<T> type, String... names);
-	
-	/**
-	 * TO PROHIBIT FROM OVER USAGE EXCEPTION FOR UNIT TEST
-	 * 
-	 * @param instance
-	 */
-	protected abstract <T> void injectMembers(T instance);
 }

@@ -28,7 +28,7 @@ public class ClientManagerImpl implements ClientManager {
 	 */
 	@Override
 	public <T> T getClient(Class<T> type) {
-		if(type.isAssignableFrom(Client.class)) {
+		if(type.isInstance(client)) {
 			return Objects.cast(client);
 		}
 		
