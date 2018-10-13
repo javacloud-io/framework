@@ -25,10 +25,6 @@ public class ServiceJUnit4Runner extends BlockJUnit4ClassRunner {
 	 */
 	@Override
 	protected Object createTest() throws Exception {
-		Object instance = super.createTest();
-		
-		//FIXME: AUTO DETECT INJECTOR
-		GuiceRegistry.getInjector().injectMembers(instance);
-		return instance;
+		return	GuiceRegistry.get().getInstance(getTestClass().getJavaClass());
 	}
 }

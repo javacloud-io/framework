@@ -7,16 +7,16 @@ import io.javacloud.framework.tx.Transactional;
  * @author ho
  *
  */
-public interface TxTransactionManager {
+public interface TxTransactionManager<Tx> {
 	/**
 	 * 
 	 * @return
 	 */
-	public TxTransaction beginTransaction(Transactional transactional);
+	public TxTransaction<Tx> beginTransaction(Transactional transactional);
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public TxTransaction getTransaction();
+	public TxTransaction<Tx> getTransaction();
 }

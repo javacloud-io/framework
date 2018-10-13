@@ -1,4 +1,4 @@
-package io.javacloud.framework.cdi.internal;
+package io.javacloud.framework.cdi;
 
 import javax.inject.Provider;
 /**

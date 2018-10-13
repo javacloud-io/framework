@@ -15,12 +15,12 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author ho
  * 
  */
-public class TxTransactionalInterceptor implements MethodInterceptor {
+public class TxTransactionalInterceptor<Tx> implements MethodInterceptor {
 	@Inject
-	private TxTransactionManager transactionManager;
+	private TxTransactionManager<Tx> transactionManager;
 	
-	private final TxTransactionalInvocation invocation;
-	public TxTransactionalInterceptor(TxTransactionalInvocation invocation) {
+	private final TxTransactionalInvocation<Tx> invocation;
+	public TxTransactionalInterceptor(TxTransactionalInvocation<Tx> invocation) {
 		this.invocation = invocation;
 	}
 	

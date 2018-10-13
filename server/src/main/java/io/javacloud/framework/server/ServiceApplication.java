@@ -22,15 +22,15 @@ import io.javacloud.framework.util.ResourceLoader;
  *
  */
 //@ApplicationPath(context)
-public class RestApplication extends ResourceConfig {
-	private static final Logger logger = Logger.getLogger(RestApplication.class.getName());
+public class ServiceApplication extends ResourceConfig {
+	private static final Logger logger = Logger.getLogger(ServiceApplication.class.getName());
 	
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 * 
 	 * @param serviceLocator
 	 */
-	public RestApplication(String...packages) {
+	public ServiceApplication(String...packages) {
 		configure(packages);
 	}
 	

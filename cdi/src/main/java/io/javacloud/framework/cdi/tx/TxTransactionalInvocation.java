@@ -11,7 +11,7 @@ import io.javacloud.framework.tx.Transactional;
  * @author ho
  *
  */
-public class TxTransactionalInvocation {
+public class TxTransactionalInvocation<Tx> {
 	/**
 	 * 
 	 * @param callable
@@ -20,9 +20,9 @@ public class TxTransactionalInvocation {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> T invoke(Callable<T> callable, TxTransactionManager tm, Transactional transactional) throws Exception {
+	public <V> V invoke(Callable<V> callable, TxTransactionManager<Tx> tm, Transactional transactional) throws Exception {
 		Propagation propagation = transactional.propagation();
-		TxTransaction tx = tm.getTransaction();
+		TxTransaction<Tx> tx = tm.getTransaction();
 		if(tx != null && tx.isActive()) {
 			if(propagation == Propagation.NEVER) {
 				throw new TransactionException("An active transaction already exists");
@@ -54,9 +54,9 @@ public class TxTransactionalInvocation {
 	 * @return
 	 * @throws Exception
 	 */
-	protected <T> T invokeNewTx(Callable<T> callable, TxTransactionManager tm, Transactional transactional) throws Exception {
-		TxTransaction tx = tm.beginTransaction(transactional);
-		T result;
+	protected <V> V invokeNewTx(Callable<V> callable, TxTransactionManager<Tx> tm, Transactional transactional) throws Exception {
+		TxTransaction<Tx> tx = tm.beginTransaction(transactional);
+		V result;
 		try {
 			result = callable.call();
 		} catch(Exception ex) {

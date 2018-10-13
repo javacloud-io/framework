@@ -2,13 +2,13 @@ package io.javacloud.framework.cdi;
 
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.ResourceLoader;
-import io.javacloud.framework.util.UncheckedException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
+ * Helper class to invoke a method using CDI
  * 
  * @author ho
  *
@@ -44,7 +44,7 @@ public abstract class ServiceRunner {
 			Object instance = ServiceRegistry.get().getInstance(zclass);
 			return	Objects.cast(method.invoke(instance, args));
 		} catch(IllegalAccessException ex) {
-			throw UncheckedException.wrap(ex);
+			throw new InvocationTargetException(ex);
 		}
 	}
 	
@@ -61,7 +61,7 @@ public abstract class ServiceRunner {
 			Method method = resolveMethod(zclass, methodName, args);
 			return runMethod(zclass, method, args);
 		} catch(NoSuchMethodException ex) {
-			throw UncheckedException.wrap(ex);
+			throw new InvocationTargetException(ex);
 		}
 	}
 	

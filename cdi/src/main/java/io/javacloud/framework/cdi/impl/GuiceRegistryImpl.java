@@ -12,7 +12,7 @@ import com.google.inject.Stage;
 
 /**
  * Basic implementation using google juice and service override at runtime level. By loading main cdi services at
- * META-INF/javacloud.cdi.services
+ * META-INF/javacloud.cdi.modules
  * 
  * @author ho
  *

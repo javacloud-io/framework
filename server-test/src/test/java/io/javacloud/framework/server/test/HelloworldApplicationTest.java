@@ -15,7 +15,7 @@
  */
 package io.javacloud.framework.server.test;
 
-import io.javacloud.framework.server.test.RestApplicationTest;
+import io.javacloud.framework.server.test.ServiceApplicationTest;
 
 import javax.ws.rs.core.Application;
 
@@ -28,7 +28,7 @@ import org.junit.Test;
  * @author ho
  *
  */
-public class HelloworldResourceTest extends RestApplicationTest {
+public class HelloworldApplicationTest extends ServiceApplicationTest {
 	@Override
 	protected Application configure() {
 		return new TestApplication();

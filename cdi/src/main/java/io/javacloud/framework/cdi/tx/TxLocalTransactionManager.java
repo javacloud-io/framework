@@ -8,14 +8,14 @@ import io.javacloud.framework.tx.Transactional;
  * @author ho
  *
  */
-public abstract class TxLocalTransactionManager implements TxTransactionManager, TxSessionManager {
-	private static final ThreadLocal<Stack<TxTransaction>> unitOfWork = new ThreadLocal<Stack<TxTransaction>>();
+public abstract class TxLocalTransactionManager<Tx> implements TxTransactionManager<Tx>, TxSessionManager {
+	protected final ThreadLocal<Stack<TxTransaction<Tx>>> unitOfWork = new ThreadLocal<Stack<TxTransaction<Tx>>>();
 	/**
 	 * BEGIN UNIT OF WORK
 	 */
 	@Override
 	public void beginSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack != null && !stack.isEmpty()) {
 			//FIXME: WARNING ABOUT TRANSACTIONS LEFT OVER
 		}
@@ -27,7 +27,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 */
 	@Override
 	public void endSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack != null && !stack.isEmpty()) {
 			//FIXME: WARNING ABOUT TRANSACTIONS LEFT OVER
 		}
@@ -39,11 +39,11 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param commit
 	 */
 	protected void clearSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack != null) {
 			try {
 				while(!stack.isEmpty()) {
-					TxTransaction tx = stack.peek();
+					TxTransaction<Tx> tx = stack.peek();
 					tx.rollback();
 				}
 			}finally {
@@ -56,8 +56,8 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * 
 	 */
 	@Override
-	public TxTransaction getTransaction() {
-		Stack<TxTransaction> stack = unitOfWork.get();
+	public TxTransaction<Tx> getTransaction() {
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack == null || stack.isEmpty()) {
 			return null;
 		}
@@ -68,9 +68,14 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * ENHANCE THE TRANSACTION TO CORRECTLY HANDLE ROLLBACK/COMMIT
 	 */
 	@Override
-	public TxTransaction beginTransaction(Transactional transactional) {
-		final TxTransaction tx = newTransaction(transactional);
-		TxTransaction txn = new TxTransaction() {
+	public TxTransaction<Tx> beginTransaction(Transactional transactional) {
+		final TxTransaction<Tx> tx = newTransaction(transactional);
+		TxTransaction<Tx> txn = new TxTransaction<Tx>() {
+			@Override
+			public Tx get() {
+				return tx.get();
+			}
+			
 			@Override
 			public Transactional getTransactional() {
 				return tx.getTransactional();
@@ -101,7 +106,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 		};
 		
 		//ADD TO UNIT OF WORK
-		Stack<TxTransaction> stack = unitOfWork.get();
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack == null) {
 			stack = new Stack<>();
 			unitOfWork.set(stack);
@@ -114,8 +119,8 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * 
 	 * @param tx
 	 */
-	protected void clearTransaction(TxTransaction tx) {
-		Stack<TxTransaction> stack = unitOfWork.get();
+	protected void clearTransaction(TxTransaction<Tx> tx) {
+		Stack<TxTransaction<Tx>> stack = unitOfWork.get();
 		if(stack == null || stack.isEmpty()) {
 			//FIXME: WARNING IF TX NOT BELONG TO UOW
 		} else {
@@ -128,5 +133,5 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param transactional
 	 * @return
 	 */
-	protected abstract TxTransaction newTransaction(Transactional transactional);
+	protected abstract TxTransaction<Tx> newTransaction(Transactional transactional);
 }

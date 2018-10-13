@@ -5,8 +5,8 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.Scopes;
 
+import io.javacloud.framework.cdi.LazySingleton;
 import io.javacloud.framework.cdi.internal.GuiceModule;
-import io.javacloud.framework.cdi.internal.LazySingleton;
 /**
  * 
  * @author ho

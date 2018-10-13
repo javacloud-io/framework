@@ -14,34 +14,11 @@
  * limitations under the License.
  */
 package io.javacloud.framework.cdi;
-
-import io.javacloud.framework.cdi.internal.GuiceModule;
-
-import javax.inject.Singleton;
 /**
+ * 
  * @author ho
  *
  */
-public class TestModule extends GuiceModule {
-	@Override
-	public void configure() {
-		bind(TestService.class).to(TestServiceImpl.class);
-		bind(TestInject.class);
-		
-		bindToName(TestService.class, "named").to(TestServiceImpl.class);
-		bind(TestInjectNamed.class);
-		
-		//Lazy
-		bind(TestLazyService.class).to(TestLazyServiceImpl.class);
-	}
-	
-	//TEST
-	@Singleton
-	public static class TestServiceImpl implements TestService {
-	}
-	
-	//
-	@LazySingleton
-	public static class TestLazyServiceImpl implements TestLazyService {
-	}
+public interface TestLazyService {
+
 }

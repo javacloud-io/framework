@@ -23,6 +23,9 @@ public class ServiceRegistryTest extends ServiceTest {
 	@Inject
 	TestService testService;
 	
+	@Inject
+	TestLazyService lazyService;
+	
 	@Inject @Named("named")
 	TestService namedService;
 	@Test

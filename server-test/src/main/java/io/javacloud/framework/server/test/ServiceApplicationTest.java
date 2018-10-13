@@ -11,9 +11,9 @@ import org.junit.AfterClass;
  * @author ho
  *
  */
-public abstract class RestApplicationTest extends JerseyApplicationTest {
+public abstract class ServiceApplicationTest extends JerseyApplicationTest {
 	private static TestContainerFactoryImpl testContainerFactory = null;
-	public RestApplicationTest() {
+	public ServiceApplicationTest() {
 	}
 	
 	/**

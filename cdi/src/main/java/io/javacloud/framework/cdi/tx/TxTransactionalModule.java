@@ -10,13 +10,13 @@ import io.javacloud.framework.tx.Transactional;
  * @author ho
  *
  */
-public abstract class TxTransactionalModule extends GuiceModule {
+public abstract class TxTransactionalModule<Tx> extends GuiceModule {
 	@Override
 	protected void configure() {
 		//BIND MANAGER CLASSES
 		
 		//TRANSACTIONAL PROCESSION
-		TxTransactionalInterceptor transactionalInterceptor = newTransactionalInterceptor();
+		TxTransactionalInterceptor<Tx> transactionalInterceptor = newTransactionalInterceptor();
 		requestInjection(transactionalInterceptor);
 		
 		//class-level @Transactional
@@ -30,7 +30,7 @@ public abstract class TxTransactionalModule extends GuiceModule {
 	 * 
 	 * @return
 	 */
-	protected TxTransactionalInterceptor newTransactionalInterceptor() {
-		return new TxTransactionalInterceptor(new TxTransactionalInvocation());
+	protected TxTransactionalInterceptor<Tx> newTransactionalInterceptor() {
+		return new TxTransactionalInterceptor<Tx>(new TxTransactionalInvocation<Tx>());
 	}
 }
