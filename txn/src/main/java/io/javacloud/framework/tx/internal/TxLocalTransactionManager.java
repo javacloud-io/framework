@@ -1,6 +1,7 @@
 package io.javacloud.framework.tx.internal;
 
 import java.util.Stack;
+import java.util.logging.Logger;
 
 import io.javacloud.framework.tx.Transactional;
 import io.javacloud.framework.tx.spi.TxSessionManager;
@@ -12,6 +13,7 @@ import io.javacloud.framework.tx.spi.TxTransactionManager;
  *
  */
 public abstract class TxLocalTransactionManager implements TxTransactionManager, TxSessionManager {
+	private static final Logger logger = Logger.getLogger(TxLocalTransactionManager.class.getName());
 	private static final ThreadLocal<Stack<TxTransaction>> unitOfWork = new ThreadLocal<Stack<TxTransaction>>();
 	/**
 	 * BEGIN UNIT OF WORK
@@ -20,7 +22,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	public void beginSession() {
 		Stack<TxTransaction> stack = unitOfWork.get();
 		if(stack != null && !stack.isEmpty()) {
-			//FIXME: WARNING ABOUT TRANSACTIONS LEFT OVER
+			logger.warning("Session starting but still have " + stack.size() + " active transaction");
 		}
 		closeSession();
 	}
@@ -32,7 +34,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	public void endSession() {
 		Stack<TxTransaction> stack = unitOfWork.get();
 		if(stack != null && !stack.isEmpty()) {
-			//FIXME: WARNING ABOUT TRANSACTIONS LEFT OVER
+			logger.warning("Session ending but still have " + stack.size() + " active transaction");
 		}
 		closeSession();
 	}
@@ -56,7 +58,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	}
 	
 	/**
-	 * 
+	 * return the active transaction
 	 */
 	@Override
 	public TxTransaction getTransaction() {
@@ -73,6 +75,8 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	@Override
 	public TxTransaction beginTransaction(Transactional transactional) {
 		TxTransaction tx = newTransaction(transactional);
+		logger.fine("Begin transaction: " + tx);
+		
 		Stack<TxTransaction> stack = unitOfWork.get();
 		if(stack == null) {
 			stack = new Stack<>();
@@ -87,9 +91,10 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param tx
 	 */
 	protected void endTransaction(TxTransaction tx) {
+		logger.fine("End transaction: " + tx);
 		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack == null || stack.isEmpty()) {
-			//FIXME: WARNING IF TX NOT BELONG TO UOW
+		if(stack == null || stack.isEmpty() || stack.peek() != tx) {
+			logger.warning("Transaction: " + tx + " doesn't belong to the session");
 		} else {
 			stack.remove(tx);
 		}

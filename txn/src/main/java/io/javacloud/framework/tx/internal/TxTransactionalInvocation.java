@@ -1,6 +1,7 @@
 package io.javacloud.framework.tx.internal;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Logger;
 
 import io.javacloud.framework.tx.Propagation;
 import io.javacloud.framework.tx.Transactional;
@@ -15,6 +16,8 @@ import io.javacloud.framework.tx.spi.TxTransactionManager;
  *
  */
 public class TxTransactionalInvocation {
+	private static final Logger logger = Logger.getLogger(TxTransactionalInvocation.class.getName());
+	
 	/**
 	 * 
 	 * @param callable
@@ -32,14 +35,15 @@ public class TxTransactionalInvocation {
 				throw new TxTransactionException("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
 				//SUSPEND EXISTING TX
+				logger.warning("Rollback transaction: " + tx + ", due propagation NOT_SUPPORTED");
 				tx.rollback();
 				return callable.call();
 			} else if(propagation == Propagation.REQUIRES_NEW) {
-				//SUSPEND EXISTING TX
-				tx.rollback();
+				logger.fine("New transaction: " + tx + ", due propagation REQUIRES_NEW");
 				return invokeNewTx(callable, tm, transactional);
 			} else if(tx.getTransactional().readOnly() && !transactional.readOnly()) {
 				//CUREENT TRANSACTION IS NOT SUITABLE FOR UPDATE => AUTO NEW ONE
+				logger.fine("New transaction, due to transaction: " + tx + " is readOnly");
 				return invokeNewTx(callable, tm, transactional);
 			}
 			return callable.call();
