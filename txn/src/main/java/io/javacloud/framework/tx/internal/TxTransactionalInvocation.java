@@ -6,8 +6,9 @@ import java.util.logging.Logger;
 import io.javacloud.framework.tx.Propagation;
 import io.javacloud.framework.tx.Transactional;
 import io.javacloud.framework.tx.spi.TxTransaction;
-import io.javacloud.framework.tx.spi.TxTransactionException;
 import io.javacloud.framework.tx.spi.TxTransactionManager;
+import io.javacloud.framework.tx.spi.TxTransactionNotRequiredException;
+import io.javacloud.framework.tx.spi.TxTransactionRequiredException;
 
 /**
  * Default handle transactional invocation
@@ -33,23 +34,23 @@ public class TxTransactionalInvocation {
 		//THERE IS AN ACTIVE TRANSACTION
 		if(tx != null && tx.isActive()) {
 			if(propagation == Propagation.NEVER) {
-				//DONT NEED ACTIVE TRANSACTION
-				throw new TxTransactionException("An active transaction already exists");
+				//DONT NEED ACTIVE TRANSACTION BUT HAVE ONE
+				throw new TxTransactionNotRequiredException("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
-				//FIXME: SUSPEND EXISTING TX AND RESUME AFTER DONE
+				//FIXME: TO SUPPORT SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return callable.call();
 			} else if(propagation == Propagation.REQUIRES_NEW) {
-				//FIXME: SUSPEND EXISTING TX AND RESUME AFTER DONE
+				//FIXME: TO SUPPORT SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			} else if(tx.getTransactional().readOnly() != transactional.readOnly()) {
-				logger.fine("Transaction: " + tx + " is not suitable");
+				logger.fine("Existing transaction: " + tx + " is not compatible");
 				//FIXME: FOR BETER PERFORMANCE WE SHOULD TRY TO CONVERT THE CURRENT TRANSACTION AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			}
 			return callable.call();
 		} else if(propagation == Propagation.MANDATORY) {
-			//NEED AN ACTIVE TRANSACTION
-			throw new TxTransactionException("An active transaction does not exist");
+			//NEED AN ACTIVE TRANSACTION BUT NOT FOUND ONE
+			throw new TxTransactionRequiredException("An active transaction does not exist");
 		} else if(propagation == Propagation.NEVER
 				|| propagation == Propagation.NOT_SUPPORTED
 				|| propagation == Propagation.SUPPORTS) {

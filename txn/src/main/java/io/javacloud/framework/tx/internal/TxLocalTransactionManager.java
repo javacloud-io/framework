@@ -1,6 +1,5 @@
 package io.javacloud.framework.tx.internal;
 
-import java.util.Stack;
 import java.util.logging.Logger;
 
 import io.javacloud.framework.tx.Transactional;
@@ -14,15 +13,15 @@ import io.javacloud.framework.tx.spi.TxTransactionManager;
  */
 public abstract class TxLocalTransactionManager implements TxTransactionManager, TxSessionManager {
 	private static final Logger logger = Logger.getLogger(TxLocalTransactionManager.class.getName());
-	private static final ThreadLocal<Stack<TxTransaction>> unitOfWork = new ThreadLocal<Stack<TxTransaction>>();
+	private final TxLocalUnitOfWork unitOfWork = new TxLocalUnitOfWork();
 	/**
 	 * BEGIN UNIT OF WORK
 	 */
 	@Override
 	public void beginSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack != null && !stack.isEmpty()) {
-			logger.warning("Session starting but still have " + stack.size() + " active transaction");
+		int size = unitOfWork.size();
+		if(size > 0) {
+			logger.warning("Session starting but still have " + size + " active transaction");
 		}
 		closeSession();
 	}
@@ -32,9 +31,9 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 */
 	@Override
 	public void endSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack != null && !stack.isEmpty()) {
-			logger.warning("Session ending but still have " + stack.size() + " active transaction");
+		int size = unitOfWork.size();
+		if(size > 0) {
+			logger.warning("Session ending but still have " + size + " active transaction");
 		}
 		closeSession();
 	}
@@ -44,29 +43,19 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param commit
 	 */
 	protected void closeSession() {
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack != null) {
-			try {
-				while(!stack.isEmpty()) {
-					TxTransaction tx = stack.peek();
-					tx.rollback();
-				}
-			}finally {
-				unitOfWork.remove();
-			}
+		while(unitOfWork.size() > 0) {
+			TxTransaction tx = unitOfWork.peek();
+			tx.rollback();
 		}
 	}
 	
 	/**
-	 * return the active transaction
+	 * FIXME: SUPPORTS SUSPENDED TRANSACTION
 	 */
 	@Override
 	public TxTransaction getTransaction() {
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack == null || stack.isEmpty()) {
-			return null;
-		}
-		return stack.peek();
+		TxTransaction tx = unitOfWork.peek();
+		return tx;
 	}
 
 	/**
@@ -77,13 +66,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 		TxTransaction tx = newTransaction(transactional);
 		logger.fine("Begin transaction: " + tx);
 		
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack == null) {
-			stack = new Stack<>();
-			unitOfWork.set(stack);
-		}
-		stack.push(tx);
-		return tx;
+		return unitOfWork.push(tx);
 	}
 	
 	/**
@@ -92,11 +75,10 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 */
 	protected void endTransaction(TxTransaction tx) {
 		logger.fine("End transaction: " + tx);
-		Stack<TxTransaction> stack = unitOfWork.get();
-		if(stack == null || stack.isEmpty() || stack.peek() != tx) {
+		if(unitOfWork.peek() != tx) {
 			logger.warning("Transaction: " + tx + " doesn't belong to the session");
 		} else {
-			stack.remove(tx);
+			unitOfWork.remove(tx);
 		}
 	}
 	
