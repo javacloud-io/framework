@@ -42,8 +42,8 @@ public class TxTransactionalInvocation {
 			} else if(propagation == Propagation.REQUIRES_NEW) {
 				//FIXME: TO SUPPORT SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
-			} else if(tx.getTransactional().readOnly() != transactional.readOnly()) {
-				logger.fine("Existing transaction: " + tx + " is not compatible");
+			} else if(tx.getTransactional().readOnly() && !transactional.readOnly()) {
+				logger.fine("Existing transaction: " + tx + " is readOnly but required readWrite");
 				//FIXME: FOR BETER PERFORMANCE WE SHOULD TRY TO CONVERT THE CURRENT TRANSACTION AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			}
