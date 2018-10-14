@@ -34,6 +34,7 @@
     <grizzly.version>2.4.3</grizzly.version>
     <slf4j.version>1.7.25</slf4j.version>
     <logback.version>1.2.3</logback.version>
+    <derby.version>10.14.2.0</derby.version>
   </properties>
   
   <modules>
@@ -45,6 +46,7 @@
     <module>json</module>
     <module>security</module>
 
+    <module>txn</module>
     <module>jaxrs</module>
     <module>server-test</module>
     <module>server</module>
@@ -624,7 +626,14 @@
             <artifactId>grizzly-http-servlet</artifactId>
             <version>${grizzly.version}</version>
         </dependency>
-        
+
+	<!--Embeded derby and driver -->
+	<dependency>
+    	   <groupId>org.apache.derby</groupId>
+    	   <artifactId>derby</artifactId>
+    	   <version>${derby.version}</version>
+	</dependency>
+ 
 	</dependencies>
   </dependencyManagement>
 </project>

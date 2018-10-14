@@ -1,4 +1,4 @@
-package io.javacloud.framework.cdi.tx;
+package io.javacloud.framework.tx.internal;
 
 import com.google.inject.matcher.Matchers;
 
@@ -6,17 +6,18 @@ import io.javacloud.framework.cdi.internal.GuiceModule;
 import io.javacloud.framework.tx.Transactional;
 
 /**
+ * TxSessionManager, TxTransactionManager, TxServiceManager need to be binding.
  * 
  * @author ho
  *
  */
-public abstract class TxTransactionalModule<Tx> extends GuiceModule {
+public class TxTransactionalModule extends GuiceModule {
 	@Override
 	protected void configure() {
-		//BIND MANAGER CLASSES
+		//TxSessionManager, TxTransactionManager need to be binded.
 		
-		//TRANSACTIONAL PROCESSION
-		TxTransactionalInterceptor<Tx> transactionalInterceptor = newTransactionalInterceptor();
+		//TRANSACTIONAL INTERCEPTOR
+		TxTransactionalInterceptor transactionalInterceptor = newTransactionalInterceptor();
 		requestInjection(transactionalInterceptor);
 		
 		//class-level @Transactional
@@ -30,7 +31,7 @@ public abstract class TxTransactionalModule<Tx> extends GuiceModule {
 	 * 
 	 * @return
 	 */
-	protected TxTransactionalInterceptor<Tx> newTransactionalInterceptor() {
-		return new TxTransactionalInterceptor<Tx>(new TxTransactionalInvocation<Tx>());
+	protected TxTransactionalInterceptor newTransactionalInterceptor() {
+		return new TxTransactionalInterceptor(new TxTransactionalInvocation());
 	}
 }

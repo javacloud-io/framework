@@ -1,4 +1,4 @@
-package io.javacloud.framework.cdi.tx;
+package io.javacloud.framework.tx.spi;
 /**
  * Abstract UNIT OF WORK management
  * 

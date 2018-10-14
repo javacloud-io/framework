@@ -1,4 +1,4 @@
-package io.javacloud.framework.cdi.tx;
+package io.javacloud.framework.tx.internal;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.Callable;
@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import io.javacloud.framework.tx.Transactional;
+import io.javacloud.framework.tx.spi.TxTransactionManager;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -15,12 +16,12 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author ho
  * 
  */
-public class TxTransactionalInterceptor<Tx> implements MethodInterceptor {
+public class TxTransactionalInterceptor implements MethodInterceptor {
 	@Inject
-	private TxTransactionManager<Tx> transactionManager;
+	private TxTransactionManager transactionManager;
 	
-	private final TxTransactionalInvocation<Tx> invocation;
-	public TxTransactionalInterceptor(TxTransactionalInvocation<Tx> invocation) {
+	private final TxTransactionalInvocation invocation;
+	public TxTransactionalInterceptor(TxTransactionalInvocation invocation) {
 		this.invocation = invocation;
 	}
 	

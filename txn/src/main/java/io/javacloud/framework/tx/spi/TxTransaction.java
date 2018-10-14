@@ -1,6 +1,4 @@
-package io.javacloud.framework.cdi.tx;
-
-import javax.inject.Provider;
+package io.javacloud.framework.tx.spi;
 
 import io.javacloud.framework.tx.Transactional;
 
@@ -8,21 +6,20 @@ import io.javacloud.framework.tx.Transactional;
  * Transaction backed by underline transaction.
  * 
  * @author ho
- *
- * @param <T>
+ * 
  */
-public interface TxTransaction<Tx> extends Provider<Tx> {
-	/**
-	 * 
-	 * @return
-	 */
-	public Transactional getTransactional();
-	
+public interface TxTransaction {
 	/**
 	 * 
 	 * @return
 	 */
 	public boolean isActive();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Transactional getTransactional();
 	
 	/**
 	 * 

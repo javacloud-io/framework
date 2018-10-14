@@ -1,17 +1,20 @@
-package io.javacloud.framework.cdi.tx;
+package io.javacloud.framework.tx.internal;
 
 import java.util.concurrent.Callable;
 
 import io.javacloud.framework.tx.Propagation;
-import io.javacloud.framework.tx.TransactionException;
 import io.javacloud.framework.tx.Transactional;
+import io.javacloud.framework.tx.spi.TxTransaction;
+import io.javacloud.framework.tx.spi.TxTransactionException;
+import io.javacloud.framework.tx.spi.TxTransactionManager;
 
 /**
+ * Default handle transactional invocation
  * 
  * @author ho
  *
  */
-public class TxTransactionalInvocation<Tx> {
+public class TxTransactionalInvocation {
 	/**
 	 * 
 	 * @param callable
@@ -20,16 +23,19 @@ public class TxTransactionalInvocation<Tx> {
 	 * @return
 	 * @throws Exception
 	 */
-	public <V> V invoke(Callable<V> callable, TxTransactionManager<Tx> tm, Transactional transactional) throws Exception {
+	public <V> V invoke(Callable<V> callable, TxTransactionManager tm, Transactional transactional) throws Exception {
 		Propagation propagation = transactional.propagation();
-		TxTransaction<Tx> tx = tm.getTransaction();
+		TxTransaction tx = tm.getTransaction();
 		if(tx != null && tx.isActive()) {
 			if(propagation == Propagation.NEVER) {
-				throw new TransactionException("An active transaction already exists");
+				//DONT NEED ACTIVE TRANSACTION
+				throw new TxTransactionException("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
+				//SUSPEND EXISTING TX
 				tx.rollback();
 				return callable.call();
 			} else if(propagation == Propagation.REQUIRES_NEW) {
+				//SUSPEND EXISTING TX
 				tx.rollback();
 				return invokeNewTx(callable, tm, transactional);
 			} else if(tx.getTransactional().readOnly() && !transactional.readOnly()) {
@@ -38,9 +44,12 @@ public class TxTransactionalInvocation<Tx> {
 			}
 			return callable.call();
 		} else if(propagation == Propagation.MANDATORY) {
-			throw new TransactionException("An active transaction does not exist");
-		} else if(propagation == Propagation.NEVER || propagation == Propagation.NOT_SUPPORTED || propagation == Propagation.SUPPORTS) {
-			//DONT NEED AN TRANSACTION
+			//NEED AN ACTIVE TRANSACTION
+			throw new TxTransactionException("An active transaction does not exist");
+		} else if(propagation == Propagation.NEVER
+				|| propagation == Propagation.NOT_SUPPORTED
+				|| propagation == Propagation.SUPPORTS) {
+			//DON'T NEED A TRANSACTION
 			return callable.call();
 		}
 		return invokeNewTx(callable, tm, transactional);
@@ -54,8 +63,8 @@ public class TxTransactionalInvocation<Tx> {
 	 * @return
 	 * @throws Exception
 	 */
-	protected <V> V invokeNewTx(Callable<V> callable, TxTransactionManager<Tx> tm, Transactional transactional) throws Exception {
-		TxTransaction<Tx> tx = tm.beginTransaction(transactional);
+	protected <V> V invokeNewTx(Callable<V> callable, TxTransactionManager tm, Transactional transactional) throws Exception {
+		TxTransaction tx = tm.beginTransaction(transactional);
 		V result;
 		try {
 			result = callable.call();
