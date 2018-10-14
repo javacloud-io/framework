@@ -15,7 +15,7 @@ public interface TxTransactionManager {
 	public TxTransaction getTransaction();
 	
 	/**
-	 * 
+	 * Start a new transaction
 	 * @return
 	 */
 	public TxTransaction beginTransaction(Transactional transactional);

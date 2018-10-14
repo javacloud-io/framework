@@ -1,32 +1,35 @@
 package io.javacloud.framework.tx;
 /**
- * Compatible with javax transactional type
+ * Compatible with javax transactional attributes:
+ * https://docs.oracle.com/javaee/6/api/javax/ejb/TransactionAttributeType.html
  * 
  * @author ho
  *
  */
 public enum Propagation {
-	//Support a current transaction, throw an exception if none exists.
-	//If called outside a transaction context, a TransactionalException with a nested TransactionRequiredException must be thrown.
+	//If a client invokes the enterprise bean's method while the client is associated with a transaction context, the container invokes the enterprise bean's method in the client's transaction context.
+	//If there is no existing transaction, an exception is thrown.
 	MANDATORY,
 	
-	//Support a current transaction, create a new one if none exists.
-	//If called outside a transaction context, the interceptor must begin a new JTA transaction, the managed bean method execution must then continue inside this transaction context, and the transaction must be completed by the interceptor.
+	//If a client invokes the enterprise bean's method while the client is associated with a transaction context, the container invokes the enterprise bean's method in the client's transaction context.
+	//If the client invokes the enterprise bean's method while the client is not associated with a transaction context, the container automatically starts a new transaction before delegating a method call to the enterprise bean method.
 	REQUIRED,
 		
-	//Create a new transaction, and suspend the current transaction if one exists.
-	//If called outside a transaction context, the interceptor must begin a new JTA transaction, the managed bean method execution must then continue inside this transaction context, and the transaction must be completed by the interceptor.
+	//The container must invoke an enterprise bean method whose transaction attribute is set to REQUIRES_NEW with a new transaction context.
+	//If the client invokes the enterprise bean's method while the client is not associated with a transaction context, the container automatically starts a new transaction before delegating a method call to the enterprise bean business method.
+	//If a client calls with a transaction context, the container suspends the association of the transaction context with the current thread before starting the new transaction and invoking the method. The container resumes the suspended transaction association after the method and the new transaction have been completed.
 	REQUIRES_NEW,
 		
-	//Execute non-transactionally, throw an exception if a transaction exists.
-	//If called outside a transaction context, managed bean method execution must then continue outside a transaction context.
+	//If a client invokes the enterprise bean's method while the client is associated with a transaction context, the container invokes the enterprise bean's method in the client's transaction context.
+	//If there is no existing transaction, an exception is thrown.
 	NEVER,
 	
-	//Support a current transaction, execute non-transactionally if none exists.
-	//If called outside a transaction context, managed bean method execution must then continue outside a transaction context.
+	//If the client calls with a transaction context, the container performs the same steps as described in the REQUIRED case.
+	//If the client calls without a transaction context, the container performs the same steps as described in the NOT_SUPPORTED case.
+	//The SUPPORTS transaction attribute must be used with caution. This is because of the different transactional semantics provided by the two possible modes of execution. Only enterprise beans that will execute correctly in both modes should use the SUPPORTS transaction attribute.
 	SUPPORTS,
 	
-	//Execute non-transactionally, suspend the current transaction if one exists.
-	//If called outside a transaction context, managed bean method execution must then continue outside a transaction context.
+	//The container invokes an enterprise bean method whose transaction attribute NOT_SUPPORTED with an unspecified transaction context.
+	//If a client calls with a transaction context, the container suspends the association of the transaction context with the current thread before invoking the enterprise bean's business method. The container resumes the suspended association when the business method has completed.
 	NOT_SUPPORTED,
 }

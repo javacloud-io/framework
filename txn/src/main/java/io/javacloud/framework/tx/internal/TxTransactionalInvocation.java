@@ -29,21 +29,21 @@ public class TxTransactionalInvocation {
 	public <V> V invoke(Callable<V> callable, TxTransactionManager tm, Transactional transactional) throws Exception {
 		Propagation propagation = transactional.propagation();
 		TxTransaction tx = tm.getTransaction();
+		
+		//THERE IS AN ACTIVE TRANSACTION
 		if(tx != null && tx.isActive()) {
 			if(propagation == Propagation.NEVER) {
 				//DONT NEED ACTIVE TRANSACTION
 				throw new TxTransactionException("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
-				//SUSPEND EXISTING TX
-				logger.warning("Rollback transaction: " + tx + ", due propagation NOT_SUPPORTED");
-				tx.rollback();
+				//FIXME: SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return callable.call();
 			} else if(propagation == Propagation.REQUIRES_NEW) {
-				logger.fine("New transaction: " + tx + ", due propagation REQUIRES_NEW");
+				//FIXME: SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
-			} else if(tx.getTransactional().readOnly() && !transactional.readOnly()) {
-				//CUREENT TRANSACTION IS NOT SUITABLE FOR UPDATE => AUTO NEW ONE
-				logger.fine("New transaction, due to transaction: " + tx + " is readOnly");
+			} else if(tx.getTransactional().readOnly() != transactional.readOnly()) {
+				logger.fine("Transaction: " + tx + " is not suitable");
+				//FIXME: FOR BETER PERFORMANCE WE SHOULD TRY TO CONVERT THE CURRENT TRANSACTION AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			}
 			return callable.call();

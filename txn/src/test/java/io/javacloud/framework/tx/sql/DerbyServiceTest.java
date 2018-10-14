@@ -39,6 +39,9 @@ public class DerbyServiceTest extends TxServiceTest {
 	public void testNoTx(){
 	}
 	
+	/**
+	 * 
+	 */
 	@Test
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void testNewTx(){
