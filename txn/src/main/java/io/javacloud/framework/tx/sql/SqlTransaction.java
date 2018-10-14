@@ -11,12 +11,10 @@ import io.javacloud.framework.tx.spi.TxTransactionException;
  * @author ho
  *
  */
-public class SqlTransaction implements TxTransaction {
-	private final Connection connection;
+public abstract class SqlTransaction implements TxTransaction {
 	private final Transactional transactional;
 	private boolean active = true;
-	public SqlTransaction(Connection connection, Transactional transactional) {
-		this.connection = connection;
+	public SqlTransaction(Transactional transactional) {
 		this.transactional = transactional;
 	}
 	
@@ -24,9 +22,7 @@ public class SqlTransaction implements TxTransaction {
 	 * return current active connection for WORK.
 	 * @return
 	 */
-	public Connection getConnection() {
-		return connection;
-	}
+	public abstract Connection getConnection();
 	
 	/**
 	 * 
@@ -50,7 +46,7 @@ public class SqlTransaction implements TxTransaction {
 	@Override
 	public void commit() {
 		try {
-			connection.commit();
+			getConnection().commit();
 		} catch(SQLException ex) {
 			throw new TxTransactionException(ex.getMessage(), ex);
 		} finally {
@@ -64,7 +60,7 @@ public class SqlTransaction implements TxTransaction {
 	@Override
 	public void rollback() {
 		try {
-			connection.rollback();
+			getConnection().rollback();
 		}catch(SQLException ex) {
 			throw new TxTransactionException(ex.getMessage(), ex);
 		} finally {

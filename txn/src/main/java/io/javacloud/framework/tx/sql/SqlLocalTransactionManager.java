@@ -1,5 +1,7 @@
 package io.javacloud.framework.tx.sql;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -7,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.sql.DataSource;
 
+import io.javacloud.framework.internal.ProxyInvocationHandler;
 import io.javacloud.framework.tx.Transactional;
 import io.javacloud.framework.tx.internal.TxLocalTransactionManager;
 import io.javacloud.framework.tx.spi.TxTransaction;
@@ -45,35 +48,43 @@ public class SqlLocalTransactionManager extends TxLocalTransactionManager {
 	}
 
 	/**
-	 * 1. ENSURE TO OPEN A CONNECTION IF ONE NOT EXISTED.
+	 * FIXME: ENSURE native CONNECTION commit() or rollback() should behave same TX.
 	 */
 	@Override
 	protected TxTransaction newTransaction(Transactional transactional) {
 		try {
-			final Connection connection = dataSource.getConnection();
-			connection.setAutoCommit(false);
-			connection.setReadOnly(transactional.readOnly());
-			return new SqlTransaction(connection, transactional) {
-				@Override
-				public void commit() {
-					try {
-						super.commit();
-					} finally {
-						endTransaction(this);
-					}
-				}
-
-				@Override
-				public void rollback() {
-					try {
-						super.rollback();
-					} finally {
-						endTransaction(this);
-					}
-				}
-			};
+			Connection rawConnection = dataSource.getConnection();
+			rawConnection.setAutoCommit(false);
+			rawConnection.setReadOnly(transactional.readOnly());
+			return new SqlTransactionImpl(rawConnection, transactional);
 		} catch(SQLException ex) {
 			throw new TxTransactionException("Unable to obtain a connection", ex);
+		}
+	}
+	
+	//
+	//PROXY THE CONNECTION TO ENSURE CORRECTNESS
+	class SqlTransactionImpl extends SqlTransaction {
+		private final Connection connection;
+		public SqlTransactionImpl(final Connection rawConnection, Transactional transactional) {
+			super(transactional);
+			this.connection = (Connection)Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[]{Connection.class}, new ProxyInvocationHandler() {
+				@Override
+				protected Object invoke(Method method, Object[] args) throws Throwable {
+					try {
+						return method.invoke(rawConnection, args);
+					} finally {
+						if("commit".equals(method.getName()) || "rollback".equals(method.getName())) {
+							endTransaction(SqlTransactionImpl.this);
+						}
+					}
+				}
+			});
+		}
+		
+		@Override
+		public Connection getConnection() {
+			return connection;
 		}
 	}
 }
