@@ -1,6 +1,4 @@
-package io.javacloud.framework.internal;
-
-import io.javacloud.framework.util.Codecs;
+package io.javacloud.framework.util;
 
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;

@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import io.javacloud.framework.data.Externalizer;
-import io.javacloud.framework.internal.BytesInputStream;
-import io.javacloud.framework.internal.BytesOutputStream;
+import io.javacloud.framework.util.BytesInputStream;
+import io.javacloud.framework.util.BytesOutputStream;
 import io.javacloud.framework.util.Codecs;
+import io.javacloud.framework.util.Externalizer;
 
 /**
  * Wrapper around externalization to provide simple use of bytes/string.

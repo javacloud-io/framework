@@ -1,6 +1,4 @@
-package io.javacloud.framework.internal;
-
-import io.javacloud.framework.util.UncheckedException;
+package io.javacloud.framework.util;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;

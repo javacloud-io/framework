@@ -1,16 +1,13 @@
 package io.javacloud.framework.config.impl;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 import javax.inject.Singleton;
 
 import io.javacloud.framework.config.ConfigManager;
 import io.javacloud.framework.config.ConfigSource;
 import io.javacloud.framework.config.internal.ConfigSourceResolver;
 import io.javacloud.framework.config.internal.DefaultConfigSource;
-import io.javacloud.framework.data.Converters;
-import io.javacloud.framework.util.Objects;
+import io.javacloud.framework.util.Converters;
+import io.javacloud.framework.util.ProxyInvocationHandler;
 import io.javacloud.framework.util.ResourceLoader;
 
 /**
@@ -53,7 +50,7 @@ public class ConfigManagerImpl implements ConfigManager {
 	 */
 	@Override
 	public <T> T getConfig(Class<T> type) {
-		InvocationHandler configHandler = new ConfigInvocationHandlerImpl(sourceResolver);
-		return Objects.cast(Proxy.newProxyInstance(ResourceLoader.getClassLoader(), new Class<?>[]{ type }, configHandler));
+		ProxyInvocationHandler configHandler = new ConfigInvocationHandlerImpl(sourceResolver);
+		return ProxyInvocationHandler.newInstance(configHandler, type);
 	}
 }

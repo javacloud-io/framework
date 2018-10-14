@@ -1,6 +1,5 @@
-package io.javacloud.framework.data;
+package io.javacloud.framework.util;
 
-import io.javacloud.framework.util.Objects;
 
 /**
  * Very simple data condition, represent a condition with its value associated.

@@ -1,9 +1,8 @@
-package io.javacloud.framework.internal;
-
-import io.javacloud.framework.util.Objects;
+package io.javacloud.framework.util;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.Set;
 
 /**
@@ -44,4 +43,14 @@ public abstract class ProxyInvocationHandler implements InvocationHandler {
 	 * @throws Throwable
 	 */
 	protected abstract Object invoke(Method method, Object[] args) throws Throwable;
+	
+	/**
+	 * 
+	 * @param invocationHandler
+	 * @param types
+	 * @return
+	 */
+	public static final <T> T newInstance(InvocationHandler invocationHandler, Class<?>... types) {
+		return Objects.cast(Proxy.newProxyInstance(invocationHandler.getClass().getClassLoader(), types, invocationHandler));
+	}
 }

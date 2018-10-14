@@ -1,6 +1,5 @@
 package io.javacloud.framework.security.claim;
 
-import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.security.AccessGrant;
 import io.javacloud.framework.security.AuthenticationException;
 import io.javacloud.framework.security.Authenticator;
@@ -10,6 +9,7 @@ import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.internal.AuthorizationGrant;
 import io.javacloud.framework.security.internal.Permissions;
 import io.javacloud.framework.security.internal.TokenCredentials;
+import io.javacloud.framework.util.Converters;
 import io.javacloud.framework.util.Objects;
 
 import java.util.Set;

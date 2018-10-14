@@ -1,7 +1,7 @@
 package io.javacloud.framework.json.impl;
 
-import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.util.DateFormats;
+import io.javacloud.framework.util.Externalizer;
 
 import java.io.IOException;
 import java.io.InputStream;

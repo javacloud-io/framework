@@ -28,7 +28,7 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import io.javacloud.framework.internal.BytesInputStream;
+import io.javacloud.framework.util.BytesInputStream;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.PRNG;
 

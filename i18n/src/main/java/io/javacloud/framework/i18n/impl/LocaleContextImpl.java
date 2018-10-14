@@ -1,7 +1,7 @@
 package io.javacloud.framework.i18n.impl;
 
-import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.i18n.LocaleContext;
+import io.javacloud.framework.util.Converters;
 import io.javacloud.framework.util.Objects;
 
 import java.util.Locale;

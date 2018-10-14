@@ -1,4 +1,4 @@
-package io.javacloud.framework.data;
+package io.javacloud.framework.security;
 
 /**
  * The NAMESPACE in which each APPE is running, to help isolation & SANDBOX.

@@ -1,6 +1,4 @@
-package io.javacloud.framework.data;
-
-import io.javacloud.framework.util.UncheckedException;
+package io.javacloud.framework.util;
 
 import java.util.regex.Pattern;
 /**

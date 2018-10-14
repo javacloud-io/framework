@@ -1,8 +1,8 @@
 package io.javacloud.framework.security.internal;
 
-import io.javacloud.framework.data.Dictionary;
 import io.javacloud.framework.security.Credentials;
 import io.javacloud.framework.util.Codecs;
+import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.

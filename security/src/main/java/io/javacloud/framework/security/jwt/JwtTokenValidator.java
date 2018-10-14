@@ -6,15 +6,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import io.javacloud.framework.data.Converters;
-import io.javacloud.framework.data.Dictionary;
-import io.javacloud.framework.data.Externalizer;
-
 import io.javacloud.framework.security.AccessDeniedException;
 import io.javacloud.framework.security.AuthenticationException;
 import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.claim.TokenValidator;
+import io.javacloud.framework.util.Converters;
+import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Externalizer;
 
 /**
  * Simple implementation of a JWT validation with a trusted signer, assuming sharing the signing key or public/private
@@ -58,11 +57,10 @@ public class JwtTokenValidator implements TokenValidator {
 		Dictionary claims = jwtToken.getClaims();
 			
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
-		TokenGrant grantToken = new TokenGrant();
-		grantToken.setId(token);
-		grantToken.setType(IdParameters.GrantType.valueOf((String)claims.get(JWT_TYPE)));
-		grantToken.setSubject((String)claims.get(JWT_SUBJECT));
-		grantToken.setAudience((String)claims.get(JWT_AUDIENCE));
+		TokenGrant grantToken = new TokenGrant(token,
+				IdParameters.GrantType.valueOf((String)claims.get(JWT_TYPE)),
+				(String)claims.get(JWT_SUBJECT),
+				(String)claims.get(JWT_AUDIENCE));
 		grantToken.setScope((String)claims.get(JWT_SCOPE));
 		grantToken.setRoles((String)claims.get(JWT_ROLES));
 		

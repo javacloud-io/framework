@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
-import io.javacloud.framework.data.NamespaceContext;
+import io.javacloud.framework.security.NamespaceContext;
 import io.javacloud.framework.server.internal.W3RequestWrapper;
 import io.javacloud.framework.util.Objects;
 /**

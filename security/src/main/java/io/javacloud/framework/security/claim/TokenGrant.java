@@ -1,6 +1,5 @@
 package io.javacloud.framework.security.claim;
 
-import io.javacloud.framework.data.Identifiable;
 import io.javacloud.framework.security.IdParameters;
 
 import java.security.Principal;
@@ -14,20 +13,28 @@ import java.util.Date;
  * @author tobi
  *
  */
-public class TokenGrant extends Identifiable<String> implements Principal {
+public class TokenGrant implements Principal {
+	private final String  id;		//token ID
 	private IdParameters.GrantType 	type;		//type of token
 	private	String 	subject;	//sub
 	private String  audience;	//aud
 	private String	scope;		//scope
 	
 	private String	roles;		//custom roles
-	private	Date 	expireAt;	//exp UTC
 	private	Date 	issuedAt;	//iat UTC
-	public TokenGrant() {
+	private	Date 	expireAt;	//exp UTC
+	public TokenGrant(String id, IdParameters.GrantType type, String subject, String audience) {
+		this.id = id;
+		this.type = type;
+		this.subject = subject;
+		this.audience= audience;
+	}
+	public String getId() {
+		return id;
 	}
 	
 	/**
-	 * 
+	 * Name of the principle
 	 */
 	@Override
 	public String getName() {
@@ -41,9 +48,6 @@ public class TokenGrant extends Identifiable<String> implements Principal {
 	public IdParameters.GrantType getType() {
 		return type;
 	}
-	public void setType(IdParameters.GrantType type) {
-		this.type = type;
-	}
 	
 	/**
 	 * 
@@ -52,10 +56,6 @@ public class TokenGrant extends Identifiable<String> implements Principal {
 	public String getSubject() {
 		return subject;
 	}
-
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
 	
 	/**
 	 * 
@@ -63,10 +63,6 @@ public class TokenGrant extends Identifiable<String> implements Principal {
 	 */
 	public String getAudience() {
 		return audience;
-	}
-
-	public void setAudience(String audience) {
-		this.audience = audience;
 	}
 
 	/**
@@ -118,11 +114,11 @@ public class TokenGrant extends Identifiable<String> implements Principal {
 	}
 	
 	/**
-	 * 
+	 * return token id encoded.
 	 */
 	@Override
 	public String toString() {
-		return getId();
+		return id;
 	}
 	
 	/**

@@ -13,11 +13,11 @@ import java.util.logging.Logger;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import io.javacloud.framework.data.Dictionaries;
-import io.javacloud.framework.data.Dictionary;
-import io.javacloud.framework.data.Externalizer;
 import io.javacloud.framework.json.internal.JacksonConverter;
 import io.javacloud.framework.util.Codecs;
+import io.javacloud.framework.util.Dictionaries;
+import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Hmacs;
 import io.javacloud.framework.util.Objects;
 

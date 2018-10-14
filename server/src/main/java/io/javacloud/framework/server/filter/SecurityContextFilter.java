@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
-import io.javacloud.framework.data.Converters;
 import io.javacloud.framework.security.AuthenticationException;
 import io.javacloud.framework.security.Authenticator;
 import io.javacloud.framework.security.AccessGrant;
@@ -25,6 +24,7 @@ import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.internal.AuthenticatorManager;
 import io.javacloud.framework.security.internal.ClientCredentials;
 import io.javacloud.framework.security.internal.TokenCredentials;
+import io.javacloud.framework.util.Converters;
 import io.javacloud.framework.util.Objects;
 
 /**

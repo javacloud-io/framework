@@ -1,6 +1,5 @@
 package io.javacloud.framework.util;
 
-import io.javacloud.framework.data.ValidationException;
 import junit.framework.TestCase;
 /**
  * 

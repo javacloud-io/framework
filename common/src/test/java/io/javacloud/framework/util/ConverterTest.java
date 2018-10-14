@@ -15,8 +15,6 @@
  */
 package io.javacloud.framework.util;
 
-import io.javacloud.framework.data.Converters;
-
 import java.util.Date;
 
 import junit.framework.TestCase;

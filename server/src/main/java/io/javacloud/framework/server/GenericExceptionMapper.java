@@ -8,15 +8,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import io.javacloud.framework.data.AlreadyExistsException;
-import io.javacloud.framework.data.Dictionaries;
-import io.javacloud.framework.data.Dictionary;
-import io.javacloud.framework.data.NotFoundException;
-import io.javacloud.framework.data.ValidationException;
 import io.javacloud.framework.security.AccessDeniedException;
 import io.javacloud.framework.security.AuthenticationException;
+import io.javacloud.framework.util.AlreadyExistsException;
+import io.javacloud.framework.util.Dictionaries;
+import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.NotFoundException;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
+import io.javacloud.framework.util.ValidationException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 /**

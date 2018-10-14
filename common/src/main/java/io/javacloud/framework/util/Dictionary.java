@@ -1,4 +1,4 @@
-package io.javacloud.framework.data;
+package io.javacloud.framework.util;
 
 import java.util.Collection;
 import java.util.Collections;

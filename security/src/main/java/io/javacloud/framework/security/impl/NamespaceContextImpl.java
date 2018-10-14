@@ -1,6 +1,6 @@
-package io.javacloud.framework.internal;
+package io.javacloud.framework.security.impl;
 
-import io.javacloud.framework.data.NamespaceContext;
+import io.javacloud.framework.security.NamespaceContext;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Digests;
 

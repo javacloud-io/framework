@@ -1,6 +1,5 @@
-package io.javacloud.framework.data;
+package io.javacloud.framework.util;
 
-import io.javacloud.framework.util.UncheckedException;
 
 /**
  * Throws the exception if something already exist.

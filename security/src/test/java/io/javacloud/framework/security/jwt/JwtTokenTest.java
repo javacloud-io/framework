@@ -1,8 +1,8 @@
 package io.javacloud.framework.security.jwt;
 
-import io.javacloud.framework.data.Dictionaries;
 import io.javacloud.framework.json.impl.JacksonMapper;
 import io.javacloud.framework.util.Codecs;
+import io.javacloud.framework.util.Dictionaries;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;

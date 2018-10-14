@@ -5,8 +5,8 @@ import java.io.InputStream;
 
 import javax.tools.SimpleJavaFileObject;
 
-import io.javacloud.framework.internal.BytesInputStream;
 import io.javacloud.framework.jacc.JavaSource;
+import io.javacloud.framework.util.BytesInputStream;
 
 /**
  * 

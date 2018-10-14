@@ -1,7 +1,7 @@
 package io.javacloud.framework.jacc.internal;
 
-import io.javacloud.framework.internal.BytesOutputStream;
 import io.javacloud.framework.jacc.ClassCollector;
+import io.javacloud.framework.util.BytesOutputStream;
 
 import java.io.OutputStream;
 import java.net.URI;

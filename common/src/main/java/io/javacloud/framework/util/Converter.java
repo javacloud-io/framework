@@ -1,4 +1,4 @@
-package io.javacloud.framework.data;
+package io.javacloud.framework.util;
 
 /**
  * Converting from something to something else. String to bytes[] will automatically assuming base64 encoded!!!

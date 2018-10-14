@@ -1,15 +1,12 @@
 package io.javacloud.framework.jaxrs.impl;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 
 import io.javacloud.framework.jaxrs.ClientManager;
 import io.javacloud.framework.util.Objects;
-import io.javacloud.framework.util.ResourceLoader;
+import io.javacloud.framework.util.ProxyInvocationHandler;
 /**
  * 
  * @author ho
@@ -33,7 +30,7 @@ public class ClientManagerImpl implements ClientManager {
 		}
 		
 		//USING INVOCATION HANDLER
-		InvocationHandler clientHandler = new ClientInvocationHandlerImpl(client);
-		return Objects.cast(Proxy.newProxyInstance(ResourceLoader.getClassLoader(), new Class<?>[]{ type }, clientHandler));
+		ProxyInvocationHandler clientHandler = new ClientInvocationHandlerImpl(client);
+		return ProxyInvocationHandler.newInstance(clientHandler, type);
 	}
 }

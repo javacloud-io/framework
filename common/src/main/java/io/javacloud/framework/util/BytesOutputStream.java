@@ -1,4 +1,4 @@
-package io.javacloud.framework.internal;
+package io.javacloud.framework.util;
 
 import java.nio.ByteBuffer;
 

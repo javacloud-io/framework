@@ -4,14 +4,13 @@ import io.javacloud.framework.security.AccessGrant;
 import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.claim.TokenProvider;
+import io.javacloud.framework.util.Converters;
+import io.javacloud.framework.util.Dictionaries;
+import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 
 import java.util.Date;
-
-import io.javacloud.framework.data.Converters;
-import io.javacloud.framework.data.Dictionaries;
-import io.javacloud.framework.data.Dictionary;
-import io.javacloud.framework.data.Externalizer;
 
 /**
  * Basic implementation of JTW token which is compatible with validator.
@@ -38,35 +37,37 @@ public abstract class JwtTokenProvider implements TokenProvider {
 	 */
 	@Override
 	public TokenGrant issueToken(AccessGrant authzGrant, IdParameters.GrantType type) {
-		TokenGrant token = new TokenGrant();
-		token.setType(type);
-		token.setSubject(authzGrant.getName());
-		token.setAudience(authzGrant.getAudience());
-		
 		//SCOPE/ROLES
-		token.setScope(authzGrant.getScope());
+		String roles = null;
 		if(!Objects.isEmpty(authzGrant.getRoles())) {
-			token.setRoles(Converters.toString(" ", authzGrant.getRoles().toArray()));
+			roles = Converters.toString(" ", authzGrant.getRoles().toArray());
 		}
 		
 		//EXPIRATION
-		token.setIssuedAt(new Date());
-		int ttls = jwtTokenTTL(type);
-		token.setExpireAt(new java.util.Date(token.getIssuedAt().getTime() + ttls * 1000L));
+		Date issuedAt = new Date();
+		Date expireAt = new java.util.Date(issuedAt.getTime() + jwtTokenTTL(type) * 1000L);
 		
 		//Compose JWT TOKEN
 		Dictionary claims = Dictionaries.asDict(
 			JwtTokenValidator.JWT_TYPE, 		type.name(),
 			JwtTokenValidator.JWT_ISSUER, 		jwtTokenIssuer(),
-			JwtTokenValidator.JWT_SUBJECT, 		token.getSubject(),
-			JwtTokenValidator.JWT_AUDIENCE, 	token.getAudience(),
-			JwtTokenValidator.JWT_SCOPE, 		token.getScope(),
-			JwtTokenValidator.JWT_ROLES, 		token.getRoles(),
-			JwtTokenValidator.JWT_ISSUEDAT, 	token.getIssuedAt().getTime(),
-			JwtTokenValidator.JWT_EXPIRATION,	token.getExpireAt().getTime()
+			JwtTokenValidator.JWT_SUBJECT, 		authzGrant.getName(),
+			JwtTokenValidator.JWT_AUDIENCE, 	authzGrant.getAudience(),
+			JwtTokenValidator.JWT_SCOPE, 		authzGrant.getScope(),
+			JwtTokenValidator.JWT_ROLES, 		roles,
+			JwtTokenValidator.JWT_ISSUEDAT, 	issuedAt.getTime(),
+			JwtTokenValidator.JWT_EXPIRATION,	expireAt.getTime()
 		);
 		
-		token.setId(jwtCodecs.encodeJWT(new JwtToken(jwtTokenType(), claims), jwtSigner));
+		//TOKEN
+		TokenGrant token = new TokenGrant(jwtCodecs.encodeJWT(new JwtToken(jwtTokenType(), claims), jwtSigner),
+				type,
+				authzGrant.getName(),
+				authzGrant.getAudience());
+		token.setScope(authzGrant.getScope());
+		token.setRoles(roles);
+		token.setIssuedAt(issuedAt);
+		token.setExpireAt(expireAt);
 		return token;
 	}
 	

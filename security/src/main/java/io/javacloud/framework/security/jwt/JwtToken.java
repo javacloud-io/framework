@@ -1,6 +1,6 @@
 package io.javacloud.framework.security.jwt;
 
-import io.javacloud.framework.data.Dictionary;
+import io.javacloud.framework.util.Dictionary;
 
 /**
  * Simple token representation with Dictionary claims set.

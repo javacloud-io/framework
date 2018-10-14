@@ -1,7 +1,7 @@
 package io.javacloud.framework.server.internal;
 
-import io.javacloud.framework.data.Dictionaries;
-import io.javacloud.framework.data.Dictionary;
+import io.javacloud.framework.util.Dictionaries;
+import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 
 import java.io.IOException;

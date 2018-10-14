@@ -1,8 +1,6 @@
 package io.javacloud.framework.i18n.impl;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -13,7 +11,7 @@ import javax.inject.Singleton;
 import io.javacloud.framework.i18n.LocaleContext;
 import io.javacloud.framework.i18n.MessageManager;
 import io.javacloud.framework.i18n.internal.MessageBundlesControl;
-import io.javacloud.framework.util.Objects;
+import io.javacloud.framework.util.ProxyInvocationHandler;
 import io.javacloud.framework.util.ResourceLoader;
 import io.javacloud.framework.util.UncheckedException;
 /**
@@ -71,7 +69,7 @@ public class MessageManagerImpl implements MessageManager {
 	 */
 	@Override
 	public <T> T getBundle(Class<T> type) {
-		InvocationHandler messageHandler = new MessageInvocationHandlerImpl(contextLocale, bundlesControl);
-		return Objects.cast(Proxy.newProxyInstance(ResourceLoader.getClassLoader(), new Class<?>[]{ type }, messageHandler));
+		ProxyInvocationHandler messageHandler = new MessageInvocationHandlerImpl(contextLocale, bundlesControl);
+		return ProxyInvocationHandler.newInstance(messageHandler, type);
 	}
 }
