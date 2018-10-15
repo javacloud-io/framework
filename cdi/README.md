@@ -4,3 +4,4 @@ Each services registry can include other services, register module or binding (a
 
 1. Using META-INF/javacloud.cdi.services as main entry point to load all services.
 2. Using META-INF/layer.services to declare reusable services
+3. Auto start/stop Deamon services using META-INF/javacloud.cdi.services.runlist
