@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
  *
  */
 public class MessageBundlesControl extends ResourceBundle.Control {
+	private static final String I18N_BUNDLES = ResourceLoader.META_INF + "javacloud.i18n.bundles";
+	
 	private final LocaleContext contextLocale;
 	private Set<String> bundleNames = new ConcurrentSkipListSet<>();
 	
@@ -69,7 +71,7 @@ public class MessageBundlesControl extends ResourceBundle.Control {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized void discoverBundles(ClassLoader classLoader) throws IOException {
-		Enumeration<URL> resourceURLs = classLoader.getResources(ResourceLoader.META_INF + "javacloud.i18n.bundles");
+		Enumeration<URL> resourceURLs = classLoader.getResources(I18N_BUNDLES);
 		while(resourceURLs.hasMoreElements()) {
 			Properties props = ResourceLoader.loadProperties(resourceURLs.nextElement());
 			bundleNames.addAll((Set)props.keySet());

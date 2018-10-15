@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * Helper class to invoke a method using CDI
+ * Helper class to invoke a method using CDI. Start/Stop managed service from: META-INF/javacloud.cdi.services.runlist
  * 
  * @author ho
  *
@@ -26,6 +26,20 @@ public abstract class ServiceRunner {
 	public static final ServiceRunner get() {
 		return RUNNER;
 	}
+	
+	/**
+	 * Start managed services registered to runlist. It's safe to be call multiple times.
+	 * 
+	 * @throws Exception
+	 */
+	public abstract void startServices() throws Exception;
+	
+	/**
+	 * Stop managed services registered to runlist
+	 * 
+	 * @throws Exception
+	 */
+	public abstract void stopServices() throws Exception;
 	
 	/**
 	 * 

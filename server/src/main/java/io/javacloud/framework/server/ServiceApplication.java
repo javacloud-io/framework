@@ -23,6 +23,7 @@ import io.javacloud.framework.util.ResourceLoader;
  */
 //@ApplicationPath(context)
 public class ServiceApplication extends ResourceConfig {
+	private static final String SERVER_COMPONENTS = ResourceLoader.META_INF + "javacloud.server.components";
 	private static final Logger logger = Logger.getLogger(ServiceApplication.class.getName());
 	
 	/**
@@ -51,7 +52,7 @@ public class ServiceApplication extends ResourceConfig {
 		}
 		
 		//AUTO LOAD THE COMPONENTS
-		List<?> components = new ComponentBuilder().build(ResourceLoader.META_INF + "javacloud.server.components", ResourceLoader.getClassLoader());
+		List<?> components = new ComponentBuilder().build(SERVER_COMPONENTS, ResourceLoader.getClassLoader());
 		logger.log(Level.FINE, "Registering jersey server components: {0}", components);
 		
 		for(Object c: components) {

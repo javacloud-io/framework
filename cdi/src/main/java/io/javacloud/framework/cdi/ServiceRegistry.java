@@ -5,7 +5,7 @@ import io.javacloud.framework.util.ResourceLoader;
 import java.util.List;
 
 /**
- * Basic registry operation for lookup & register object, module...
+ * Basic registry operation for lookup & register object, module...from: META-INF/javacloud.cdi.services
  * 
  * @author ho
  *

@@ -12,12 +12,13 @@ import com.google.inject.Stage;
 
 /**
  * Basic implementation using google juice and service override at runtime level. By loading main cdi services at
- * META-INF/javacloud.cdi.modules
+ * META-INF/javacloud.cdi.services
  * 
  * @author ho
  *
  */
 public class GuiceRegistryImpl extends GuiceRegistry {
+	static final String CDI_SERVICES = ResourceLoader.META_INF + "javacloud.cdi.services";
 	/**
 	 * Injector only create at first time construction using current class loader.
 	 * Make sure AppeRegistry just load at the correct time!!!
@@ -36,6 +37,6 @@ public class GuiceRegistryImpl extends GuiceRegistry {
 				modules.add(0, new GuiceModuleImpl());
 				return super.build(modules, overrides);
 			}
-		}.build(ResourceLoader.META_INF + "javacloud.cdi.services" , ResourceLoader.getClassLoader());
+		}.build(CDI_SERVICES , ResourceLoader.getClassLoader());
 	}
 }

@@ -26,6 +26,7 @@ import org.glassfish.jersey.client.ClientConfig;
  */
 @Singleton
 public class HttpClientProvider implements Provider<Client> {
+	private static final String CLIENT_COMPONENTS = ResourceLoader.META_INF + "javacloud.client.components";
 	private static final Logger logger = Logger.getLogger(HttpClientProvider.class.getName());
 	
 	//DEFAULT CLIENT
@@ -68,7 +69,7 @@ public class HttpClientProvider implements Provider<Client> {
 	 * @return
 	 */
 	protected ClientConfig configure() {
-		List<?> components = new ComponentBuilder().build(ResourceLoader.META_INF + "javacloud.client.components", ResourceLoader.getClassLoader());
+		List<?> components = new ComponentBuilder().build(CLIENT_COMPONENTS, ResourceLoader.getClassLoader());
 		logger.log(Level.FINE, "Registering client components: {0}", components);
 		
 		ClientConfig config = new ClientConfig();
