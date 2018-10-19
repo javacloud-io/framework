@@ -35,5 +35,7 @@ public class JacksonMapperTest extends ServiceTest {
 		
 		dict = converter.toObject("{\"a\":123}", Dictionary.class);
 		Assert.assertEquals(123, (int)dict.get("a"));
+		
+		Object obj = converter.toObject("true", Object.class);
 	}
 }

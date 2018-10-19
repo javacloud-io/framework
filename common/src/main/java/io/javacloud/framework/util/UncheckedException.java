@@ -1,5 +1,6 @@
 package io.javacloud.framework.util;
 
+import java.io.PrintWriter;
 import java.util.zip.CRC32;
 
 /**
@@ -168,5 +169,18 @@ public class UncheckedException extends RuntimeException {
 			return	(UncheckedException)t;
 		}
 		return	new UncheckedException(t);
+	}
+	
+	/**
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public static String toStackTrace(Throwable t) {
+		BytesOutputStream out = new BytesOutputStream();
+		PrintWriter s = new PrintWriter(out);
+		t.printStackTrace(s);
+		s.flush();
+		return out.toString();
 	}
 }

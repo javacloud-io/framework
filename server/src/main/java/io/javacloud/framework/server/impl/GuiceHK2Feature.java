@@ -9,7 +9,7 @@ import org.glassfish.jersey.server.ContainerException;
 import org.glassfish.jersey.server.spi.Container;
 import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 
-import io.javacloud.framework.cdi.ServiceRunner;
+import io.javacloud.framework.cdi.ServiceRunlist;
 import io.javacloud.framework.security.AccessGrant;
 /**
  * If the registry is GuiceRegistry => try to find it and register with the system
@@ -48,7 +48,7 @@ public class GuiceHK2Feature extends io.javacloud.framework.jaxrs.impl.GuiceHK2F
 			@Override
 			public void onStartup(Container container) {
 				try {
-					ServiceRunner.get().startServices();
+					ServiceRunlist.get().startServices();
 				}catch(Exception ex) {
 					throw new ContainerException(ex);
 				}
@@ -57,7 +57,7 @@ public class GuiceHK2Feature extends io.javacloud.framework.jaxrs.impl.GuiceHK2F
 			@Override
 			public void onShutdown(Container container) {
 				try {
-					ServiceRunner.get().stopServices();
+					ServiceRunlist.get().stopServices();
 				}catch(Exception ex) {
 					throw new ContainerException(ex);
 				}

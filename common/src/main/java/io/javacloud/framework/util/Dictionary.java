@@ -13,7 +13,7 @@ import java.util.Set;
  * @author ho
  *
  */
-public final class Dictionary implements Map<String, Object> {
+public class Dictionary implements Map<String, Object> {
 	private final Map<String, Object> impl;
 	/**
 	 * Default to a simple HASH MAP.

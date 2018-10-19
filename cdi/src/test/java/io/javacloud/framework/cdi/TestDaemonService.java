@@ -7,9 +7,9 @@ package io.javacloud.framework.cdi;
  */
 public class TestDaemonService {
 	public void start() {
-		System.out.println("HELLO TEST!");
+		System.out.println("STARTED: HELLO TEST!");
 	}
 	public void stop() {
-		System.out.println("BYE TEST!");
+		System.out.println("STOPPED: BYE TEST!");
 	}
 }

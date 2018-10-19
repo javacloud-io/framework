@@ -1,6 +1,7 @@
 package io.javacloud.framework.cdi.internal;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
+import io.javacloud.framework.util.Objects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +45,9 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 	 */
 	@Override
 	public <T> T getInstance(Class<T> type, String name) {
+		if(Objects.isEmpty(name)) {
+			return getInstance(type);
+		}
 		return injector.getInstance(Key.get(type, Names.named(name)));
 	}
 	

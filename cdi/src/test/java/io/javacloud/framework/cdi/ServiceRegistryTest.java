@@ -1,8 +1,8 @@
 package io.javacloud.framework.cdi;
 
+import io.javacloud.framework.cdi.TestModule.TestServiceImpl;
 import io.javacloud.framework.cdi.test.ServiceTest;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,6 +47,7 @@ public class ServiceRegistryTest extends ServiceTest {
 		
 		//ALWAYS NEW
 		Assert.assertSame(ts, ServiceRegistry.get().getInstance(TestService.class));
+		Assert.assertSame(ts, ServiceRegistry.get().getInstance(TestServiceImpl.class));
 		Assert.assertSame(ts, ServiceRegistry.get().getInstance(TestService.class, "named"));
 		
 		Assert.assertNotNull(ServiceRegistry.get().getInstance(TestInject.class).getService());
@@ -67,7 +68,7 @@ public class ServiceRegistryTest extends ServiceTest {
 	 * @throws InvocationTargetException
 	 */
 	@Test
-	public void testRunner() throws InvocationTargetException {
-		ServiceRunner.get().runMethod(ServiceRegistryTest.class, "testInstances");
+	public void testRunlist() throws Exception {
+		ServiceRunlist.get().runMethod(ServiceRegistryTest.class, "testInstances");
 	}
 }

@@ -1,7 +1,7 @@
 package io.javacloud.framework.cdi.test;
 
 import io.javacloud.framework.cdi.ServiceRegistry;
-import io.javacloud.framework.cdi.ServiceRunner;
+import io.javacloud.framework.cdi.ServiceRunlist;
 
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;
@@ -29,11 +29,11 @@ public class ServiceJUnit4Runner extends BlockJUnit4ClassRunner {
 	@Override
 	public void run(RunNotifier notifier) {
 		try {
-			ServiceRunner.get().startServices();
+			ServiceRunlist.get().startServices();
 			try {
 				super.run(notifier);
 			} finally {
-				ServiceRunner.get().stopServices();
+				ServiceRunlist.get().stopServices();
 			}
 		} catch(Exception ex) {
 			notifier.fireTestFailure(new Failure(getDescription(), ex));

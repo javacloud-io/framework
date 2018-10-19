@@ -1,10 +1,10 @@
 package io.javacloud.framework.cdi.impl;
 
-import io.javacloud.framework.cdi.ServiceRunner;
+import io.javacloud.framework.cdi.ServiceRegistry;
+import io.javacloud.framework.cdi.internal.GuiceRunlist;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.ResourceLoader;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  * @author ho
  *
  */
-public class GuiceRunnerImpl extends ServiceRunner {
-	private static final Logger logger = Logger.getLogger(GuiceRunnerImpl.class.getName());
+public class GuiceRunlistImpl extends GuiceRunlist {
+	private static final Logger logger = Logger.getLogger(GuiceRunlistImpl.class.getName());
 	
 	private static final String MANAGED_SERVICES = GuiceRegistryImpl.CDI_SERVICES + ".runlist";
 	private final List<ResourceLoader.Binding> runlist = new ArrayList<>(); 
-	public GuiceRunnerImpl() {
+	public GuiceRunlistImpl() {
 	}
 	
 	/**
@@ -45,7 +45,8 @@ public class GuiceRunnerImpl extends ServiceRunner {
 			for(ResourceLoader.Binding binding: bindings) {
 				logger.fine("Starting service: " + binding.typeClass());
 				
-				runMethod(binding.typeClass(), "start");
+				Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
+				runInstance(instance, "start");
 				runlist.add(binding);
 			}
 		}
@@ -64,7 +65,8 @@ public class GuiceRunnerImpl extends ServiceRunner {
 					ResourceLoader.Binding binding = runlist.get(i);
 					logger.fine("Stopping service: " + binding.typeClass());
 					
-					runMethod(binding.typeClass(), "stop");
+					Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
+					runInstance(instance, "stop");
 				} catch(Exception ex) {
 					lastException = ex;
 				}
@@ -75,55 +77,5 @@ public class GuiceRunnerImpl extends ServiceRunner {
 				throw lastException;
 			}
 		}
-	}
-
-	/**
-	 * Resolve a method that best re-present the arguments
-	 */
-	@Override
-	protected Method resolveMethod(Class<?> zclass, String methodName, Object... args) throws NoSuchMethodException {
-		if(args == null || args.length == 0) {
-			return zclass.getMethod(methodName);
-		}
-		
-		//INPUT PARAMS
-		Class<?>[] types = new Class<?>[args.length];
-		for(int i = 0; i < args.length; i ++) {
-			types[i] = args[i].getClass();
-		}
-		
-		//DIRECT LOOKUP OR SEARCH FOR MATCHING
-		try {
-			return zclass.getMethod(methodName, types);
-		} catch(NoSuchMethodException ex) {
-			Method method = findMethod(zclass, methodName, types);
-			if(method == null) {
-				throw ex;
-			}
-			return method;
-		}
-	}
-	
-	/**
-	 * Find best method matchings number of arguments and assignable parameter types
-	 * 
-	 * @param zclass
-	 * @param methodName
-	 * @param types
-	 * @return
-	 */
-	private Method findMethod(Class<?> zclass, String methodName, Class<?>[] types) {
-		for(Method m: zclass.getMethods()) {
-			//MATCH NAME
-			if(!m.getName().equals(methodName)) {
-				continue;
-			}
-			
-			//FIXME: BEST MATCHES IS NOT EXACT
-			if(m.getParameterCount() == types.length) {
-				return m;
-			}
-		}
-		return null;
 	}
 }

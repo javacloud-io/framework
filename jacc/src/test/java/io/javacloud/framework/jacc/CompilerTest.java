@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
-import io.javacloud.framework.cdi.ServiceRunner;
+import io.javacloud.framework.cdi.ServiceRunlist;
 import io.javacloud.framework.cdi.test.ServiceTest;
 import io.javacloud.framework.jacc.JavaCompiler;
 import io.javacloud.framework.jacc.internal.InMemoryClassCollector;
@@ -49,7 +49,7 @@ public class CompilerTest extends ServiceTest {
 				System.out.println("COMPILATION SUCCESSFUL.");
 				InMemoryClassLoader classLoader = new InMemoryClassLoader(collector, CompilerTest.class.getClassLoader());
 				Class<?> helloClass = classLoader.loadClass("io.test.Hello");
-				ServiceRunner.get().runMethod(helloClass, "sayHello");
+				ServiceRunlist.get().runMethod(helloClass, "sayHello");
 			}
 		} finally {
 			System.out.println("\nESLAPED: " + (System.currentTimeMillis() - starts));
