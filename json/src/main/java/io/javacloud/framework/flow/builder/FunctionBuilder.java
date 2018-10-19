@@ -4,7 +4,6 @@ import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
-import io.javacloud.framework.flow.StateTransition.Success;
 
 /**
  * 
@@ -13,9 +12,9 @@ import io.javacloud.framework.flow.StateTransition.Success;
  */
 public class FunctionBuilder {
 	private StateHandler 		  stateHandler;
-	private StateHandler.Success  successHandler;
-	private StateHandler.Failure  failureHandler;
-	private StateHandler.Retry	  retryHandler;
+	private StateHandler.SuccessHandler  successHandler;
+	private StateHandler.FailureHandler  failureHandler;
+	private StateHandler.RetryHandler	  retryHandler;
 	public FunctionBuilder() {
 	}
 	/**
@@ -23,7 +22,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withResourceHandler(StateHandler handler) {
+	public FunctionBuilder withStateHandler(StateHandler handler) {
 		this.stateHandler = handler;
 		return this;
 	}
@@ -33,7 +32,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withSuccessHandler(StateHandler.Success  handler) {
+	public FunctionBuilder withSuccessHandler(StateHandler.SuccessHandler  handler) {
 		this.successHandler = handler;
 		return this;
 	}
@@ -43,7 +42,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withFailureHandler(StateHandler.Failure  handler) {
+	public FunctionBuilder withFailureHandler(StateHandler.FailureHandler  handler) {
 		this.failureHandler = handler;
 		return this;
 	}
@@ -53,7 +52,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withRetryHandler(StateHandler.Retry handler) {
+	public FunctionBuilder withRetryHandler(StateHandler.RetryHandler handler) {
 		this.retryHandler = handler;
 		return this;
 	}
@@ -64,9 +63,9 @@ public class FunctionBuilder {
 	 * @return
 	 */
 	public FunctionBuilder withSuccessTransition(final StateTransition.Success transition) {
-		return withSuccessHandler(new StateHandler.Success() {
+		return withSuccessHandler(new StateHandler.SuccessHandler() {
 			@Override
-			public Success onSuccess(StateContext context) {
+			public StateTransition.Success onSuccess(StateContext context) {
 				return transition;
 			}
 		});
@@ -78,7 +77,7 @@ public class FunctionBuilder {
 	 * @return
 	 */
 	public FunctionBuilder withFailureTransition(final StateTransition.Failure transition) {
-		return withFailureHandler(new StateHandler.Failure() {
+		return withFailureHandler(new StateHandler.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				return transition;
@@ -92,7 +91,7 @@ public class FunctionBuilder {
 	 * @return
 	 */
 	public FunctionBuilder withRetryHandler(final StateTransition.Retry transition) {
-		return withRetryHandler(new StateHandler.Retry() {
+		return withRetryHandler(new StateHandler.RetryHandler() {
 			@Override
 			public StateTransition.Retry onRetry(StateContext context) {
 				return transition;

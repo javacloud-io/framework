@@ -5,6 +5,6 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateFunction extends StateHandler,
-	StateHandler.Success, StateHandler.Failure, StateHandler.Retry {
+	StateHandler.SuccessHandler, StateHandler.FailureHandler, StateHandler.RetryHandler {
 
 }

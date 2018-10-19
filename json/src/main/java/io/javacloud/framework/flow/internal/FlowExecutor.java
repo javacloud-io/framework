@@ -85,21 +85,25 @@ public class FlowExecutor {
 	 * @param parameters
 	 * @param state
 	 * @param transition
-	 * @return
+	 * @return 0: timeout, -1: can't retry
 	 */
 	public int retry(Dictionary parameters, FlowState state, StateTransition.Retry transition) {
 		int retryCount = state.getRetryCount();
 		if(retryCount < transition.getMaxAttempts()) {
 			long maxTimeout = transition.getTimeoutSeconds() * 1000L;
-			//TIMEOUT => FAILED
+			//TIMEOUT => FAILED [0]
 			if(maxTimeout >= 0 && (state.getStartedAt() + maxTimeout) >= System.currentTimeMillis()) {
+				state.setFailed(true);
 				return 0;
 			} else {
 				state.setRetryCount(retryCount + 1);
 				int delaySeconds = (int)(transition.getIntervalSeconds() * Math.pow(transition.getBackoffRate(), retryCount - 1));
-				return Math.min(delaySeconds, MIN_DELAY_SECONDS);
+				return Math.max(delaySeconds, MIN_DELAY_SECONDS);
 			}
+		} else {
+			//FAILED[1]
+			state.setFailed(true);
 		}
-		return 0;
+		return -1;
 	}
 }

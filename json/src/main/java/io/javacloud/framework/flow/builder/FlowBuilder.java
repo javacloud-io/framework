@@ -37,7 +37,7 @@ public class FlowBuilder {
 	 */
 	public FlowBuilder withState(String name, final StateHandler handler, final String next) {
 		states.put(name, new FunctionBuilder()
-								.withResourceHandler(handler)
+								.withStateHandler(handler)
 								.withSuccessTransition(TransitionBuilder.success(next))
 								.build());
 		return this;

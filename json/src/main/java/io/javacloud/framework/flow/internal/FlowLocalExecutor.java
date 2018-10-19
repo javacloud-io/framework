@@ -14,8 +14,8 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class FlowLocalExecutor extends FlowExecutor {
-	public FlowLocalExecutor(StateMachine workflow) {
-		super(workflow);
+	public FlowLocalExecutor(StateMachine stateMachine) {
+		super(stateMachine);
 	}
 	
 	/**

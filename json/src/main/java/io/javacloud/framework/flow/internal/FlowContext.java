@@ -20,7 +20,7 @@ public class FlowContext implements StateContext {
 	
 	@Override
 	public String getFlowId() {
-		return null;
+		return state.getFlowId();
 	}
 
 	@Override
@@ -52,6 +52,6 @@ public class FlowContext implements StateContext {
 
 	@Override
 	public int getRetryCount() {
-		return 0;
+		return state.getRetryCount();
 	}
 }
