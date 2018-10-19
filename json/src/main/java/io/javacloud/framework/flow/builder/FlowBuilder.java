@@ -35,14 +35,27 @@ public class FlowBuilder {
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, final StateHandler handler, final String next) {
-		states.put(name, new FunctionBuilder()
+	public FlowBuilder withState(String name, StateHandler handler, String next) {
+		return withState(name, new FunctionBuilder()
 								.withStateHandler(handler)
 								.withSuccessTransition(TransitionBuilder.success(next))
 								.build());
-		return this;
 	}
-	
+	/**
+	 * 
+	 * @param name
+	 * @param handler
+	 * @param retryHandler
+	 * @param next
+	 * @return
+	 */
+	public FlowBuilder withState(String name, StateHandler handler, StateHandler.RetryHandler retryHandler, String next) {
+		return withState(name, new FunctionBuilder()
+								.withStateHandler(handler)
+								.withRetryHandler(retryHandler)
+								.withSuccessTransition(TransitionBuilder.success(next))
+								.build());
+	}
 	/**
 	 * 
 	 * @param name

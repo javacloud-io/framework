@@ -7,7 +7,7 @@ package io.javacloud.framework.flow;
  */
 public interface StateTransition {
 	public boolean isEnd();
-	
+	//RETRY
 	interface Retry extends StateTransition {
 		/**
 		 * 
@@ -33,11 +33,11 @@ public interface StateTransition {
 		 */
 		public int getTimeoutSeconds();
 	}
-	
+	//SUCCESS
 	interface Success extends StateTransition {
 		public String getNext();
 	}
-	
+	//FAILURE
 	interface Failure extends StateTransition {
 	}
 }

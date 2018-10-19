@@ -12,7 +12,7 @@ import io.javacloud.framework.util.Dictionary;
  */
 public class FlowContext implements StateContext {
 	private final Dictionary parameters;
-	private final FlowState  state;
+	final FlowState  state;
 	public FlowContext(Dictionary parameters, FlowState  state) {
 		this.parameters = new Dictionary(Collections.unmodifiableMap(parameters));
 		this.state		= state;

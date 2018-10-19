@@ -4,7 +4,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.StateTransition;
+import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.internal.FlowState;
+import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 
@@ -24,6 +26,7 @@ public class FlowLocalExecutor extends FlowExecutor {
 	@Override
 	public FlowState start(Dictionary parameters, String startAt) {
 		FlowState state = super.start(parameters, startAt);
+		state.setFlowId(Codecs.randomID());
 		try {
 			execute(parameters, state);
 		} finally {
@@ -43,6 +46,9 @@ public class FlowLocalExecutor extends FlowExecutor {
 		}
 		if(transition instanceof StateTransition.Retry) {
 			int delaySeconds = retry(parameters, state, (StateTransition.Retry)transition);
+			if(delaySeconds <= 0) {
+				return TransitionBuilder.failure();
+			}
 			Objects.sleep(delaySeconds, TimeUnit.MILLISECONDS);
 			return	execute(parameters, state);
 		}

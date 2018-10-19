@@ -3,6 +3,7 @@ package io.javacloud.framework.flow.internal;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.StateMachine;
+import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
@@ -64,10 +65,9 @@ public class FlowExecutor {
 				return	function.onRetry(context);
 			}
 			//UNKNOWN FAILURE
-			return function.onFailure(context, null);
+			return onFailure(function, context, null);
 		} catch(Exception ex) {
-			state.setStackTrace(UncheckedException.toStackTrace(ex));
-			return function.onFailure(context, ex);
+			return onFailure(function, context, ex);
 		}
 	}
 	
@@ -105,5 +105,31 @@ public class FlowExecutor {
 			state.setFailed(true);
 		}
 		return -1;
+	}
+	
+	/**
+	 * 
+	 * @param function
+	 * @param context
+	 * @param ex
+	 * @return
+	 */
+	protected StateTransition onFailure(StateFunction function, FlowContext context, Exception ex) {
+		StateTransition transition;
+		//NOT FOUND STATE
+		if(function == null) {
+			transition = TransitionBuilder.failure();
+		} else {
+			transition = function.onFailure(context, ex);
+		}
+		
+		//HANDLE FAILURE
+		if(transition instanceof StateTransition.Failure) {
+			context.state.setFailed(true);
+			if(ex != null) {
+				context.state.setStackTrace(UncheckedException.toStackTrace(ex));
+			}
+		}
+		return transition;
 	}
 }
