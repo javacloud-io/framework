@@ -9,15 +9,19 @@ import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
 
 /**
- * 
+ * start -> execute -[end]-> [success]
+ * 					 [success] 	-> execute
+ * 					 [retry]	-> [delays] -> execute
+ * 								-> [not]	-> [failure]
+ * 					 [failure]	-> []
  * @author ho
  *
  */
-public class FlowExecutor {
+public class FlowHandler {
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateMachine stateMachine;
-	public FlowExecutor(StateMachine stateMachine) {
+	public FlowHandler(StateMachine stateMachine) {
 		this.stateMachine = stateMachine;
 	}
 	
@@ -32,6 +36,7 @@ public class FlowExecutor {
 	
 	/**
 	 * start -> execute
+	 * 
 	 * @param startAt;
 	 * @param parameters
 	 * @return

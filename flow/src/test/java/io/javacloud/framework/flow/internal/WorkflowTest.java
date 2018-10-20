@@ -9,6 +9,7 @@ import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.StateTransition.Retry;
 import io.javacloud.framework.flow.builder.FlowBuilder;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
+import io.javacloud.framework.flow.test.FlowExecutor;
 import io.javacloud.framework.util.Dictionaries;
 import junit.framework.TestCase;
 /**
@@ -36,7 +37,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = new FlowLocalExecutor(workflow).start(Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
 		Assert.assertFalse(state.isFailed());
 		Assert.assertEquals("abc", state.getAttributes().get("t1"));
 		Assert.assertEquals("xyz", state.getAttributes().get("t2"));
@@ -61,7 +62,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = new FlowLocalExecutor(workflow).start(Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
 		Assert.assertTrue(state.isFailed());
 		Assert.assertEquals("abc", state.getAttributes().get("t1"));
 		Assert.assertNull(state.getAttributes().get("t2"));
@@ -94,7 +95,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = new FlowLocalExecutor(workflow).start(Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
 		Assert.assertFalse(state.isFailed());
 		Assert.assertEquals("abc", state.getAttributes().get("t1"));
 		Assert.assertEquals("xyz", state.getAttributes().get("t2"));

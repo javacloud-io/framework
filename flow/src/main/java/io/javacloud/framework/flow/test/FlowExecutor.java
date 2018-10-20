@@ -1,10 +1,10 @@
-package io.javacloud.framework.flow.internal;
-
+package io.javacloud.framework.flow.test;
 import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
+import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionary;
@@ -15,8 +15,8 @@ import io.javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FlowLocalExecutor extends FlowExecutor {
-	public FlowLocalExecutor(StateMachine stateMachine) {
+public class FlowExecutor extends FlowHandler {
+	public FlowExecutor(StateMachine stateMachine) {
 		super(stateMachine);
 	}
 	
@@ -55,5 +55,15 @@ public class FlowLocalExecutor extends FlowExecutor {
 		//TAKE NAP & RE-TRY
 		Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
 		return	execute(parameters, state);
+	}
+	
+	/**
+	 * 
+	 * @param stateMachine
+	 * @param parameters
+	 * @return
+	 */
+	public static FlowState run(StateMachine stateMachine, Dictionary parameters) {
+		return new FlowExecutor(stateMachine).start(parameters);
 	}
 }
