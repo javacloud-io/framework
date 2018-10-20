@@ -12,7 +12,8 @@ import org.glassfish.jersey.server.spi.ContainerLifecycleListener;
 import io.javacloud.framework.cdi.ServiceRunlist;
 import io.javacloud.framework.security.AccessGrant;
 /**
- * If the registry is GuiceRegistry => try to find it and register with the system
+ * 1. If the registry is GuiceRegistry => try to find it and register with the system
+ * 2. Hook container lifecycle with runlist.
  * 
  * @author ho
  *
