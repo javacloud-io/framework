@@ -16,21 +16,21 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class FlowExecutor extends FlowHandler {
-	public FlowExecutor(StateMachine stateMachine) {
-		super(stateMachine);
+	public FlowExecutor(StateMachine stateMachine, Dictionary parameters) {
+		super(stateMachine, parameters);
 	}
 	
 	/**
 	 * 
 	 */
 	@Override
-	public FlowState start(Dictionary parameters, String startAt) {
-		FlowState state = super.start(parameters, startAt);
+	public FlowState start(String startAt) {
+		FlowState state = super.start(startAt);
 		state.setFlowId(Codecs.randomID());
 		try {
-			execute(parameters, state);
+			execute(state);
 		} finally {
-			complete(parameters, state);
+			complete(state);
 		}
 		return state;
 	}
@@ -39,22 +39,23 @@ public class FlowExecutor extends FlowHandler {
 	 * Execute to completion
 	 */
 	@Override
-	public StateTransition execute(Dictionary parameters, FlowState state) {
-		StateTransition transition = super.execute(parameters, state);
+	public StateTransition execute(FlowState state) {
+		StateTransition transition = super.execute(state);
 		if(transition.isEnd()) {
 			return transition;
 		}
 		if(transition instanceof StateTransition.Retry) {
-			int delaySeconds = retry(parameters, state, (StateTransition.Retry)transition);
+			int delaySeconds = retry(state, (StateTransition.Retry)transition);
 			if(delaySeconds <= 0) {
 				return TransitionBuilder.failure();
 			}
+			//TAKE NAP & RE-TRY
 			Objects.sleep(delaySeconds, TimeUnit.MILLISECONDS);
-			return	execute(parameters, state);
+			return	execute(state);
 		}
-		//TAKE NAP & RE-TRY
+		//TAKE NAP & EXECUTE NEXT
 		Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
-		return	execute(parameters, state);
+		return	execute(state);
 	}
 	
 	/**
@@ -64,6 +65,6 @@ public class FlowExecutor extends FlowHandler {
 	 * @return
 	 */
 	public static FlowState run(StateMachine stateMachine, Dictionary parameters) {
-		return new FlowExecutor(stateMachine).start(parameters);
+		return new FlowExecutor(stateMachine, parameters).start();
 	}
 }

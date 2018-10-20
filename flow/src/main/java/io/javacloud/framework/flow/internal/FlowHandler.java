@@ -21,27 +21,27 @@ public class FlowHandler {
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateMachine stateMachine;
-	public FlowHandler(StateMachine stateMachine) {
+	private final Dictionary parameters;
+	public FlowHandler(StateMachine stateMachine, Dictionary parameters) {
 		this.stateMachine = stateMachine;
+		this.parameters = parameters;
 	}
 	
 	/**
 	 * 
-	 * @param parameters
 	 * @return
 	 */
-	public FlowState start(Dictionary parameters) {
-		return start(parameters, null);
+	public FlowState start() {
+		return start(null);
 	}
 	
 	/**
 	 * start -> execute
 	 * 
 	 * @param startAt;
-	 * @param parameters
 	 * @return
 	 */
-	public FlowState start(Dictionary parameters, String startAt) {
+	public FlowState start(String startAt) {
 		FlowState state = new FlowState();
 		state.setAttributes(parameters == null? new Dictionary(): parameters);
 		return state.reset(Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
@@ -57,7 +57,7 @@ public class FlowHandler {
 	 * @param state
 	 * @return
 	 */
-	public StateTransition execute(Dictionary parameters, FlowState state) {
+	public StateTransition execute(FlowState state) {
 		FlowContext context = new FlowContext(parameters, state);
 		StateFunction function = stateMachine.getState(state.getName());
 		try {
@@ -78,21 +78,19 @@ public class FlowHandler {
 	
 	/**
 	 * 
-	 * @param parameters
 	 * @param state
 	 */
-	public void complete(Dictionary parameters, FlowState state) {
+	public void complete(FlowState state) {
 	}
 	
 	/**
 	 * return number of SECONDS for DELAYS otherwise INDICATION AS FAILED
 	 * 
-	 * @param parameters
 	 * @param state
 	 * @param transition
 	 * @return 0: timeout, -1: can't retry
 	 */
-	public int retry(Dictionary parameters, FlowState state, StateTransition.Retry transition) {
+	public int retry(FlowState state, StateTransition.Retry transition) {
 		int retryCount = state.getRetryCount();
 		if(retryCount < transition.getMaxAttempts()) {
 			long maxTimeout = transition.getTimeoutSeconds() * 1000L;
