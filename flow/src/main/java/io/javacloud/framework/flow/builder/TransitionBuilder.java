@@ -92,19 +92,6 @@ public class TransitionBuilder {
 	
 	/**
 	 * 
-	 * @return
-	 */
-	public static StateTransition.Failure failure() {
-		return new StateTransition.Failure() {
-			@Override
-			public boolean isEnd() {
-				return true;
-			}
-		};
-	}
-	
-	/**
-	 * 
 	 * @param next
 	 * @return
 	 */
@@ -118,6 +105,19 @@ public class TransitionBuilder {
 			@Override
 			public String getNext() {
 				return next;
+			}
+		};
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static StateTransition.Failure failure() {
+		return new StateTransition.Failure() {
+			@Override
+			public boolean isEnd() {
+				return true;
 			}
 		};
 	}
