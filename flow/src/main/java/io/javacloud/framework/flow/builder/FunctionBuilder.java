@@ -120,7 +120,7 @@ public class FunctionBuilder {
 			}
 
 			@Override
-			public StateTransition.Retry onRetry(StateContext context) {
+			public StateTransition onRetry(StateContext context) {
 				return (retryHandler == null? new TransitionBuilder().retry() : retryHandler.onRetry(context));
 			}
 		};

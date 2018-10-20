@@ -26,6 +26,6 @@ public interface StateHandler {
 	
 	//HANDLE RETRY
 	public interface RetryHandler {
-		StateTransition.Retry onRetry(StateContext context);
+		StateTransition onRetry(StateContext context);
 	}
 }
