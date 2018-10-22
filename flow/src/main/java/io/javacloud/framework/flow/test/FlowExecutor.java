@@ -16,16 +16,16 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class FlowExecutor extends FlowHandler {
-	public FlowExecutor(StateMachine stateMachine, Dictionary parameters) {
-		super(stateMachine, parameters);
+	public FlowExecutor(StateMachine stateMachine) {
+		super(stateMachine);
 	}
 	
 	/**
 	 * 
 	 */
 	@Override
-	public FlowState start(String startAt) {
-		FlowState state = super.start(startAt);
+	public FlowState start(Object parameters, String startAt) {
+		FlowState state = super.start(parameters, startAt);
 		state.setFlowId(Codecs.randomID());
 		try {
 			execute(state);
@@ -65,6 +65,6 @@ public class FlowExecutor extends FlowHandler {
 	 * @return
 	 */
 	public static FlowState run(StateMachine stateMachine, Dictionary parameters) {
-		return new FlowExecutor(stateMachine, parameters).start();
+		return new FlowExecutor(stateMachine).start(parameters);
 	}
 }

@@ -1,6 +1,8 @@
 package io.javacloud.framework.flow.internal;
 
+import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -15,6 +17,9 @@ public class FlowState {
 	
 	private String 	flowId;
 	private boolean failed;
+	
+	//INPUT/OUTPUT
+	private Object  parameters;
 	private Dictionary attributes;
 	public FlowState() {
 	}
@@ -84,6 +89,17 @@ public class FlowState {
 	public void setFailed(boolean failed) {
 		this.failed = failed;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public <T> T getParameters() {
+		return Objects.cast(parameters);
+	}
+	public void setParameters(Object parameters) {
+		this.parameters = parameters;
+	}
 
 	/**
 	 * 
@@ -95,18 +111,16 @@ public class FlowState {
 	public void setAttributes(Dictionary attributes) {
 		this.attributes = attributes;
 	}
-
 	
 	/**
-	 * 
-	 * @param name
+	 * The result of final state is RESULT or INPUT
 	 * @return
 	 */
-	public FlowState reset(String name) {
-		setName(name);
-		setStartedAt(System.currentTimeMillis());
-		setRetryCount(0);
-		setStackTrace(null);
-		return this;
+	public <T> T getResult() {
+		Object result = attributes.get(StateContext.RESULT_ATTRIBUTE);
+		if(result == null) {
+			result = parameters;
+		}
+		return Objects.cast(result);
 	}
 }

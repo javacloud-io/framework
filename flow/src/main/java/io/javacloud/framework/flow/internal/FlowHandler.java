@@ -21,18 +21,17 @@ public class FlowHandler {
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateMachine stateMachine;
-	private final Dictionary parameters;
-	public FlowHandler(StateMachine stateMachine, Dictionary parameters) {
+	public FlowHandler(StateMachine stateMachine) {
 		this.stateMachine = stateMachine;
-		this.parameters = parameters;
 	}
 	
 	/**
 	 * 
+	 * @param parameters
 	 * @return
 	 */
-	public FlowState start() {
-		return start(null);
+	public FlowState start(Object parameters) {
+		return start(parameters, null);
 	}
 	
 	/**
@@ -41,10 +40,10 @@ public class FlowHandler {
 	 * @param startAt;
 	 * @return
 	 */
-	public FlowState start(String startAt) {
+	public FlowState start(Object parameters, String startAt) {
 		FlowState state = new FlowState();
-		state.setAttributes(parameters == null? new Dictionary(): parameters);
-		return state.reset(Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
+		state.setParameters(parameters);
+		return onPrepare(state, Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
 	}
 	
 	/**
@@ -58,14 +57,12 @@ public class FlowHandler {
 	 * @return
 	 */
 	public StateTransition execute(FlowState state) {
-		FlowContext context = new FlowContext(parameters, state);
+		FlowContext context = new FlowContext(state);
 		StateFunction function = stateMachine.getState(state.getName());
 		try {
 			StateFunction.Status status = function.handle(context);
 			if(status == StateFunction.Status.SUCCESS) {
-				StateTransition.Success success = function.onSuccess(context);
-				state.setName(success.getNext());
-				return success;
+				return onSuccess(function, context);
 			} else if(status == StateFunction.Status.RETRY) {
 				return	function.onRetry(context);
 			}
@@ -77,7 +74,7 @@ public class FlowHandler {
 	}
 	
 	/**
-	 * 
+	 * Flip the final PARAMS as OUTPUT
 	 * @param state
 	 */
 	public void complete(FlowState state) {
@@ -108,6 +105,48 @@ public class FlowHandler {
 			state.setFailed(true);
 		}
 		return -1;
+	}
+	
+	/**
+	 * 
+	 * @param state
+	 * @param name
+	 * @return
+	 */
+	protected FlowState onPrepare(FlowState state, String name) {
+		//AN EMPTY INPUT IF NOT PROVIDED
+		Object parameters = state.getParameters();
+		if(parameters == null) {
+			parameters = new Dictionary();
+		}
+		state.setParameters(parameters);
+		state.setAttributes(new Dictionary());
+		
+		//RESET OTHERS
+		state.setName(name);
+		state.setStartedAt(System.currentTimeMillis());
+		state.setRetryCount(0);
+		state.setStackTrace(null);
+		return state;
+	}
+	
+	/**
+	 * OUTPUT = {RESULTS + INPUT}
+	 * 
+	 * @param function
+	 * @param context
+	 * @return
+	 */
+	protected StateTransition onSuccess(StateFunction function, FlowContext context) {
+		StateTransition.Success success = function.onSuccess(context);
+		
+		//PREPARE NEXT STEP (OUTPUT -> INPUT)
+		if(!success.isEnd()) {
+			FlowState state = context.state;
+			state.setParameters(state.getResult());
+			onPrepare(state, success.getNext());
+		}
+		return success;
 	}
 	
 	/**

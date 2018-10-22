@@ -1,7 +1,5 @@
 package io.javacloud.framework.flow.internal;
 
-import java.util.Collections;
-
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.util.Dictionary;
 
@@ -11,10 +9,8 @@ import io.javacloud.framework.util.Dictionary;
  *
  */
 public class FlowContext implements StateContext {
-	private final Dictionary parameters;
 	final FlowState  state;
-	public FlowContext(Dictionary parameters, FlowState  state) {
-		this.parameters = new Dictionary(Collections.unmodifiableMap(parameters));
+	public FlowContext(FlowState  state) {
 		this.state		= state;
 	}
 	
@@ -24,18 +20,13 @@ public class FlowContext implements StateContext {
 	}
 
 	@Override
-	public Dictionary getParameters() {
-		return parameters;
-	}
-
-	@Override
-	public Dictionary getAttributes() {
-		return (state == null ? null: state.getAttributes());
+	public <T> T getParameters() {
+		return state.getParameters();
 	}
 
 	@Override
 	public <T> T getAttribute(String name) {
-		Dictionary attributes = getAttributes();
+		Dictionary attributes = state.getAttributes();
 		if(attributes == null) {
 			return null;
 		}
@@ -44,7 +35,7 @@ public class FlowContext implements StateContext {
 
 	@Override
 	public <T> void setAttribute(String name, T attribute) {
-		Dictionary attributes = getAttributes();
+		Dictionary attributes = state.getAttributes();
 		if(attributes != null) {
 			attributes.set(name, attribute);
 		}

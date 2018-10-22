@@ -11,6 +11,7 @@ import io.javacloud.framework.flow.builder.FlowBuilder;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.test.FlowExecutor;
 import io.javacloud.framework.util.Dictionaries;
+import io.javacloud.framework.util.Dictionary;
 import junit.framework.TestCase;
 /**
  * 
@@ -26,21 +27,23 @@ public class WorkflowTest extends TestCase {
 								@Override
 								public StateHandler.Status handle(StateContext context) throws Exception {
 									context.setAttribute("t1", "abc");
-									return StateHandler.Status.SUCCESS;
+									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
 							.withState("state2", new StateHandler() {
 								@Override
 								public StateHandler.Status handle(StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
-									return StateHandler.Status.SUCCESS;
+									return successResult(context, "t2", "xyz");
 								}
 							}, null).build();
 		
 		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		Dictionary result = state.getResult();
+		
 		Assert.assertFalse(state.isFailed());
-		Assert.assertEquals("abc", state.getAttributes().get("t1"));
-		Assert.assertEquals("xyz", state.getAttributes().get("t2"));
+		Assert.assertEquals("abc", result.get("t1"));
+		Assert.assertEquals("xyz", result.get("t2"));
 	}
 	
 	@Test
@@ -50,22 +53,23 @@ public class WorkflowTest extends TestCase {
 							.withState("state1", new StateHandler() {
 								@Override
 								public StateHandler.Status handle(StateContext context) throws Exception {
-									context.setAttribute("t1", "abc");
-									return StateHandler.Status.FAILURE;
+									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
 							.withState("state2", new StateHandler() {
 								@Override
 								public StateHandler.Status handle(StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
-									return StateHandler.Status.SUCCESS;
+									return StateHandler.Status.FAILURE;
 								}
 							}, null).build();
 		
 		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		Dictionary result = state.getResult();
+		
 		Assert.assertTrue(state.isFailed());
-		Assert.assertEquals("abc", state.getAttributes().get("t1"));
-		Assert.assertNull(state.getAttributes().get("t2"));
+		Assert.assertEquals("abc", result.get("t1"));
+		Assert.assertNull(result.get("t2"));
 	}
 	
 	@Test
@@ -79,7 +83,7 @@ public class WorkflowTest extends TestCase {
 										return StateHandler.Status.RETRY;
 									}
 									context.setAttribute("t1", "abc");
-									return StateHandler.Status.SUCCESS;
+									return successResult(context, "t1", "abc");
 								}
 							}, new StateHandler.RetryHandler() {
 								@Override
@@ -90,14 +94,29 @@ public class WorkflowTest extends TestCase {
 							.withState("state2", new StateHandler() {
 								@Override
 								public StateHandler.Status handle(StateContext context) throws Exception {
-									context.setAttribute("t2", "xyz");
-									return StateHandler.Status.SUCCESS;
+									return successResult(context, "t2", "xyz");
 								}
 							}, null).build();
 		
 		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		Dictionary result = state.getResult();
+		
 		Assert.assertFalse(state.isFailed());
-		Assert.assertEquals("abc", state.getAttributes().get("t1"));
-		Assert.assertEquals("xyz", state.getAttributes().get("t2"));
+		Assert.assertEquals("abc", result.get("t1"));
+		Assert.assertEquals("xyz", result.get("t2"));
+	}
+	
+	/**
+	 * Combine INPUT/OUTPUT
+	 * 
+	 * @param context
+	 * @param dict
+	 * @return
+	 */
+	static StateHandler.Status successResult(StateContext context, String name, String value) {
+		Dictionary result = new Dictionary();
+		result.putAll((Dictionary)context.getParameters());
+		result.put(name, value);
+		return TransitionBuilder.success(context, result);
 	}
 }

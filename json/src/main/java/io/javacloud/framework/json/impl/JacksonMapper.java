@@ -1,20 +1,32 @@
 package io.javacloud.framework.json.impl;
 
+import io.javacloud.framework.json.JsonValue;
+import io.javacloud.framework.json.internal.JsonValues;
 import io.javacloud.framework.util.DateFormats;
+import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.inject.Singleton;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 /**
  * Baseline for JACKSON object mapping, make sure ALWAYS NICE AND POJO!
@@ -30,6 +42,13 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 */
 	public JacksonMapper() {
 		configure();
+		
+		//CONFIGURE CUSTOM MODULE
+		SimpleModule module = new SimpleModule("javacloud.json");
+		configure(module);
+		
+		//REGISTER CUSTOM MODULE
+		registerModule(module);
 	}
 	
 	/**
@@ -51,6 +70,36 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		//DEFAULT DATE FORMAT
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601));
+	}
+	
+	/**
+	 * 
+	 * @param module
+	 */
+	@SuppressWarnings("serial")
+	protected void configure(SimpleModule module) {
+		//JSON VALUE
+		module.addSerializer(JsonValue.class, new StdSerializer<JsonValue>(JsonValue.class) {
+			@Override
+			public void serialize(JsonValue json, JsonGenerator gen, SerializerProvider provider) throws IOException {
+				gen.writeObject(json.value());
+			}
+		});
+		module.addDeserializer(JsonValue.class, new StdDeserializer<JsonValue>(JsonValue.class) {
+			@Override
+			public JsonValue deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+				Object value = p.readValueAs(Object.class);
+				return JsonValues.asValue(value);
+			}
+		});
+		
+		//CONVERT MAP TO DICTIONARY
+		module.addDeserializer(Map.class, new StdDeserializer<Dictionary>(Dictionary.class) {
+			@Override
+			public Dictionary deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+				return	p.readValueAs(Dictionary.class);
+			}
+		});
 	}
 	
 	/**

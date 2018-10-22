@@ -1,13 +1,14 @@
 package io.javacloud.framework.flow;
 
-import java.util.Map;
-
 /**
+ * https://states-language.net/spec.html
  * 
  * @author ho
  *
  */
 public interface StateContext {
+	public static final String RESULT_ATTRIBUTE = "State.Result";
+	
 	/**
 	 * return execution ID;
 	 * 
@@ -16,21 +17,14 @@ public interface StateContext {
 	public String getFlowId();
 	
 	/**
-	 * return original INPUT parameters
+	 * return INPUT parameters: String, Number, Dictionary...
 	 * 
 	 * @return
 	 */
-	public Map<String, Object> getParameters();
+	public <T> T getParameters();
 	
 	/**
-	 * Persistent attributes cross StepFunction
-	 * 
-	 * @return
-	 */
-	public Map<String, Object> getAttributes();
-	
-	/**
-	 * return attribute value
+	 * return internal state attribute value from setAttribute()
 	 * 
 	 * @param name
 	 * @return

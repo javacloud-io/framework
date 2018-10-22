@@ -1,6 +1,7 @@
 package io.javacloud.framework.json;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,9 +34,18 @@ public class JacksonMapperTest extends ServiceTest {
 		Dictionary dict = new Dictionary();
 		Assert.assertEquals("{}", converter.toUTF8(dict));
 		
-		dict = converter.toObject("{\"a\":123}", Dictionary.class);
+		dict = (Dictionary)converter.toObject("{\"a\":123}", Map.class);
 		Assert.assertEquals(123, (int)dict.get("a"));
 		
 		Object obj = converter.toObject("true", Object.class);
+		Assert.assertEquals(Boolean.class, obj.getClass());
+	}
+	
+	@Test
+	public void testJson() throws IOException {
+		JacksonConverter converter = new JacksonConverter(externalizer);
+		JsonValue jvalue = converter.toObject("{\"a\":123}", JsonValue.class);
+		Assert.assertEquals(JsonValue.Type.OBJECT, jvalue.type());
+		Assert.assertEquals(Dictionary.class, jvalue.value().getClass());
 	}
 }
