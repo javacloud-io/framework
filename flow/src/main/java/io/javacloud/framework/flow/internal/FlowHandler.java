@@ -143,7 +143,7 @@ public class FlowHandler {
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		if(!success.isEnd()) {
 			FlowState state = context.state;
-			state.setParameters(state.getResult());
+			state.setParameters(state.result());
 			onPrepare(state, success.getNext());
 		}
 		return success;

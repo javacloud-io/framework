@@ -2,6 +2,7 @@ package io.javacloud.framework.flow.internal;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -21,7 +22,7 @@ public class FlowContext implements StateContext {
 
 	@Override
 	public <T> T getParameters() {
-		return state.getParameters();
+		return Objects.cast(state.getParameters());
 	}
 
 	@Override

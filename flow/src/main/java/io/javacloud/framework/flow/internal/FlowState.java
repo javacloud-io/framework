@@ -94,8 +94,8 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public <T> T getParameters() {
-		return Objects.cast(parameters);
+	public Object getParameters() {
+		return parameters;
 	}
 	public void setParameters(Object parameters) {
 		this.parameters = parameters;
@@ -116,7 +116,7 @@ public class FlowState {
 	 * The result of final state is RESULT or INPUT
 	 * @return
 	 */
-	public <T> T getResult() {
+	public <T> T result() {
 		Object result = attributes.get(StateContext.RESULT_ATTRIBUTE);
 		if(result == null) {
 			result = parameters;
