@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
-import io.javacloud.framework.json.internal.JacksonConverter;
+import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.json.internal.JsonPath;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
@@ -54,10 +54,10 @@ public class InputBuilder {
 			public <T> T onInput(StateContext context) {
 				Object parameters = new JsonPath(context.getParameters()).select(inputPath);
 				//AUTO CONVERSION
-				if(parameters != null && inputClass != null && !inputClass.isInstance(parameters) && externalizer != null) {
-					JacksonConverter converter = new JacksonConverter(externalizer);
+				if(parameters != null && inputClass != null && externalizer != null) {
+					JsonConverter converter = new JsonConverter(externalizer);
 					try {
-						parameters = converter.toObject(converter.toBytes(parameters), inputClass);
+						parameters = converter.convert(parameters, inputClass);
 					} catch(IOException ex) {
 						throw new IllegalArgumentException(ex);
 					}

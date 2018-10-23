@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import io.javacloud.framework.json.internal.JacksonConverter;
+import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionaries;
 import io.javacloud.framework.util.Dictionary;
@@ -124,9 +124,9 @@ public final class JwtCodecs {
 	}
 	
 	//PROTECTED
-	private JacksonConverter converter;
+	private JsonConverter converter;
 	public JwtCodecs(Externalizer externalizer) {
-		this.converter = new JacksonConverter(externalizer);
+		this.converter = new JsonConverter(externalizer);
 	}
 	
 	/**

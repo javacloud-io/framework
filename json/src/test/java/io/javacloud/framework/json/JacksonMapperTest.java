@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javacloud.framework.cdi.test.ServiceTest;
-import io.javacloud.framework.json.internal.JacksonConverter;
+import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 
@@ -30,7 +30,7 @@ public class JacksonMapperTest extends ServiceTest {
 	
 	@Test
 	public void testDict() throws IOException {
-		JacksonConverter converter = new JacksonConverter(externalizer);
+		JsonConverter converter = new JsonConverter(externalizer);
 		Dictionary dict = new Dictionary();
 		Assert.assertEquals("{}", converter.toUTF8(dict));
 		
@@ -43,7 +43,7 @@ public class JacksonMapperTest extends ServiceTest {
 	
 	@Test
 	public void testJson() throws IOException {
-		JacksonConverter converter = new JacksonConverter(externalizer);
+		JsonConverter converter = new JsonConverter(externalizer);
 		JsonValue jvalue = converter.toObject("{\"a\":123}", JsonValue.class);
 		Assert.assertEquals(JsonValue.Type.OBJECT, jvalue.type());
 		Assert.assertEquals(Dictionary.class, jvalue.value().getClass());
