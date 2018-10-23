@@ -11,10 +11,11 @@ import io.javacloud.framework.flow.StateTransition;
  *
  */
 public class FunctionBuilder {
-	private StateHandler 		  stateHandler;
-	private StateHandler.SuccessHandler  successHandler;
+	private StateHandler 		 		 stateHandler;
+	private StateHandler.InputHandler	 inputHandler;
+	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
-	private StateHandler.RetryHandler	  retryHandler;
+	private StateHandler.RetryHandler	 retryHandler;
 	public FunctionBuilder() {
 	}
 	/**
@@ -32,8 +33,18 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withSuccessHandler(StateHandler.SuccessHandler  handler) {
-		this.successHandler = handler;
+	public FunctionBuilder withInputHandler(StateHandler.InputHandler  handler) {
+		this.inputHandler = handler;
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param handler
+	 * @return
+	 */
+	public FunctionBuilder withOutputHandler(StateHandler.OutputHandler  handler) {
+		this.outputHandler = handler;
 		return this;
 	}
 	
@@ -63,9 +74,9 @@ public class FunctionBuilder {
 	 * @return
 	 */
 	public FunctionBuilder withSuccessTransition(final StateTransition.Success transition) {
-		return withSuccessHandler(new StateHandler.SuccessHandler() {
+		return withOutputHandler(new StateHandler.OutputHandler() {
 			@Override
-			public StateTransition.Success onSuccess(StateContext context) {
+			public StateTransition.Success onOutput(StateContext context) {
 				return transition;
 			}
 		});
@@ -106,12 +117,19 @@ public class FunctionBuilder {
 	public StateFunction build() {
 		return new StateFunction() {
 			@Override
-			public StateHandler.Status handle(StateContext context) throws Exception {
-				return (stateHandler == null? StateHandler.Status.FAILURE : stateHandler.handle(context));
+			public <T> T onInput(StateContext context) {
+				if(inputHandler == null) {
+					return context.getParameters();
+				}
+				return inputHandler.onInput(context);
 			}
 			@Override
-			public StateTransition.Success onSuccess(StateContext context) {
-				return (successHandler == null? TransitionBuilder.success(null) : successHandler.onSuccess(context));
+			public <T> StateHandler.Status handle(T parameters, StateContext context) throws Exception {
+				return (stateHandler == null? StateHandler.Status.FAILURE : stateHandler.handle(parameters, context));
+			}
+			@Override
+			public StateTransition.Success onOutput(StateContext context) {
+				return (outputHandler == null? TransitionBuilder.success(null) : outputHandler.onOutput(context));
 			}
 
 			@Override

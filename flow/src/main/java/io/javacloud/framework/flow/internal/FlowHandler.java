@@ -57,10 +57,10 @@ public class FlowHandler {
 	 * @return
 	 */
 	public StateTransition execute(FlowState state) {
-		FlowContext context = new FlowContext(state);
 		StateFunction function = stateMachine.getState(state.getName());
+		FlowContext context = new FlowContext(state);
 		try {
-			StateFunction.Status status = function.handle(context);
+			StateFunction.Status status = function.handle(function.onInput(context), context);
 			if(status == StateFunction.Status.SUCCESS) {
 				return onSuccess(function, context);
 			} else if(status == StateFunction.Status.RETRY) {
@@ -138,7 +138,7 @@ public class FlowHandler {
 	 * @return
 	 */
 	protected StateTransition onSuccess(StateFunction function, FlowContext context) {
-		StateTransition.Success success = function.onSuccess(context);
+		StateTransition.Success success = function.onOutput(context);
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		if(!success.isEnd()) {

@@ -25,14 +25,14 @@ public class WorkflowTest extends TestCase {
 							.withStartAt("state1")
 							.withState("state1", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									context.setAttribute("t1", "abc");
 									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
 							.withState("state2", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
 									return successResult(context, "t2", "xyz");
 								}
@@ -52,13 +52,13 @@ public class WorkflowTest extends TestCase {
 							.withStartAt("state1")
 							.withState("state1", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
 							.withState("state2", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
 									return StateHandler.Status.FAILURE;
 								}
@@ -78,7 +78,7 @@ public class WorkflowTest extends TestCase {
 							.withStartAt("state1")
 							.withState("state1", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									if(context.getRetryCount() < 5) {
 										return StateHandler.Status.RETRY;
 									}
@@ -93,7 +93,7 @@ public class WorkflowTest extends TestCase {
 							}, "state2")
 							.withState("state2", new StateHandler() {
 								@Override
-								public StateHandler.Status handle(StateContext context) throws Exception {
+								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 									return successResult(context, "t2", "xyz");
 								}
 							}, null).build();

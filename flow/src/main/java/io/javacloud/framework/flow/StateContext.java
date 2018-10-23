@@ -17,7 +17,7 @@ public interface StateContext {
 	public String getFlowId();
 	
 	/**
-	 * return INPUT parameters: String, Number, Dictionary...
+	 * return initial/raw INPUT parameters: String, Number, Dictionary...
 	 * 
 	 * @return
 	 */

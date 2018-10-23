@@ -12,11 +12,23 @@ public interface StateHandler {
 	}
 	
 	//HANDLE RESOURCE
-	public Status handle(StateContext context) throws Exception;
+	/**
+	 * 
+	 * @param parameters
+	 * @param context
+	 * @return
+	 * @throws Exception
+	 */
+	public <T> Status handle(T parameters, StateContext context) throws Exception;
 	
-	//HANDLE SUCCESS
-	public interface SuccessHandler {
-		StateTransition.Success onSuccess(StateContext context);
+	//INPUT FILTER 
+	public interface InputHandler {
+		public <T> T onInput(StateContext context);
+	}
+	
+	//OUTPUT FILTER
+	public interface OutputHandler {
+		public StateTransition.Success onOutput(StateContext context);
 	}
 	
 	//HANDLE FAILURE
