@@ -54,7 +54,7 @@ public class InputBuilder {
 			public <T> T onInput(StateContext context) {
 				Object parameters = new JsonPath(context.getParameters()).select(inputPath);
 				//AUTO CONVERSION
-				if(inputClass != null && !inputClass.isInstance(parameters) && externalizer != null) {
+				if(parameters != null && inputClass != null && !inputClass.isInstance(parameters) && externalizer != null) {
 					JacksonConverter converter = new JacksonConverter(externalizer);
 					try {
 						parameters = converter.toObject(converter.toBytes(parameters), inputClass);
