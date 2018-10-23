@@ -23,6 +23,7 @@ public class JsonPathTest extends TestCase {
 		Assert.assertEquals("v", jsonPath.select("$.x.y.u"));
 		
 		dict = jsonPath.select("$.x");
+		jsonPath = new JsonPath(dict);
 		Assert.assertEquals("v", jsonPath.select("$.y.u"));
 	}
 }
