@@ -4,6 +4,7 @@ import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.json.internal.JsonPath;
+import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -12,8 +13,8 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class OutputBuilder {
-	private String resultPath;
-	private String outputPath;
+	private String resultPath = JsonPath.ROOT;
+	private String outputPath = JsonPath.ROOT;
 	private String next;
 	public OutputBuilder() {	
 	}
@@ -57,6 +58,7 @@ public class OutputBuilder {
 			public StateTransition.Success onOutput(StateContext context) {
 				Object result = context.getAttribute(StateContext.RESULT_ATTRIBUTE);
 				if(result != null) {
+					//DISCARD RESULT IF NO PATH
 					if(Objects.isEmpty(resultPath)) {
 						result = context.getParameters();
 					} else {
@@ -65,8 +67,13 @@ public class OutputBuilder {
 				} else {
 					result = context.getParameters();
 				}
-				//OUTPUT
+				
+				//EMPTY OUTPUT IF NULL
 				result = new JsonPath(result).select(outputPath);
+				if(result == null) {
+					result = new Dictionary();
+				}
+				//SET BACK RESULT
 				TransitionBuilder.success(context, result);
 				return TransitionBuilder.success(next);
 			}

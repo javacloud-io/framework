@@ -3,6 +3,8 @@ package io.javacloud.framework.json.internal;
 import java.beans.PropertyDescriptor;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.javacloud.framework.util.Dictionaries;
 import io.javacloud.framework.util.Dictionary;
@@ -16,6 +18,9 @@ import io.javacloud.framework.util.Pair;
  *
  */
 public class JsonPath {
+	private static final Logger logger = Logger.getLogger(JsonPath.class.getName());
+	public static final String ROOT = "$";
+	
 	private Object root;
 	public JsonPath(Object root) {
 		this.root = root;
@@ -33,7 +38,7 @@ public class JsonPath {
 		String[] segments = segments(path);
 		Object dict = this.root;
 		for(int i = 1; i < segments.length; i ++) {
-			dict = getField(dict, segments[i]);
+			dict = getProperty(dict, segments[i]);
 			if(dict == null) {
 				break;
 			}
@@ -48,8 +53,8 @@ public class JsonPath {
 	 * @return
 	 */
 	public <T, V> T merge(String path, V value) {
+		//REPLACE ROOT
 		if(isRoot(path)) {
-			this.root = value;
 			return Objects.cast(value);
 		}
 		
@@ -58,7 +63,7 @@ public class JsonPath {
 		Stack<Pair<Object, String>> stack = new Stack<>();
 		String[] segments = segments(path);
 		for(int i = 1; i < segments.length; i ++) {
-			Object v = getField(dict, segments[i]);
+			Object v = getProperty(dict, segments[i]);
 			if(v == null) {
 				v = new Dictionary();
 			}
@@ -71,18 +76,17 @@ public class JsonPath {
 		while(!stack.isEmpty()) {
 			Pair<Object, String> p = stack.pop();
 			//NOT ABLE TO SET => CONVERT TO DICT
-			if(!setField(p.getKey(), p.getValue(), dict)) {
+			if(!setProperty(p.getKey(), p.getValue(), dict)) {
 				dict = Dictionaries.asDict(p.getValue(), dict);
 			} else {
 				dict = p.getKey();
 			}
 		}
-		this.root = dict;
-		return Objects.cast(this.root);
+		return Objects.cast(dict);
 	}
 	
 	/**
-	 * 
+	 * [1] based index
 	 * @param path
 	 * @return
 	 */
@@ -97,39 +101,44 @@ public class JsonPath {
 	 * @param name
 	 * @return
 	 */
-	protected Object getField(Object v, String name) {
-		if(v instanceof Map<?,?>) {
-			return ((Map<?,?>)v).get(name);
+	protected Object getProperty(Object json, String name) {
+		//MAP
+		if(json instanceof Map<?,?>) {
+			return ((Map<?,?>)json).get(name);
 		}
 		
 		//ASSUMING PROPERTY NOT FOUND
 		try {
-			PropertyDescriptor pd = new PropertyDescriptor(name, v.getClass());
-			return pd.getReadMethod().invoke(v);
+			PropertyDescriptor pd = new PropertyDescriptor(name, json.getClass());
+			return pd.getReadMethod().invoke(json);
 		}catch(Exception ex) {
+			logger.log(Level.WARNING, "Unable to get property: " + name, ex);
 			return null;
 		}
 	}
 	
 	/**
 	 * 
-	 * @param v
+	 * @param json
 	 * @param name
 	 * @param value
+	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	protected boolean setField(Object v, String name, Object value) {
-		if(v instanceof Map<?,?>) {
-			((Map<String, Object>)v).put(name, value);
+	protected boolean setProperty(Object json, String name, Object value) {
+		//MAP
+		if(json instanceof Map<?,?>) {
+			((Map<String, Object>)json).put(name, value);
 			return true;
 		}
 		
 		//ASSUMING PROPERTY NOT FOUND
 		try {
-			PropertyDescriptor pd = new PropertyDescriptor(name, v.getClass());
-			pd.getWriteMethod().invoke(v, value);
+			PropertyDescriptor pd = new PropertyDescriptor(name, json.getClass());
+			pd.getWriteMethod().invoke(json, value);
 			return true;
 		}catch(Exception ex) {
+			logger.log(Level.WARNING, "Unable to set property: " + name, ex);
 			return false;
 		}
 	}
@@ -140,6 +149,6 @@ public class JsonPath {
 	 * @return
 	 */
 	public static final boolean isRoot(String path) {
-		return (path == null || path.isEmpty() || path.equals("$"));
+		return (path == null || path.isEmpty() || path.equals(ROOT));
 	}
 }

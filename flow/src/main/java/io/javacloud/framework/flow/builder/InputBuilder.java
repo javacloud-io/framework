@@ -14,7 +14,7 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class InputBuilder {
-	private String 		inputPath;
+	private String 		inputPath	= JsonPath.ROOT;
 	private Class<?> 	inputClass;
 	private Externalizer externalizer;
 	public InputBuilder() {
