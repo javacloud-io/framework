@@ -2,7 +2,7 @@ package io.javacloud.framework.flow.builder;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
-import io.javacloud.framework.flow.StateTransition.Success;
+import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.json.internal.JsonPath;
 import io.javacloud.framework.util.Objects;
 
@@ -54,7 +54,7 @@ public class OutputBuilder {
 	public StateHandler.OutputHandler build() {
 		return new StateHandler.OutputHandler() {
 			@Override
-			public Success onOutput(StateContext context) {
+			public StateTransition.Success onOutput(StateContext context) {
 				Object result = context.getAttribute(StateContext.RESULT_ATTRIBUTE);
 				if(result != null) {
 					if(Objects.isEmpty(resultPath)) {
@@ -69,20 +69,6 @@ public class OutputBuilder {
 				result = new JsonPath(result).select(outputPath);
 				TransitionBuilder.success(context, result);
 				return TransitionBuilder.success(next);
-			}
-		};
-	}
-	
-	/**
-	 * Build input handler 
-	 * @param inputPath
-	 * @return
-	 */
-	public static StateHandler.InputHandler build(final String inputPath) {
-		return new StateHandler.InputHandler() {
-			@Override
-			public <T> T onInput(StateContext context) {
-				return new JsonPath(context.getParameters()).select(inputPath);
 			}
 		};
 	}
