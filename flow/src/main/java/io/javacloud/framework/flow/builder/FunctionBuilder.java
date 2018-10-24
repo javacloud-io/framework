@@ -1,9 +1,12 @@
 package io.javacloud.framework.flow.builder;
 
+import java.lang.reflect.ParameterizedType;
+
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
+import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -11,8 +14,8 @@ import io.javacloud.framework.flow.StateTransition;
  *
  */
 public class FunctionBuilder {
-	private StateHandler 		 		 stateHandler;
-	private StateHandler.InputHandler	 inputHandler;
+	private StateHandler<Object> 		 stateHandler;
+	private StateHandler.InputHandler<Object> inputHandler;
 	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
 	private StateHandler.RetryHandler	 retryHandler;
@@ -23,8 +26,8 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withStateHandler(StateHandler handler) {
-		this.stateHandler = handler;
+	public FunctionBuilder withStateHandler(StateHandler<?> handler) {
+		this.stateHandler = Objects.cast(handler);
 		return this;
 	}
 	
@@ -33,8 +36,8 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withInputHandler(StateHandler.InputHandler  handler) {
-		this.inputHandler = handler;
+	public FunctionBuilder withInputHandler(StateHandler.InputHandler<?>  handler) {
+		this.inputHandler = Objects.cast(handler);
 		return this;
 	}
 	
@@ -114,17 +117,17 @@ public class FunctionBuilder {
 	 * 
 	 * @return
 	 */
-	public StateFunction build() {
+	public  StateFunction build() {
 		return new StateFunction() {
 			@Override
-			public <T> T onInput(StateContext context) {
+			public Object onInput(StateContext context) {
 				if(inputHandler == null) {
 					return context.getParameters();
 				}
 				return inputHandler.onInput(context);
 			}
 			@Override
-			public <T> StateHandler.Status handle(T parameters, StateContext context) throws Exception {
+			public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 				return (stateHandler == null? StateHandler.Status.FAILURE : stateHandler.handle(parameters, context));
 			}
 			@Override
@@ -140,6 +143,18 @@ public class FunctionBuilder {
 			@Override
 			public StateTransition onRetry(StateContext context) {
 				return (retryHandler == null? new TransitionBuilder().retry() : retryHandler.onRetry(context));
+			}
+			
+			@Override
+			public Class<?> getHandlerType() {
+				if(stateHandler != null) {
+					ParameterizedType type = (ParameterizedType)stateHandler.getClass().getGenericInterfaces()[0];
+					return (Class<?>)type.getActualTypeArguments()[0];
+				} else if(inputHandler != null) {
+					ParameterizedType type = (ParameterizedType)inputHandler.getClass().getGenericInterfaces()[0];
+					return (Class<?>)type.getActualTypeArguments()[0];
+				}
+				return Object.class;
 			}
 		};
 	}

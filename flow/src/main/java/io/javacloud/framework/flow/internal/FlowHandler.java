@@ -1,10 +1,15 @@
 package io.javacloud.framework.flow.internal;
 
+import java.io.IOException;
+
+import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
+import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
 
@@ -21,8 +26,10 @@ public class FlowHandler {
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateMachine stateMachine;
-	public FlowHandler(StateMachine stateMachine) {
+	private final Externalizer externalizer;
+	public FlowHandler(StateMachine stateMachine, Externalizer externalizer) {
 		this.stateMachine = stateMachine;
+		this.externalizer = externalizer;
 	}
 	
 	/**
@@ -57,10 +64,11 @@ public class FlowHandler {
 	 * @return
 	 */
 	public StateTransition execute(FlowState state) {
-		StateFunction function = stateMachine.getState(state.getName());
 		FlowContext context = new FlowContext(state);
+		StateFunction function = stateMachine.getState(state.getName());
 		try {
-			StateFunction.Status status = function.handle(function.onInput(context), context);
+			Object parameters = onInput(function, context);
+			StateFunction.Status status = function.handle(parameters, context);
 			if(status == StateFunction.Status.SUCCESS) {
 				return onSuccess(function, context);
 			} else if(status == StateFunction.Status.RETRY) {
@@ -75,6 +83,7 @@ public class FlowHandler {
 	
 	/**
 	 * Flip the final PARAMS as OUTPUT
+	 * 
 	 * @param state
 	 */
 	public void complete(FlowState state) {
@@ -131,7 +140,24 @@ public class FlowHandler {
 	}
 	
 	/**
-	 * OUTPUT = {RESULTS + INPUT}
+	 * Filter the input and AUTO convert the parameters for handler if not applicable.
+	 * 
+	 * @param function
+	 * @param context
+	 * @return
+	 */
+	protected Object onInput(StateFunction function, StateContext context) throws IOException {
+		Object parameters = function.onInput(context);
+		Class<?> type = function.getHandlerType();
+		//PARAMETERS CONVERSION!!!
+		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
+			parameters = new JsonConverter(externalizer).convert(parameters, type);
+		}
+		return	parameters;
+	}
+	
+	/**
+	 * OUTPUT = {RESULT + INPUT}
 	 * 
 	 * @param function
 	 * @param context

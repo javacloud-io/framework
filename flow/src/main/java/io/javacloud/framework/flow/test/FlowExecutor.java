@@ -8,6 +8,7 @@ import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -16,10 +17,12 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class FlowExecutor extends FlowHandler {
-	public FlowExecutor(StateMachine stateMachine) {
-		super(stateMachine);
+	public FlowExecutor(StateMachine stateMachine, Externalizer externalizer) {
+		super(stateMachine, externalizer);
 	}
-	
+	public FlowExecutor(StateMachine stateMachine) {
+		this(stateMachine, null);
+	}
 	/**
 	 * 
 	 */

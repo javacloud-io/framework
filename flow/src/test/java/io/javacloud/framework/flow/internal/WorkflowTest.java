@@ -23,16 +23,16 @@ public class WorkflowTest extends TestCase {
 	public void testSuccess() {
 		StateMachine workflow = new FlowBuilder()
 							.withStartAt("state1")
-							.withState("state1", new StateHandler() {
+							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									context.setAttribute("t1", "abc");
 									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
-							.withState("state2", new StateHandler() {
+							.withState("state2", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
 									return successResult(context, "t2", "xyz");
 								}
@@ -50,15 +50,15 @@ public class WorkflowTest extends TestCase {
 	public void testFailure() {
 		StateMachine workflow = new FlowBuilder()
 							.withStartAt("state1")
-							.withState("state1", new StateHandler() {
+							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									return successResult(context, "t1", "abc");
 								}
 							}, "state2")
-							.withState("state2", new StateHandler() {
+							.withState("state2", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
 									return StateHandler.Status.FAILURE;
 								}
@@ -76,9 +76,9 @@ public class WorkflowTest extends TestCase {
 	public void testRetry() {
 		StateMachine workflow = new FlowBuilder()
 							.withStartAt("state1")
-							.withState("state1", new StateHandler() {
+							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									if(context.getRetryCount() < 5) {
 										return StateHandler.Status.RETRY;
 									}
@@ -91,9 +91,9 @@ public class WorkflowTest extends TestCase {
 									return new TransitionBuilder().withMaxAttempts(6).retry();
 								}
 							}, "state2")
-							.withState("state2", new StateHandler() {
+							.withState("state2", new StateHandler<Dictionary>() {
 								@Override
-								public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
 									return successResult(context, "t2", "xyz");
 								}
 							}, null).build();

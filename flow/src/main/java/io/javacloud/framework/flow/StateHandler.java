@@ -1,10 +1,11 @@
 package io.javacloud.framework.flow;
+
 /**
  * 
  * @author ho
  *
  */
-public interface StateHandler {
+public interface StateHandler<T> {
 	public enum Status {
 		SUCCESS,
 		FAILURE,
@@ -19,11 +20,11 @@ public interface StateHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	public <T> Status handle(T parameters, StateContext context) throws Exception;
+	public Status handle(T parameters, StateContext context) throws Exception;
 	
 	//INPUT FILTER 
-	public interface InputHandler {
-		public <T> T onInput(StateContext context);
+	public interface InputHandler<T> {
+		public T onInput(StateContext context);
 	}
 	
 	//OUTPUT FILTER
