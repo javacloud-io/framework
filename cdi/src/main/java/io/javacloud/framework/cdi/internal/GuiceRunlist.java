@@ -35,7 +35,8 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 	protected <T> T runInstance(Object instance, String methodName, Object...args) throws Exception {
 		Method method;
 		if(instance instanceof Class<?>) {
-			method = resolveMethod((Class<?>)instance, methodName, args);
+			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
+			method = resolveMethod(instance.getClass(), methodName, args);
 		} else {
 			method = resolveMethod(instance.getClass(), methodName, args);
 		}
@@ -43,8 +44,6 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 		//STATIC METHOD
 		if(Modifier.isStatic(method.getModifiers())) {
 			return	Objects.cast(method.invoke(null, args));
-		} else if(instance instanceof Class<?>) {
-			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
 		}
 		return	Objects.cast(method.invoke(instance, args));
 	}
