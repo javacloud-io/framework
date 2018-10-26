@@ -21,6 +21,7 @@ public class FunctionBuilder {
 	private StateHandler.RetryHandler	 retryHandler;
 	public FunctionBuilder() {
 	}
+	
 	/**
 	 * 
 	 * @param handler
@@ -29,6 +30,20 @@ public class FunctionBuilder {
 	public FunctionBuilder withStateHandler(StateHandler<?> handler) {
 		this.stateHandler = Objects.cast(handler);
 		return this;
+	}
+	
+	/**
+	 * Handler always return a fix status PASS/FAIL
+	 * @param status
+	 * @return
+	 */
+	public FunctionBuilder withStateHandler(final StateHandler.Status status) {
+		return withStateHandler(new StateHandler<Object>() {
+			@Override
+			public Status handle(Object parameters, StateContext context) throws Exception {
+				return status;
+			}
+		});
 	}
 	
 	/**
