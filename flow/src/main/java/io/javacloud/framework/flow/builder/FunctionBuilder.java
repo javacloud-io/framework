@@ -101,20 +101,6 @@ public class FunctionBuilder {
 	
 	/**
 	 * 
-	 * @param transition
-	 * @return
-	 */
-	public FunctionBuilder withRetryHandler(final StateTransition.Retry transition) {
-		return withRetryHandler(new StateHandler.RetryHandler() {
-			@Override
-			public StateTransition.Retry onRetry(StateContext context) {
-				return transition;
-			}
-		});
-	}
-	
-	/**
-	 * 
 	 * @return
 	 */
 	public  StateFunction build() {
@@ -142,7 +128,7 @@ public class FunctionBuilder {
 
 			@Override
 			public StateTransition onRetry(StateContext context) {
-				return (retryHandler == null? new TransitionBuilder().retry() : retryHandler.onRetry(context));
+				return (retryHandler == null? TransitionBuilder.failure() : retryHandler.onRetry(context));
 			}
 			
 			@Override

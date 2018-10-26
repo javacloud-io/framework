@@ -6,8 +6,8 @@ import org.junit.Assert;
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateMachine;
-import io.javacloud.framework.flow.StateTransition.Retry;
 import io.javacloud.framework.flow.builder.FlowBuilder;
+import io.javacloud.framework.flow.builder.RetryBuilder;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.test.FlowExecutor;
 import io.javacloud.framework.util.Dictionaries;
@@ -85,12 +85,8 @@ public class WorkflowTest extends TestCase {
 									context.setAttribute("t1", "abc");
 									return successResult(context, "t1", "abc");
 								}
-							}, new StateHandler.RetryHandler() {
-								@Override
-								public Retry onRetry(StateContext context) {
-									return new TransitionBuilder().withMaxAttempts(6).retry();
-								}
-							}, "state2")
+							},
+							new RetryBuilder().withRetrier(new RetryBuilder.Retrier().withMaxAttempts(6)).build(), "state2")
 							.withState("state2", new StateHandler<Dictionary>() {
 								@Override
 								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {

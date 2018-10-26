@@ -2,6 +2,7 @@ package io.javacloud.framework.flow.internal;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
+import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.StateMachine;
@@ -100,7 +101,7 @@ public class FlowHandler {
 			long maxTimeout = transition.getTimeoutSeconds() * 1000L;
 			//TIMEOUT => FAILED [0]
 			if(maxTimeout >= 0 && (state.getStartedAt() + maxTimeout) >= System.currentTimeMillis()) {
-				state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateContext.ERROR_TIMEOUT);
+				state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
 				state.setFailed(true);
 				return 0;
 			} else {
@@ -110,7 +111,7 @@ public class FlowHandler {
 			}
 		} else {
 			//FAILED[1]
-			state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateContext.ERROR_NOT_RETRYABLE);
+			state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
 			state.setFailed(true);
 		}
 		return -1;
@@ -155,7 +156,7 @@ public class FlowHandler {
 			try {
 				parameters = new JsonConverter(externalizer).convert(parameters, type);
 			} catch(Exception ex) {
-				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateContext.ERROR_JSON_CONVERTER);
+				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
 				throw ex;
 			}
 		}
@@ -192,7 +193,7 @@ public class FlowHandler {
 		StateTransition transition;
 		//NOT FOUND STATE
 		if(function == null) {
-			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateContext.ERROR_NOT_FOUND);
+			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_FOUND);
 			transition = TransitionBuilder.failure();
 		} else {
 			transition = function.onFailure(context, ex);

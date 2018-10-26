@@ -6,6 +6,13 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateHandler<T> {
+	//BUILT-IN ERROR
+	public static final String ERROR_ALL 	   		= "States.ALL";
+	public static final String ERROR_TIMEOUT 		= "States.Timeout";
+	public static final String ERROR_NOT_FOUND 		= "States.NotFound";
+	public static final String ERROR_NOT_RETRYABLE 	= "States.NotRetryable";
+	public static final String ERROR_JSON_CONVERSION= "States.JsonConversion";
+		
 	//STATUS
 	public enum Status {
 		SUCCESS,

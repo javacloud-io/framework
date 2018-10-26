@@ -14,7 +14,7 @@ import io.javacloud.framework.flow.StateMachine;
  */
 public class FlowBuilder {
 	private String startAt;
-	private Map<String, StateFunction> states = new HashMap<>();
+	private Map<String, StateFunction> states;
 	public FlowBuilder() {
 	}
 	
@@ -63,6 +63,9 @@ public class FlowBuilder {
 	 * @return
 	 */
 	public FlowBuilder withState(String name, StateFunction function) {
+		if(states == null) {
+			states = new HashMap<>();
+		}
 		states.put(name, function);
 		return this;
 	}
@@ -80,7 +83,7 @@ public class FlowBuilder {
 			
 			@Override
 			public StateFunction getState(String stepName) {
-				return states.get(stepName);
+				return (states == null? null : states.get(stepName));
 			}
 		};
 	}
