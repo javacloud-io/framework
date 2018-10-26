@@ -150,6 +150,15 @@ public class JsonPath {
 	 * @return
 	 */
 	public static final boolean isRoot(String path) {
-		return (path == null || path.isEmpty() || path.equals(ROOT));
+		return (Objects.isEmpty(path) || path.equals(ROOT));
+	}
+	
+	/**
+	 * return true if reference path
+	 * @param path
+	 * @return
+	 */
+	public static final boolean is(String path) {
+		return !Objects.isEmpty(path) && path.startsWith(ROOT);
 	}
 }

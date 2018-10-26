@@ -4,8 +4,8 @@ import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.json.internal.JsonPath;
+import io.javacloud.framework.json.internal.JsonTemplate;
 import io.javacloud.framework.util.Dictionary;
-import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -13,8 +13,8 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class OutputBuilder {
-	private String resultPath = JsonPath.ROOT;
-	private String outputPath = JsonPath.ROOT;
+	protected Object result = JsonPath.ROOT;
+	protected Object output = JsonPath.ROOT;
 	
 	private String next;
 	public OutputBuilder() {	
@@ -25,7 +25,11 @@ public class OutputBuilder {
 	 * @return
 	 */
 	public OutputBuilder withResultPath(String resultPath) {
-		this.resultPath = resultPath;
+		this.result = resultPath;
+		return this;
+	}
+	public OutputBuilder withResult(Object result) {
+		this.result = result;
 		return this;
 	}
 	
@@ -35,7 +39,11 @@ public class OutputBuilder {
 	 * @return
 	 */
 	public OutputBuilder withOutputPath(String outputPath) {
-		this.outputPath = outputPath;
+		this.output = outputPath;
+		return this;
+	}
+	public OutputBuilder withOutput(Object output) {
+		this.output = output;
 		return this;
 	}
 	
@@ -50,6 +58,7 @@ public class OutputBuilder {
 	}
 	
 	/**
+	 * If there is hard-coded result => Use it.
 	 * 
 	 * @return
 	 */
@@ -57,32 +66,57 @@ public class OutputBuilder {
 		return new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
-				//USING REAL RESULT IF NOT OVERRIDE
-				Object finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
+				Object finalResult;
+				
+				//FILTER RESULT
+				String resultPath = JsonPath.ROOT;
+				if(result == null) {
+					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
+				} else if(result instanceof String && JsonPath.is((String)result)){
+					resultPath = (String)result;
+					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
+				} else {
+					finalResult = compileResult(new JsonPath(context.getParameters()));
+				}
 				
 				//PROCESS RESULT
 				if(finalResult != null) {
-					//DISCARD RESULT IF NO PATH
-					if(Objects.isEmpty(resultPath)) {
-						finalResult = context.getParameters();
-					} else {
-						finalResult = new JsonPath(context.getParameters()).merge(resultPath, finalResult);
-					}
+					finalResult = new JsonPath(context.getParameters()).merge(resultPath, finalResult);
 				} else {
 					finalResult = context.getParameters();
 				}
 				
-				//EMPTY OUTPUT IF NULL
-				finalResult = new JsonPath(finalResult).select(outputPath);
-				
-				//EMPTY IF GOT NOTHING
-				if(finalResult == null) {
-					finalResult = new Dictionary();
+				//FILTER OUTPUT
+				if(output == null) {
+					output = finalResult;
+				} else if(output instanceof String && JsonPath.is((String)output)) {
+					finalResult = new JsonPath(finalResult).select((String)output);
+				} else {
+					output = compileOutput(new JsonPath(finalResult));
 				}
+				
 				//SET BACK RESULT
-				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult);
+				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult == null? new Dictionary() : finalResult);
 				return TransitionBuilder.success(next);
 			}
 		};
+	}
+	
+	/**
+	 * 
+	 * @param jsonPath
+	 * @return
+	 */
+	protected Object compileResult(JsonPath jsonPath) {
+		return new JsonTemplate(jsonPath).compile(result);
+	}
+	
+	/**
+	 * 
+	 * @param jsonPath
+	 * @return
+	 */
+	protected Object compileOutput(JsonPath jsonPath) {
+		return new JsonTemplate(jsonPath).compile(output);
 	}
 }
