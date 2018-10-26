@@ -7,8 +7,16 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateContext {
-	public static final String RESULT_ATTRIBUTE = "State.Result";
+	public static final String ATTRIBUTE_RESULT = "stateResult";
+	public static final String ATTRIBUTE_ERROR 	= "stateError";
 	
+	//BUILT-IN ERROR
+	public static final String ERROR_ALL 	   		= "States.ALL";
+	public static final String ERROR_TIMEOUT 		= "States.Timeout";
+	public static final String ERROR_NOT_FOUND 		= "States.NotFound";
+	public static final String ERROR_NOT_RETRYABLE 	= "States.NotRetryable";
+	public static final String ERROR_JSON_CONVERTER	= "States.JsonConverter";
+		
 	/**
 	 * return execution ID;
 	 * 

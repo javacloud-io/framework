@@ -10,5 +10,5 @@ public interface StateFunction extends StateHandler<Object>, StateHandler.InputH
 	 * Generic InputHandler need type for conversion
 	 * @return
 	 */
-	public Class<?> getHandlerType();
+	public Class<?> getParametersType();
 }

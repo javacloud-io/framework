@@ -12,7 +12,8 @@ import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.Pair;
 
 /**
- * https://goessner.net/articles/JsonPath
+ * Implements JsonPath spec: https://goessner.net/articles/JsonPath
+ * Also supporting {}
  * 
  * @author ho
  *
@@ -83,6 +84,15 @@ public class JsonPath {
 			}
 		}
 		return Objects.cast(dict);
+	}
+	
+	/**
+	 * Compile the input with substitution from ROOT
+	 * 
+	 * @return
+	 */
+	public <T, V> T compile(V value) {
+		return Objects.cast(value);
 	}
 	
 	/**

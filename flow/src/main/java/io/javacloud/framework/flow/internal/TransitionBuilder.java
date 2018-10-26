@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.builder;
+package io.javacloud.framework.flow.internal;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
@@ -131,7 +131,18 @@ public class TransitionBuilder {
 	 * @return
 	 */
 	public static StateHandler.Status success(StateContext context, Object result) {
-		context.setAttribute(StateContext.RESULT_ATTRIBUTE, result);
+		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
 		return StateHandler.Status.SUCCESS;
+	}
+	
+	/**
+	 * 
+	 * @param context
+	 * @param error
+	 * @return
+	 */
+	public static StateHandler.Status failure(StateContext context, String error) {
+		context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
+		return StateHandler.Status.FAILURE;
 	}
 }

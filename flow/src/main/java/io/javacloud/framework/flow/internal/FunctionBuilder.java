@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.builder;
+package io.javacloud.framework.flow.internal;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -146,7 +146,7 @@ public class FunctionBuilder {
 			}
 			
 			@Override
-			public Class<?> getHandlerType() {
+			public Class<?> getParametersType() {
 				if(stateHandler != null) {
 					ParameterizedType type = (ParameterizedType)stateHandler.getClass().getGenericInterfaces()[0];
 					return (Class<?>)type.getActualTypeArguments()[0];

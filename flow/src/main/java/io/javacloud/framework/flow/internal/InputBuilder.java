@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.builder;
+package io.javacloud.framework.flow.internal;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
@@ -10,6 +10,7 @@ import io.javacloud.framework.json.internal.JsonPath;
  */
 public class InputBuilder {
 	private String 		inputPath	= JsonPath.ROOT;
+	private Object		input;	//default input object
 	public InputBuilder() {
 	}
 	
@@ -25,13 +26,27 @@ public class InputBuilder {
 	
 	/**
 	 * 
+	 * @param input
+	 * @return
+	 */
+	public <T> InputBuilder withInput(T input) {
+		this.input = input;
+		return this;
+	}
+	
+	/**
+	 * 
 	 * @return
 	 */
 	public StateHandler.InputHandler<?> build() {
 		return new StateHandler.InputHandler<Object>() {
 			@Override
 			public Object onInput(StateContext context) {
-				return new JsonPath(context.getParameters()).select(inputPath);
+				JsonPath jsonPath = new JsonPath(context.getParameters());
+				if(input != null) {
+					return jsonPath.compile(input);
+				}
+				return jsonPath.select(inputPath);
 			}
 		};
 	}

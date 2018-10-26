@@ -6,6 +6,7 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateHandler<T> {
+	//STATUS
 	public enum Status {
 		SUCCESS,
 		FAILURE,

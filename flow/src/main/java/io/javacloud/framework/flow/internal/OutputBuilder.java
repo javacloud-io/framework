@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.builder;
+package io.javacloud.framework.flow.internal;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
@@ -14,7 +14,11 @@ import io.javacloud.framework.util.Objects;
  */
 public class OutputBuilder {
 	private String resultPath = JsonPath.ROOT;
+	private Object result;
+	
 	private String outputPath = JsonPath.ROOT;
+	private Object output;
+	
 	private String next;
 	public OutputBuilder() {	
 	}
@@ -40,6 +44,26 @@ public class OutputBuilder {
 	
 	/**
 	 * 
+	 * @param result
+	 * @return
+	 */
+	public <T> OutputBuilder withResult(T result) {
+		this.result = result;
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param output
+	 * @return
+	 */
+	public <T> OutputBuilder withOutput(T output) {
+		this.output = output;
+		return this;
+	}
+	
+	/**
+	 * 
 	 * @param next
 	 * @return
 	 */
@@ -56,25 +80,38 @@ public class OutputBuilder {
 		return new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
-				Object result = context.getAttribute(StateContext.RESULT_ATTRIBUTE);
-				if(result != null) {
+				//USING REAL RESULT IF NOT OVERRIDE
+				Object finalResult = result;
+				if(finalResult == null) {
+					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
+				}
+				
+				//PROCESS RESULT
+				if(finalResult != null) {
 					//DISCARD RESULT IF NO PATH
 					if(Objects.isEmpty(resultPath)) {
-						result = context.getParameters();
+						finalResult = context.getParameters();
 					} else {
-						result = new JsonPath(context.getParameters()).merge(resultPath, result);
+						finalResult = new JsonPath(context.getParameters()).merge(resultPath, result);
 					}
 				} else {
-					result = context.getParameters();
+					finalResult = context.getParameters();
 				}
 				
 				//EMPTY OUTPUT IF NULL
-				result = new JsonPath(result).select(outputPath);
-				if(result == null) {
-					result = new Dictionary();
+				JsonPath jsonPath = new JsonPath(finalResult);
+				if(output != null) {
+					finalResult = jsonPath.compile(output);
+				} else {
+					finalResult = jsonPath.select(outputPath);
+				}
+				
+				//EMPTY IF GOT NOTHING
+				if(finalResult == null) {
+					finalResult = new Dictionary();
 				}
 				//SET BACK RESULT
-				TransitionBuilder.success(context, result);
+				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult);
 				return TransitionBuilder.success(next);
 			}
 		};

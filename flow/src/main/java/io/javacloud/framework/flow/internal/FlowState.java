@@ -113,11 +113,20 @@ public class FlowState {
 	}
 	
 	/**
+	 * 
+	 * @param name
+	 * @param attribute
+	 */
+	<T> void setAttribute(String name, T attribute) {
+		attributes.set(name, attribute);
+	}
+	
+	/**
 	 * The result of final state is RESULT or INPUT
 	 * @return
 	 */
 	public <T> T result() {
-		Object result = attributes.get(StateContext.RESULT_ATTRIBUTE);
+		Object result = attributes.get(StateContext.ATTRIBUTE_RESULT);
 		if(result == null) {
 			result = parameters;
 		}

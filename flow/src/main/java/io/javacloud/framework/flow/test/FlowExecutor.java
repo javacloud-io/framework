@@ -3,9 +3,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.StateTransition;
-import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
+import io.javacloud.framework.flow.internal.TransitionBuilder;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
