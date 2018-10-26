@@ -7,8 +7,8 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateContext {
-	public static final String ATTRIBUTE_RESULT = "stateResult";
-	public static final String ATTRIBUTE_ERROR 	= "stateError";
+	public static final String ATTRIBUTE_RESULT 	= "StateResult";
+	public static final String ATTRIBUTE_ERROR 		= "StateError";
 	
 	//BUILT-IN ERROR
 	public static final String ERROR_ALL 	   		= "States.ALL";
