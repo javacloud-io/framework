@@ -16,8 +16,8 @@ public class FlowContext implements StateContext {
 	}
 	
 	@Override
-	public String getFlowId() {
-		return state.getFlowId();
+	public String getInstanceId() {
+		return state.getInstanceId();
 	}
 
 	@Override

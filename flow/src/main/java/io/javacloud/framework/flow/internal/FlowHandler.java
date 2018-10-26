@@ -3,6 +3,7 @@ package io.javacloud.framework.flow.internal;
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateTransition;
+import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Dictionary;

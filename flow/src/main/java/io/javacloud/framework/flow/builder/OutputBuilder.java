@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.internal;
+package io.javacloud.framework.flow.builder;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
@@ -14,10 +14,7 @@ import io.javacloud.framework.util.Objects;
  */
 public class OutputBuilder {
 	private String resultPath = JsonPath.ROOT;
-	private Object result;
-	
 	private String outputPath = JsonPath.ROOT;
-	private Object output;
 	
 	private String next;
 	public OutputBuilder() {	
@@ -44,26 +41,6 @@ public class OutputBuilder {
 	
 	/**
 	 * 
-	 * @param result
-	 * @return
-	 */
-	public <T> OutputBuilder withResult(T result) {
-		this.result = result;
-		return this;
-	}
-	
-	/**
-	 * 
-	 * @param output
-	 * @return
-	 */
-	public <T> OutputBuilder withOutput(T output) {
-		this.output = output;
-		return this;
-	}
-	
-	/**
-	 * 
 	 * @param next
 	 * @return
 	 */
@@ -81,10 +58,7 @@ public class OutputBuilder {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
 				//USING REAL RESULT IF NOT OVERRIDE
-				Object finalResult = result;
-				if(finalResult == null) {
-					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
-				}
+				Object finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
 				
 				//PROCESS RESULT
 				if(finalResult != null) {
@@ -92,19 +66,14 @@ public class OutputBuilder {
 					if(Objects.isEmpty(resultPath)) {
 						finalResult = context.getParameters();
 					} else {
-						finalResult = new JsonPath(context.getParameters()).merge(resultPath, result);
+						finalResult = new JsonPath(context.getParameters()).merge(resultPath, finalResult);
 					}
 				} else {
 					finalResult = context.getParameters();
 				}
 				
 				//EMPTY OUTPUT IF NULL
-				JsonPath jsonPath = new JsonPath(finalResult);
-				if(output != null) {
-					finalResult = jsonPath.compile(output);
-				} else {
-					finalResult = jsonPath.select(outputPath);
-				}
+				finalResult = new JsonPath(finalResult).select(outputPath);
 				
 				//EMPTY IF GOT NOTHING
 				if(finalResult == null) {

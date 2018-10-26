@@ -15,7 +15,7 @@ public class FlowState {
 	private int  	retryCount;
 	private String 	stackTrace;
 	
-	private String 	flowId;
+	private String 	instanceId;
 	private boolean failed;
 	
 	//INPUT/OUTPUT
@@ -72,11 +72,11 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public String getFlowId() {
-		return flowId;
+	public String getInstanceId() {
+		return instanceId;
 	}
-	public void setFlowId(String flowId) {
-		this.flowId = flowId;
+	public void setInstanceId(String instanceId) {
+		this.instanceId = instanceId;
 	}
 	
 	/**

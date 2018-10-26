@@ -87,15 +87,6 @@ public class JsonPath {
 	}
 	
 	/**
-	 * Compile the input with substitution from ROOT
-	 * 
-	 * @return
-	 */
-	public <T, V> T compile(V value) {
-		return Objects.cast(value);
-	}
-	
-	/**
 	 * [1] based index
 	 * @param path
 	 * @return

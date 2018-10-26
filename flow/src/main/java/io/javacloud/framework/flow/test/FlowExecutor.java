@@ -3,9 +3,9 @@ import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.StateTransition;
+import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
-import io.javacloud.framework.flow.internal.TransitionBuilder;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
@@ -29,7 +29,7 @@ public class FlowExecutor extends FlowHandler {
 	@Override
 	public FlowState start(Object parameters, String startAt) {
 		FlowState state = super.start(parameters, startAt);
-		state.setFlowId(Codecs.randomID());
+		state.setInstanceId(Codecs.randomID());
 		try {
 			execute(state);
 		} finally {

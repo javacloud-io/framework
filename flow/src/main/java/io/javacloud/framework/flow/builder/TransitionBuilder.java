@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.internal;
+package io.javacloud.framework.flow.builder;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;

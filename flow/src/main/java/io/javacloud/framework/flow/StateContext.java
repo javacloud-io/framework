@@ -22,7 +22,7 @@ public interface StateContext {
 	 * 
 	 * @return
 	 */
-	public String getFlowId();
+	public String getInstanceId();
 	
 	/**
 	 * return initial/raw INPUT parameters: String, Number, Dictionary...

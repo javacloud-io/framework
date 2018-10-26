@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.internal;
+package io.javacloud.framework.flow.builder;
 
 import java.util.HashMap;
 import java.util.Map;
