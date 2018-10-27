@@ -1,11 +1,13 @@
 package io.javacloud.framework.flow.builder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
+import io.javacloud.framework.flow.spec.StateSpec;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -22,53 +24,7 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class RetryBuilder {
-	public static class Retrier implements StateTransition.Retry {
-		private int timeoutSeconds	= -1;
-		private int maxAttempts		= 0;
-		private int intervalSeconds	= 5;
-		private double backoffRate 	= 1.0;
-		
-		@Override
-		public boolean isEnd() {
-			return false;
-		}
-		@Override
-		public int getMaxAttempts() {
-			return maxAttempts;
-		}
-		public Retrier withMaxAttempts(int maxAttempts) {
-			this.maxAttempts = maxAttempts;
-			return this;
-		}
-		
-		@Override
-		public int getIntervalSeconds() {
-			return intervalSeconds;
-		}
-		public Retrier withIntervalSeconds(int intervalSeconds) {
-			this.intervalSeconds = intervalSeconds;
-			return this;
-		}
-		
-		@Override
-		public double getBackoffRate() {
-			return backoffRate;
-		}
-		public Retrier withBackoffRate(int backoffRate) {
-			this.backoffRate = backoffRate;
-			return this;
-		}
-		
-		@Override
-		public int getTimeoutSeconds() {
-			return timeoutSeconds;
-		}
-		public Retrier withTimeoutSeconds(int timeoutSeconds) {
-			this.timeoutSeconds = timeoutSeconds;
-			return this;
-		}
-	}
-	private Map<String, Retrier> retriers;
+	private Map<String, StateSpec.Retrier> retriers;
 	public RetryBuilder() {
 	}
 	
@@ -78,16 +34,35 @@ public class RetryBuilder {
 	 * @param errors
 	 * @return
 	 */
-	public RetryBuilder withRetrier(Retrier retrier, String... errors) {
+	public RetryBuilder withRetrier(StateSpec.Retrier retrier, String... errors) {
 		if(retriers == null) {
 			retriers = new HashMap<>();
 		}
+		//ADD EQUAL ERRORS
 		if(Objects.isEmpty(errors)) {
-			retriers.put(StateHandler.ERROR_ALL, retrier);
+			if(Objects.isEmpty(retrier.getErrorEquals())) {
+				retriers.put(StateHandler.ERROR_ALL, retrier);
+			} else {
+				for(String error: retrier.getErrorEquals()) {
+					retriers.put(error, retrier);
+				}
+			}
 		} else {
 			for(String error: errors) {
 				retriers.put(error, retrier);
 			}
+		}
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param retriers
+	 * @return
+	 */
+	public RetryBuilder withRetriers(List<StateSpec.Retrier> retriers) {
+		for(StateSpec.Retrier retrier: retriers) {
+			withRetrier(retrier);
 		}
 		return this;
 	}
@@ -101,7 +76,7 @@ public class RetryBuilder {
 			@Override
 			public StateTransition onRetry(StateContext context) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
-				Retrier retrier = null;
+				StateSpec.Retrier retrier = null;
 				if(error != null) {
 					retrier = (retriers == null? null : retriers.get(error));
 				}

@@ -137,7 +137,7 @@ public class UncheckedException extends RuntimeException {
 		if(cause instanceof UncheckedException) {
 			return ((UncheckedException)cause).getCode();
 		}
-		return crc32Code(cause);
+		return cause.getClass().getName();
 	}
 	
 	/**

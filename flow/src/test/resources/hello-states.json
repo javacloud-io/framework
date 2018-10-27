@@ -1,0 +1,10 @@
+{
+    "Comment": "Hello world",
+    "StartAt": "hello",
+    "States" : {
+        "hello": {
+            "Type": "Task",
+            "Resource": "java:io.javacloud.HelloWorld"
+        }
+    }
+}
