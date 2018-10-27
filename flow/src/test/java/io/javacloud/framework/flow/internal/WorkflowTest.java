@@ -38,7 +38,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
 		Dictionary result = state.result();
 		
 		Assert.assertFalse(state.isFailed());
@@ -64,7 +64,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
 		Dictionary result = state.result();
 		
 		Assert.assertTrue(state.isFailed());
@@ -94,7 +94,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.run(workflow, Dictionaries.asDict("a", "b"));
+		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
 		Dictionary result = state.result();
 		
 		Assert.assertFalse(state.isFailed());

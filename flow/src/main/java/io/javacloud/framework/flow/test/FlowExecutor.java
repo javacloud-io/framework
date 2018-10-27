@@ -67,7 +67,7 @@ public class FlowExecutor extends FlowHandler {
 	 * @param parameters
 	 * @return
 	 */
-	public static FlowState run(StateMachine stateMachine, Dictionary parameters) {
+	public static FlowState start(StateMachine stateMachine, Dictionary parameters) {
 		return new FlowExecutor(stateMachine).start(parameters);
 	}
 }
