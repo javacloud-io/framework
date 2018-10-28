@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.spec;
+package io.javacloud.framework.flow.spi;
 
 import java.util.List;
 
@@ -16,11 +16,9 @@ public class StateSpec {
 	public static enum Type {
 		Task,
 		Pass,
-		
 		Wait,
 		Succeed,
 		Fail,
-		
 		Choice,
 		Parallel
 	}

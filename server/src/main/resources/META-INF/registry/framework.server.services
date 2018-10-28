@@ -1,7 +1,6 @@
 # Default framework server registry
 #
 #
-framework.common.services
 framework.json.services
 framework.config.services
 framework.client.services

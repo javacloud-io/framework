@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.spec;
+package io.javacloud.framework.flow.spi;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -6,6 +6,10 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * Implement Amazon States Language https://states-language.net/spec.html with extension:
+ * 
+ * 1. Allows to compile Input/Result/Output as JSON not just JsonPath
+ * 2. 
  * 
  * @author ho
  *

@@ -9,7 +9,7 @@ import io.javacloud.framework.flow.StateMachine;
 import io.javacloud.framework.flow.builder.FlowBuilder;
 import io.javacloud.framework.flow.builder.RetryBuilder;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
-import io.javacloud.framework.flow.spec.StateSpec;
+import io.javacloud.framework.flow.spi.StateSpec;
 import io.javacloud.framework.flow.test.FlowExecutor;
 import io.javacloud.framework.util.Dictionaries;
 import io.javacloud.framework.util.Dictionary;
