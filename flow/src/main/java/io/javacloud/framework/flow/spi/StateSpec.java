@@ -164,6 +164,24 @@ public abstract class StateSpec {
 		}
 	}
 	
+	public static class Expr {
+		@JsonProperty("Variable")
+		private String variable;
+	}
+	
+	public static class Rule implements StateTransition.Success {
+		@JsonProperty("Next")
+		private String next;
+		@Override
+		public boolean isEnd() {
+			return false;
+		}
+
+		@Override
+		public String getNext() {
+			return next;
+		}
+	}
 	@JsonProperty("Type")
 	private Type 	type;
 	
@@ -284,6 +302,8 @@ public abstract class StateSpec {
 	
 	//PASS
 	public static class Pass extends StateSpec {
+		public Pass() {
+		}
 	}
 		
 	//WAIT
@@ -293,10 +313,14 @@ public abstract class StateSpec {
 		
 		@JsonProperty("Timestamp")
 		private Object timestamp;
+		public Wait() {
+		}
 	}
 	
 	//SUCCEED
 	public static class Succeed extends StateSpec {
+		public Succeed() {
+		}
 	}
 	
 	//FAIL
@@ -306,13 +330,23 @@ public abstract class StateSpec {
 		
 		@JsonProperty("Cause")
 		private String cause;
+		public Fail() {
+		}
 	}
 	
 	//CHOICE
 	public static class Choice extends StateSpec {
+		@JsonProperty("Choices")
+		private List<Rule> rules;
+		public Choice() {
+		}
 	}
 	
 	//PARALLEL
 	public static class Parallel extends StateSpec {
+		@JsonProperty("Branches")
+		private List<FlowSpec> branches;
+		public Parallel() {
+		}
 	}
 }
