@@ -3,6 +3,8 @@ package io.javacloud.framework.flow.spi;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.util.Objects;
@@ -12,7 +14,17 @@ import io.javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class StateSpec {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "Type")
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = StateSpec.Task.class, 	name = "Task"),
+	@JsonSubTypes.Type(value = StateSpec.Pass.class, 	name = "Pass"),
+	@JsonSubTypes.Type(value = StateSpec.Wait.class, 	name = "Wait"),
+	@JsonSubTypes.Type(value = StateSpec.Succeed.class, name = "Succeed"),
+	@JsonSubTypes.Type(value = StateSpec.Fail.class, 	name = "Fail"),
+	@JsonSubTypes.Type(value = StateSpec.Choice.class, 	name = "Choice"),
+	@JsonSubTypes.Type(value = StateSpec.Parallel.class,name = "Parallel")
+})
+public abstract class StateSpec {
 	public static enum Type {
 		Task,
 		Pass,
@@ -155,9 +167,6 @@ public class StateSpec {
 	@JsonProperty("Type")
 	private Type 	type;
 	
-	@JsonProperty("Resource")
-	private String	resource;
-	
 	@JsonProperty("Input")
 	private Object	input;
 	
@@ -186,13 +195,6 @@ public class StateSpec {
 	}
 	public void setType(Type type) {
 		this.type = type;
-	}
-	
-	public String getResource() {
-		return resource;
-	}
-	public void setResource(String resource) {
-		this.resource = resource;
 	}
 	
 	public Object getInput() {
@@ -242,5 +244,75 @@ public class StateSpec {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	
+	//SUBTYPE
+	//TASK
+	public static class Task extends StateSpec {
+		@JsonProperty("Resource")
+		private String	resource;
+		
+		@JsonProperty("TimeoutSeconds")
+		private int timeoutSeconds;
+		
+		@JsonProperty("HeartbeatSeconds")
+		private int heartbeatSeconds;
+		
+		public Task() {
+		}
+		public String getResource() {
+			return resource;
+		}
+		public void setResource(String resource) {
+			this.resource = resource;
+		}
+		
+		public int getTimeoutSeconds() {
+			return timeoutSeconds;
+		}
+		public void setTimeoutSeconds(int timeoutSeconds) {
+			this.timeoutSeconds = timeoutSeconds;
+		}
+		
+		public int getHeartbeatSeconds() {
+			return heartbeatSeconds;
+		}
+		public void setHeartbeatSeconds(int heartbeatSeconds) {
+			this.heartbeatSeconds = heartbeatSeconds;
+		}
+	}
+	
+	//PASS
+	public static class Pass extends StateSpec {
+	}
+		
+	//WAIT
+	public static class Wait extends StateSpec {
+		@JsonProperty("Seconds")
+		private int seconds;
+		
+		@JsonProperty("Timestamp")
+		private Object timestamp;
+	}
+	
+	//SUCCEED
+	public static class Succeed extends StateSpec {
+	}
+	
+	//FAIL
+	public static class Fail extends StateSpec {
+		@JsonProperty("Error")
+		private String error;
+		
+		@JsonProperty("Cause")
+		private String cause;
+	}
+	
+	//CHOICE
+	public static class Choice extends StateSpec {
+	}
+	
+	//PARALLEL
+	public static class Parallel extends StateSpec {
 	}
 }
