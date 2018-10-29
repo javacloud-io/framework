@@ -28,8 +28,9 @@ public abstract class RuleSpec implements StateTransition.Success {
 		return next;
 	}
 	
+	//
 	//Operator: Values
-	public static class Condition {
+	public static abstract class Condition {
 		@JsonProperty("Variable")
 		private String variable;
 		protected Condition() {
