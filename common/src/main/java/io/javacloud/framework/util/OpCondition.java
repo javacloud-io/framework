@@ -18,7 +18,7 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	    BETWEEN,
 	    NULL,
 	    NOT_NULL,
-	    STARTS_WITH;
+	    STARTS_WITH
 	}
 	private Op	op;		//range key comparator
 	protected T[] values;//which range keys

@@ -164,35 +164,29 @@ public abstract class StateSpec {
 		}
 	}
 	
-	public static class Expr {
-		@JsonProperty("Variable")
-		private String variable;
-	}
-	
-	public static class Rule implements StateTransition.Success {
-		@JsonProperty("Next")
-		private String next;
-		@Override
-		public boolean isEnd() {
-			return false;
-		}
-
-		@Override
-		public String getNext() {
-			return next;
-		}
-	}
 	@JsonProperty("Type")
 	private Type 	type;
 	
 	@JsonProperty("Input")
 	private Object	input;
 	
+	//DEPRECATED, USING Input INSTEAD
+	@JsonProperty("InputPath")
+	private String	inputPath;
+	
 	@JsonProperty("Result")
 	private Object	result;
 	
+	//DEPRECATED, USING Result INSTEAD
+	@JsonProperty("ResultPath")
+	private String	resultPath;
+	
 	@JsonProperty("Output")
 	private Object	output;
+	
+	//DEPRECATED, USING Output INSTEAD
+	@JsonProperty("OutputPath")
+	private String	ouputPath;
 	
 	@JsonProperty("Next")
 	private String next;
@@ -337,7 +331,7 @@ public abstract class StateSpec {
 	//CHOICE
 	public static class Choice extends StateSpec {
 		@JsonProperty("Choices")
-		private List<Rule> rules;
+		private List<ChoiceRule> rules;
 		public Choice() {
 		}
 	}
