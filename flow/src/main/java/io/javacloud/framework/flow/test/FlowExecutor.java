@@ -53,7 +53,7 @@ public class FlowExecutor extends FlowHandler {
 				return TransitionBuilder.failure();
 			}
 			//TAKE NAP & RE-TRY
-			Objects.sleep(delaySeconds, TimeUnit.MILLISECONDS);
+			Objects.sleep(delaySeconds, TimeUnit.SECONDS);
 			return	execute(state);
 		}
 		//TAKE NAP & EXECUTE NEXT

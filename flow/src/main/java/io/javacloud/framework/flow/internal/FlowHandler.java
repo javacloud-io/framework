@@ -96,11 +96,13 @@ public class FlowHandler {
 	 * @return 0: timeout, -1: can't retry
 	 */
 	public int retry(FlowState state, StateTransition.Retry transition) {
-		int retryCount = state.getRetryCount();
-		if(retryCount < transition.getMaxAttempts()) {
-			long maxTimeout = transition.getTimeoutSeconds() * 1000L;
+		int maxAttempts= transition.getMaxAttempts();
+		long maxTimeout= transition.getTimeoutSeconds() * 1000L;
+		if(maxAttempts > 0 || maxTimeout > 0) {
+			int retryCount = state.getRetryCount();
 			//TIMEOUT => FAILED [0]
-			if(maxTimeout >= 0 && (state.getStartedAt() + maxTimeout) >= System.currentTimeMillis()) {
+			if((maxAttempts > 0 && retryCount > maxAttempts) || 
+			   (maxTimeout  > 0 && System.currentTimeMillis() > (state.getStartedAt() + maxTimeout))) {
 				state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
 				state.setFailed(true);
 				return 0;
@@ -205,7 +207,7 @@ public class FlowHandler {
 			if(ex != null) {
 				//IF ERROR CODE IS NOT SET => USING CLASS NAME
 				if(context.getAttribute(StateContext.ATTRIBUTE_ERROR) == null) {
-					context.setAttribute(StateContext.ATTRIBUTE_ERROR, ex.getClass().getName());
+					context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.resolveCode(ex));
 				}
 				context.state.setStackTrace(UncheckedException.toStackTrace(ex));
 			}
