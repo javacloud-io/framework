@@ -55,7 +55,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public String getValue() {
 			return value;
 		}
 	}
@@ -67,7 +67,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public String getValue() {
 			return value;
 		}
 	}
@@ -79,7 +79,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public String getValue() {
 			return value;
 		}
 	}
@@ -91,7 +91,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public String getValue() {
 			return value;
 		}
 	}
@@ -103,7 +103,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public String getValue() {
 			return value;
 		}
 	}
@@ -116,7 +116,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Number getValue() {
 			return value;
 		}
 	}
@@ -128,7 +128,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Number getValue() {
 			return value;
 		}
 	}
@@ -140,7 +140,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Number getValue() {
 			return value;
 		}
 	}
@@ -152,7 +152,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Number getValue() {
 			return value;
 		}
 	}
@@ -164,7 +164,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Number getValue() {
 			return value;
 		}
 	}
@@ -177,7 +177,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Boolean getValue() {
 			return value;
 		}
 	}
@@ -190,7 +190,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Date getValue() {
 			return value;
 		}
 	}
@@ -202,7 +202,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Date getValue() {
 			return value;
 		}
 	}
@@ -214,7 +214,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Date getValue() {
 			return value;
 		}
 	}
@@ -226,7 +226,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Date getValue() {
 			return value;
 		}
 	}
@@ -238,7 +238,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.value = value;
 		}
 		@Override
-		public Object getValue() {
+		public Date getValue() {
 			return value;
 		}
 	}
@@ -251,6 +251,9 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(next);
 			this.conditions = conditions;
 		}
+		public List<Condition> getConditions() {
+			return conditions;
+		}
 	}
 	public static class Or extends RuleSpec {
 		@JsonProperty("Or")
@@ -259,6 +262,9 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(next);
 			this.conditions = conditions;
 		}
+		public List<Condition> getConditions() {
+			return conditions;
+		}
 	}
 	public static class Not extends RuleSpec {
 		@JsonProperty("Not")
@@ -266,6 +272,9 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public Not(String next, Condition condition) {
 			super(next);
 			this.condition = condition;
+		}
+		public Condition getCondition() {
+			return condition;
 		}
 	}
 	
