@@ -4,7 +4,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * Implement Amazon States Language https://states-language.net/spec.html with extension:
@@ -23,7 +22,6 @@ public class FlowSpec {
 	private String startAt;
 	
 	@JsonProperty("States")
-	@JsonDeserialize(as=LinkedHashMap.class, keyAs=String.class, contentAs=StateSpec.class)
 	private Map<String, StateSpec> states;
 	public FlowSpec() {
 	}

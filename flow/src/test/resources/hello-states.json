@@ -4,7 +4,39 @@
     "States" : {
         "hello": {
             "Type": "Task",
-            "Resource": "java:io.javacloud.HelloWorld"
+            "Resource": "java:io.javacloud.HelloWorld",
+            "Next": "choice"
+        },
+        "choice": {
+            "Type" : "Choice",
+            "Choices": [
+                {
+                    "Not": {
+                        "Variable": "$.type",
+                        "StringEquals": "Private"
+                    }
+                },
+                {
+                    "And": [{
+                        "Variable": "$.type",
+                        "StringLessThanEquals": "Private"
+                    },
+                    {
+                        "Variable": "$.type",
+                        "StringEquals": "Private"
+                    }]
+                },
+                {
+                    "Or": [{
+                        "Variable": "$.type",
+                        "StringLessThanEquals": "Private"
+                    },
+                    {
+                        "Variable": "$.type",
+                        "StringEquals": "Private"
+                    }]
+                }
+            ]
         }
     }
 }
