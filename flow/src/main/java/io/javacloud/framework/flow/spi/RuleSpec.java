@@ -44,6 +44,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public String getVariable() {
 			return variable;
 		}
+		public abstract Object getValue();
 	}
 	
 	public static class StringEquals extends Condition {
@@ -53,6 +54,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class StringLessThan extends Condition {
 		@JsonProperty("StringLessThan")
@@ -60,6 +65,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public StringLessThan(String variable, String value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	public static class StringGreaterThan extends Condition {
@@ -69,6 +78,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class StringLessThanEquals extends Condition {
 		@JsonProperty("StringLessThanEquals")
@@ -77,6 +90,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class StringGreaterThanEquals extends Condition {
 		@JsonProperty("StringGreaterThanEquals")
@@ -84,6 +101,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public StringGreaterThanEquals(String variable, String value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	
@@ -94,6 +115,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class NumericLessThan extends Condition {
 		@JsonProperty("NumericLessThan")
@@ -101,6 +126,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public NumericLessThan(String variable, Number value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	public static class NumericGreaterThan extends Condition {
@@ -110,6 +139,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class NumericLessThanEquals extends Condition {
 		@JsonProperty("NumericLessThanEquals")
@@ -118,6 +151,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class NumericGreaterThanEquals extends Condition {
 		@JsonProperty("NumericGreaterThanEquals")
@@ -125,6 +162,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public NumericGreaterThanEquals(String variable, Number value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	
@@ -135,6 +176,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	
 	public static class TimestampEquals extends Condition {
@@ -144,6 +189,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class TimestampLessThan extends Condition {
 		@JsonProperty("TimestampLessThan")
@@ -151,6 +200,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public TimestampLessThan(String variable, Date value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	public static class TimestampGreaterThan extends Condition {
@@ -160,6 +213,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class TimestampLessThanEquals extends Condition {
 		@JsonProperty("TimestampLessThanEquals")
@@ -168,6 +225,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 			super(variable);
 			this.value = value;
 		}
+		@Override
+		public Object getValue() {
+			return value;
+		}
 	}
 	public static class TimestampGreaterThanEquals extends Condition {
 		@JsonProperty("TimestampGreaterThanEquals")
@@ -175,6 +236,10 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public TimestampGreaterThanEquals(String variable, Date value) {
 			super(variable);
 			this.value = value;
+		}
+		@Override
+		public Object getValue() {
+			return value;
 		}
 	}
 	

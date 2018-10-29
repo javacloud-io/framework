@@ -309,6 +309,19 @@ public abstract class StateSpec {
 		private Object timestamp;
 		public Wait() {
 		}
+		public int getSeconds() {
+			return seconds;
+		}
+		public void setSeconds(int seconds) {
+			this.seconds = seconds;
+		}
+		
+		public Object getTimestamp() {
+			return timestamp;
+		}
+		public void setTimestamp(Object timestamp) {
+			this.timestamp = timestamp;
+		}
 	}
 	
 	//SUCCEED
@@ -326,6 +339,19 @@ public abstract class StateSpec {
 		private String cause;
 		public Fail() {
 		}
+		public String getError() {
+			return error;
+		}
+		public void setError(String error) {
+			this.error = error;
+		}
+		
+		public String getCause() {
+			return cause;
+		}
+		public void setCause(String cause) {
+			this.cause = cause;
+		}
 	}
 	
 	//CHOICE
@@ -334,6 +360,12 @@ public abstract class StateSpec {
 		private List<RuleSpec> rules;
 		public Choice() {
 		}
+		public List<RuleSpec> getRules() {
+			return rules;
+		}
+		public void setRules(List<RuleSpec> rules) {
+			this.rules = rules;
+		}
 	}
 	
 	//PARALLEL
@@ -341,6 +373,12 @@ public abstract class StateSpec {
 		@JsonProperty("Branches")
 		private List<FlowSpec> branches;
 		public Parallel() {
+		}
+		public List<FlowSpec> getBranches() {
+			return branches;
+		}
+		public void setBranches(List<FlowSpec> branches) {
+			this.branches = branches;
 		}
 	}
 }
