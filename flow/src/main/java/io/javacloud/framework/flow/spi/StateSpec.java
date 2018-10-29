@@ -339,7 +339,7 @@ public abstract class StateSpec {
 	//PARALLEL
 	public static class Parallel extends StateSpec {
 		@JsonProperty("Branches")
-		private List<FlowSpec> branches;
+		private List<MachineSpec> branches;
 		public Parallel() {
 		}
 	}
