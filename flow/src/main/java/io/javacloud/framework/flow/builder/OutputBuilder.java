@@ -21,13 +21,9 @@ public class OutputBuilder {
 	}
 	/**
 	 * 
-	 * @param resultPath
+	 * @param result
 	 * @return
 	 */
-	public OutputBuilder withResultPath(String resultPath) {
-		this.result = resultPath;
-		return this;
-	}
 	public OutputBuilder withResult(Object result) {
 		this.result = result;
 		return this;
@@ -35,13 +31,9 @@ public class OutputBuilder {
 	
 	/**
 	 * 
-	 * @param outputPath
+	 * @param output
 	 * @return
 	 */
-	public OutputBuilder withOutputPath(String outputPath) {
-		this.output = outputPath;
-		return this;
-	}
 	public OutputBuilder withOutput(Object output) {
 		this.output = output;
 		return this;

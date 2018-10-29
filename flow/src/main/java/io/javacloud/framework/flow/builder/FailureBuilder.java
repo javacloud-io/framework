@@ -58,7 +58,7 @@ public class FailureBuilder {
 	 * @param catchers
 	 * @return
 	 */
-	public FailureBuilder withCatchiers(List<StateSpec.Catcher> catchers) {
+	public FailureBuilder withCatchers(List<StateSpec.Catcher> catchers) {
 		for(StateSpec.Catcher catcher: catchers) {
 			withCatcher(catcher);
 		}
