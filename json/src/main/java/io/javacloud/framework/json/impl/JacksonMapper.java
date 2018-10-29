@@ -3,13 +3,11 @@ package io.javacloud.framework.json.impl;
 import io.javacloud.framework.json.JsonValue;
 import io.javacloud.framework.json.internal.JsonValues;
 import io.javacloud.framework.util.DateFormats;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Map;
 
 import javax.inject.Singleton;
 
@@ -90,14 +88,6 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 			public JsonValue deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 				Object value = p.readValueAs(Object.class);
 				return JsonValues.asValue(value);
-			}
-		});
-		
-		//CONVERT MAP TO DICTIONARY
-		module.addDeserializer(Map.class, new StdDeserializer<Dictionary>(Dictionary.class) {
-			@Override
-			public Dictionary deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-				return	p.readValueAs(Dictionary.class);
 			}
 		});
 	}
