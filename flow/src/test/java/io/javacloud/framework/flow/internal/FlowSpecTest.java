@@ -9,7 +9,6 @@ import com.google.inject.Inject;
 
 import io.javacloud.framework.cdi.test.ServiceTest;
 import io.javacloud.framework.flow.spi.FlowSpec;
-import io.javacloud.framework.flow.spi.StateSpec;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.ResourceLoader;
 import org.junit.Assert;
@@ -30,6 +29,6 @@ public class FlowSpecTest extends ServiceTest {
 			flowSpec = externalizer.unmarshal(stream, FlowSpec.class);
 		}
 		Assert.assertNotNull(flowSpec);
-		Assert.assertTrue(flowSpec.getStates().get("hello") instanceof StateSpec.Task);
+		Assert.assertTrue(flowSpec.getStates().get("hello") instanceof FlowSpec.Task);
 	}
 }
