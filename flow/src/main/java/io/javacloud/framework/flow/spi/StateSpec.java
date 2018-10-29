@@ -331,7 +331,7 @@ public abstract class StateSpec {
 	//CHOICE
 	public static class Choice extends StateSpec {
 		@JsonProperty("Choices")
-		private List<ChoiceRule> rules;
+		private List<RuleSpec> rules;
 		public Choice() {
 		}
 	}

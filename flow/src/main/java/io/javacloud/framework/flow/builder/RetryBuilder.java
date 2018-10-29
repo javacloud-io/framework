@@ -61,8 +61,10 @@ public class RetryBuilder {
 	 * @return
 	 */
 	public RetryBuilder withRetriers(List<StateSpec.Retrier> retriers) {
-		for(StateSpec.Retrier retrier: retriers) {
-			withRetrier(retrier);
+		if(!Objects.isEmpty(retriers)) {
+			for(StateSpec.Retrier retrier: retriers) {
+				withRetrier(retrier);
+			}
 		}
 		return this;
 	}

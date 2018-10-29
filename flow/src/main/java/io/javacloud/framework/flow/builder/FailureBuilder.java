@@ -59,8 +59,10 @@ public class FailureBuilder {
 	 * @return
 	 */
 	public FailureBuilder withCatchers(List<StateSpec.Catcher> catchers) {
-		for(StateSpec.Catcher catcher: catchers) {
-			withCatcher(catcher);
+		if(!Objects.isEmpty(catchers)) {
+			for(StateSpec.Catcher catcher: catchers) {
+				withCatcher(catcher);
+			}
 		}
 		return this;
 	}
