@@ -60,9 +60,10 @@ public class FlowExecutor extends FlowHandler {
 		//TAKE NAP & EXECUTE NEXT
 		int delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
 		if(delaySeconds < MIN_DELAY_SECONDS) {
-			delaySeconds = MIN_DELAY_SECONDS;
+			Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
+		} else {
+			Objects.sleep(delaySeconds, TimeUnit.SECONDS);
 		}
-		Objects.sleep(delaySeconds, TimeUnit.MILLISECONDS);
 		return	execute(state);
 	}
 	
