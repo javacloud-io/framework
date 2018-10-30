@@ -1,11 +1,13 @@
 package io.javacloud.framework.flow.internal;
 
+import java.io.IOException;
+
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
-import io.javacloud.framework.flow.StateMachine;
+import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
@@ -24,10 +26,10 @@ import io.javacloud.framework.util.UncheckedException;
 public class FlowHandler {
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
-	private final StateMachine stateMachine;
+	private final StateFlow stateFlow;
 	private final Externalizer externalizer;
-	public FlowHandler(StateMachine stateMachine, Externalizer externalizer) {
-		this.stateMachine = stateMachine;
+	public FlowHandler(StateFlow stateFlow, Externalizer externalizer) {
+		this.stateFlow 	  = stateFlow;
 		this.externalizer = externalizer;
 	}
 	
@@ -42,14 +44,14 @@ public class FlowHandler {
 	
 	/**
 	 * start -> execute
-	 * 
+	 * @param input
 	 * @param startAt;
 	 * @return
 	 */
-	public FlowState start(Object parameters, String startAt) {
+	public FlowState start(Object input, String startAt) {
 		FlowState state = new FlowState();
-		state.setParameters(parameters);
-		return onPrepare(state, Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
+		state.setInput(input);
+		return onPrepare(state, Objects.isEmpty(startAt) ? stateFlow.getStartAt() : startAt);
 	}
 	
 	/**
@@ -64,7 +66,7 @@ public class FlowHandler {
 	 */
 	public StateTransition execute(FlowState state) {
 		FlowContext context = new FlowContext(state);
-		StateFunction function = stateMachine.getState(state.getName());
+		StateFunction function = stateFlow.getState(state.getName());
 		try {
 			Object parameters = onInput(function, context);
 			StateFunction.Status status = function.handle(parameters, context);
@@ -101,7 +103,7 @@ public class FlowHandler {
 			int retryCount = state.getRetryCount();
 			//TIMEOUT => FAILED [0]
 			if(retryCount > maxAttempts) {
-				state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
+				state.getAttributes().set(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
 				state.setFailed(true);
 				return 0;
 			} else {
@@ -111,7 +113,7 @@ public class FlowHandler {
 			}
 		} else {
 			//FAILED[1]
-			state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
+			state.getAttributes().set(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
 			state.setFailed(true);
 		}
 		return -1;
@@ -125,11 +127,11 @@ public class FlowHandler {
 	 */
 	protected FlowState onPrepare(FlowState state, String name) {
 		//AN EMPTY INPUT IF NOT PROVIDED
-		Object parameters = state.getParameters();
-		if(parameters == null) {
-			parameters = new Dictionary();
+		Object input = state.getInput();
+		if(input == null) {
+			input = new Dictionary();
 		}
-		state.setParameters(parameters);
+		state.setInput(input);
 		state.setAttributes(new Dictionary());
 		
 		//RESET OTHERS
@@ -155,7 +157,7 @@ public class FlowHandler {
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
 			try {
 				parameters = new JsonConverter(externalizer).convert(parameters, type);
-			} catch(Exception ex) {
+			} catch(IOException ex) {
 				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
 				throw ex;
 			}
@@ -176,7 +178,7 @@ public class FlowHandler {
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		if(!success.isEnd()) {
 			FlowState state = context.state;
-			state.setParameters(state.result());
+			state.setInput(state.output());
 			onPrepare(state, success.getNext());
 		}
 		return success;
@@ -205,7 +207,7 @@ public class FlowHandler {
 			if(ex != null) {
 				//IF ERROR CODE IS NOT SET => USING CLASS NAME
 				if(context.getAttribute(StateContext.ATTRIBUTE_ERROR) == null) {
-					context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.resolveCode(ex));
+					context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.findReason(ex));
 				}
 				context.state.setStackTrace(UncheckedException.toStackTrace(ex));
 			}

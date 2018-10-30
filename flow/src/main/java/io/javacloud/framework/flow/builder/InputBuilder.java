@@ -51,12 +51,12 @@ public class InputBuilder {
 			@Override
 			public Object onInput(StateContext context) {
 				if(input == null) {
-					return context.getParameters();
+					return context.getInput();
 				}
 				if((input instanceof String) && (JsonPath.is((String)input))) {
-					return new JsonPath(context.getParameters()).select((String)input);
+					return new JsonPath(context.getInput()).select((String)input);
 				}
-				return compileInput(new JsonPath(context.getParameters()));
+				return compileInput(new JsonPath(context.getInput()));
 			}
 		};
 	}

@@ -54,5 +54,9 @@ public interface StateTransition {
 	
 	//FAILURE
 	interface Failure extends StateTransition {
+		@Override
+		default public boolean isEnd() {
+			return true;
+		}
 	}
 }

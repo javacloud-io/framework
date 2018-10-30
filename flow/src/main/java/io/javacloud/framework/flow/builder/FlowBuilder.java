@@ -5,7 +5,7 @@ import java.util.Map;
 
 import io.javacloud.framework.flow.StateFunction;
 import io.javacloud.framework.flow.StateHandler;
-import io.javacloud.framework.flow.StateMachine;
+import io.javacloud.framework.flow.StateFlow;
 
 /**
  * 
@@ -74,8 +74,8 @@ public class FlowBuilder {
 	 * 
 	 * @return
 	 */
-	public StateMachine build() {
-		return new StateMachine() {
+	public StateFlow build() {
+		return new StateFlow() {
 			@Override
 			public String getStartAt() {
 				return startAt;

@@ -93,6 +93,11 @@ public abstract class StateSpec {
 			this.errorEquals = Objects.asList(errorEquals);
 			return this;
 		}
+		
+		@Override
+		public String toString() {
+			return "Retry: " + maxAttempts + ", " + intervalSeconds + ", " + backoffRate;
+		}
 	}
 	
 	public static class Catcher implements StateTransition.Success {

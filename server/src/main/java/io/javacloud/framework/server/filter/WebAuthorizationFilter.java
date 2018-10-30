@@ -125,7 +125,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 	 */
 	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception)
 		throws ServletException, IOException {
-		Dictionary entity = Dictionaries.asDict(IdParameters.PARAM_ERROR, exception.getCode(),
+		Dictionary entity = Dictionaries.asDict(IdParameters.PARAM_ERROR, exception.getReason(),
 				IdParameters.PARAM_STATE, req.getParameter(IdParameters.PARAM_STATE));
 				
 		//ALWAYS ASSUMING REDIRECT

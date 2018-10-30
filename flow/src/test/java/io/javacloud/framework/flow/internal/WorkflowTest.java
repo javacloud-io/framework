@@ -5,7 +5,7 @@ import org.junit.Assert;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
-import io.javacloud.framework.flow.StateMachine;
+import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.flow.builder.FlowBuilder;
 import io.javacloud.framework.flow.builder.RetryBuilder;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 public class WorkflowTest extends TestCase {
 	@Test
 	public void testSuccess() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state1")
 							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
@@ -40,16 +40,16 @@ public class WorkflowTest extends TestCase {
 							}, null).build();
 		
 		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
-		Dictionary result = state.result();
+		Dictionary output = state.output();
 		
 		Assert.assertFalse(state.isFailed());
-		Assert.assertEquals("abc", result.get("t1"));
-		Assert.assertEquals("xyz", result.get("t2"));
+		Assert.assertEquals("abc", output.get("t1"));
+		Assert.assertEquals("xyz", output.get("t2"));
 	}
 	
 	@Test
 	public void testFailure() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state1")
 							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
@@ -66,16 +66,16 @@ public class WorkflowTest extends TestCase {
 							}, null).build();
 		
 		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
-		Dictionary result = state.result();
+		Dictionary output = state.output();
 		
 		Assert.assertTrue(state.isFailed());
-		Assert.assertEquals("abc", result.get("t1"));
-		Assert.assertNull(result.get("t2"));
+		Assert.assertEquals("abc", output.get("t1"));
+		Assert.assertNull(output.get("t2"));
 	}
 	
 	@Test
 	public void testRetry() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state1")
 							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
@@ -96,11 +96,11 @@ public class WorkflowTest extends TestCase {
 							}, null).build();
 		
 		FlowState state = FlowExecutor.start(workflow, Dictionaries.asDict("a", "b"));
-		Dictionary result = state.result();
+		Dictionary output = state.output();
 		
 		Assert.assertFalse(state.isFailed());
-		Assert.assertEquals("abc", result.get("t1"));
-		Assert.assertEquals("xyz", result.get("t2"));
+		Assert.assertEquals("abc", output.get("t1"));
+		Assert.assertEquals("xyz", output.get("t2"));
 	}
 	
 	/**
@@ -112,7 +112,7 @@ public class WorkflowTest extends TestCase {
 	 */
 	static StateHandler.Status successResult(StateContext context, String name, String value) {
 		Dictionary result = new Dictionary();
-		result.putAll((Dictionary)context.getParameters());
+		result.putAll((Dictionary)context.getInput());
 		result.put(name, value);
 		return TransitionBuilder.success(context, result);
 	}

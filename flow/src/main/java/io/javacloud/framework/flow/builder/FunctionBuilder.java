@@ -123,7 +123,7 @@ public class FunctionBuilder {
 			@Override
 			public Object onInput(StateContext context) {
 				if(inputHandler == null) {
-					return context.getParameters();
+					return context.getInput();
 				}
 				return inputHandler.onInput(context);
 			}
@@ -149,14 +149,22 @@ public class FunctionBuilder {
 			@Override
 			public Class<?> getParametersType() {
 				if(stateHandler != null) {
-					ParameterizedType type = (ParameterizedType)stateHandler.getClass().getGenericInterfaces()[0];
-					return (Class<?>)type.getActualTypeArguments()[0];
+					return getActualTypeArguments(stateHandler.getClass());
 				} else if(inputHandler != null) {
-					ParameterizedType type = (ParameterizedType)inputHandler.getClass().getGenericInterfaces()[0];
-					return (Class<?>)type.getActualTypeArguments()[0];
+					return getActualTypeArguments(inputHandler.getClass());
 				}
 				return Object.class;
 			}
 		};
+	}
+	
+	/**
+	 * Assuming handler has ONE generic interface
+	 * @param handlerClass
+	 * @return
+	 */
+	protected Class<?> getActualTypeArguments(Class<?> handlerClass) {
+		ParameterizedType type = (ParameterizedType)handlerClass.getGenericInterfaces()[0];
+		return (Class<?>)type.getActualTypeArguments()[0];
 	}
 }

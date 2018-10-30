@@ -22,7 +22,7 @@ public interface StateContext {
 	 * 
 	 * @return
 	 */
-	public <T> T getParameters();
+	public <T> T getInput();
 	
 	/**
 	 * return internal state attribute value from setAttribute()

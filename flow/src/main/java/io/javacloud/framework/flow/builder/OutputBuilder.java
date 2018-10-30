@@ -79,14 +79,14 @@ public class OutputBuilder {
 					resultPath = (String)result;
 					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
 				} else {
-					finalResult = compileResult(new JsonPath(context.getParameters()));
+					finalResult = compileResult(new JsonPath(context.getInput()));
 				}
 				
 				//PROCESS RESULT
 				if(finalResult != null) {
-					finalResult = new JsonPath(context.getParameters()).merge(resultPath, finalResult);
+					finalResult = new JsonPath(context.getInput()).merge(resultPath, finalResult);
 				} else {
-					finalResult = context.getParameters();
+					finalResult = context.getInput();
 				}
 				
 				//FILTER OUTPUT

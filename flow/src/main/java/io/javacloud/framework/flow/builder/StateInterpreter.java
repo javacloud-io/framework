@@ -128,7 +128,7 @@ public abstract class StateInterpreter implements StateFunction {
 				StateSpec.Wait waitSpec = (StateSpec.Wait)spec;
 				int delaySeconds;
 				if(!Objects.isEmpty(waitSpec.getTimestamp())) {
-					String source = new JsonTemplate(context.getParameters()).compile(waitSpec.getTimestamp());
+					String source = new JsonTemplate(context.getInput()).compile(waitSpec.getTimestamp());
 					delaySeconds= (int)((DateFormats.getUTC().parse(source).getTime() - System.currentTimeMillis()) / 1000L);
 				} else {
 					delaySeconds= ((StateSpec.Wait)spec).getSeconds();

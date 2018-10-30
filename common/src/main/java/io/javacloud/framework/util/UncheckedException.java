@@ -54,7 +54,7 @@ public class UncheckedException extends RuntimeException {
 	 * 
 	 * @return
 	 */
-	public String getCode() {
+	public String getReason() {
 		Throwable cause = findRootCause(this);
 		return crc32Code(cause);
 	}
@@ -133,10 +133,11 @@ public class UncheckedException extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public static final String resolveCode(Throwable cause) {
+	public static final String findReason(Throwable cause) {
 		if(cause instanceof UncheckedException) {
-			return ((UncheckedException)cause).getCode();
+			return ((UncheckedException)cause).getReason();
 		}
+		//GENERIC AS CLASS NAME
 		return cause.getClass().getName();
 	}
 	

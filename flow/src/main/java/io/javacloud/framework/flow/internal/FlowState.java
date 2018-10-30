@@ -19,7 +19,7 @@ public class FlowState {
 	private boolean failed;
 	
 	//INPUT/OUTPUT
-	private Object  parameters;
+	private Object  input;
 	private Dictionary attributes;
 	public FlowState() {
 	}
@@ -94,11 +94,11 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public Object getParameters() {
-		return parameters;
+	public Object getInput() {
+		return input;
 	}
-	public void setParameters(Object parameters) {
-		this.parameters = parameters;
+	public void setInput(Object input) {
+		this.input = input;
 	}
 
 	/**
@@ -113,23 +113,14 @@ public class FlowState {
 	}
 	
 	/**
-	 * 
-	 * @param name
-	 * @param attribute
-	 */
-	<T> void setAttribute(String name, T attribute) {
-		attributes.set(name, attribute);
-	}
-	
-	/**
 	 * The result of final state is RESULT or INPUT
 	 * @return
 	 */
-	public <T> T result() {
-		Object result = attributes.get(StateContext.ATTRIBUTE_RESULT);
-		if(result == null) {
-			result = parameters;
+	public <T> T output() {
+		Object output = attributes.get(StateContext.ATTRIBUTE_RESULT);
+		if(output == null) {
+			output = input;
 		}
-		return Objects.cast(result);
+		return Objects.cast(output);
 	}
 }

@@ -98,9 +98,9 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		String error;
 		//REASON ERROR
 		if(exception instanceof UncheckedException) {
-			error = ((UncheckedException)exception).getCode();
+			error = ((UncheckedException)exception).getReason();
 		} else {
-			error = UncheckedException.resolveCode(exception);
+			error = UncheckedException.findReason(exception);
 		}
 		
 		//DETAILS MESSAGE LOCALE

@@ -21,8 +21,8 @@ public class FlowContext implements StateContext {
 	}
 
 	@Override
-	public <T> T getParameters() {
-		return Objects.cast(state.getParameters());
+	public <T> T getInput() {
+		return Objects.cast(state.getInput());
 	}
 
 	@Override

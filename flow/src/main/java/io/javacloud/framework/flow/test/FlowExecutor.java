@@ -1,7 +1,7 @@
 package io.javacloud.framework.flow.test;
 import java.util.concurrent.TimeUnit;
 
-import io.javacloud.framework.flow.StateMachine;
+import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.internal.FlowHandler;
@@ -17,11 +17,11 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class FlowExecutor extends FlowHandler {
-	public FlowExecutor(StateMachine stateMachine, Externalizer externalizer) {
-		super(stateMachine, externalizer);
+	public FlowExecutor(StateFlow stateFlow, Externalizer externalizer) {
+		super(stateFlow, externalizer);
 	}
-	public FlowExecutor(StateMachine stateMachine) {
-		this(stateMachine, null);
+	public FlowExecutor(StateFlow stateFlow) {
+		this(stateFlow, null);
 	}
 	/**
 	 * 
@@ -68,11 +68,11 @@ public class FlowExecutor extends FlowHandler {
 	
 	/**
 	 * 
-	 * @param stateMachine
+	 * @param stateFlow
 	 * @param parameters
 	 * @return
 	 */
-	public static FlowState start(StateMachine stateMachine, Dictionary parameters) {
-		return new FlowExecutor(stateMachine).start(parameters);
+	public static FlowState start(StateFlow stateFlow, Dictionary parameters) {
+		return new FlowExecutor(stateFlow).start(parameters);
 	}
 }

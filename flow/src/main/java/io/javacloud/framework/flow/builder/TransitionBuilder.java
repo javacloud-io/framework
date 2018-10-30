@@ -44,6 +44,10 @@ public class TransitionBuilder {
 			public String getNext() {
 				return next;
 			}
+			@Override
+			public String toString() {
+				return "Success";
+			}
 		};
 	}
 	
@@ -63,10 +67,10 @@ public class TransitionBuilder {
 	 * @return
 	 */
 	public static StateTransition.Failure failure() {
-		return new StateTransition.Failure() {
+		return new StateTransition.Failure(){
 			@Override
-			public boolean isEnd() {
-				return true;
+			public String toString() {
+				return "Failure";
 			}
 		};
 	}
