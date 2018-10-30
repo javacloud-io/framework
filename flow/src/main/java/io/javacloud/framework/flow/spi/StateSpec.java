@@ -172,14 +172,6 @@ public abstract class StateSpec {
 	@JsonProperty("Output")
 	private Object	output;
 	
-	@JsonProperty("Next")
-	private String next;
-	
-	@JsonProperty("Retry")
-	private List<Retrier> retriers;
-	
-	@JsonProperty("Catch")
-	private List<Catcher> catchers;
 	public StateSpec() {
 	}
 	
@@ -218,27 +210,6 @@ public abstract class StateSpec {
 		this.output = output;
 	}
 	
-	public String getNext() {
-		return next;
-	}
-	public void setNext(String next) {
-		this.next = next;
-	}
-	
-	public List<Retrier> getRetriers() {
-		return retriers;
-	}
-	public void setRetriers(List<Retrier> retriers) {
-		this.retriers = retriers;
-	}
-	
-	public List<Catcher> getCatchers() {
-		return catchers;
-	}
-	public void setCatchers(List<Catcher> catchers) {
-		this.catchers = catchers;
-	}
-	
 	//TASK
 	public static class Task extends StateSpec {
 		@JsonProperty("Resource")
@@ -249,6 +220,18 @@ public abstract class StateSpec {
 		
 		@JsonProperty("HeartbeatSeconds")
 		private int heartbeatSeconds;
+		
+		@JsonProperty("Next")
+		private String next;
+		
+		@JsonProperty("End")
+		private boolean end;
+		
+		@JsonProperty("Retry")
+		private List<Retrier> retriers;
+		
+		@JsonProperty("Catch")
+		private List<Catcher> catchers;
 		
 		public Task() {
 		}
@@ -272,16 +255,70 @@ public abstract class StateSpec {
 		public void setHeartbeatSeconds(int heartbeatSeconds) {
 			this.heartbeatSeconds = heartbeatSeconds;
 		}
+		
+		public String getNext() {
+			return next;
+		}
+		public void setNext(String next) {
+			this.next = next;
+		}
+		
+		public boolean isEnd() {
+			return end;
+		}
+		public void setEnd(boolean end) {
+			this.end = end;
+		}
+		
+		public List<Retrier> getRetriers() {
+			return retriers;
+		}
+		public void setRetriers(List<Retrier> retriers) {
+			this.retriers = retriers;
+		}
+		
+		public List<Catcher> getCatchers() {
+			return catchers;
+		}
+		public void setCatchers(List<Catcher> catchers) {
+			this.catchers = catchers;
+		}
 	}
 	
 	//PASS
 	public static class Pass extends StateSpec {
+		@JsonProperty("Next")
+		private String next;
+		
+		@JsonProperty("End")
+		private boolean end;
+		
 		public Pass() {
+		}
+		
+		public String getNext() {
+			return next;
+		}
+		public void setNext(String next) {
+			this.next = next;
+		}
+		
+		public boolean isEnd() {
+			return end;
+		}
+		public void setEnd(boolean end) {
+			this.end = end;
 		}
 	}
 		
 	//WAIT
 	public static class Wait extends StateSpec {
+		@JsonProperty("Next")
+		private String next;
+		
+		@JsonProperty("End")
+		private boolean end;
+		
 		@JsonProperty("Seconds")
 		private int seconds;
 		
@@ -290,6 +327,20 @@ public abstract class StateSpec {
 		private String timestamp;
 		public Wait() {
 		}
+		public String getNext() {
+			return next;
+		}
+		public void setNext(String next) {
+			this.next = next;
+		}
+		
+		public boolean isEnd() {
+			return end;
+		}
+		public void setEnd(boolean end) {
+			this.end = end;
+		}
+		
 		public int getSeconds() {
 			return seconds;
 		}
@@ -305,13 +356,13 @@ public abstract class StateSpec {
 		}
 	}
 	
-	//SUCCEED
+	//SUCCEED TERMINATE
 	public static class Succeed extends StateSpec {
 		public Succeed() {
 		}
 	}
 	
-	//FAIL
+	//FAIL TERMINATE
 	public static class Fail extends StateSpec {
 		@JsonProperty("Error")
 		private String error;
@@ -339,6 +390,9 @@ public abstract class StateSpec {
 	public static class Choice extends StateSpec {
 		@JsonProperty("Choices")
 		private List<RuleSpec> rules;
+		
+		@JsonProperty("Default")
+		private String next;
 		public Choice() {
 		}
 		public List<RuleSpec> getRules() {
@@ -347,14 +401,41 @@ public abstract class StateSpec {
 		public void setRules(List<RuleSpec> rules) {
 			this.rules = rules;
 		}
+		
+		public String getDefault() {
+			return next;
+		}
+		public void setDefault(String next) {
+			this.next = next;
+		}
 	}
 	
 	//PARALLEL
 	public static class Parallel extends StateSpec {
+		@JsonProperty("Next")
+		private String next;
+		
+		@JsonProperty("End")
+		private boolean end;
+		
 		@JsonProperty("Branches")
 		private List<FlowSpec> branches;
 		public Parallel() {
 		}
+		public String getNext() {
+			return next;
+		}
+		public void setNext(String next) {
+			this.next = next;
+		}
+		
+		public boolean isEnd() {
+			return end;
+		}
+		public void setEnd(boolean end) {
+			this.end = end;
+		}
+		
 		public List<FlowSpec> getBranches() {
 			return branches;
 		}

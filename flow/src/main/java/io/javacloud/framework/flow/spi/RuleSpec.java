@@ -3,6 +3,8 @@ package io.javacloud.framework.flow.spi;
 import java.util.Date;
 import java.util.List;
 
+
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -47,63 +49,15 @@ public abstract class RuleSpec implements StateTransition.Success {
 		public abstract Object getValue();
 	}
 	
-	public static class StringEquals extends Condition {
-		@JsonProperty("StringEquals")
-		private String value;
-		public StringEquals(String variable, String value) {
+	public static class BooleanEquals extends Condition {
+		@JsonProperty("BooleanEquals")
+		private Boolean value;
+		public BooleanEquals(String variable, boolean value) {
 			super(variable);
 			this.value = value;
 		}
 		@Override
-		public String getValue() {
-			return value;
-		}
-	}
-	public static class StringLessThan extends Condition {
-		@JsonProperty("StringLessThan")
-		private String value;
-		public StringLessThan(String variable, String value) {
-			super(variable);
-			this.value = value;
-		}
-		@Override
-		public String getValue() {
-			return value;
-		}
-	}
-	public static class StringGreaterThan extends Condition {
-		@JsonProperty("StringGreaterThan")
-		private String value;
-		public StringGreaterThan(String variable, String value) {
-			super(variable);
-			this.value = value;
-		}
-		@Override
-		public String getValue() {
-			return value;
-		}
-	}
-	public static class StringLessThanEquals extends Condition {
-		@JsonProperty("StringLessThanEquals")
-		private String value;
-		public StringLessThanEquals(String variable, String value) {
-			super(variable);
-			this.value = value;
-		}
-		@Override
-		public String getValue() {
-			return value;
-		}
-	}
-	public static class StringGreaterThanEquals extends Condition {
-		@JsonProperty("StringGreaterThanEquals")
-		private String value;
-		public StringGreaterThanEquals(String variable, String value) {
-			super(variable);
-			this.value = value;
-		}
-		@Override
-		public String getValue() {
+		public Boolean getValue() {
 			return value;
 		}
 	}
@@ -169,15 +123,63 @@ public abstract class RuleSpec implements StateTransition.Success {
 		}
 	}
 	
-	public static class BooleanEquals extends Condition {
-		@JsonProperty("BooleanEquals")
-		private Boolean value;
-		public BooleanEquals(String variable, boolean value) {
+	public static class StringEquals extends Condition {
+		@JsonProperty("StringEquals")
+		private String value;
+		public StringEquals(String variable, String value) {
 			super(variable);
 			this.value = value;
 		}
 		@Override
-		public Boolean getValue() {
+		public String getValue() {
+			return value;
+		}
+	}
+	public static class StringLessThan extends Condition {
+		@JsonProperty("StringLessThan")
+		private String value;
+		public StringLessThan(String variable, String value) {
+			super(variable);
+			this.value = value;
+		}
+		@Override
+		public String getValue() {
+			return value;
+		}
+	}
+	public static class StringGreaterThan extends Condition {
+		@JsonProperty("StringGreaterThan")
+		private String value;
+		public StringGreaterThan(String variable, String value) {
+			super(variable);
+			this.value = value;
+		}
+		@Override
+		public String getValue() {
+			return value;
+		}
+	}
+	public static class StringLessThanEquals extends Condition {
+		@JsonProperty("StringLessThanEquals")
+		private String value;
+		public StringLessThanEquals(String variable, String value) {
+			super(variable);
+			this.value = value;
+		}
+		@Override
+		public String getValue() {
+			return value;
+		}
+	}
+	public static class StringGreaterThanEquals extends Condition {
+		@JsonProperty("StringGreaterThanEquals")
+		private String value;
+		public StringGreaterThanEquals(String variable, String value) {
+			super(variable);
+			this.value = value;
+		}
+		@Override
+		public String getValue() {
 			return value;
 		}
 	}
@@ -243,7 +245,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 		}
 	}
 	
-	//LOGICAL OPERATOR
+	//LOGICAL OPERATORS
 	public static class And extends RuleSpec {
 		@JsonProperty("And")
 		private List<Condition> conditions;
@@ -281,7 +283,7 @@ public abstract class RuleSpec implements StateTransition.Success {
 	//CUSTOM RULE BUILDER
 	static class RuleBuilder {
 		private String next;
-		private Class<? extends RuleSpec> type;
+		private String operator;
 		private Object value;
 		
 		@JsonProperty("Next")
@@ -290,44 +292,38 @@ public abstract class RuleSpec implements StateTransition.Success {
 			return this;
 		}
 		
-		@JsonProperty("And")
-		public RuleBuilder withAnd(List<Condition> value) {
-			this.type = And.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("Or")
-		public RuleBuilder withNot(List<Condition> value) {
-			this.type = Or.class;
-			this.value = value;
-			return this;
-		}
 		@JsonProperty("Not")
-		public RuleBuilder withNot(Condition value) {
-			this.type = Not.class;
-			this.value = value;
+		public RuleBuilder withNot(Condition condition) {
+			this.operator = "Not";
+			this.value	  = condition;
+			return this;
+		}
+		
+		//OTHERS
+		@JsonAnySetter
+		public RuleBuilder withOperator(String operator, List<Condition> conditions) {
+			this.operator = operator;
+			this.value	  = conditions;
 			return this;
 		}
 		//
 		public RuleSpec build() {
-			if(type == Not.class) {
-				return new Not(next, (Condition)value);
+			switch(operator) {
+				case "Not":
+					return new Not(next, (Condition)value);
+				case "Or":
+					return new Or(next, Objects.cast(value));
+				case "And":
+					return new And(next, Objects.cast(value));
 			}
-			if(type == Or.class) {
-				return new Or(next, Objects.cast(value));
-			}
-			if(type == And.class) {
-				return new And(next, Objects.cast(value));
-			}
-			//UNKNOWN
-			return null;
+			throw new IllegalArgumentException("Unknown rule with operator: [" + operator + "], value: [" + value + "]");
 		}
 	}
 	
 	//CUSTOM CONDITION BUILDER
 	static class ConditionBuilder {
 		private String variable;
-		private Class<? extends Condition> type;
+		private String operator;
 		private Object value;
 		
 		@JsonProperty("Variable")
@@ -335,154 +331,53 @@ public abstract class RuleSpec implements StateTransition.Success {
 			this.variable = variable;
 			return this;
 		}
-		@JsonProperty("StringEquals")
-		public ConditionBuilder withStringEquals(String value) {
-			this.type = StringEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("StringLessThan")
-		public ConditionBuilder withStringLessThan(String value) {
-			this.type = StringLessThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("StringGreaterThan")
-		public ConditionBuilder withStringGreaterThan(String value) {
-			this.type = StringGreaterThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("StringLessThanEquals")
-		public ConditionBuilder withStringLessThanEquals(String value) {
-			this.type = StringLessThanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("StringGreaterThanEquals")
-		public ConditionBuilder withStringGreaterThanEquals(String value) {
-			this.type = StringGreaterThanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("NumericEquals")
-		public ConditionBuilder withNumericEquals(Number value) {
-			this.type = NumericEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("NumericLessThan")
-		public ConditionBuilder withNumericLessThan(Number value) {
-			this.type = NumericLessThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("NumericGreaterThan")
-		public ConditionBuilder withNumericGreaterThan(Number value) {
-			this.type = NumericGreaterThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("NumericLessThanEquals")
-		public ConditionBuilder withNumericLessThanEquals(Number value) {
-			this.type = NumericLessThanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("NumericGreaterThanEquals")
-		public ConditionBuilder withNumericGreaterThanEquals(Number value) {
-			this.type = NumericGreaterThanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("BooleanEquals")
-		public ConditionBuilder withBooleanEquals(boolean value) {
-			this.type = BooleanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("TimestampEquals")
-		public ConditionBuilder withTimestampEquals(Date value) {
-			this.type = TimestampEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("TimestampLessThan")
-		public ConditionBuilder withTimestampLessThan(Date value) {
-			this.type = TimestampLessThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("TimestampGreaterThan")
-		public ConditionBuilder withTimestampGreaterThan(Date value) {
-			this.type = TimestampGreaterThan.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("TimestampLessThanEquals")
-		public ConditionBuilder withTimestampLessThanEquals(Date value) {
-			this.type = TimestampLessThanEquals.class;
-			this.value = value;
-			return this;
-		}
-		@JsonProperty("TimestampGreaterThanEquals")
-		public ConditionBuilder withTimestampGreaterThanEquals(Date value) {
-			this.type = TimestampGreaterThanEquals.class;
-			this.value = value;
-			return this;
-		}
 		
+		//OTHERS
+		@JsonAnySetter
+		public ConditionBuilder withOperator(String operator, Object value) {
+			this.operator = operator;
+			this.value	  = value;
+			return this;
+		}
 		public Condition build() {
-			if(type == StringEquals.class) {
-				return new StringEquals(variable, Objects.cast(value));
+			switch(operator) {
+				case "BooleanEquals":
+					return new BooleanEquals(variable, Objects.cast(value));
+					
+				case "NumericEquals":
+					return new NumericEquals(variable, Objects.cast(value));
+				case "NumericLessThan":
+					return new NumericLessThan(variable, Objects.cast(value));
+				case "NumericGreaterThan":
+					return new NumericGreaterThan(variable, Objects.cast(value));
+				case "NumericLessThanEquals":
+					return new NumericLessThanEquals(variable, Objects.cast(value));
+				case "NumericGreaterThanEquals":
+					return new NumericGreaterThanEquals(variable, Objects.cast(value));
+				
+				case "StringEquals":
+					return new StringEquals(variable, Objects.cast(value));
+				case "StringLessThan":
+					return new StringLessThan(variable, Objects.cast(value));
+				case "StringGreaterThan":
+					return new StringGreaterThan(variable, Objects.cast(value));
+				case "StringLessThanEquals":
+					return new StringLessThanEquals(variable, Objects.cast(value));
+				case "StringGreaterThanEquals":
+					return new StringGreaterThanEquals(variable, Objects.cast(value));
+				
+				case "TimestampEquals":
+					return new TimestampEquals(variable, Objects.cast(value));
+				case "TimestampLessThan":
+					return new TimestampLessThan(variable, Objects.cast(value));
+				case "TimestampGreaterThan":
+					return new NumericGreaterThan(variable, Objects.cast(value));
+				case "TimestampLessThanEquals":
+					return new TimestampLessThanEquals(variable, Objects.cast(value));
+				case "TimestampGreaterThanEquals":
+					return new TimestampGreaterThanEquals(variable, Objects.cast(value));
 			}
-			if(type == StringLessThan.class) {
-				return new StringLessThan(variable, Objects.cast(value));
-			}
-			if(type == StringGreaterThan.class) {
-				return new StringGreaterThan(variable, Objects.cast(value));
-			}
-			if(type == StringLessThanEquals.class) {
-				return new StringLessThanEquals(variable, Objects.cast(value));
-			}
-			if(type == StringGreaterThanEquals.class) {
-				return new StringGreaterThanEquals(variable, Objects.cast(value));
-			}
-			if(type == NumericEquals.class) {
-				return new NumericEquals(variable, Objects.cast(value));
-			}
-			if(type == NumericLessThan.class) {
-				return new NumericLessThan(variable, Objects.cast(value));
-			}
-			if(type == NumericGreaterThan.class) {
-				return new NumericGreaterThan(variable, Objects.cast(value));
-			}
-			if(type == NumericLessThanEquals.class) {
-				return new NumericLessThanEquals(variable, Objects.cast(value));
-			}
-			if(type == NumericGreaterThanEquals.class) {
-				return new NumericGreaterThanEquals(variable, Objects.cast(value));
-			}
-			if(type == BooleanEquals.class) {
-				return new BooleanEquals(variable, Objects.cast(value));
-			}
-			if(type == TimestampEquals.class) {
-				return new TimestampEquals(variable, Objects.cast(value));
-			}
-			if(type == TimestampLessThan.class) {
-				return new TimestampLessThan(variable, Objects.cast(value));
-			}
-			if(type == TimestampGreaterThan.class) {
-				return new TimestampGreaterThan(variable, Objects.cast(value));
-			}
-			if(type == TimestampLessThanEquals.class) {
-				return new TimestampLessThanEquals(variable, Objects.cast(value));
-			}
-			if(type == TimestampGreaterThanEquals.class) {
-				return new TimestampGreaterThanEquals(variable, Objects.cast(value));
-			}
-			//UNKNOWN
-			return null;
+			throw new IllegalArgumentException("Unknown condition with operator: [" + operator + "], value: [" + value + "]");
 		}
 	}
 }
