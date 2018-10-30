@@ -71,7 +71,7 @@ public class OutputBuilder {
 			public StateTransition.Success onOutput(StateContext context) {
 				Object finalResult;
 				
-				//FILTER RESULT
+				//IF RESULT IS PATH => TAKE CURRENT RESULT AND MERGE TO INPUT
 				String resultPath = JsonPath.ROOT;
 				if(result == null) {
 					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
@@ -89,11 +89,9 @@ public class OutputBuilder {
 					finalResult = context.getInput();
 				}
 				
-				//FILTER OUTPUT
-				if(output == null) {
-					output = finalResult;
-				} else {
-					output = new JsonTemplate(finalResult).compile(output);
+				//IF THERE IS OUTPUT DEFINE => COMPILE IT
+				if(output != null) {
+					finalResult = new JsonTemplate(finalResult).compile(output);
 				}
 				
 				//SET BACK RESULT
