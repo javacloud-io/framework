@@ -13,7 +13,7 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class JsonTemplate {
-	private JsonPath jsonPath;
+	private final JsonPath jsonPath;
 	/**
 	 * 
 	 * @param jsonPath

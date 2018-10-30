@@ -16,6 +16,7 @@ public class OutputBuilder {
 	protected Object result = JsonPath.ROOT;
 	protected Object output = JsonPath.ROOT;
 	
+	private int delaySeconds;
 	private String next;
 	public OutputBuilder() {	
 	}
@@ -46,6 +47,16 @@ public class OutputBuilder {
 	 */
 	public OutputBuilder withNext(String next) {
 		this.next = next;
+		return this;
+	}
+	
+	/**
+	 * 
+	 * @param delaySeconds
+	 * @return
+	 */
+	public OutputBuilder withDelaySeconds(int delaySeconds) {
+		this.delaySeconds = delaySeconds;
 		return this;
 	}
 	
@@ -89,7 +100,7 @@ public class OutputBuilder {
 				
 				//SET BACK RESULT
 				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult == null? new Dictionary() : finalResult);
-				return TransitionBuilder.success(next);
+				return TransitionBuilder.success(next, delaySeconds);
 			}
 		};
 	}

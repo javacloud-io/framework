@@ -97,12 +97,10 @@ public class FlowHandler {
 	 */
 	public int retry(FlowState state, StateTransition.Retry transition) {
 		int maxAttempts= transition.getMaxAttempts();
-		long maxTimeout= transition.getTimeoutSeconds() * 1000L;
-		if(maxAttempts > 0 || maxTimeout > 0) {
+		if(maxAttempts > 0) {
 			int retryCount = state.getRetryCount();
 			//TIMEOUT => FAILED [0]
-			if((maxAttempts > 0 && retryCount > maxAttempts) || 
-			   (maxTimeout  > 0 && System.currentTimeMillis() > (state.getStartedAt() + maxTimeout))) {
+			if(retryCount > maxAttempts) {
 				state.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
 				state.setFailed(true);
 				return 0;

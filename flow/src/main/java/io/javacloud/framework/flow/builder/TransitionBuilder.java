@@ -20,10 +20,24 @@ public class TransitionBuilder {
 	 * @return
 	 */
 	public static StateTransition.Success success(final String next) {
+		return success(next, 0);
+	}
+	
+	/**
+	 * @param next
+	 * @param delaySeconds
+	 * @return
+	 */
+	public static StateTransition.Success success(final String next, final int delaySeconds) {
 		return new StateTransition.Success() {
 			@Override
 			public boolean isEnd() {
 				return Objects.isEmpty(next);
+			}
+			
+			@Override
+			public int getDelaySeconds() {
+				return delaySeconds;
 			}
 			
 			@Override

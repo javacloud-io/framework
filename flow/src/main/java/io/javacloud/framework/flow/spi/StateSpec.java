@@ -39,9 +39,6 @@ public abstract class StateSpec {
 		@JsonProperty("ErrorEquals")
 		private List<String> errorEquals;
 		
-		@JsonProperty("TimeoutSeconds")
-		private int timeoutSeconds	= -1;
-		
 		@JsonProperty("MaxAttempts")
 		private int maxAttempts		= 0;
 		
@@ -82,15 +79,6 @@ public abstract class StateSpec {
 		}
 		public Retrier withBackoffRate(int backoffRate) {
 			this.backoffRate = backoffRate;
-			return this;
-		}
-		
-		@Override
-		public int getTimeoutSeconds() {
-			return timeoutSeconds;
-		}
-		public Retrier withTimeoutSeconds(int timeoutSeconds) {
-			this.timeoutSeconds = timeoutSeconds;
 			return this;
 		}
 
@@ -305,8 +293,9 @@ public abstract class StateSpec {
 		@JsonProperty("Seconds")
 		private int seconds;
 		
+		//json path or ISO string
 		@JsonProperty("Timestamp")
-		private Object timestamp;
+		private String timestamp;
 		public Wait() {
 		}
 		public int getSeconds() {
@@ -316,10 +305,10 @@ public abstract class StateSpec {
 			this.seconds = seconds;
 		}
 		
-		public Object getTimestamp() {
+		public String getTimestamp() {
 			return timestamp;
 		}
-		public void setTimestamp(Object timestamp) {
+		public void setTimestamp(String timestamp) {
 			this.timestamp = timestamp;
 		}
 	}

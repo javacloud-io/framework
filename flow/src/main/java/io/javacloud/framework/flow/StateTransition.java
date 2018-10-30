@@ -26,17 +26,25 @@ public interface StateTransition {
 		 * 
 		 * @return
 		 */
-		public double getBackoffRate();
+		default public double getBackoffRate() {
+			return 1.0;
+		}
+	}
+	
+	//SUCCESS
+	interface Success extends StateTransition {
+		/**
+		 * Delays second prior to move to next state
+		 * @return
+		 */
+		default public int getDelaySeconds() {
+			return 0;
+		}
 		
 		/**
 		 * 
 		 * @return
 		 */
-		public int getTimeoutSeconds();
-	}
-	
-	//SUCCESS
-	interface Success extends StateTransition {
 		public String getNext();
 	}
 	
