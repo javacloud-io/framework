@@ -50,24 +50,12 @@ public class InputBuilder {
 		return new StateHandler.InputHandler<Object>() {
 			@Override
 			public Object onInput(StateContext context) {
+				//NOT DEFINED => USING ORIGINAL INPUT
 				if(input == null) {
 					return context.getInput();
 				}
-				if((input instanceof String) && (JsonPath.is((String)input))) {
-					return new JsonPath(context.getInput()).select((String)input);
-				}
-				return compileInput(new JsonPath(context.getInput()));
+				return	new JsonTemplate(context.getInput()).compile(input);
 			}
 		};
-	}
-	
-	/**
-	 * Compile the input to has correct value substitution
-	 * 
-	 * @param jsonPath
-	 * @return
-	 */
-	protected Object compileInput(JsonPath jsonPath) {
-		return new JsonTemplate(jsonPath).compile(input);
 	}
 }

@@ -79,7 +79,7 @@ public class OutputBuilder {
 					resultPath = (String)result;
 					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
 				} else {
-					finalResult = compileResult(new JsonPath(context.getInput()));
+					finalResult = new JsonTemplate(context.getInput()).compile(result);
 				}
 				
 				//PROCESS RESULT
@@ -92,10 +92,8 @@ public class OutputBuilder {
 				//FILTER OUTPUT
 				if(output == null) {
 					output = finalResult;
-				} else if(output instanceof String && JsonPath.is((String)output)) {
-					finalResult = new JsonPath(finalResult).select((String)output);
 				} else {
-					output = compileOutput(new JsonPath(finalResult));
+					output = new JsonTemplate(finalResult).compile(output);
 				}
 				
 				//SET BACK RESULT
@@ -103,23 +101,5 @@ public class OutputBuilder {
 				return TransitionBuilder.success(next, delaySeconds);
 			}
 		};
-	}
-	
-	/**
-	 * 
-	 * @param jsonPath
-	 * @return
-	 */
-	protected Object compileResult(JsonPath jsonPath) {
-		return new JsonTemplate(jsonPath).compile(result);
-	}
-	
-	/**
-	 * 
-	 * @param jsonPath
-	 * @return
-	 */
-	protected Object compileOutput(JsonPath jsonPath) {
-		return new JsonTemplate(jsonPath).compile(output);
 	}
 }

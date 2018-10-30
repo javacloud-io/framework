@@ -23,6 +23,14 @@ public class JsonTemplate {
 	}
 	
 	/**
+	 * Template from root object
+	 * @param root
+	 */
+	public JsonTemplate(Object root) {
+		this(root instanceof JsonPath? (JsonPath)root : new JsonPath(root));
+	}
+	
+	/**
 	 * 
 	 * @param value
 	 * @return
@@ -77,7 +85,7 @@ public class JsonTemplate {
 	}
 	
 	/**
-	 * Evaluate the expression using {$.xxxxx}XXX
+	 * Evaluate the expression using {$.path}ZZZ
 	 * 
 	 * @param value
 	 * @return
@@ -85,8 +93,7 @@ public class JsonTemplate {
 	protected Object evalString(String expr) {
 		if(Objects.isEmpty(expr)) {
 			return expr;
-		}
-		if(JsonPath.is(expr)) {
+		} else if(JsonPath.is(expr)) {
 			return jsonPath.select(expr);
 		}
 		
