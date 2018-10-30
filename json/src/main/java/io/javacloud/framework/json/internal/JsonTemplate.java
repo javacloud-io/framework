@@ -14,20 +14,17 @@ import io.javacloud.framework.util.Objects;
  */
 public class JsonTemplate {
 	private final JsonPath jsonPath;
-	/**
-	 * 
-	 * @param jsonPath
-	 */
-	public JsonTemplate(JsonPath jsonPath) {
-		this.jsonPath = jsonPath;
-	}
 	
 	/**
 	 * Template from root object
 	 * @param root
 	 */
 	public JsonTemplate(Object root) {
-		this(root instanceof JsonPath? (JsonPath)root : new JsonPath(root));
+		if(root instanceof JsonPath) {
+			this.jsonPath = (JsonPath)root;
+		} else {
+			this.jsonPath = new JsonPath(root);
+		}
 	}
 	
 	/**

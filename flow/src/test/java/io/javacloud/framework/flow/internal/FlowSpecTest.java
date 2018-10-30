@@ -31,7 +31,5 @@ public class FlowSpecTest extends ServiceTest {
 		}
 		Assert.assertNotNull(flowSpec);
 		Assert.assertTrue(flowSpec.getStates().get("hello") instanceof StateSpec.Task);
-		
-		externalizer.marshal(flowSpec, System.out);
 	}
 }

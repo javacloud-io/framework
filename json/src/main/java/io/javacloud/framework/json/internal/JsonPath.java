@@ -161,4 +161,16 @@ public class JsonPath {
 	public static final boolean is(String path) {
 		return !Objects.isEmpty(path) && path.startsWith(ROOT);
 	}
+	
+	/**
+	 * 
+	 * @param root
+	 * @return
+	 */
+	public static final JsonPath as(Object root) {
+		if(root instanceof JsonPath) {
+			return (JsonPath)root;
+		}
+		return new JsonPath(root);
+	}
 }
