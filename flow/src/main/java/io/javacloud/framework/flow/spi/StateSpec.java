@@ -166,23 +166,11 @@ public abstract class StateSpec {
 	@JsonProperty("Input")
 	private Object	input;
 	
-	//DEPRECATED, USING Input INSTEAD
-	@JsonProperty("InputPath")
-	private String	inputPath;
-	
 	@JsonProperty("Result")
 	private Object	result;
 	
-	//DEPRECATED, USING Result INSTEAD
-	@JsonProperty("ResultPath")
-	private String	resultPath;
-	
 	@JsonProperty("Output")
 	private Object	output;
-	
-	//DEPRECATED, USING Output INSTEAD
-	@JsonProperty("OutputPath")
-	private String	ouputPath;
 	
 	@JsonProperty("Next")
 	private String next;
