@@ -1,5 +1,7 @@
 package io.javacloud.framework.json;
 
+import java.util.List;
+
 /**
  * https://www.json.org
  * 
@@ -20,7 +22,25 @@ public interface JsonValue {
 	 * 
 	 * @return
 	 */
-	public Type type();
+	default public Type type() {
+		Object value = value();
+		if(value == null) {
+			return Type.NULL;
+		}
+		if(value instanceof Boolean) {
+			return Type.BOOLEAN;
+		}
+		if(value instanceof Number) {
+			return Type.NUMBER;
+		}
+		if(value instanceof String) {
+			return Type.STRING;
+		}
+		if(value instanceof List) {
+			return Type.ARRAY;
+		}
+		return Type.OBJECT;
+	}
 	
 	/**
 	 * 

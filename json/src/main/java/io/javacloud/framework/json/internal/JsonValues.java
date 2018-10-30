@@ -1,7 +1,5 @@
 package io.javacloud.framework.json.internal;
 
-import java.util.List;
-
 import io.javacloud.framework.json.JsonValue;
 import io.javacloud.framework.util.Objects;
 
@@ -25,28 +23,6 @@ public final class JsonValues {
 			return (JsonValue)value;
 		}
 		return new JsonValue() {
-			/**
-			 * Default TYPE interpretation
-			 * @return
-			 */
-			@Override
-			public Type type() {
-				Object value = value();
-				if(value == null) {
-					return Type.NULL;
-				}
-				if(value instanceof Boolean) {
-					return Type.BOOLEAN;
-				}
-				if(value instanceof String) {
-					return Type.STRING;
-				}
-				if(value instanceof List) {
-					return Type.ARRAY;
-				}
-				return Type.OBJECT;
-			}
-			
 			@Override
 			public <T> T value() {
 				return Objects.cast(value);
