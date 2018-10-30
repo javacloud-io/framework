@@ -155,6 +155,9 @@ public abstract class StateSpec {
 	@JsonProperty("Type")
 	private Type 	type;
 	
+	@JsonProperty("Comment")
+	private String comment;
+	
 	@JsonProperty("Input")
 	private Object	input;
 	
@@ -184,9 +187,6 @@ public abstract class StateSpec {
 	
 	@JsonProperty("Catch")
 	private List<Catcher> catchers;
-	
-	@JsonProperty("Comment")
-	private String comment;
 	public StateSpec() {
 	}
 	
@@ -195,6 +195,13 @@ public abstract class StateSpec {
 	}
 	public void setType(Type type) {
 		this.type = type;
+	}
+	
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
 	public Object getInput() {
@@ -238,14 +245,6 @@ public abstract class StateSpec {
 	public void setCatchers(List<Catcher> catchers) {
 		this.catchers = catchers;
 	}
-
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
-	
 	
 	//TASK
 	public static class Task extends StateSpec {

@@ -6,6 +6,10 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateTransition {
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isEnd();
 	
 	//RETRY
