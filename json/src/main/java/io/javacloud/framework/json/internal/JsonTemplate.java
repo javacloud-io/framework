@@ -75,7 +75,7 @@ public class JsonTemplate {
 	 * @return
 	 */
 	protected List<?> evalList(List<Object> expr) {
-		for(int  i = 0; i < expr.size(); i ++) {
+		for(int i = 0; i < expr.size(); i ++) {
 			expr.set(i, eval(expr.get(i)));
 		}
 		return expr;
