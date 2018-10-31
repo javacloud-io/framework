@@ -7,6 +7,7 @@ import io.javacloud.framework.json.internal.JsonPath;
 import io.javacloud.framework.json.internal.JsonTemplate;
 import io.javacloud.framework.util.Dictionaries;
 import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Objects;
 import junit.framework.TestCase;
 
 /**
@@ -17,10 +18,13 @@ import junit.framework.TestCase;
 public class JsonPathTest extends TestCase {
 	@Test
 	public void testBasic() {
-		Dictionary dict = Dictionaries.asDict("a", "b", "c", "d");
+		Dictionary dict = Dictionaries.asDict("a", "b", "c", "d", "r", Objects.asList(1, 2, 3 ,4));
 		JsonPath jsonPath = new JsonPath(dict);
 		Assert.assertEquals("b", jsonPath.select("$.a"));
 		Assert.assertEquals("d", jsonPath.select("$.c"));
+		
+		Assert.assertEquals(1, (int)jsonPath.select("$.r[0]"));
+		Assert.assertEquals(4, (int)jsonPath.select("$.r[-1]"));
 		
 		jsonPath.merge("$.x.y", Dictionaries.asDict("u", "v"));
 		Assert.assertEquals("v", jsonPath.select("$.x.y.u"));

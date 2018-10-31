@@ -1,6 +1,7 @@
 package io.javacloud.framework.json.internal;
 
 import java.beans.PropertyDescriptor;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.logging.Level;
@@ -13,7 +14,10 @@ import io.javacloud.framework.util.Pair;
 
 /**
  * Implements JsonPath spec: https://goessner.net/articles/JsonPath
- * Also supporting {}
+ * 
+ * -DOT access: $.books
+ * -INDEX access: $.books[0]
+ * -RANGE access: $.books[0:5]
  * 
  * @author ho
  *
@@ -39,7 +43,7 @@ public class JsonPath {
 		String[] segments = segments(path);
 		Object dict = this.root;
 		for(int i = 1; i < segments.length; i ++) {
-			dict = getProperty(dict, segments[i]);
+			dict = resolveProperty(dict, segments[i]);
 			if(dict == null) {
 				break;
 			}
@@ -91,9 +95,73 @@ public class JsonPath {
 	 * @param path
 	 * @return
 	 */
-	protected String[] segments(String path) {
+	private String[] segments(String path) {
 		String[] segments = path.split("\\.");
 		return segments;
+	}
+	
+	/**
+	 * resolve field[*]
+	 * 
+	 * @param json
+	 * @param name
+	 * @return
+	 */
+	private Object resolveProperty(Object json, String name) {
+		int s = name.indexOf('[');
+		if(s < 0) {
+			return getProperty(json, name);
+		}
+		int e = name.indexOf(']', s);
+		if(e < 0) {
+			throw new ArrayIndexOutOfBoundsException("Index not close with ]");
+		}
+		
+		//WHOLE OBJECT
+		Object v = getProperty(json, name.substring(0, s));
+		String index = name.substring(s + 1, e);
+		int d = index.indexOf(':');
+		if(d == 0 && index.length() <= 1) {
+			return v;
+		}
+		
+		//PROCESS INDEX
+		List<Object> list = Objects.cast(v);
+		if(d < 0) {
+			s = intValueOf(index, list.size());
+			return list.get(s);
+		}
+		
+		//PROCESS RANGE
+		if(d == 0) {
+			//SUB[:3]
+			s = 0;
+			e = intValueOf(index.substring(1), list.size());
+		} else if(d == index.length() - 1) {
+			//SUB[3:]
+			s = intValueOf(index.substring(0, d), list.size());
+			e = list.size();
+		} else {
+			s = intValueOf(index.substring(0, d), list.size());
+			e = intValueOf(index.substring(d + 1),list.size());
+		}
+		
+		//SUBLIST OR NOT
+		return (s == 0 && e == list.size()? list : list.subList(s,  e));
+	}
+	
+	/**
+	 * 
+	 * @param index
+	 * @param len
+	 * @return
+	 */
+	private int intValueOf(String index, int len) {
+		if(Objects.isEmpty(index)) {
+			return 0;
+		}
+		int i = Integer.valueOf(index);
+		return (i < 0? i + len : i);
 	}
 	
 	/**
@@ -160,17 +228,5 @@ public class JsonPath {
 	 */
 	public static final boolean is(String path) {
 		return !Objects.isEmpty(path) && path.startsWith(ROOT);
-	}
-	
-	/**
-	 * 
-	 * @param root
-	 * @return
-	 */
-	public static final JsonPath as(Object root) {
-		if(root instanceof JsonPath) {
-			return (JsonPath)root;
-		}
-		return new JsonPath(root);
 	}
 }

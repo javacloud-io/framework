@@ -7,7 +7,7 @@ import io.javacloud.framework.util.Converters;
 import io.javacloud.framework.util.Objects;
 
 /**
- * Compile the json template value using jsonPath substitution
+ * Compile the json template value using {jsonPath} substitution
  * 
  * @author ho
  *
