@@ -148,11 +148,11 @@ public class FlowHandler {
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		FlowState state = context.state;
+		state.setRunCount(state.getRunCount() + 1);
+		
 		if(!transition.isEnd()) {
 			state.setInput(state.output());
 			onPrepare(state, transition.getNext());
-		} else {
-			state.setRunCount(state.getRunCount() + 1);
 		}
 		return transition;
 	}
