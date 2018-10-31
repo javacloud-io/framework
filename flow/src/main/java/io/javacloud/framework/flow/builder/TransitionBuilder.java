@@ -65,6 +65,7 @@ public class TransitionBuilder {
 	}
 	
 	/**
+	 * Repeat same state with delay in seconds
 	 * 
 	 * @return
 	 */

@@ -87,6 +87,7 @@ public class RetryBuilder {
 				
 				//CAN'T RE-TRY
 				if(retrier == null) {
+					context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
 					return	TransitionBuilder.failure();
 				}
 				
