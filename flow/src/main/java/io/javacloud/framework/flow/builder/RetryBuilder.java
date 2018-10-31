@@ -34,19 +34,15 @@ public class RetryBuilder {
 	 * @param errors
 	 * @return
 	 */
-	public RetryBuilder withRetrier(StateSpec.Retrier retrier, String... errors) {
+	public RetryBuilder withRetrier(StateSpec.Retrier retrier) {
 		if(retriers == null) {
 			retriers = new HashMap<>();
 		}
+		
 		//ADD EQUAL ERRORS
+		List<String> errors = retrier.getErrorEquals();
 		if(Objects.isEmpty(errors)) {
-			if(Objects.isEmpty(retrier.getErrorEquals())) {
-				retriers.put(StateHandler.ERROR_ALL, retrier);
-			} else {
-				for(String error: retrier.getErrorEquals()) {
-					retriers.put(error, retrier);
-				}
-			}
+			retriers.put(StateHandler.ERROR_ALL, retrier);
 		} else {
 			for(String error: errors) {
 				retriers.put(error, retrier);
@@ -78,10 +74,13 @@ public class RetryBuilder {
 			@Override
 			public StateTransition onRetry(StateContext context) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
-				StateSpec.Retrier retrier = null;
+				StateSpec.Retrier retrier;
 				if(error != null) {
 					retrier = (retriers == null? null : retriers.get(error));
+				} else {
+					retrier = null;
 				}
+				//USING DEFAULT
 				if(retrier == null && retriers != null) {
 					retrier = retriers.get(StateHandler.ERROR_ALL);
 				}

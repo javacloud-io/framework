@@ -262,7 +262,7 @@ public abstract class StateSpec {
 		public void setNext(String next) {
 			this.next = next;
 		}
-		
+
 		public boolean isEnd() {
 			return end;
 		}
@@ -333,7 +333,7 @@ public abstract class StateSpec {
 		public void setNext(String next) {
 			this.next = next;
 		}
-		
+
 		public boolean isEnd() {
 			return end;
 		}
