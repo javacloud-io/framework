@@ -7,15 +7,15 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateContext {
-	public static final String ATTRIBUTE_RESULT 	= "StateResult";
-	public static final String ATTRIBUTE_ERROR 		= "StateError";
+	public static final String ATTRIBUTE_RESULT = "StateResult";
+	public static final String ATTRIBUTE_ERROR 	= "StateError";
 	
 	/**
 	 * return execution ID;
 	 * 
 	 * @return
 	 */
-	public String getInstanceId();
+	public String getExecutionId();
 	
 	/**
 	 * return initial/raw INPUT parameters: String, Number, Dictionary...
@@ -41,8 +41,8 @@ public interface StateContext {
 	public <T> void setAttribute(String name, T attribute);
 	
 	/**
-	 * 
+	 * In case of loop, how many time it's been running
 	 * @return
 	 */
-	public int getRetryCount();
+	public int getRunCount();
 }

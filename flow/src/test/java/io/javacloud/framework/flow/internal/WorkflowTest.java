@@ -80,8 +80,8 @@ public class WorkflowTest extends TestCase {
 							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
 								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
-									if(context.getRetryCount() < 5) {
-										return StateHandler.Status.RETRY;
+									if(context.getRunCount() < 5) {
+										return StateHandler.Status.REPEAT;
 									}
 									context.setAttribute("t1", "abc");
 									return successResult(context, "t1", "abc");

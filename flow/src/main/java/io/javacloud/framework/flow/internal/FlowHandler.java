@@ -17,7 +17,7 @@ import io.javacloud.framework.util.UncheckedException;
 /**
  * start -> execute -[end]-> [success]
  * 					 [success] 	-> execute
- * 					 [retry]	-> [delays] -> execute
+ * 					 [repeat]	-> [delays] -> execute
  * 								-> [not]	-> [failure]
  * 					 [failure]	-> []
  * @author ho
@@ -57,7 +57,7 @@ public class FlowHandler {
 	/**
 	 * execute -[end]-> [success]
 	 * 			[success] 	-> execute
-	 * 			[retry]		-> [delays] -> execute
+	 * 			[repeat]	-> [delays] -> execute
 	 * 						-> [not]	-> [failure]
 	 * 			[failure]	-> []
 	 * @param parameters
@@ -72,8 +72,8 @@ public class FlowHandler {
 			StateFunction.Status status = function.handle(parameters, context);
 			if(status == StateFunction.Status.SUCCESS) {
 				return onSuccess(function, context);
-			} else if(status == StateFunction.Status.RETRY) {
-				return	function.onRetry(context);
+			} else if(status == StateFunction.Status.REPEAT) {
+				return	onResume(function, context);
 			}
 			//UNKNOWN FAILURE
 			return onFailure(function, context, null);
@@ -88,35 +88,6 @@ public class FlowHandler {
 	 * @param state
 	 */
 	public void complete(FlowState state) {
-	}
-	
-	/**
-	 * return number of SECONDS for DELAYS otherwise INDICATION AS FAILED
-	 * 
-	 * @param state
-	 * @param transition
-	 * @return 0: timeout, -1: can't retry
-	 */
-	public int retry(FlowState state, StateTransition.Retry transition) {
-		int maxAttempts= transition.getMaxAttempts();
-		if(maxAttempts > 0) {
-			int retryCount = state.getRetryCount();
-			//TIMEOUT => FAILED [0]
-			if(retryCount > maxAttempts) {
-				state.getAttributes().set(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
-				state.setFailed(true);
-				return 0;
-			} else {
-				state.setRetryCount(retryCount + 1);
-				int delaySeconds = (int)(transition.getIntervalSeconds() * Math.pow(transition.getBackoffRate(), retryCount - 1));
-				return Math.max(delaySeconds, MIN_DELAY_SECONDS);
-			}
-		} else {
-			//FAILED[1]
-			state.getAttributes().set(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
-			state.setFailed(true);
-		}
-		return -1;
 	}
 	
 	/**
@@ -137,7 +108,7 @@ public class FlowHandler {
 		//RESET OTHERS
 		state.setName(name);
 		state.setStartedAt(System.currentTimeMillis());
-		state.setRetryCount(0);
+		state.setRunCount(0);
 		state.setStackTrace(null);
 		return state;
 	}
@@ -173,15 +144,31 @@ public class FlowHandler {
 	 * @return
 	 */
 	protected StateTransition onSuccess(StateFunction function, FlowContext context) {
-		StateTransition.Success success = function.onOutput(context);
+		StateTransition.Success transition = function.onOutput(context);
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
-		if(!success.isEnd()) {
-			FlowState state = context.state;
+		FlowState state = context.state;
+		if(!transition.isEnd()) {
 			state.setInput(state.output());
-			onPrepare(state, success.getNext());
+			onPrepare(state, transition.getNext());
+		} else {
+			state.setRunCount(state.getRunCount() + 1);
 		}
-		return success;
+		return transition;
+	}
+	
+	/**
+	 * Resume to control the state
+	 * 
+	 * @param function
+	 * @param context
+	 * @return
+	 */
+	protected StateTransition onResume(StateFunction function, FlowContext context) {
+		StateTransition transition = function.onResume(context);
+		FlowState state = context.state;
+		state.setRunCount(state.getRunCount() + 1);
+		return transition;
 	}
 	
 	/**

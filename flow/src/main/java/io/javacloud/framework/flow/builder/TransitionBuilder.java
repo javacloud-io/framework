@@ -52,17 +52,6 @@ public class TransitionBuilder {
 	}
 	
 	/**
-	 * Success with result
-	 * @param context
-	 * @param result
-	 * @return
-	 */
-	public static StateHandler.Status success(StateContext context, Object result) {
-		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
-		return StateHandler.Status.SUCCESS;
-	}
-	
-	/**
 	 * 
 	 * @return
 	 */
@@ -73,6 +62,34 @@ public class TransitionBuilder {
 				return "Failure";
 			}
 		};
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static StateTransition.Repeat repeat(final int delaySeconds) {
+		return new StateTransition.Repeat() {
+			@Override
+			public int getDelaySeconds() {
+				return delaySeconds;
+			}
+			@Override
+			public String toString() {
+				return "Repeat";
+			}
+		};
+	}
+	
+	/**
+	 * Success with result
+	 * @param context
+	 * @param result
+	 * @return
+	 */
+	public static StateHandler.Status success(StateContext context, Object result) {
+		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
+		return StateHandler.Status.SUCCESS;
 	}
 	
 	/**

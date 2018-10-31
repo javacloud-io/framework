@@ -18,7 +18,7 @@ public class FunctionBuilder {
 	private StateHandler.InputHandler<Object> inputHandler;
 	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
-	private StateHandler.RetryHandler	 retryHandler;
+	private StateHandler.RepeatHandler	 repeatHandler;
 	public FunctionBuilder() {
 	}
 	
@@ -81,8 +81,8 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withRetryHandler(StateHandler.RetryHandler handler) {
-		this.retryHandler = handler;
+	public FunctionBuilder withRepeatHandler(StateHandler.RepeatHandler handler) {
+		this.repeatHandler = handler;
 		return this;
 	}
 	
@@ -142,8 +142,8 @@ public class FunctionBuilder {
 			}
 
 			@Override
-			public StateTransition onRetry(StateContext context) {
-				return (retryHandler == null? TransitionBuilder.failure() : retryHandler.onRetry(context));
+			public StateTransition onResume(StateContext context) {
+				return (repeatHandler == null? TransitionBuilder.repeat(0) : repeatHandler.onResume(context));
 			}
 			
 			@Override

@@ -66,13 +66,13 @@ public class RetryBuilder {
 	}
 	
 	/**
-	 * 
+	 * return a repeat builder with re-trier definition
 	 * @return
 	 */
-	public StateHandler.RetryHandler build() {
-		return new StateHandler.RetryHandler() {
+	public StateHandler.RepeatHandler build() {
+		return new StateHandler.RepeatHandler() {
 			@Override
-			public StateTransition onRetry(StateContext context) {
+			public StateTransition onResume(StateContext context) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 				StateSpec.Retrier retrier;
 				if(error != null) {
@@ -84,7 +84,15 @@ public class RetryBuilder {
 				if(retrier == null && retriers != null) {
 					retrier = retriers.get(StateHandler.ERROR_ALL);
 				}
-				return (retrier == null? TransitionBuilder.failure(): retrier);
+				
+				//CAN'T RE-TRY
+				if(retrier == null) {
+					return	TransitionBuilder.failure();
+				}
+				
+				//CALCULATE FINAL DELAYS
+				int delaySeconds = (int)(retrier.getIntervalSeconds() * Math.pow(retrier.getBackoffRate(), context.getRunCount()));
+				return TransitionBuilder.repeat(delaySeconds);
 			}
 		};
 	}

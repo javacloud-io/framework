@@ -3,7 +3,6 @@ import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.flow.StateTransition;
-import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
 import io.javacloud.framework.util.Codecs;
@@ -29,7 +28,7 @@ public class FlowExecutor extends FlowHandler {
 	@Override
 	public FlowState start(Object parameters, String startAt) {
 		FlowState state = super.start(parameters, startAt);
-		state.setInstanceId(Codecs.randomID());
+		state.setExecutionId(Codecs.randomID());
 		try {
 			execute(state);
 		} finally {
@@ -44,26 +43,26 @@ public class FlowExecutor extends FlowHandler {
 	@Override
 	public StateTransition execute(FlowState state) {
 		StateTransition transition = super.execute(state);
+		//FAILURE/SUCCESS
 		if(transition.isEnd()) {
 			return transition;
 		}
-		if(transition instanceof StateTransition.Retry) {
-			int delaySeconds = retry(state, (StateTransition.Retry)transition);
-			if(delaySeconds <= 0) {
-				return TransitionBuilder.failure();
+		
+		//TAKE NAP & RESUME
+		if(transition instanceof StateTransition.Repeat) {
+			int delaySeconds = ((StateTransition.Repeat)transition).getDelaySeconds();
+			if(delaySeconds > 0) {
+				Objects.sleep(delaySeconds, TimeUnit.SECONDS);
 			}
-			//TAKE NAP & RE-TRY
-			Objects.sleep(delaySeconds, TimeUnit.SECONDS);
 			return	execute(state);
 		}
 		
-		//TAKE NAP & EXECUTE NEXT
+		//TAKE A SCALING NAP & EXECUTE NEXT
 		int delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
 		if(delaySeconds < MIN_DELAY_SECONDS) {
-			Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
-		} else {
-			Objects.sleep(delaySeconds, TimeUnit.SECONDS);
+			delaySeconds = MIN_DELAY_SECONDS;
 		}
+		Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
 		return	execute(state);
 	}
 	

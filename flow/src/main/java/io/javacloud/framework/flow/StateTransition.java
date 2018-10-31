@@ -12,30 +12,21 @@ public interface StateTransition {
 	 */
 	public boolean isEnd();
 	
-	//RETRY
-	interface Retry extends StateTransition {
-		/**
-		 * 
-		 * @return
-		 */
-		public int getMaxAttempts();
-		
-		/**
-		 * 
-		 * @return
-		 */
-		public int getIntervalSeconds();
-		
-		/**
-		 * 
-		 * @return
-		 */
-		default public double getBackoffRate() {
-			return 1.0;
+	//REPEAT -> RESUME
+	interface Repeat extends StateTransition {
+		@Override
+		default public boolean isEnd() {
+			return false;
 		}
+		
+		/**
+		 * Delays second prior to resume
+		 * @return
+		 */
+		public int getDelaySeconds();
 	}
 	
-	//SUCCESS
+	//SUCCESS -> NEXT
 	interface Success extends StateTransition {
 		/**
 		 * Delays second prior to move to next state
@@ -52,7 +43,7 @@ public interface StateTransition {
 		public String getNext();
 	}
 	
-	//FAILURE
+	//FAILURE -> TERMINATE
 	interface Failure extends StateTransition {
 		@Override
 		default public boolean isEnd() {

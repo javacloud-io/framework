@@ -16,8 +16,8 @@ public class FlowContext implements StateContext {
 	}
 	
 	@Override
-	public String getInstanceId() {
-		return state.getInstanceId();
+	public String getExecutionId() {
+		return state.getExecutionId();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class FlowContext implements StateContext {
 	}
 
 	@Override
-	public int getRetryCount() {
-		return state.getRetryCount();
+	public int getRunCount() {
+		return state.getRunCount();
 	}
 }

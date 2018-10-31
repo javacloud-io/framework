@@ -6,7 +6,7 @@ package io.javacloud.framework.flow;
  *
  */
 public interface StateFunction extends StateHandler<Object>, StateHandler.InputHandler<Object>, StateHandler.OutputHandler,
-	StateHandler.FailureHandler, StateHandler.RetryHandler {
+	StateHandler.FailureHandler, StateHandler.RepeatHandler {
 	/**
 	 * Generic InputHandler need type for conversion
 	 * @return
@@ -15,6 +15,7 @@ public interface StateFunction extends StateHandler<Object>, StateHandler.InputH
 	
 	/**
 	 * Default function timeout
+	 * 
 	 * @return
 	 */
 	default public int getTimeoutSeconds() {
@@ -23,6 +24,7 @@ public interface StateFunction extends StateHandler<Object>, StateHandler.InputH
 	
 	/**
 	 * Default heartbeat to keep alive
+	 * 
 	 * @return
 	 */
 	default public int getHeartbeatSeconds() {

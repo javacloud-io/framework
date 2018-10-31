@@ -17,7 +17,7 @@ public interface StateHandler<T> {
 	public enum Status {
 		SUCCESS,
 		FAILURE,
-		RETRY
+		REPEAT
 	}
 	
 	//HANDLE RESOURCE
@@ -45,8 +45,8 @@ public interface StateHandler<T> {
 		StateTransition onFailure(StateContext context, Exception ex);
 	}
 	
-	//HANDLE RETRY
-	public interface RetryHandler {
-		StateTransition onRetry(StateContext context);
+	//HANDLE RESUME
+	public interface RepeatHandler {
+		StateTransition onResume(StateContext context);
 	}
 }

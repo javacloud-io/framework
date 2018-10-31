@@ -45,14 +45,14 @@ public class FlowBuilder {
 	 * 
 	 * @param name
 	 * @param handler
-	 * @param retryHandler
+	 * @param repeatHandler
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateHandler<?> handler, StateHandler.RetryHandler retryHandler, String next) {
+	public FlowBuilder withState(String name, StateHandler<?> handler, StateHandler.RepeatHandler repeatHandler, String next) {
 		return withState(name, new FunctionBuilder()
 								.withStateHandler(handler)
-								.withRetryHandler(retryHandler)
+								.withRepeatHandler(repeatHandler)
 								.withSuccessTransition(TransitionBuilder.success(next))
 								.build());
 	}

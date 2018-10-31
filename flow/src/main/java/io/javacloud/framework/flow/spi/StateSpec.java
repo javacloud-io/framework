@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -35,7 +34,7 @@ public abstract class StateSpec {
 		Parallel
 	}
 	
-	public static class Retrier implements StateTransition.Retry {
+	public static class Retrier {
 		@JsonProperty("ErrorEquals")
 		private List<String> errorEquals;
 		
@@ -43,7 +42,7 @@ public abstract class StateSpec {
 		private int maxAttempts		= 0;
 		
 		@JsonProperty("IntervalSeconds")
-		private int intervalSeconds	= 5;
+		private int intervalSeconds	= 2;
 		
 		@JsonProperty("BackoffRate")
 		private double backoffRate 	= 1.0;
@@ -51,11 +50,6 @@ public abstract class StateSpec {
 		public Retrier() {
 		}
 		
-		@Override
-		public boolean isEnd() {
-			return false;
-		}
-		@Override
 		public int getMaxAttempts() {
 			return maxAttempts;
 		}
@@ -64,7 +58,6 @@ public abstract class StateSpec {
 			return this;
 		}
 		
-		@Override
 		public int getIntervalSeconds() {
 			return intervalSeconds;
 		}
@@ -73,11 +66,10 @@ public abstract class StateSpec {
 			return this;
 		}
 		
-		@Override
 		public double getBackoffRate() {
 			return backoffRate;
 		}
-		public Retrier withBackoffRate(int backoffRate) {
+		public Retrier withBackoffRate(double backoffRate) {
 			this.backoffRate = backoffRate;
 			return this;
 		}
@@ -100,7 +92,7 @@ public abstract class StateSpec {
 		}
 	}
 	
-	public static class Catcher implements StateTransition.Success {
+	public static class Catcher {
 		@JsonProperty("ErrorEquals")
 		private List<String> errorEquals;
 		
@@ -115,11 +107,6 @@ public abstract class StateSpec {
 		public Catcher() {
 		}
 		
-		@Override
-		public boolean isEnd() {
-			return false;
-		}
-		@Override
 		public String getNext() {
 			return next;
 		}
