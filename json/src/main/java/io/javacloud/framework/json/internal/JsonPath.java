@@ -101,7 +101,7 @@ public class JsonPath {
 	}
 	
 	/**
-	 * resolve field[*]
+	 * resolve field[*], field[s:e]
 	 * 
 	 * @param json
 	 * @param name
@@ -119,6 +119,9 @@ public class JsonPath {
 		
 		//WHOLE OBJECT
 		Object v = getProperty(json, name.substring(0, s));
+		if(v == null) {
+			return v;
+		}
 		String index = name.substring(s + 1, e);
 		int d = index.indexOf(':');
 		if(d == 0 && index.length() <= 1) {
@@ -126,7 +129,8 @@ public class JsonPath {
 		}
 		
 		//PROCESS INDEX
-		List<Object> list = Objects.cast(v);
+		boolean isArray = v.getClass().isArray();
+		List<Object> list = isArray? Objects.asList((Object[])v) : Objects.cast(v);
 		if(d < 0) {
 			s = intValueOf(index, list.size());
 			return list.get(s);
@@ -134,20 +138,22 @@ public class JsonPath {
 		
 		//PROCESS RANGE
 		if(d == 0) {
-			//SUB[:3]
+			//SUB[:e]
 			s = 0;
 			e = intValueOf(index.substring(1), list.size());
 		} else if(d == index.length() - 1) {
-			//SUB[3:]
+			//SUB[s:]
 			s = intValueOf(index.substring(0, d), list.size());
 			e = list.size();
 		} else {
+			//SUB[s:e]
 			s = intValueOf(index.substring(0, d), list.size());
 			e = intValueOf(index.substring(d + 1),list.size());
 		}
 		
-		//SUBLIST OR NOT
-		return (s == 0 && e == list.size()? list : list.subList(s,  e));
+		//SUBLIST OR WHOLE
+		list = (s == 0 && e == list.size()? list : list.subList(s,  e));
+		return isArray? list.toArray() : list;
 	}
 	
 	/**

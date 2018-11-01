@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 public class JsonPathTest extends TestCase {
 	@Test
 	public void testBasic() {
-		Dictionary dict = Dictionaries.asDict("a", "b", "c", "d", "r", Objects.asList(1, 2, 3 ,4));
+		Dictionary dict = Dictionaries.asDict("a", "b", "c", "d", "r", Objects.asList(1, 2, 3 ,4), "ar", new Object[] {"a", "b", "c"});
 		JsonPath jsonPath = new JsonPath(dict);
 		Assert.assertEquals("b", jsonPath.select("$.a"));
 		Assert.assertEquals("d", jsonPath.select("$.c"));
