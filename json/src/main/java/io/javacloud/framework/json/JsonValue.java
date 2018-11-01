@@ -36,7 +36,7 @@ public interface JsonValue {
 		if(value instanceof String) {
 			return Type.STRING;
 		}
-		if(value instanceof List) {
+		if(value instanceof List || value.getClass().isArray()) {
 			return Type.ARRAY;
 		}
 		return Type.OBJECT;
