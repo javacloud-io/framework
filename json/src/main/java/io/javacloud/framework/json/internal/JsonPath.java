@@ -13,7 +13,7 @@ import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.Pair;
 
 /**
- * Implements JsonPath spec: https://goessner.net/articles/JsonPath
+ * Basic implements JsonPath specification : https://goessner.net/articles/JsonPath
  * 
  * -DOT access: $.books
  * -INDEX access: $.books[0]
