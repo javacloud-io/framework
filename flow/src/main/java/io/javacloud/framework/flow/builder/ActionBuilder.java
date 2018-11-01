@@ -18,7 +18,7 @@ public class ActionBuilder {
 	private StateHandler.InputHandler<Object> inputHandler;
 	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
-	private StateHandler.RepeatHandler	 repeatHandler;
+	private StateHandler.RetryHandler	 retryHandler;
 	public ActionBuilder() {
 	}
 	
@@ -81,8 +81,8 @@ public class ActionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public ActionBuilder withRepeatHandler(StateHandler.RepeatHandler handler) {
-		this.repeatHandler = handler;
+	public ActionBuilder withRetryHandler(StateHandler.RetryHandler handler) {
+		this.retryHandler = handler;
 		return this;
 	}
 	
@@ -142,8 +142,8 @@ public class ActionBuilder {
 			}
 
 			@Override
-			public StateTransition onResume(StateContext context) {
-				return (repeatHandler == null? TransitionBuilder.repeat(0) : repeatHandler.onResume(context));
+			public StateTransition onRetry(StateContext context) {
+				return (retryHandler == null? TransitionBuilder.retry(0) : retryHandler.onRetry(context));
 			}
 			
 			@Override

@@ -69,15 +69,15 @@ public class TransitionBuilder {
 	 * 
 	 * @return
 	 */
-	public static StateTransition.Repeat repeat(final int delaySeconds) {
-		return new StateTransition.Repeat() {
+	public static StateTransition.Retry retry(final int delaySeconds) {
+		return new StateTransition.Retry() {
 			@Override
 			public int getDelaySeconds() {
 				return delaySeconds;
 			}
 			@Override
 			public String toString() {
-				return "Repeat";
+				return "Retry";
 			}
 		};
 	}

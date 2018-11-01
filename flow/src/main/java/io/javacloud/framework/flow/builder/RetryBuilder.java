@@ -11,8 +11,9 @@ import io.javacloud.framework.flow.spi.StateSpec;
 import io.javacloud.framework.util.Objects;
 
 /**
+ * To handle re-try on ERROR or LOOP condition
  * 
- * * {
+ * {
  * 		"Retry":[
  * 			{ "ErrorEquals": ["a", "b"],
  * 			  "MaxAttempts": 10
@@ -69,10 +70,10 @@ public class RetryBuilder {
 	 * return a repeat builder with re-trier definition
 	 * @return
 	 */
-	public StateHandler.RepeatHandler build() {
-		return new StateHandler.RepeatHandler() {
+	public StateHandler.RetryHandler build() {
+		return new StateHandler.RetryHandler() {
 			@Override
-			public StateTransition onResume(StateContext context) {
+			public StateTransition onRetry(StateContext context) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 				StateSpec.Retrier retrier;
 				if(error != null) {
@@ -89,11 +90,14 @@ public class RetryBuilder {
 				if(retrier == null) {
 					context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_RETRYABLE);
 					return	TransitionBuilder.failure();
+				} else if(context.getTryCount() > retrier.getMaxAttempts()) {
+					context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_TIMEOUT);
+					return	TransitionBuilder.failure();
 				}
 				
 				//CALCULATE FINAL DELAYS
-				int delaySeconds = (int)(retrier.getIntervalSeconds() * Math.pow(retrier.getBackoffRate(), context.getRunCount()));
-				return TransitionBuilder.repeat(delaySeconds);
+				int delaySeconds = (int)(retrier.getIntervalSeconds() * Math.pow(retrier.getBackoffRate(), context.getTryCount() - 1));
+				return TransitionBuilder.retry(delaySeconds);
 			}
 		};
 	}

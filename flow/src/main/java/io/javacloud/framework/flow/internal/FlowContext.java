@@ -43,7 +43,7 @@ public class FlowContext implements StateContext {
 	}
 
 	@Override
-	public int getRunCount() {
-		return state.getRunCount();
+	public int getTryCount() {
+		return state.getTryCount();
 	}
 }

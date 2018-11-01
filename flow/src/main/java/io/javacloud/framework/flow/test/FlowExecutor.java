@@ -49,8 +49,8 @@ public class FlowExecutor extends FlowHandler {
 		}
 		
 		//TAKE NAP & RESUME
-		if(transition instanceof StateTransition.Repeat) {
-			int delaySeconds = ((StateTransition.Repeat)transition).getDelaySeconds();
+		if(transition instanceof StateTransition.Retry) {
+			int delaySeconds = ((StateTransition.Retry)transition).getDelaySeconds();
 			if(delaySeconds > 0) {
 				Objects.sleep(delaySeconds, TimeUnit.SECONDS);
 			}

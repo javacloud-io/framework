@@ -12,7 +12,7 @@ import io.javacloud.framework.util.Objects;
 public class FlowState {
 	private String 	name;
 	private long 	startedAt;
-	private int  	runCount;
+	private int  	tryCount;
 	private String 	stackTrace;
 	
 	private String 	executionId;
@@ -50,11 +50,11 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public int getRunCount() {
-		return runCount;
+	public int getTryCount() {
+		return tryCount;
 	}
-	public void setRunCount(int runCount) {
-		this.runCount = runCount;
+	public void setTryCount(int tryCount) {
+		this.tryCount = tryCount;
 	}
 	
 	/**

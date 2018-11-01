@@ -12,8 +12,8 @@ public interface StateTransition {
 	 */
 	public boolean isEnd();
 	
-	//REPEAT -> RESUME
-	interface Repeat extends StateTransition {
+	//RETRY -> RESUME
+	interface Retry extends StateTransition {
 		@Override
 		default public boolean isEnd() {
 			return false;

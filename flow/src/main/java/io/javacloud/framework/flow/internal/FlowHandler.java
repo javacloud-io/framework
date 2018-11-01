@@ -67,14 +67,18 @@ public class FlowHandler {
 	public StateTransition execute(FlowState state) {
 		FlowContext context = new FlowContext(state);
 		StateAction action = stateFlow.getState(state.getName());
+		if(action == null) {
+			return onFailure(action, context, null);
+		}
 		try {
 			Object parameters = onInput(action, context);
-			StateAction.Status status = action.handle(parameters, context);
+			StateAction.Status status = onHandle(action, context, parameters);
 			if(status == StateHandler.Status.SUCCESS) {
 				return onSuccess(action, context);
-			} else if(status == StateHandler.Status.REPEAT) {
-				return	onResume(action, context);
+			} else if(status == StateHandler.Status.RETRY) {
+				return	onRetry(action, context);
 			}
+			
 			//UNKNOWN FAILURE
 			return onFailure(action, context, null);
 		} catch(Exception ex) {
@@ -108,7 +112,7 @@ public class FlowHandler {
 		//RESET OTHERS
 		state.setName(name);
 		state.setStartedAt(System.currentTimeMillis());
-		state.setRunCount(0);
+		state.setTryCount(0);
 		state.setStackTrace(null);
 		return state;
 	}
@@ -137,6 +141,24 @@ public class FlowHandler {
 	}
 	
 	/**
+	 * Handle the action and increase try-count
+	 * 
+	 * @param action
+	 * @param context
+	 * @param parameters
+	 * @return
+	 * @throws Exception
+	 */
+	protected StateHandler.Status onHandle(StateAction action, FlowContext context, Object parameters) throws Exception {
+		try {
+			return	action.handle(parameters, context);
+		} finally {
+			FlowState state = context.state;
+			state.setTryCount(state.getTryCount() + 1);
+		}
+	}
+	
+	/**
 	 * OUTPUT = {RESULT + INPUT}
 	 * 
 	 * @param action
@@ -147,10 +169,8 @@ public class FlowHandler {
 		StateTransition.Success transition = action.onOutput(context);
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
-		FlowState state = context.state;
-		state.setRunCount(state.getRunCount() + 1);
-		
 		if(!transition.isEnd()) {
+			FlowState state = context.state;
 			state.setInput(state.output());
 			onPrepare(state, transition.getNext());
 		}
@@ -158,16 +178,17 @@ public class FlowHandler {
 	}
 	
 	/**
-	 * Resume to control the state
+	 * Retry to control the state 
 	 * 
 	 * @param action
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onResume(StateAction action, FlowContext context) {
-		StateTransition transition = action.onResume(context);
-		FlowState state = context.state;
-		state.setRunCount(state.getRunCount() + 1);
+	protected StateTransition onRetry(StateAction action, FlowContext context) {
+		StateTransition transition = action.onRetry(context);
+		if(transition instanceof StateTransition.Failure) {
+			context.state.setFailed(true);
+		}
 		return transition;
 	}
 	
@@ -191,11 +212,9 @@ public class FlowHandler {
 		//HANDLE FAILURE
 		if(transition instanceof StateTransition.Failure) {
 			context.state.setFailed(true);
-			if(ex != null) {
-				//IF ERROR CODE IS NOT SET => USING CLASS NAME
-				if(context.getAttribute(StateContext.ATTRIBUTE_ERROR) == null) {
-					context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.findReason(ex));
-				}
+			//SET DETAILS ERROR IF HAVEN'T DONE SO
+			if(ex != null && context.getAttribute(StateContext.ATTRIBUTE_ERROR) == null) {
+				context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.findReason(ex));
 				context.state.setStackTrace(UncheckedException.toStackTrace(ex));
 			}
 		}

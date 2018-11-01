@@ -80,14 +80,14 @@ public class WorkflowTest extends TestCase {
 							.withState("state1", new StateHandler<Dictionary>() {
 								@Override
 								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {
-									if(context.getRunCount() < 5) {
-										return StateHandler.Status.REPEAT;
+									if(context.getTryCount() < 5) {
+										return StateHandler.Status.RETRY;
 									}
 									context.setAttribute("t1", "abc");
 									return successResult(context, "t1", "abc");
 								}
 							},
-							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(6)).build(), "state2")
+							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "state2")
 							.withState("state2", new StateHandler<Dictionary>() {
 								@Override
 								public StateHandler.Status handle(Dictionary parameters, StateContext context) throws Exception {

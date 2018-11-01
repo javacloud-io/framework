@@ -49,10 +49,10 @@ public class FlowBuilder {
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateHandler<?> handler, StateHandler.RepeatHandler repeatHandler, String next) {
+	public FlowBuilder withState(String name, StateHandler<?> handler, StateHandler.RetryHandler retryHandler, String next) {
 		return withState(name, new ActionBuilder()
 								.withStateHandler(handler)
-								.withRepeatHandler(repeatHandler)
+								.withRetryHandler(retryHandler)
 								.withSuccessTransition(TransitionBuilder.success(next))
 								.build());
 	}

@@ -44,5 +44,5 @@ public interface StateContext {
 	 * In case of loop, how many time it's been running
 	 * @return
 	 */
-	public int getRunCount();
+	public int getTryCount();
 }
