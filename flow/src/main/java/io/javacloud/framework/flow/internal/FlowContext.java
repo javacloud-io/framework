@@ -12,7 +12,7 @@ import io.javacloud.framework.util.Objects;
 public class FlowContext implements StateContext {
 	final FlowState  state;
 	public FlowContext(FlowState  state) {
-		this.state		= state;
+		this.state	= state;
 	}
 	
 	@Override
