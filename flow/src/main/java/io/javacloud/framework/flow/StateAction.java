@@ -5,7 +5,7 @@ package io.javacloud.framework.flow;
  * @author ho
  *
  */
-public interface StateFunction extends StateHandler<Object>, StateHandler.InputHandler<Object>, StateHandler.OutputHandler,
+public interface StateAction extends StateHandler<Object>, StateHandler.InputHandler<Object>, StateHandler.OutputHandler,
 	StateHandler.FailureHandler, StateHandler.RepeatHandler {
 	/**
 	 * Generic InputHandler need type for conversion
@@ -14,7 +14,7 @@ public interface StateFunction extends StateHandler<Object>, StateHandler.InputH
 	public Class<?> getParametersType();
 	
 	/**
-	 * Default function timeout
+	 * Default action timeout
 	 * 
 	 * @return
 	 */

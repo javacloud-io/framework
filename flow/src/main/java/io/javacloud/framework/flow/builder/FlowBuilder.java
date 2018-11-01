@@ -3,7 +3,7 @@ package io.javacloud.framework.flow.builder;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.javacloud.framework.flow.StateFunction;
+import io.javacloud.framework.flow.StateAction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateFlow;
 
@@ -14,7 +14,7 @@ import io.javacloud.framework.flow.StateFlow;
  */
 public class FlowBuilder {
 	private String startAt;
-	private Map<String, StateFunction> states;
+	private Map<String, StateAction> states;
 	public FlowBuilder() {
 	}
 	
@@ -36,7 +36,7 @@ public class FlowBuilder {
 	 * @return
 	 */
 	public FlowBuilder withState(String name, StateHandler<?> handler, String next) {
-		return withState(name, new FunctionBuilder()
+		return withState(name, new ActionBuilder()
 								.withStateHandler(handler)
 								.withSuccessTransition(TransitionBuilder.success(next))
 								.build());
@@ -50,7 +50,7 @@ public class FlowBuilder {
 	 * @return
 	 */
 	public FlowBuilder withState(String name, StateHandler<?> handler, StateHandler.RepeatHandler repeatHandler, String next) {
-		return withState(name, new FunctionBuilder()
+		return withState(name, new ActionBuilder()
 								.withStateHandler(handler)
 								.withRepeatHandler(repeatHandler)
 								.withSuccessTransition(TransitionBuilder.success(next))
@@ -59,14 +59,14 @@ public class FlowBuilder {
 	/**
 	 * 
 	 * @param name
-	 * @param function
+	 * @param action
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateFunction function) {
+	public FlowBuilder withState(String name, StateAction action) {
 		if(states == null) {
 			states = new HashMap<>();
 		}
-		states.put(name, function);
+		states.put(name, action);
 		return this;
 	}
 	
@@ -82,7 +82,7 @@ public class FlowBuilder {
 			}
 			
 			@Override
-			public StateFunction getState(String stepName) {
+			public StateAction getState(String stepName) {
 				return (states == null? null : states.get(stepName));
 			}
 		};

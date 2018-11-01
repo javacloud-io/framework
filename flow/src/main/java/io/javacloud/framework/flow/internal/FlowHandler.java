@@ -3,7 +3,7 @@ package io.javacloud.framework.flow.internal;
 import java.io.IOException;
 
 import io.javacloud.framework.flow.StateContext;
-import io.javacloud.framework.flow.StateFunction;
+import io.javacloud.framework.flow.StateAction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
@@ -66,19 +66,19 @@ public class FlowHandler {
 	 */
 	public StateTransition execute(FlowState state) {
 		FlowContext context = new FlowContext(state);
-		StateFunction function = stateFlow.getState(state.getName());
+		StateAction action = stateFlow.getState(state.getName());
 		try {
-			Object parameters = onInput(function, context);
-			StateFunction.Status status = function.handle(parameters, context);
-			if(status == StateFunction.Status.SUCCESS) {
-				return onSuccess(function, context);
-			} else if(status == StateFunction.Status.REPEAT) {
-				return	onResume(function, context);
+			Object parameters = onInput(action, context);
+			StateAction.Status status = action.handle(parameters, context);
+			if(status == StateHandler.Status.SUCCESS) {
+				return onSuccess(action, context);
+			} else if(status == StateHandler.Status.REPEAT) {
+				return	onResume(action, context);
 			}
 			//UNKNOWN FAILURE
-			return onFailure(function, context, null);
+			return onFailure(action, context, null);
 		} catch(Exception ex) {
-			return onFailure(function, context, ex);
+			return onFailure(action, context, ex);
 		}
 	}
 	
@@ -116,14 +116,14 @@ public class FlowHandler {
 	/**
 	 * Filter the input and AUTO convert the parameters for handler if not applicable.
 	 * 
-	 * @param function
+	 * @param action
 	 * @param context
 	 * @return
 	 * @throws Exception
 	 */
-	protected Object onInput(StateFunction function, StateContext context) throws Exception {
-		Object parameters = function.onInput(context);
-		Class<?> type = function.getParametersType();
+	protected Object onInput(StateAction action, StateContext context) throws Exception {
+		Object parameters = action.onInput(context);
+		Class<?> type = action.getParametersType();
 		//PARAMETERS CONVERSION!!!
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
 			try {
@@ -139,12 +139,12 @@ public class FlowHandler {
 	/**
 	 * OUTPUT = {RESULT + INPUT}
 	 * 
-	 * @param function
+	 * @param action
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onSuccess(StateFunction function, FlowContext context) {
-		StateTransition.Success transition = function.onOutput(context);
+	protected StateTransition onSuccess(StateAction action, FlowContext context) {
+		StateTransition.Success transition = action.onOutput(context);
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		FlowState state = context.state;
@@ -160,12 +160,12 @@ public class FlowHandler {
 	/**
 	 * Resume to control the state
 	 * 
-	 * @param function
+	 * @param action
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onResume(StateFunction function, FlowContext context) {
-		StateTransition transition = function.onResume(context);
+	protected StateTransition onResume(StateAction action, FlowContext context) {
+		StateTransition transition = action.onResume(context);
 		FlowState state = context.state;
 		state.setRunCount(state.getRunCount() + 1);
 		return transition;
@@ -173,19 +173,19 @@ public class FlowHandler {
 	
 	/**
 	 * 
-	 * @param function
+	 * @param action
 	 * @param context
 	 * @param ex
 	 * @return
 	 */
-	protected StateTransition onFailure(StateFunction function, FlowContext context, Exception ex) {
+	protected StateTransition onFailure(StateAction action, FlowContext context, Exception ex) {
 		StateTransition transition;
 		//NOT FOUND STATE
-		if(function == null) {
+		if(action == null) {
 			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_FOUND);
 			transition = TransitionBuilder.failure();
 		} else {
-			transition = function.onFailure(context, ex);
+			transition = action.onFailure(context, ex);
 		}
 		
 		//HANDLE FAILURE

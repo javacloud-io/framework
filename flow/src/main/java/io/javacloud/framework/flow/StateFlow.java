@@ -16,5 +16,5 @@ public interface StateFlow {
 	 * @param name
 	 * @return
 	 */
-	public StateFunction getState(String name);
+	public StateAction getState(String name);
 }

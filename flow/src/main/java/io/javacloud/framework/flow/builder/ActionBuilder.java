@@ -3,7 +3,7 @@ package io.javacloud.framework.flow.builder;
 import java.lang.reflect.ParameterizedType;
 
 import io.javacloud.framework.flow.StateContext;
-import io.javacloud.framework.flow.StateFunction;
+import io.javacloud.framework.flow.StateAction;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.util.Objects;
@@ -13,13 +13,13 @@ import io.javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FunctionBuilder {
+public class ActionBuilder {
 	private StateHandler<Object> 		 stateHandler;
 	private StateHandler.InputHandler<Object> inputHandler;
 	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
 	private StateHandler.RepeatHandler	 repeatHandler;
-	public FunctionBuilder() {
+	public ActionBuilder() {
 	}
 	
 	/**
@@ -27,7 +27,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withStateHandler(StateHandler<?> handler) {
+	public ActionBuilder withStateHandler(StateHandler<?> handler) {
 		this.stateHandler = Objects.cast(handler);
 		return this;
 	}
@@ -37,7 +37,7 @@ public class FunctionBuilder {
 	 * @param status
 	 * @return
 	 */
-	public FunctionBuilder withStateHandler(final StateHandler.Status status) {
+	public ActionBuilder withStateHandler(final StateHandler.Status status) {
 		return withStateHandler(new StateHandler<Object>() {
 			@Override
 			public Status handle(Object parameters, StateContext context) throws Exception {
@@ -51,7 +51,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withInputHandler(StateHandler.InputHandler<?>  handler) {
+	public ActionBuilder withInputHandler(StateHandler.InputHandler<?>  handler) {
 		this.inputHandler = Objects.cast(handler);
 		return this;
 	}
@@ -61,7 +61,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withOutputHandler(StateHandler.OutputHandler  handler) {
+	public ActionBuilder withOutputHandler(StateHandler.OutputHandler  handler) {
 		this.outputHandler = handler;
 		return this;
 	}
@@ -71,7 +71,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withFailureHandler(StateHandler.FailureHandler  handler) {
+	public ActionBuilder withFailureHandler(StateHandler.FailureHandler  handler) {
 		this.failureHandler = handler;
 		return this;
 	}
@@ -81,7 +81,7 @@ public class FunctionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public FunctionBuilder withRepeatHandler(StateHandler.RepeatHandler handler) {
+	public ActionBuilder withRepeatHandler(StateHandler.RepeatHandler handler) {
 		this.repeatHandler = handler;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class FunctionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public FunctionBuilder withSuccessTransition(final StateTransition.Success transition) {
+	public ActionBuilder withSuccessTransition(final StateTransition.Success transition) {
 		return withOutputHandler(new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
@@ -105,7 +105,7 @@ public class FunctionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public FunctionBuilder withFailureTransition(final StateTransition.Failure transition) {
+	public ActionBuilder withFailureTransition(final StateTransition.Failure transition) {
 		return withFailureHandler(new StateHandler.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
@@ -118,8 +118,8 @@ public class FunctionBuilder {
 	 * 
 	 * @return
 	 */
-	public  StateFunction build() {
-		return new StateFunction() {
+	public  StateAction build() {
+		return new StateAction() {
 			@Override
 			public Object onInput(StateContext context) {
 				if(inputHandler == null) {
