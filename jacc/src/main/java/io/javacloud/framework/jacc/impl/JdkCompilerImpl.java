@@ -20,7 +20,6 @@ import io.javacloud.framework.util.Objects;
  * @author ho
  *
  */
-@SuppressWarnings("restriction")
 @Singleton
 public class JdkCompilerImpl implements JavaCompiler {
 	private final LocaleContext localeContext;

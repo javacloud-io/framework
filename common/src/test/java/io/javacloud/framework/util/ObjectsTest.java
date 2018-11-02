@@ -17,6 +17,8 @@ package io.javacloud.framework.util;
 
 import io.javacloud.framework.util.Objects;
 
+import java.util.List;
+
 import org.junit.Assert;
 
 import junit.framework.TestCase;
@@ -30,14 +32,6 @@ public class ObjectsTest extends TestCase {
 	public void testCompare() {
 		Assert.assertTrue(Objects.compare(1, 2) < 0);
 		Assert.assertTrue(Objects.compare("aa", "ab") < 0);
-	}
-	
-	public void testDict() {
-		Dictionary dict = Dictionaries.asDict("a", "aa", "b", "bb");
-		Assert.assertEquals(2, dict.size());
-		Assert.assertEquals(dict.get("a"), "aa");
-		Assert.assertEquals(dict.get("b"), "bb");
-		Assert.assertNull(dict.get("c"));
 	}
 	
 	public void testSignum() {
@@ -54,5 +48,11 @@ public class ObjectsTest extends TestCase {
 	public void testToArray() {
 		String[] a = Converters.toArray("1,2,3,4", ",", true);
 		Assert.assertArrayEquals(new String[]{"1","2","3","4"}, a);
+	}
+	
+	public void testObjects() {
+		Object v = new String[] {"a", "b", "c"};
+		List<Object> list = Objects.asList((Object[])v);
+		Assert.assertEquals(3, list.size());
 	}
 }

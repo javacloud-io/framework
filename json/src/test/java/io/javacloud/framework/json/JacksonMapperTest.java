@@ -1,6 +1,7 @@
 package io.javacloud.framework.json;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,8 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javacloud.framework.cdi.test.ServiceTest;
 import io.javacloud.framework.json.internal.JsonConverter;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
+import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -30,10 +31,10 @@ public class JacksonMapperTest extends ServiceTest {
 	@Test
 	public void testDict() throws IOException {
 		JsonConverter converter = new JsonConverter(externalizer);
-		Dictionary dict = new Dictionary();
+		Map<String, Object> dict = Objects.asMap();
 		Assert.assertEquals("{}", converter.toUTF8(dict));
 		
-		dict = (Dictionary)converter.toObject("{\"a\":123}", Dictionary.class);
+		dict = converter.toObject("{\"a\":123}", Map.class);
 		Assert.assertEquals(123, (int)dict.get("a"));
 		
 		Object obj = converter.toObject("true", Object.class);

@@ -6,7 +6,6 @@ import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
 import io.javacloud.framework.util.Codecs;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 
@@ -72,7 +71,7 @@ public class FlowExecutor extends FlowHandler {
 	 * @param parameters
 	 * @return
 	 */
-	public static FlowState start(StateFlow stateFlow, Dictionary parameters) {
+	public static <T> FlowState start(StateFlow stateFlow, T parameters) {
 		return new FlowExecutor(stateFlow).start(parameters);
 	}
 }

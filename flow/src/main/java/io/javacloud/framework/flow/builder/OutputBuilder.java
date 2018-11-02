@@ -5,7 +5,7 @@ import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.json.internal.JsonPath;
 import io.javacloud.framework.json.internal.JsonTemplate;
-import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Objects;
 
 /**
  * 
@@ -95,7 +95,7 @@ public class OutputBuilder {
 				}
 				
 				//SET BACK RESULT
-				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult == null? new Dictionary() : finalResult);
+				context.setAttribute(StateContext.ATTRIBUTE_RESULT, finalResult == null? Objects.asMap() : finalResult);
 				return TransitionBuilder.success(next, delaySeconds);
 			}
 		};

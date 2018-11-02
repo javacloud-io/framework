@@ -5,12 +5,11 @@ import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.claim.TokenProvider;
 import io.javacloud.framework.util.Converters;
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Basic implementation of JTW token which is compatible with validator.
@@ -48,7 +47,7 @@ public abstract class JwtTokenProvider implements TokenProvider {
 		Date expireAt = new java.util.Date(issuedAt.getTime() + jwtTokenTTL(type) * 1000L);
 		
 		//Compose JWT TOKEN
-		Dictionary claims = Dictionaries.asDict(
+		Map<String, Object> claims = Objects.asMap(
 			JwtTokenValidator.JWT_TYPE, 		type.name(),
 			JwtTokenValidator.JWT_ISSUER, 		jwtTokenIssuer(),
 			JwtTokenValidator.JWT_SUBJECT, 		authzGrant.getName(),

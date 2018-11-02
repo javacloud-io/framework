@@ -3,6 +3,7 @@ package io.javacloud.framework.server.filter;
 import io.javacloud.framework.server.internal.RequestWrapper;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,8 +18,7 @@ import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.InvalidCredentialsException;
 import io.javacloud.framework.security.internal.Permissions;
 import io.javacloud.framework.util.Converters;
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
 
@@ -125,19 +125,19 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 	 */
 	protected void responseError(HttpServletRequest req, HttpServletResponse resp, AuthenticationException exception)
 		throws ServletException, IOException {
-		Dictionary entity = Dictionaries.asDict(IdParameters.PARAM_ERROR, exception.getReason(),
+		Map<String, Object> entity = Objects.asMap(IdParameters.PARAM_ERROR, exception.getReason(),
 				IdParameters.PARAM_STATE, req.getParameter(IdParameters.PARAM_STATE));
 				
 		//ALWAYS ASSUMING REDIRECT
 		if(Objects.isEmpty(challengeScheme)) {
-			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Dictionaries.encodeURL(entity);
+			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Codecs.encodeURL(entity);
 			resp.sendRedirect(RequestWrapper.buildURI(req, redirectUri));
 		} else {
 			//ANYTHING WILL ASSUMING AUTHZ ISSUE?
 			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, challengeScheme);
 			resp.setStatus(UncheckedException.isCausedBy(exception, AccessDeniedException.class) ?
 					HttpServletResponse.SC_FORBIDDEN : HttpServletResponse.SC_UNAUTHORIZED);
-			resp.getWriter().write((Dictionaries.encodeURL(entity)));
+			resp.getWriter().write((Codecs.encodeURL(entity)));
 		}
 	}
 }

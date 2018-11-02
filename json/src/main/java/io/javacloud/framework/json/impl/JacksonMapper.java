@@ -4,6 +4,7 @@ import io.javacloud.framework.json.JsonValue;
 import io.javacloud.framework.json.internal.JsonValues;
 import io.javacloud.framework.util.DateFormats;
 import io.javacloud.framework.util.Externalizer;
+import io.javacloud.framework.util.Objects;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -107,11 +108,12 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	public void marshal(Object v, OutputStream dst) throws IOException {
 		writeValue(dst, v);
 	}
+	
 	/**
 	 * 
 	 */
 	@Override
-	public <T> T unmarshal(InputStream src, Class<T> type) throws IOException {
-		return readValue(src, type);
+	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
+		return Objects.cast(readValue(src, type));
 	}
 }

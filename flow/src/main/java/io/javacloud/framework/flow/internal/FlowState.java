@@ -1,7 +1,8 @@
 package io.javacloud.framework.flow.internal;
 
+import java.util.Map;
+
 import io.javacloud.framework.flow.StateContext;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -20,7 +21,7 @@ public class FlowState {
 	
 	//INPUT/OUTPUT
 	private Object  input;
-	private Dictionary attributes;
+	private Map<String, Object> attributes;
 	public FlowState() {
 	}
 	
@@ -105,10 +106,10 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public Dictionary getAttributes() {
+	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
-	public void setAttributes(Dictionary attributes) {
+	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
 	

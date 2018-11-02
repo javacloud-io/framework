@@ -1,8 +1,9 @@
 package io.javacloud.framework.security.internal;
 
+import java.util.Map;
+
 import io.javacloud.framework.security.Credentials;
 import io.javacloud.framework.util.Codecs;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 /**
  * Simple authentication request, just principal & credentials. There are remoteAddress field help to identify original.
@@ -13,7 +14,7 @@ import io.javacloud.framework.util.Objects;
 public class BasicCredentials implements Credentials {
 	private String 		name;
 	private	String 		secret;
-	private Dictionary 	attributes;
+	private Map<String, Object> attributes;
 	/**
 	 * 
 	 * @param name
@@ -66,9 +67,10 @@ public class BasicCredentials implements Credentials {
 	public BasicCredentials withAttribute(String name, Object value) {
 		//CREATE ONE IF NOT EXIST
 		if(attributes == null) {
-			attributes = new Dictionary();
+			attributes = Objects.asMap(name, value);
+		} else {
+			attributes.put(name, value);
 		}
-		attributes.set(name, value);
 		return this;
 	}
 	

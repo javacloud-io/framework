@@ -7,8 +7,6 @@ import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.Pair;
 
@@ -70,7 +68,7 @@ public class JsonPath {
 		for(int i = 1; i < segments.length; i ++) {
 			Object v = getProperty(dict, segments[i]);
 			if(v == null) {
-				v = new Dictionary();
+				v = Objects.asMap();
 			}
 			stack.push(new Pair<Object, String>(dict, segments[i]));
 			dict = v;
@@ -82,7 +80,7 @@ public class JsonPath {
 			Pair<Object, String> p = stack.pop();
 			//NOT ABLE TO SET => CONVERT TO DICT
 			if(!setProperty(p.getKey(), p.getValue(), dict)) {
-				dict = Dictionaries.asDict(p.getValue(), dict);
+				dict = Objects.asMap(p.getValue(), dict);
 			} else {
 				dict = p.getKey();
 			}

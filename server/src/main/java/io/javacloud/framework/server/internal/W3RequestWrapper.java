@@ -1,10 +1,10 @@
 package io.javacloud.framework.server.internal;
 
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
+import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Objects;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -18,14 +18,14 @@ import javax.servlet.http.HttpServletRequestWrapper;
  *
  */
 public class W3RequestWrapper extends HttpServletRequestWrapper {
-	private Dictionary parameterMap;
+	private Map<String, String[]> parameterMap;
 	public W3RequestWrapper(HttpServletRequest request) throws IOException {
 		super(request);
 		String queryString = request.getQueryString();
 		if(Objects.isEmpty(queryString)) {
-			parameterMap = new Dictionary();
+			parameterMap = Objects.asMap();
 		}  else {
-			parameterMap = Dictionaries.decodeURL(queryString);
+			parameterMap = Objects.cast(Codecs.decodeURL(queryString, true));
 		}
 	}
 	
@@ -34,7 +34,8 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String getParameter(String name) {
-		return parameterMap.get(name);
+		String[] values = parameterMap.get(name);
+		return (values == null || values.length == 0? null : values[0]);
 	}
 	
 	/**
@@ -42,7 +43,7 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public Map<String, String[]> getParameterMap() {
-		return super.getParameterMap();
+		return parameterMap;
 	}
 	
 	/**
@@ -50,7 +51,7 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public Enumeration<String> getParameterNames() {
-		return super.getParameterNames();
+		return Collections.enumeration(parameterMap.keySet());
 	}
 	
 	/**
@@ -58,7 +59,6 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	@Override
 	public String[] getParameterValues(String name) {
-		String value = getParameter(name);
-		return value == null ? null : new String[] {value};
+		return parameterMap.get(name);
 	}
 }

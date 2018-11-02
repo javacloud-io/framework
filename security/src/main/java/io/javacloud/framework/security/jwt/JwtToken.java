@@ -1,6 +1,6 @@
 package io.javacloud.framework.security.jwt;
 
-import io.javacloud.framework.util.Dictionary;
+import java.util.Map;
 
 /**
  * Simple token representation with Dictionary claims set.
@@ -11,14 +11,14 @@ import io.javacloud.framework.util.Dictionary;
 public final class JwtToken {
 	private String type;
 	private String algorithm;
-	private Dictionary claims;
+	private Map<String, Object> claims;
 	/**
 	 * 
 	 * @param type
 	 * @param algorithm
 	 * @param claims
 	 */
-	public JwtToken(String type, String algorithm, Dictionary claims) {
+	public JwtToken(String type, String algorithm, Map<String, Object> claims) {
 		this.type = type;
 		this.algorithm = algorithm;
 		this.claims = claims;
@@ -29,7 +29,7 @@ public final class JwtToken {
 	 * @param type
 	 * @param claims
 	 */
-	public JwtToken(String type, Dictionary claims) {
+	public JwtToken(String type, Map<String, Object> claims) {
 		this.type = type;
 		this.claims = claims;
 	}
@@ -54,7 +54,7 @@ public final class JwtToken {
 	 * 
 	 * @return
 	 */
-	public Dictionary getClaims() {
+	public Map<String, Object> getClaims() {
 		return claims;
 	}
 }

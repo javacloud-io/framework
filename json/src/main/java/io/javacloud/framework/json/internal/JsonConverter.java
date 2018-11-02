@@ -42,7 +42,7 @@ public final class JsonConverter implements Externalizer {
 	 * 
 	 */
 	@Override
-	public <T> T unmarshal(InputStream src, Class<T> type) throws IOException {
+	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
 		return externalizer.unmarshal(src, type);
 	}
 	
@@ -77,8 +77,8 @@ public final class JsonConverter implements Externalizer {
 	 * @return
 	 * @throws IOException
 	 */
-	public <T> T toObject(byte[] buf, Class<T> type) throws IOException {
-		return externalizer.unmarshal(new BytesInputStream(buf), type);
+	public <T> T toObject(byte[] buf, Class<?> type) throws IOException {
+		return unmarshal(new BytesInputStream(buf), type);
 	}
 	
 	/**
@@ -88,8 +88,8 @@ public final class JsonConverter implements Externalizer {
 	 * @return
 	 * @throws IOException
 	 */
-	public <T> T toObject(String utf8, Class<T> type) throws IOException {
-		return externalizer.unmarshal(new BytesInputStream(utf8), type);
+	public <T> T toObject(String utf8, Class<?> type) throws IOException {
+		return unmarshal(new BytesInputStream(utf8), type);
 	}
 	
 	/**

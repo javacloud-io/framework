@@ -16,7 +16,6 @@ import javax.tools.SimpleJavaFileObject;
  * @author ho
  *
  */
-@SuppressWarnings("restriction")
 public class JdkClassFileManager extends ForwardingJavaFileManager<JavaFileManager> {
 	private final ClassCollector collector;
 	public JdkClassFileManager(JavaFileManager fileManager, ClassCollector collector) {

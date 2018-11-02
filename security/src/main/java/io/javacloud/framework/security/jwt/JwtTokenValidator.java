@@ -1,6 +1,7 @@
 package io.javacloud.framework.security.jwt;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,7 +13,6 @@ import io.javacloud.framework.security.IdParameters;
 import io.javacloud.framework.security.claim.TokenGrant;
 import io.javacloud.framework.security.claim.TokenValidator;
 import io.javacloud.framework.util.Converters;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 
 /**
@@ -54,7 +54,7 @@ public class JwtTokenValidator implements TokenValidator {
 	@Override
 	public TokenGrant validateToken(String token) throws AuthenticationException {
 		JwtToken jwtToken = jwtCodecs.decodeJWT(token, jwtVerifier);
-		Dictionary claims = jwtToken.getClaims();
+		Map<String, Object> claims = jwtToken.getClaims();
 			
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
 		TokenGrant grantToken = new TokenGrant(token,

@@ -9,7 +9,6 @@ import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.builder.TransitionBuilder;
 import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.json.internal.JsonConverter;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
@@ -104,10 +103,10 @@ public class FlowHandler {
 		//AN EMPTY INPUT IF NOT PROVIDED
 		Object input = state.getInput();
 		if(input == null) {
-			input = new Dictionary();
+			input = Objects.asMap();
 		}
 		state.setInput(input);
-		state.setAttributes(new Dictionary());
+		state.setAttributes(Objects.asMap());
 		
 		//RESET OTHERS
 		state.setName(name);

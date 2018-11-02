@@ -8,6 +8,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +16,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import io.javacloud.framework.json.internal.JsonConverter;
 import io.javacloud.framework.util.Codecs;
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Hmacs;
 import io.javacloud.framework.util.Objects;
@@ -141,7 +140,7 @@ public final class JwtCodecs {
 	public String encodeJWT(JwtToken token, JwtSigner signer) throws JwtInvalidException {
 		try {
 			byte[] header = converter.toBytes(
-					Dictionaries.asDict("typ", token.getType(), "alg", signer.getAlgorithm())
+					Objects.asMap("typ", token.getType(), "alg", signer.getAlgorithm())
 				);
 			
 			byte[] claims = converter.toBytes(token.getClaims());
@@ -186,8 +185,8 @@ public final class JwtCodecs {
 			throw new JwtInvalidException();
 		}
 		try {
-			Dictionary header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true), Dictionary.class);
-			Dictionary claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Dictionary.class);
+			Map<String, Object> header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true),  Map.class);
+			Map<String, Object> claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Map.class);
 			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
 		} catch(IOException ex) {
 			logger.log(Level.WARNING, "Problem decode JWT token", ex);

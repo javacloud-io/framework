@@ -13,7 +13,6 @@ import io.javacloud.framework.util.BytesInputStream;
  * @author ho
  *
  */
-@SuppressWarnings("restriction")
 public class JdkSourceFileAdapter extends SimpleJavaFileObject {
 	private final JavaSource source;
 	/**

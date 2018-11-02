@@ -1,6 +1,7 @@
 package io.javacloud.framework.flow.builder;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateAction;
@@ -159,12 +160,16 @@ public class ActionBuilder {
 	}
 	
 	/**
-	 * Assuming handler has ONE generic interface
+	 * Assuming handler has ONE generic interface StateHandler<T> or StateHandler<X<T>>
+	 * 
 	 * @param handlerClass
 	 * @return
 	 */
 	protected Class<?> getActualTypeArguments(Class<?> handlerClass) {
-		ParameterizedType type = (ParameterizedType)handlerClass.getGenericInterfaces()[0];
-		return (Class<?>)type.getActualTypeArguments()[0];
+		Type type = ((ParameterizedType)handlerClass.getGenericInterfaces()[0]).getActualTypeArguments()[0];
+		if(type instanceof Class) {
+			return (Class<?>)type;
+		}
+		return (Class<?>)((ParameterizedType)type).getRawType();
 	}
 }

@@ -35,5 +35,5 @@ public interface Externalizer {
 	 * @return
 	 * @throws IOException
 	 */
-	public <T> T unmarshal(InputStream src, Class<T> type) throws IOException;
+	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException;
 }

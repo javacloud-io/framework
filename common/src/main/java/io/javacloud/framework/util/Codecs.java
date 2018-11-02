@@ -1,7 +1,12 @@
 package io.javacloud.framework.util;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -173,6 +178,100 @@ public final class Codecs {
 	public static String randomID() {
 		BigInteger id = PRNG.nextBInteger(16);
 		return id.toString(36);
+	}
+	
+	/**
+	 * TODO: 
+	 * -need to take care of multiple value encoded.
+	 * -consider replace '+' with '%20'
+	 * 
+	 * @param params
+	 * @return
+	 * @throws IOException
+	 */
+	public static String encodeURL(Map<String, Object> params) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		for(String name: params.keySet()) {
+			Object value = params.get(name);
+			if(value == null) {
+				continue;
+			}
+			
+			//CONVERT TO LIST
+			List<Object> list;
+			if(value.getClass().isArray()) {
+				list =  Objects.asList((Object[])value);
+			} else if(value instanceof List) {
+				list = Objects.cast(value);
+			} else {
+				list = Objects.asList(value);
+			}
+			for(Object val : list) {
+				//&NAME=VALUE
+				sb.append("&");
+				sb.append(URLEncoder.encode(name, UTF8));
+				sb.append("=");
+				sb.append(URLEncoder.encode(Converters.STRING.to(val), UTF8));
+			}
+		}
+		
+		//SKIP THE FIRST &
+		if(sb.length() > 0) {
+			return sb.substring(1);
+		}
+		
+		//DON'T HAVE ANYTHING
+		return sb.toString();
+	}
+	
+	/**
+	 * 
+	 * TODO: need to take care of multiple value decoded.
+	 * @param params
+	 * @param multiple
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public static Map<String, Object> decodeURL(String params, boolean multiple) throws IOException {
+		//NEW INSTANCE OBJECT
+		Map<String, Object> props = Objects.asMap();
+		
+		//PARSE PROPERTIES
+		String[] list = params.split("&");
+		for(String p: list) {
+			
+			//IGNORE EMPTY ONE
+			if(Objects.isEmpty(p)) {
+				continue;
+			}
+			
+			//JUST IGNORE ALL THE NAME/VALUE EMPTY
+			//TODO: need to support multiple value
+			int index = p.indexOf('=');
+			String name, value;
+			if(index > 0) {
+				name = URLDecoder.decode(p.substring(0, index), UTF8);
+				value= URLDecoder.decode(p.substring(index + 1),UTF8);
+			} else {
+				name  = URLDecoder.decode(p, UTF8);
+				value = "";
+			}
+			
+			//SET VALUE
+			if(multiple) {
+				if(props.containsKey(name)) {
+					List<Object> values = Objects.asList(props.get(name));
+					values.add(value);
+					props.put(name, values.toArray(new String[values.size()]));
+				} else {
+					props.put(name, new String[] {value});
+				}
+			} else {
+				props.put(name, value);
+			}
+		}
+		return props;
 	}
 }
 

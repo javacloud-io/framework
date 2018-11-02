@@ -15,21 +15,23 @@
  */
 package io.javacloud.framework.util;
 
+import java.util.Map;
+
 import junit.framework.TestCase;
 /**
  * 
  * @author tobi
  *
  */
-public class DictionariesTest extends TestCase {
+public class PlistXmlTest extends TestCase {
 	public void testPList() throws Exception {
-		Dictionary props = new Dictionary();
+		Map<String, Object> props = Objects.asMap();
 		props.put("name1", "value1");
 		props.put("name2", "value2");
 		props.put("data", new byte[] {1, 2, 3, 4, 5, 6,7});
 		props.put("null", null);	//ALOW NULL
 		
 		assertTrue(props.containsKey("null"));
-		Dictionaries.writePlist(props, System.out);
+		PlistXml.writeDocument(props, System.out);
 	}
 }

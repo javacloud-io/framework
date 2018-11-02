@@ -11,7 +11,6 @@ import io.javacloud.framework.jacc.DiagnosticListener;
  * @author ho
  *
  */
-@SuppressWarnings("restriction")
 public class JdkDiagnosticAdapter implements javax.tools.DiagnosticListener<JavaFileObject> {
 	private final DiagnosticListener listener;
 	private final Locale locale;

@@ -1,5 +1,6 @@
 package io.javacloud.framework.server;
 
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,8 +12,6 @@ import javax.ws.rs.ext.ExceptionMapper;
 import io.javacloud.framework.security.AccessDeniedException;
 import io.javacloud.framework.security.AuthenticationException;
 import io.javacloud.framework.util.AlreadyExistsException;
-import io.javacloud.framework.util.Dictionaries;
-import io.javacloud.framework.util.Dictionary;
 import io.javacloud.framework.util.NotFoundException;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
@@ -49,7 +48,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		}
 		
 		//DEBUG DETAILS
-		Dictionary entity = toEntity(exception);
+		Map<String, Object> entity = toEntity(exception);
 		if(status >= 500) {
 			logger.log(Level.SEVERE, "HTTP status: " + status + ", details: " + entity, exception);
 		}
@@ -94,7 +93,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 * @param exception
 	 * @return
 	 */
-	protected Dictionary toEntity(E exception) {
+	protected Map<String, Object> toEntity(E exception) {
 		String error;
 		//REASON ERROR
 		if(exception instanceof UncheckedException) {
@@ -114,7 +113,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		if(Objects.isEmpty(message)) {
 			message = exception.getClass().getName();
 		}
-		return Dictionaries.asDict("error", error, "message", toLocalizedMessage(message));
+		return Objects.asMap("error", error, "message", toLocalizedMessage(message));
 	}
 	
 	/**

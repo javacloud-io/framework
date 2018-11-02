@@ -4,11 +4,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -37,111 +36,8 @@ import org.xml.sax.SAXException;
  * @author aimee
  *
  */
-public final class Dictionaries {
-	private Dictionaries() {
-	}
-	
-	/**
-	 * Cast given object to dictionary if NEED SO MAKE SURE WE ALWAYS SUCCESS DOING SO.
-	 * 
-	 * @param obj
-	 * @return
-	 */
-	public static Dictionary asDict(Object... values) {
-		//EMPTY DICT
-		if(values == null || values.length == 0) {
-			return new Dictionary();
-		}
-		
-		//PACK AS MAP
-		Map<String, Object> mo;
-		if(values.length == 1) {
-			Object obj = values[0];
-			if(obj instanceof Dictionary) {
-				return	(Dictionary)obj;
-			} else if(obj instanceof Map) {
-				mo = Objects.cast(obj);
-			} else {
-				mo = Objects.asMap("dict", obj);
-			}
-		} else {
-			mo = Objects.asMap(values);
-		}
-		
-		//PACK AS DICT
-		return new Dictionary(mo);
-	}
-	
-	/**
-	 * TODO: 
-	 * -need to take care of multiple value encoded.
-	 * -consider replace '+' with '%20'
-	 * 
-	 * @param params
-	 * @return
-	 * @throws IOException
-	 */
-	public static String encodeURL(Dictionary params) throws IOException {
-		StringBuilder sb = new StringBuilder();
-		for(String name: params.keySet()) {
-			String value = Converters.STRING.to(params.get(name));
-			if(value == null) {
-				continue;
-			}
-			
-			//&NAME=VALUE
-			sb.append("&");
-			sb.append(URLEncoder.encode(name, Codecs.UTF8));
-			sb.append("=");
-			sb.append(URLEncoder.encode(value, Codecs.UTF8));
-		}
-		
-		//SKIP THE FIRST &
-		if(sb.length() > 0) {
-			return sb.substring(1);
-		}
-		
-		//DON'T HAVE ANYTHING
-		return sb.toString();
-	}
-	
-	/**
-	 * 
-	 * TODO: need to take care of multiple value decoded.
-	 * @param params
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	public static Dictionary decodeURL(String params) throws IOException {
-		//NEW INSTANCE OBJECT
-		Dictionary props = new Dictionary();
-		
-		//PARSE PROPERTIES
-		String[] list = params.split("&");
-		for(String p: list) {
-			
-			//IGNORE EMPTY ONE
-			if(Objects.isEmpty(p)) {
-				continue;
-			}
-			
-			//JUST IGNORE ALL THE NAME/VALUE EMPTY
-			//TODO: need to support multiple value
-			int index = p.indexOf('=');
-			String name, value;
-			if(index > 0) {
-				name = URLDecoder.decode(p.substring(0, index), Codecs.UTF8);
-				value= URLDecoder.decode(p.substring(index + 1),Codecs.UTF8);
-			} else {
-				name  = URLDecoder.decode(p, Codecs.UTF8);
-				value = "";
-			}
-			
-			//SET VALUE
-			props.put(name, value);
-		}
-		return props;
+public final class PlistXml {
+	private PlistXml() {
 	}
 	
 	/**
@@ -150,7 +46,7 @@ public final class Dictionaries {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Dictionary readPlist(InputStream ins) throws IOException {
+	public static Map<String, Object> readDocument(InputStream ins) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			//DISABLE DTD VALIDATION BY RETURN DUMMY SOURCE
@@ -173,7 +69,7 @@ public final class Dictionaries {
 	        while(element != null && element.getNodeType() != Node.ELEMENT_NODE) {
 	        	element = element.getNextSibling();
 	        }
-			return (element == null? new Dictionary() : (Dictionary)parseElement(element));
+			return (element == null? Objects.asMap() : Objects.cast(parseElement(element)));
 		} catch (ParserConfigurationException ex) {
 			throw new IOException(ex);
 		} catch (SAXException ex) {
@@ -206,7 +102,7 @@ public final class Dictionaries {
 		} else if("data".equals(type)) {
 			return	Codecs.decodeBase64(element.getTextContent(), false);
 		} else if("array".equals(type)) {
-			ArrayList<Object> list = new ArrayList<Object>();
+			List<Object> list = new ArrayList<Object>();
 			NodeList elements = element.getChildNodes();
             for(int i = 0; i < elements.getLength(); i++) {
                 Node node = elements.item(i);
@@ -217,7 +113,7 @@ public final class Dictionaries {
             }
             return list;
 		} else if("dict".equals(type)) {
-			Dictionary dict = new Dictionary();
+			Map<String, Object> dict = Objects.asMap();
 			element = element.getFirstChild();
 			while(element != null) {
 				Node key = element;
@@ -251,8 +147,8 @@ public final class Dictionaries {
 	 * @param out
 	 * @throws IOException
 	 */
-	public static void writePlist(Dictionary plist, OutputStream out) throws IOException {
-		writePlist(plist, out, false);
+	public static void writeDocument(Map<String, Object> plist, OutputStream out) throws IOException {
+		writeDocument(plist, out, false);
 	}
 	
 	/**
@@ -262,7 +158,7 @@ public final class Dictionaries {
 	 * @param compact
 	 * @throws IOException
 	 */
-	public static void writePlist(Dictionary plist, OutputStream out, boolean compact) throws IOException {
+	public static void writeDocument(Map<String, Object> plist, OutputStream out, boolean compact) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document xmlDoc = documentBuilder.newDocument();
@@ -343,9 +239,9 @@ public final class Dictionaries {
 				element.appendChild(createElement(xmlDoc, ov, compact));
 			}
 			return element;
-		} else if(value instanceof Dictionary) {
+		} else if(value instanceof Map) {
 			Node element = xmlDoc.createElement("dict");
-			Dictionary props = (Dictionary)value;
+			Map<String, Object> props = Objects.cast(value);
 			for(String name: props.keySet()) {
 				Node key = xmlDoc.createElement("key");
 				key.setTextContent(name);
