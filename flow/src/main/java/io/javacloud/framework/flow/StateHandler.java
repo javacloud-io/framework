@@ -4,6 +4,8 @@ package io.javacloud.framework.flow;
  * 
  * @author ho
  *
+ * @param <T>
+ * @param <R>
  */
 public interface StateHandler<T, R> {
 	//BUILT-IN ERRORS
@@ -20,7 +22,7 @@ public interface StateHandler<T, R> {
 		RETRY
 	}
 	
-	//HANDLE RESOURCE
+	//HANDLE TASK
 	/**
 	 * Using Status as R for flow control
 	 * 
@@ -43,11 +45,11 @@ public interface StateHandler<T, R> {
 	
 	//HANDLE FAILURE
 	public interface FailureHandler {
-		StateTransition onFailure(StateContext context, Exception ex);
+		public StateTransition onFailure(StateContext context, Exception ex);
 	}
 	
 	//HANDLE RETRY
 	public interface RetryHandler {
-		StateTransition onRetry(StateContext context);
+		public StateTransition onRetry(StateContext context);
 	}
 }
