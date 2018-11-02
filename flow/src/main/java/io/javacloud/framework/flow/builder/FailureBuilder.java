@@ -7,7 +7,7 @@ import java.util.Map;
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
 import io.javacloud.framework.flow.StateTransition;
-import io.javacloud.framework.flow.spi.StateSpec;
+import io.javacloud.framework.flow.spec.StateSpec;
 import io.javacloud.framework.util.Objects;
 import io.javacloud.framework.util.UncheckedException;
 

@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.spi;
+package io.javacloud.framework.flow.spec;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

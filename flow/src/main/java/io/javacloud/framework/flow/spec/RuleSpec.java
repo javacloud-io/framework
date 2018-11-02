@@ -1,4 +1,4 @@
-package io.javacloud.framework.flow.spi;
+package io.javacloud.framework.flow.spec;
 
 import java.util.Date;
 import java.util.List;
@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.util.Objects;
 
 /**
@@ -17,19 +16,13 @@ import io.javacloud.framework.util.Objects;
  *
  */
 @JsonDeserialize(builder = RuleSpec.RuleBuilder.class)
-public abstract class RuleSpec implements StateTransition.Success {
+public abstract class RuleSpec {
 	@JsonProperty("Next")
 	private String next;
 	protected RuleSpec(String next) {
 		this.next = next;
 	}
 	
-	@Override
-	public boolean isEnd() {
-		return false;
-	}
-
-	@Override
 	public String getNext() {
 		return next;
 	}
