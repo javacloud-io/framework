@@ -5,8 +5,8 @@ package io.javacloud.framework.flow;
  * @author ho
  *
  */
-public interface StateAction extends StateHandler<Object>, StateHandler.InputHandler<Object>, StateHandler.OutputHandler,
-	StateHandler.FailureHandler, StateHandler.RetryHandler {
+public interface StateAction extends StateHandler<Object, StateHandler.Status>, StateHandler.InputHandler<Object>,
+	StateHandler.OutputHandler, StateHandler.FailureHandler, StateHandler.RetryHandler {
 	/**
 	 * Generic InputHandler need type for conversion
 	 * @return

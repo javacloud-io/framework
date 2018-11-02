@@ -8,7 +8,7 @@ import io.javacloud.framework.json.internal.JsonTemplate;
 import io.javacloud.framework.util.Objects;
 
 /**
- * 
+ * By default RESULT will overwrite the INPUT to be OUTPUT. OUTPUT will be AS IS to pass to INPUT
  * @author ho
  *
  */

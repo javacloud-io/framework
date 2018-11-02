@@ -6,6 +6,7 @@ import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.util.Objects;
 
 /**
+ * Persistable across State execution in flow.
  * 
  * @author ho
  *

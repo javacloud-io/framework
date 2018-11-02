@@ -15,7 +15,7 @@ import io.javacloud.framework.util.Objects;
  *
  */
 public class ActionBuilder {
-	private StateHandler<Object> 		 stateHandler;
+	private StateHandler<Object, Object> 	stateHandler;
 	private StateHandler.InputHandler<Object> inputHandler;
 	private StateHandler.OutputHandler	 outputHandler;
 	private StateHandler.FailureHandler  failureHandler;
@@ -28,7 +28,7 @@ public class ActionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public ActionBuilder withStateHandler(StateHandler<?> handler) {
+	public ActionBuilder withStateHandler(StateHandler<?, ?> handler) {
 		this.stateHandler = Objects.cast(handler);
 		return this;
 	}
@@ -39,7 +39,7 @@ public class ActionBuilder {
 	 * @return
 	 */
 	public ActionBuilder withStateHandler(final StateHandler.Status status) {
-		return withStateHandler(new StateHandler<Object>() {
+		return withStateHandler(new StateHandler<Object, StateHandler.Status>() {
 			@Override
 			public Status handle(Object parameters, StateContext context) throws Exception {
 				return status;
@@ -123,14 +123,23 @@ public class ActionBuilder {
 		return new StateAction() {
 			@Override
 			public Object onInput(StateContext context) {
-				if(inputHandler == null) {
-					return context.getInput();
-				}
-				return inputHandler.onInput(context);
+				return (inputHandler == null? context.getInput() : inputHandler.onInput(context));
 			}
 			@Override
 			public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
-				return (stateHandler == null? StateHandler.Status.FAILURE : stateHandler.handle(parameters, context));
+				if(stateHandler == null) {
+					return StateHandler.Status.SUCCESS;
+				}
+				//RESPECT STATUS
+				Object result = stateHandler.handle(parameters, context);
+				if(result instanceof StateHandler.Status) {
+					return Objects.cast(result);
+				}
+				//SUCCESS WITH NO RESULT
+				if(result == null || result instanceof Void) {
+					return StateHandler.Status.SUCCESS; 
+				}
+				return TransitionBuilder.success(context, result);
 			}
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {

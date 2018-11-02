@@ -5,7 +5,7 @@ package io.javacloud.framework.flow;
  * @author ho
  *
  */
-public interface StateHandler<T> {
+public interface StateHandler<T, R> {
 	//BUILT-IN ERRORS
 	public static final String ERROR_ALL 	   		= "States.ALL";
 	public static final String ERROR_TIMEOUT 		= "States.Timeout";
@@ -22,13 +22,14 @@ public interface StateHandler<T> {
 	
 	//HANDLE RESOURCE
 	/**
+	 * Using Status as R for flow control
 	 * 
 	 * @param parameters
 	 * @param context
 	 * @return
 	 * @throws Exception
 	 */
-	public Status handle(T parameters, StateContext context) throws Exception;
+	public R handle(T parameters, StateContext context) throws Exception;
 	
 	//INPUT FILTER 
 	public interface InputHandler<T> {

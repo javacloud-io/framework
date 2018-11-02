@@ -54,17 +54,34 @@ public class FlowHandler {
 	}
 	
 	/**
-	 * execute -[end]-> [success]
-	 * 			[success] 	-> execute
-	 * 			[repeat]	-> [delays] -> execute
-	 * 						-> [not]	-> [failure]
-	 * 			[failure]	-> []
-	 * @param parameters
+	 * Execute with default flow context
 	 * @param state
 	 * @return
 	 */
 	public StateTransition execute(FlowState state) {
 		FlowContext context = new FlowContext(state);
+		return onExecute(state, context);
+	}
+	
+	/**
+	 * Flip the final PARAMS as OUTPUT
+	 * 
+	 * @param state
+	 */
+	public void complete(FlowState state) {
+	}
+	
+	/**
+	 * execute -[end]-> [success]
+	 * 			[success] 	-> execute
+	 * 			[repeat]	-> [delays] -> execute
+	 * 						-> [not]	-> [failure]
+	 * 			[failure]	-> []
+	 * @param state
+	 * @param context
+	 * @return
+	 */
+	protected StateTransition onExecute(FlowState state, FlowContext context) {
 		StateAction action = stateFlow.getState(state.getName());
 		if(action == null) {
 			return onFailure(action, context, null);
@@ -83,14 +100,6 @@ public class FlowHandler {
 		} catch(Exception ex) {
 			return onFailure(action, context, ex);
 		}
-	}
-	
-	/**
-	 * Flip the final PARAMS as OUTPUT
-	 * 
-	 * @param state
-	 */
-	public void complete(FlowState state) {
 	}
 	
 	/**

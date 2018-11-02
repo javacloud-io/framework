@@ -39,7 +39,7 @@ public abstract class StateSpec {
 		private List<String> errorEquals;
 		
 		@JsonProperty("MaxAttempts")
-		private int maxAttempts		= 0;
+		private int maxAttempts		= 3;
 		
 		@JsonProperty("IntervalSeconds")
 		private int intervalSeconds	= 2;
