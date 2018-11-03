@@ -1,7 +1,5 @@
 package io.javacloud.framework.flow.worker;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -9,6 +7,7 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -39,28 +38,16 @@ public class TaskQueue<T> {
 	}
 	
 	//OFFER ONLY IF WORKER AVAILABLE
-	private final SynchronousQueue<Reservation<T>> reservationQueue = new SynchronousQueue<>();
-	public TaskQueue() {
+	private final SynchronousQueue<Reservation<T>> reservationQueue;
+	public TaskQueue(boolean fair) {
+		reservationQueue = new SynchronousQueue<>(fair);
 	}
 	
 	/**
-	 * Reserve up to number of worker
 	 * 
-	 * @param timeout
-	 * @param unit
-	 * @param numberOfWorkers
-	 * @return
 	 */
-	public List<Reservation<T>> reserve(long timeout, TimeUnit unit, int numberOfWorkers) {
-		List<TaskQueue.Reservation<T>> reservations = new ArrayList<>();
-		for(int i = 0; i < numberOfWorkers; i ++) {
-			Reservation<T> reservation = reserve(timeout, unit);
-			if(reservation == null) {
-				break;
-			}
-			reservations.add(reservation);
-		}
-		return reservations;
+	public TaskQueue() {
+		this(true);
 	}
 	
 	/**
@@ -75,11 +62,12 @@ public class TaskQueue<T> {
 		if(reservationQueue.offer(resveration)) {
 			return resveration;
 		}
+		//NO WORKER AVAILABLE
 		return null;
 	}
 	
 	/**
-	 * Call by work to pull task for WORK.
+	 * Call by work to pull task for WORK with maximum waiting timeout.
 	 * 
 	 * @param timeout
 	 * @param unit
@@ -89,9 +77,9 @@ public class TaskQueue<T> {
 	 */
 	public T poll(long timeout, TimeUnit unit) throws InterruptedException {
 		ReservationTask<T> resveration = (ReservationTask<T>)reservationQueue.poll(timeout, unit);
-		//DONT HAVE OR EXPIRES => ASSUMING NO WORK
+		//DONT HAVE AVAILABLE RESERVATION
 		if(resveration == null) {
-			logger.fine("No task available for worker after waiting: " + unit.toMillis(timeout) + "(ms)");
+			logger.fine("No reservation available after " + unit.toMillis(timeout) + "(ms) timeout");
 			return null;
 		}
 		
@@ -99,14 +87,14 @@ public class TaskQueue<T> {
 		try {
 			return resveration.get(resveration.timeout, resveration.unit);
 		} catch(TimeoutException ex) {
-			//CONFIRMATION IS NOT MAKE WITHIN TIME
-			logger.fine("No task confirmation after reservation timeout: " + resveration.unit.toMillis(resveration.timeout) + "(ms)");
+			//CONFIRMATION IS NOT MAKE WITHIN TIMEOUT
+			logger.fine("No confirmation after " + resveration.unit.toMillis(resveration.timeout) + "(ms) timeout");
 		} catch(ExecutionException ex) {
 			//SOME ISSUE AFTER RESERVATION
-			logger.fine("Unknown issue occurred after reservation, cause: " + ex);
+			logger.log(Level.FINE, "Uncaught issue occurred after reservation", ex);
 		} catch(CancellationException ex) {
-			//RESERVATION CANCLED
-			logger.fine("Reservation cancelled!");
+			//RESERVATION CANCELLED
+			logger.fine("Cancelled reservation");
 		}
 		return null;
 	}

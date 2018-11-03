@@ -82,17 +82,17 @@ public class FlowExecutor {
 			protected List<HandlerTask> poll(int numberOfTasks) {
 				return pollTasks(numberOfTasks);
 			}
-		}, 0, 1, TimeUnit.MILLISECONDS);
+		}, 0, 1, TimeUnit.SECONDS);
 		
 		//SUBMIT WORKERS
 		workersPool = Executors.newScheduledThreadPool(numberOfWorkers);
 		for(int i = 0; i < numberOfWorkers; i ++) {
-			workersPool.scheduleAtFixedRate(new TaskRunner<HandlerTask>(taskQueue, reservationSeconds * 100) {
+			workersPool.scheduleAtFixedRate(new TaskRunner<HandlerTask>(taskQueue, reservationSeconds * 10) {
 				@Override
 				protected void run(HandlerTask task) {
 					runTask(task);
 				}
-			}, 0, 1, TimeUnit.MILLISECONDS);
+			}, 0, 1, TimeUnit.SECONDS);
 		}
 	}
 	
@@ -100,7 +100,7 @@ public class FlowExecutor {
 	 * DEFAULT 5 WORKERS, 60 SECONDS RESERVATION
 	 */
 	public FlowExecutor() {
-		this(null, 5, 60);
+		this(null, 2, 60);
 	}
 	
 	/**
@@ -122,6 +122,7 @@ public class FlowExecutor {
 	
 	/**
 	 * ENSURE EXECUTION IS NOT FAILURE
+	 * 
 	 * @param task
 	 */
 	protected void runTask(HandlerTask task) {

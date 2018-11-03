@@ -29,12 +29,11 @@ public abstract class TaskRunner<T> implements Runnable {
 	 */
 	@Override
 	public void run() {
-		logger.fine("Waiting for task, timeout: " + timeoutSeconds + "(s)");
 		try {
 			T task = taskQueue.poll(timeoutSeconds, TimeUnit.SECONDS);
-			
-			//RUN IF AVAILABLE
+			//RUN ONLY IF AVAILABLE
 			if(task != null) {
+				logger.fine("Run task: " + task);
 				run(task);
 			}
 		} catch(InterruptedException ex) {
@@ -46,7 +45,7 @@ public abstract class TaskRunner<T> implements Runnable {
 	 * Handle interrupted event
 	 */
 	protected void onInterrupted() {
-		logger.fine("Runner being interrupted!");
+		logger.fine("Worker being interrupted!");
 	}
 	
 	/**

@@ -1,8 +1,11 @@
 package io.javacloud.framework.flow.worker;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+
+import io.javacloud.framework.flow.worker.TaskQueue.Reservation;
 
 /**
  * 
@@ -33,31 +36,38 @@ public abstract class TaskPoller<T> implements Runnable {
 	 */
 	@Override
 	public void run() {
-		List<TaskQueue.Reservation<T>> reservations = taskQueue.reserve(reservationSeconds, TimeUnit.SECONDS, numberOfWorkers);
-		
-		//NOTHING TO DO HERE
-		if(reservations.isEmpty()) {
-			logger.fine("No worker available for reservation!");
-			return;
+		List<TaskQueue.Reservation<T>> reservations = new ArrayList<>();
+		for(int i = 0; i < numberOfWorkers; i ++) {
+			Reservation<T> reservation = taskQueue.reserve(reservationSeconds, TimeUnit.SECONDS);
+			if(reservation == null) {
+				break;
+			}
+			reservations.add(reservation);
 		}
 		
 		//PULL AS MUCH TASKS AS CAN HANDLE
-		try {
-			List<T> tasks = poll(reservations.size());
-			for(int i = 0; i < reservations.size(); i ++) {
-				TaskQueue.Reservation<T> reservation = reservations.get(i);
-				if(i < tasks.size()) {
-					reservation.confirm(tasks.get(i));
-				} else {
-					reservation.cancel(null);
+		if(!reservations.isEmpty()) {
+			logger.fine("Reservered " +  reservations.size() + " worker(s)");
+			try {
+				List<T> tasks = poll(reservations.size());
+				logger.fine("Confirming " + tasks.size() + " and cancelling " + (reservations.size() - tasks.size()) + " reservation(s)");
+				for(int i = 0; i < reservations.size(); i ++) {
+					TaskQueue.Reservation<T> reservation = reservations.get(i);
+					if(i < tasks.size()) {
+						reservation.confirm(tasks.get(i));
+					} else {
+						reservation.cancel(null);
+					}
+				}
+			} catch(Exception ex) {
+				logger.fine("Cancelling all " + reservations.size() + " reservation(s) due to unexpected error: " + ex);
+				for(int i = 0; i < reservations.size(); i ++) {
+					TaskQueue.Reservation<T> reservation = reservations.get(i);
+					reservation.cancel(ex);
 				}
 			}
-		}catch(Exception ex) {
-			logger.fine("Abort all reservations due to unexpected error: " + ex);
-			for(int i = 0; i < reservations.size(); i ++) {
-				TaskQueue.Reservation<T> reservation = reservations.get(i);
-				reservation.cancel(ex);
-			}
+		} else {
+			logger.fine("No worker available!");
 		}
 	}
 	
