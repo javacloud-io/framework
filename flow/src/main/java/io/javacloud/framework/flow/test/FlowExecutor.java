@@ -1,68 +1,145 @@
 package io.javacloud.framework.flow.test;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.Delayed;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import io.javacloud.framework.flow.StateFlow;
 import io.javacloud.framework.flow.StateTransition;
 import io.javacloud.framework.flow.internal.FlowHandler;
 import io.javacloud.framework.flow.internal.FlowState;
+import io.javacloud.framework.flow.worker.TaskQueue;
+import io.javacloud.framework.flow.worker.TaskPoller;
+import io.javacloud.framework.flow.worker.TaskRunner;
 import io.javacloud.framework.util.Codecs;
 import io.javacloud.framework.util.Externalizer;
 import io.javacloud.framework.util.Objects;
+import io.javacloud.framework.util.UncheckedException;
 
 /**
  * 
  * @author ho
  *
  */
-public class FlowExecutor extends FlowHandler {
-	public FlowExecutor(StateFlow stateFlow, Externalizer externalizer) {
-		super(stateFlow, externalizer);
-	}
-	public FlowExecutor(StateFlow stateFlow) {
-		this(stateFlow, null);
-	}
-	/**
-	 * 
-	 */
-	@Override
-	public FlowState start(Object parameters, String startAt) {
-		FlowState state = super.start(parameters, startAt);
-		state.setExecutionId(Codecs.randomID());
-		try {
-			execute(state);
-		} finally {
-			complete(state);
+public class FlowExecutor {
+	//KEEP THE ACTIVE 
+	static class HandlerTask extends FutureTask<FlowState> implements Delayed {
+		final FlowHandler handler;
+		final FlowState state;
+		long availableAt;
+		//INVOKE RUN TO COMPLETE TASK
+		public HandlerTask(FlowHandler handler, FlowState state) {
+			super(new Callable<FlowState>() {
+				@Override
+				public FlowState call() throws Exception {
+					handler.complete(state);
+					return state;
+				}
+			});
+			this.handler = handler;
+			this.state   = state;
+			this.availableAt = System.nanoTime();
 		}
-		return state;
+		
+		@Override
+		public int compareTo(Delayed o) {
+			HandlerTask delayed = (HandlerTask)o;
+			return Objects.signum(this.availableAt - delayed.availableAt);
+		}
+		
+		@Override
+		public long getDelay(TimeUnit unit) {
+			return unit.convert(availableAt - System.nanoTime(), TimeUnit.NANOSECONDS);
+		}
+		
+		//RENEW TASK TO RE-RUN
+		public HandlerTask renew(int delaySeconds) {
+			availableAt  = System.nanoTime() + TimeUnit.SECONDS.toNanos(delaySeconds);
+			return this;
+		}
+	}
+	//
+	private final Externalizer externalizer;
+	private final TaskQueue<HandlerTask>  taskQueue = new TaskQueue<HandlerTask>();
+	private final DelayQueue<HandlerTask> availableTasks   = new DelayQueue<>();
+	
+	private final ScheduledExecutorService workersPool;
+	private final ScheduledExecutorService pollerPool;
+	public FlowExecutor(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
+		this.externalizer = externalizer;
+		
+		//POLL EVERY SECOND
+		this.pollerPool = Executors.newScheduledThreadPool(1);
+		this.pollerPool.scheduleAtFixedRate(new TaskPoller<HandlerTask>(taskQueue, numberOfWorkers, reservationSeconds) {
+			@Override
+			protected List<HandlerTask> poll(int numberOfTasks) {
+				return pollTasks(numberOfTasks);
+			}
+		}, 0, 1, TimeUnit.MILLISECONDS);
+		
+		//SUBMIT WORKERS
+		workersPool = Executors.newScheduledThreadPool(numberOfWorkers);
+		for(int i = 0; i < numberOfWorkers; i ++) {
+			workersPool.scheduleAtFixedRate(new TaskRunner<HandlerTask>(taskQueue, reservationSeconds * 100) {
+				@Override
+				protected void run(HandlerTask task) {
+					runTask(task);
+				}
+			}, 0, 1, TimeUnit.MILLISECONDS);
+		}
 	}
 	
 	/**
-	 * Execute to completion
+	 * DEFAULT 5 WORKERS, 60 SECONDS RESERVATION
 	 */
-	@Override
-	public StateTransition execute(FlowState state) {
-		StateTransition transition = super.execute(state);
+	public FlowExecutor() {
+		this(null, 5, 60);
+	}
+	
+	/**
+	 * 
+	 * @param numberOfTasks
+	 * @return
+	 */
+	protected List<HandlerTask> pollTasks(int numberOfTasks) {
+		List<HandlerTask> tasks = new ArrayList<>();
+		while(numberOfTasks-- > 0) {
+			HandlerTask task = availableTasks.poll();
+			if(task == null) {
+				break;
+			}
+			tasks.add(task);
+		}
+		return tasks;
+	}
+	
+	/**
+	 * ENSURE EXECUTION IS NOT FAILURE
+	 * @param task
+	 */
+	protected void runTask(HandlerTask task) {
+		StateTransition transition = task.handler.execute(task.state);
+		
 		//FAILURE/SUCCESS
 		if(transition.isEnd()) {
-			return transition;
-		}
-		
-		//TAKE NAP & RESUME
-		if(transition instanceof StateTransition.Retry) {
+			task.run();
+		} else if(transition instanceof StateTransition.Retry) {
 			int delaySeconds = ((StateTransition.Retry)transition).getDelaySeconds();
-			if(delaySeconds > 0) {
-				Objects.sleep(delaySeconds, TimeUnit.SECONDS);
+			if(delaySeconds < FlowHandler.MIN_DELAY_SECONDS) {
+				delaySeconds = FlowHandler.MIN_DELAY_SECONDS;
 			}
-			return	execute(state);
+			availableTasks.offer(task.renew(delaySeconds));
+		} else {
+			int delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
+			availableTasks.offer(task.renew(delaySeconds));
 		}
-		
-		//TAKE A SCALING NAP & EXECUTE NEXT
-		int delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
-		if(delaySeconds < MIN_DELAY_SECONDS) {
-			delaySeconds = MIN_DELAY_SECONDS;
-		}
-		Objects.sleep(MIN_DELAY_SECONDS, TimeUnit.MILLISECONDS);
-		return	execute(state);
 	}
 	
 	/**
@@ -71,7 +148,28 @@ public class FlowExecutor extends FlowHandler {
 	 * @param parameters
 	 * @return
 	 */
-	public static <T> FlowState start(StateFlow stateFlow, T parameters) {
-		return new FlowExecutor(stateFlow).start(parameters);
+	public <T> Future<FlowState> submit(StateFlow stateFlow, T parameters) {
+		FlowHandler handler = new FlowHandler(stateFlow, externalizer);
+		FlowState state = handler.start(parameters);
+		state.setExecutionId(Codecs.randomID());
+		
+		//QUEUE TASK
+		HandlerTask task = new HandlerTask(handler, handler.start(parameters));
+		availableTasks.offer(task);
+		return task;
+	}
+	
+	/**
+	 * 
+	 * @param stateFlow
+	 * @param parameters
+	 * @return
+	 */
+	public <T> FlowState run(StateFlow stateFlow, T parameters) {
+		try {
+			return submit(stateFlow, parameters).get();
+		} catch(InterruptedException | ExecutionException ex) {
+			throw UncheckedException.wrap(ex);
+		}
 	}
 }

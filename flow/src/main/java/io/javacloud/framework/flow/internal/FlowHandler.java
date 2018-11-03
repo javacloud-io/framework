@@ -37,7 +37,7 @@ public class FlowHandler {
 	 * @param parameters
 	 * @return
 	 */
-	public FlowState start(Object parameters) {
+	public <T> FlowState start(T parameters) {
 		return start(parameters, null);
 	}
 	
@@ -47,7 +47,7 @@ public class FlowHandler {
 	 * @param startAt;
 	 * @return
 	 */
-	public FlowState start(Object input, String startAt) {
+	public <T> FlowState start(T input, String startAt) {
 		FlowState state = new FlowState();
 		state.setInput(input);
 		return onPrepare(state, Objects.isEmpty(startAt) ? stateFlow.getStartAt() : startAt);

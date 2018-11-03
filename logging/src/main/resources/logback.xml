@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- Eliminate translation from JUL to slf4j overhead -->
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+    
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 	    <!-- encoders type ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
 	    <encoder>

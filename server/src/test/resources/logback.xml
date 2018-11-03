@@ -7,7 +7,7 @@
 	    </encoder>
 	</appender>
 	
-	<logger name="com.appe" level="DEBUG" additivity="false">
+	<logger name="io.javacloud" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	

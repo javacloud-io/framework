@@ -1,10 +1,10 @@
 package io.javacloud.framework.flow.internal;
 
-import org.junit.Test;
-
 import java.util.Map;
 
+import org.junit.Test;
 import org.junit.Assert;
+import junit.framework.TestCase;
 
 import io.javacloud.framework.flow.StateContext;
 import io.javacloud.framework.flow.StateHandler;
@@ -16,13 +16,14 @@ import io.javacloud.framework.flow.internal.FlowState;
 import io.javacloud.framework.flow.spec.StateSpec;
 import io.javacloud.framework.flow.test.FlowExecutor;
 import io.javacloud.framework.util.Objects;
-import junit.framework.TestCase;
 /**
  * 
  * @author ho
  *
  */
 public class WorkflowTest extends TestCase {
+	private static final FlowExecutor flowExecutor = new FlowExecutor();
+	
 	@Test
 	public void testSuccess() {
 		StateFlow workflow = new FlowBuilder()
@@ -42,7 +43,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.start(workflow, Objects.asMap("a", "b"));
+		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
 		Assert.assertFalse(state.isFailed());
@@ -68,7 +69,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.start(workflow, Objects.asMap("a", "b"));
+		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
 		Assert.assertTrue(state.isFailed());
@@ -98,7 +99,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = FlowExecutor.start(workflow, Objects.asMap("a", "b"));
+		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
 		Assert.assertFalse(state.isFailed());
