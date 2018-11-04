@@ -1,4 +1,4 @@
 #
-io.javacloud.framework.i18n.LocaleContext=io.javacloud.framework.i18n.impl.LocaleContextImpl
-io.javacloud.framework.i18n.CharsetContext=io.javacloud.framework.i18n.impl.CharsetContextImpl
-io.javacloud.framework.i18n.MessageManager=io.javacloud.framework.i18n.impl.MessageManagerImpl
+javacloud.framework.i18n.LocaleContext=javacloud.framework.i18n.impl.LocaleContextImpl
+javacloud.framework.i18n.CharsetContext=javacloud.framework.i18n.impl.CharsetContextImpl
+javacloud.framework.i18n.MessageManager=javacloud.framework.i18n.impl.MessageManagerImpl

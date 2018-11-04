@@ -1,11 +1,11 @@
 package com.appe.framework.server;
 
-import io.javacloud.framework.server.GenericExceptionMapper;
-
 import javax.ws.rs.core.Response;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import javacloud.framework.server.GenericExceptionMapper;
 
 /**
  * TODO: all the basic test of exception

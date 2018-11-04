@@ -12,12 +12,12 @@
 	    </encoder>
 	</appender>
 	
-	<logger name="io.javacloud" level="DEBUG" additivity="false">
+	<logger name="javacloud.framework" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
 	<!-- The level of the root level is set to WARN by default.-->
-  	<root level="DEBUG">
+  	<root level="WARN">
     	<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

@@ -1,3 +1,3 @@
 ######### List of services for runner start/stop########
-io.javacloud.framework.logging.StaticConfigurator
-io.javacloud.framework.cdi.TestDaemonService
+
+javacloud.framework.cdi.TestDaemonService

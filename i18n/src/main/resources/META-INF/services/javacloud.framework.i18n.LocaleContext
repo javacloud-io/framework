@@ -1,0 +1,2 @@
+#Load the default locale
+javacloud.framework.i18n.impl.LocaleContextImpl

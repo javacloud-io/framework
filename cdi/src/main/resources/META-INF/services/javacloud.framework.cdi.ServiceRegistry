@@ -1,0 +1,2 @@
+#Register the service registry implementation using Google Guice
+javacloud.framework.cdi.impl.GuiceRegistryImpl

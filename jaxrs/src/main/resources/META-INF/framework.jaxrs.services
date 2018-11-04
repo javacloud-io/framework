@@ -1,5 +1,5 @@
 # Default framework data InMemory registry
 #
 #
-javax.ws.rs.client.Client=io.javacloud.framework.jaxrs.impl.HttpClientProvider
-io.javacloud.framework.jaxrs.ClientManager=io.javacloud.framework.jaxrs.impl.ClientManagerImpl
+javax.ws.rs.client.Client=javacloud.framework.jaxrs.impl.HttpClientProvider
+javacloud.framework.jaxrs.ClientManager=javacloud.framework.jaxrs.impl.ClientManagerImpl

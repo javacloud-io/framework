@@ -1,3 +1,3 @@
 # Default framework java complier registry
 #
-io.javacloud.framework.jacc.JavaCompiler=io.javacloud.framework.jacc.impl.JdkCompilerImpl
+javacloud.framework.jacc.JavaCompiler=javacloud.framework.jacc.impl.JdkCompilerImpl

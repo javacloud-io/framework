@@ -1,7 +1,7 @@
 # Basic features
-io.javacloud.framework.server.impl.GuiceHK2Feature
-io.javacloud.framework.server.impl.JacksonFeature
-io.javacloud.framework.server.impl.DefaultExceptionMapper
+javacloud.framework.server.impl.GuiceHK2Feature
+javacloud.framework.server.impl.JacksonFeature
+javacloud.framework.server.impl.DefaultExceptionMapper
 
 # Authorization
 org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
