@@ -128,7 +128,7 @@ public class ActionBuilder {
 			@Override
 			public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
 				if(stateHandler == null) {
-					return StateHandler.Status.SUCCESS;
+					return StateHandler.Status.SUCCEED;
 				}
 				//RESPECT STATUS
 				Object result = stateHandler.handle(parameters, context);
@@ -137,9 +137,9 @@ public class ActionBuilder {
 				}
 				//SUCCESS WITH NO RESULT
 				if(result == null || result instanceof Void) {
-					return StateHandler.Status.SUCCESS; 
+					return StateHandler.Status.SUCCEED; 
 				}
-				return TransitionBuilder.success(context, result);
+				return TransitionBuilder.succeed(context, result);
 			}
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {

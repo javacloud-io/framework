@@ -88,9 +88,9 @@ public class TransitionBuilder {
 	 * @param result
 	 * @return
 	 */
-	public static StateHandler.Status success(StateContext context, Object result) {
+	public static StateHandler.Status succeed(StateContext context, Object result) {
 		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
-		return StateHandler.Status.SUCCESS;
+		return StateHandler.Status.SUCCEED;
 	}
 	
 	/**
@@ -99,8 +99,8 @@ public class TransitionBuilder {
 	 * @param error
 	 * @return
 	 */
-	public static StateHandler.Status failure(StateContext context, String error) {
+	public static StateHandler.Status failed(StateContext context, String error) {
 		context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
-		return StateHandler.Status.FAILURE;
+		return StateHandler.Status.FAILED;
 	}
 }

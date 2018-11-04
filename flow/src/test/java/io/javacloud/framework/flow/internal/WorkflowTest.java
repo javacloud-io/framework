@@ -65,7 +65,7 @@ public class WorkflowTest extends TestCase {
 								@Override
 								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
-									return StateHandler.Status.FAILURE;
+									return StateHandler.Status.FAILED;
 								}
 							}, null).build();
 		
@@ -88,7 +88,7 @@ public class WorkflowTest extends TestCase {
 										return StateHandler.Status.RETRY;
 									}
 									context.setAttribute("t1", "abc");
-									return TransitionBuilder.success(context, Objects.asMap("t1", "abc"));
+									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
 							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "state2")
