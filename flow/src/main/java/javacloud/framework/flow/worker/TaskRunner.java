@@ -1,6 +1,7 @@
 package javacloud.framework.flow.worker;
 
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -33,7 +34,7 @@ public abstract class TaskRunner<T> implements Runnable {
 			T task = taskQueue.poll(timeoutSeconds, TimeUnit.SECONDS);
 			//RUN ONLY IF AVAILABLE
 			if(task != null) {
-				logger.fine("Run task: " + task);
+				logger.log(Level.FINE, "Run task: {0}", task);
 				run(task);
 			}
 		} catch(InterruptedException ex) {
@@ -45,7 +46,7 @@ public abstract class TaskRunner<T> implements Runnable {
 	 * Handle interrupted event
 	 */
 	protected void onInterrupted() {
-		logger.fine("Worker being interrupted!");
+		logger.log(Level.FINE, "Worker being interrupted!");
 	}
 	
 	/**

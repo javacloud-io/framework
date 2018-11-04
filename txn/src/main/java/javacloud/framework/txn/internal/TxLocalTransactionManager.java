@@ -1,5 +1,6 @@
 package javacloud.framework.txn.internal;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.txn.Transactional;
@@ -21,7 +22,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	public void beginSession() {
 		int size = unitOfWork.size();
 		if(size > 0) {
-			logger.warning("Session starting but still have " + size + " active transaction");
+			logger.log(Level.WARNING, "Session starting but still have {0} active transaction", size);
 		}
 		closeSession();
 	}
@@ -33,7 +34,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	public void endSession() {
 		int size = unitOfWork.size();
 		if(size > 0) {
-			logger.warning("Session ending but still have " + size + " active transaction");
+			logger.log(Level.WARNING, "Session ending but still have {0} active transaction", size);
 		}
 		closeSession();
 	}
@@ -64,7 +65,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	@Override
 	public TxTransaction beginTransaction(Transactional transactional) {
 		TxTransaction tx = newTransaction(transactional);
-		logger.fine("Begin transaction: " + tx);
+		logger.log(Level.FINE, "Begin transaction: {0}", tx);
 		
 		return unitOfWork.push(tx);
 	}
@@ -74,9 +75,9 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param tx
 	 */
 	protected void endTransaction(TxTransaction tx) {
-		logger.fine("End transaction: " + tx);
+		logger.log(Level.FINE, "End transaction: {0}", tx);
 		if(unitOfWork.peek() != tx) {
-			logger.warning("Transaction: " + tx + " doesn't belong to the session");
+			logger.log(Level.WARNING, "Transaction: {0} doesn't belong to the session", tx);
 		} else {
 			unitOfWork.remove(tx);
 		}

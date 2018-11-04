@@ -21,14 +21,14 @@ import javacloud.framework.util.ResourceLoader;
 public final class StaticConfigurator {
 	private static volatile Boolean configured = false;
 	/**
-	 * 
+	 * JUL configure using constructor
 	 */
 	public StaticConfigurator() {
 		start();
 	}
 	
 	/**
-	 * CONFIGURE ONE ONLY!!!
+	 * FOR RUNLIST LCM
 	 */
 	public static void start() {
 		if(!configured) {
@@ -42,7 +42,7 @@ public final class StaticConfigurator {
 	}
 	
 	/**
-	 * DOING NOTHING
+	 * FOR RUNLIST LCM
 	 */
 	public static void stop() {
 	}

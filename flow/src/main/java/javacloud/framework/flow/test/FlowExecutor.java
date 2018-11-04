@@ -155,7 +155,7 @@ public class FlowExecutor {
 		state.setExecutionId(Codecs.randomID());
 		
 		//QUEUE TASK
-		HandlerTask task = new HandlerTask(handler, handler.start(parameters));
+		HandlerTask task = new HandlerTask(handler, state);
 		availableTasks.offer(task);
 		return task;
 	}

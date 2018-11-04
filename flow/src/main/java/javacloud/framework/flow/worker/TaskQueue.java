@@ -79,7 +79,7 @@ public class TaskQueue<T> {
 		ReservationTask<T> resveration = (ReservationTask<T>)reservationQueue.poll(timeout, unit);
 		//DONT HAVE AVAILABLE RESERVATION
 		if(resveration == null) {
-			logger.fine("No reservation available after " + unit.toMillis(timeout) + "(ms) timeout");
+			logger.log(Level.FINE, "No reservation available after {0}(ms) timeout", unit.toMillis(timeout));
 			return null;
 		}
 		
@@ -88,13 +88,13 @@ public class TaskQueue<T> {
 			return resveration.get(resveration.timeout, resveration.unit);
 		} catch(TimeoutException ex) {
 			//CONFIRMATION IS NOT MAKE WITHIN TIMEOUT
-			logger.fine("No confirmation after " + resveration.unit.toMillis(resveration.timeout) + "(ms) timeout");
+			logger.log(Level.FINE, "No confirmation after {0}(ms) timeout", resveration.unit.toMillis(resveration.timeout));
 		} catch(ExecutionException ex) {
 			//SOME ISSUE AFTER RESERVATION
 			logger.log(Level.FINE, "Uncaught issue occurred after reservation", ex);
 		} catch(CancellationException ex) {
 			//RESERVATION CANCELLED
-			logger.fine("Cancelled reservation");
+			logger.log(Level.FINE, "Cancelled reservation!");
 		}
 		return null;
 	}

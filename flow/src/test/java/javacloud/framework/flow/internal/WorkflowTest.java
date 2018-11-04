@@ -53,14 +53,14 @@ public class WorkflowTest extends TestCase {
 	@Test
 	public void testFailure() {
 		StateFlow workflow = new FlowBuilder()
-							.withStartAt("state1")
-							.withState("state1", new StateHandler<Map<String, Object>, Map<String, Object>>() {
+							.withStartAt("state3")
+							.withState("state3", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									return Objects.asMap("t1", "abc");
 								}
-							}, "state2")
-							.withState("state2", new StateHandler<Map<String, Object>, StateHandler.Status>() {
+							}, "state4")
+							.withState("state4", new StateHandler<Map<String, Object>, StateHandler.Status>() {
 								@Override
 								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
@@ -79,8 +79,8 @@ public class WorkflowTest extends TestCase {
 	@Test
 	public void testRetry() {
 		StateFlow workflow = new FlowBuilder()
-							.withStartAt("state1")
-							.withState("state1", new StateHandler<Map<String, Object>, StateHandler.Status>() {
+							.withStartAt("state5")
+							.withState("state5", new StateHandler<Map<String, Object>, StateHandler.Status>() {
 								@Override
 								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									if(context.getTryCount() < 5) {
@@ -90,8 +90,8 @@ public class WorkflowTest extends TestCase {
 									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
-							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "state2")
-							.withState("state2", new StateHandler<Map<String, Object>, Map<String, Object>>() {
+							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "state6")
+							.withState("state6", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									return Objects.asMap("t2", "xyz");

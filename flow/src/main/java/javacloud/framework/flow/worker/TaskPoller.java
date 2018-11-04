@@ -3,6 +3,7 @@ package javacloud.framework.flow.worker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.flow.worker.TaskQueue.Reservation;
@@ -47,10 +48,10 @@ public abstract class TaskPoller<T> implements Runnable {
 		
 		//PULL AS MUCH TASKS AS CAN HANDLE
 		if(!reservations.isEmpty()) {
-			logger.fine("Reservered " +  reservations.size() + " worker(s)");
+			logger.log(Level.FINE, "Reservered {0} worker(s)", reservations.size());
 			try {
 				List<T> tasks = poll(reservations.size());
-				logger.fine("Confirming " + tasks.size() + " and cancelling " + (reservations.size() - tasks.size()) + " reservation(s)");
+				logger.log(Level.FINE, "Confirming {0} and cancelling {1} reservation(s)", new Object[]{tasks.size(), reservations.size() - tasks.size()});
 				for(int i = 0; i < reservations.size(); i ++) {
 					TaskQueue.Reservation<T> reservation = reservations.get(i);
 					if(i < tasks.size()) {
@@ -60,14 +61,14 @@ public abstract class TaskPoller<T> implements Runnable {
 					}
 				}
 			} catch(Exception ex) {
-				logger.fine("Cancelling all " + reservations.size() + " reservation(s) due to unexpected error: " + ex);
+				logger.log(Level.WARNING, "Cancelling all {0} reservation(s) due to unexpected error: {1}", new Object[] {reservations.size(), ex});
 				for(int i = 0; i < reservations.size(); i ++) {
 					TaskQueue.Reservation<T> reservation = reservations.get(i);
 					reservation.cancel(ex);
 				}
 			}
 		} else {
-			logger.fine("No worker available!");
+			logger.log(Level.FINE, "No worker available!");
 		}
 	}
 	

@@ -1,6 +1,8 @@
 package javacloud.framework.flow.internal;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javacloud.framework.flow.StateAction;
 import javacloud.framework.flow.StateContext;
@@ -23,6 +25,8 @@ import javacloud.framework.util.UncheckedException;
  *
  */
 public class FlowHandler {
+	private static final Logger logger = Logger.getLogger(FlowHandler.class.getName());
+	
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateFlow stateFlow;
@@ -69,6 +73,7 @@ public class FlowHandler {
 	 * @param state
 	 */
 	public void complete(FlowState state) {
+		logger.log(Level.FINE, "Completed execution: {0}", state.getExecutionId());
 	}
 	
 	/**
@@ -110,6 +115,7 @@ public class FlowHandler {
 	 */
 	protected FlowState onPrepare(FlowState state, String name) {
 		//AN EMPTY INPUT IF NOT PROVIDED
+		logger.log(Level.FINE, "Preparing state: {0}", name);
 		Object input = state.getInput();
 		if(input == null) {
 			input = Objects.asMap();
@@ -138,6 +144,7 @@ public class FlowHandler {
 		Class<?> type = action.getParametersType();
 		//PARAMETERS CONVERSION!!!
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
+			logger.log(Level.FINE, "Converting input to parameters type: {0}", type);
 			try {
 				parameters = new JsonConverter(externalizer).convert(parameters, type);
 			} catch(IOException ex) {
@@ -158,10 +165,10 @@ public class FlowHandler {
 	 * @throws Exception
 	 */
 	protected StateHandler.Status onHandle(StateAction action, FlowContext context, Object parameters) throws Exception {
+		FlowState state = context.state;
 		try {
 			return	action.handle(parameters, context);
 		} finally {
-			FlowState state = context.state;
 			state.setTryCount(state.getTryCount() + 1);
 		}
 	}
@@ -176,9 +183,11 @@ public class FlowHandler {
 	protected StateTransition onSuccess(StateAction action, FlowContext context) {
 		StateTransition.Success transition = action.onOutput(context);
 		
+		FlowState state = context.state;
+		logger.log(Level.FINE, "Succeed state: {0}, transition to: {1}", new Object[] {state.getName(), transition.getNext()});
+		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		if(!transition.isEnd()) {
-			FlowState state = context.state;
 			state.setInput(state.output());
 			onPrepare(state, transition.getNext());
 		}
@@ -194,9 +203,11 @@ public class FlowHandler {
 	 */
 	protected StateTransition onRetry(StateAction action, FlowContext context) {
 		StateTransition transition = action.onRetry(context);
+		FlowState state = context.state;
 		if(transition instanceof StateTransition.Failure) {
-			context.state.setFailed(true);
+			state.setFailed(true);
 		}
+		logger.log(Level.FINE, "Retrying state: {0}, transition: {1}", new Object[] {state.getName(), transition});
 		return transition;
 	}
 	
@@ -209,22 +220,26 @@ public class FlowHandler {
 	 */
 	protected StateTransition onFailure(StateAction action, FlowContext context, Exception ex) {
 		StateTransition transition;
+		FlowState state = context.state;
 		//NOT FOUND STATE
 		if(action == null) {
+			logger.log(Level.FINE, "Not found state: {0}", state.getName());
 			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_FOUND);
 			transition = TransitionBuilder.failure();
 		} else {
 			transition = action.onFailure(context, ex);
 		}
 		
-		//HANDLE FAILURE
+		//HANDLE FAILURE, SET DETAILS ERROR IF HAVEN'T DONE SO
 		if(transition instanceof StateTransition.Failure) {
-			context.state.setFailed(true);
-			//SET DETAILS ERROR IF HAVEN'T DONE SO
-			if(ex != null && context.getAttribute(StateContext.ATTRIBUTE_ERROR) == null) {
-				context.setAttribute(StateContext.ATTRIBUTE_ERROR, UncheckedException.findReason(ex));
-				context.state.setStackTrace(UncheckedException.toStackTrace(ex));
+			state.setFailed(true);
+			String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
+			if(ex != null && error == null) {
+				error = UncheckedException.findReason(ex);
+				context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
+				state.setStackTrace(UncheckedException.toStackTrace(ex));
 			}
+			logger.log(Level.FINE, "Failed state: {0}, error: {1}", new Object[] {state.getName(), error});
 		}
 		return transition;
 	}

@@ -3,6 +3,7 @@ package javacloud.framework.i18n.impl;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -43,7 +44,7 @@ public class MessageManagerImpl implements MessageManager {
 	protected void discoverBundles() {
 		try {
 			bundlesControl.discoverBundles(ResourceLoader.getClassLoader());
-			logger.fine("Discovered i18n resource bundles: " + bundlesControl.getBundleNames());
+			logger.log(Level.FINE, "Discovered i18n resource bundles: {}", bundlesControl.getBundleNames());
 		}catch(IOException ex) {
 			throw UncheckedException.wrap(ex);
 		}

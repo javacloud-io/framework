@@ -1,6 +1,7 @@
 package javacloud.framework.txn.internal;
 
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.txn.Propagation;
@@ -43,7 +44,7 @@ public class TxTransactionalInvocation {
 				//FIXME: TO SUPPORT SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			} else if(tx.getTransactional().readOnly() && !transactional.readOnly()) {
-				logger.fine("Existing transaction: " + tx + " is readOnly but required readWrite");
+				logger.log(Level.FINE, "Existing transaction: {0} is readOnly but required readWrite", tx);
 				//FIXME: FOR BETER PERFORMANCE WE SHOULD TRY TO CONVERT THE CURRENT TRANSACTION AND RESUME AFTER DONE
 				return invokeNewTx(callable, tm, transactional);
 			}

@@ -1,4 +1,7 @@
 package javacloud.framework.cdi;
+
+import java.util.logging.Logger;
+
 /**
  * Test a daemon service is running from runlist
  * 
@@ -6,10 +9,12 @@ package javacloud.framework.cdi;
  *
  */
 public class TestDaemonService {
+	private static final Logger logger = Logger.getLogger(TestDaemonService.class.getName());
+	
 	public void start() {
-		System.out.println("STARTED: HELLO TEST!");
+		logger.info("STARTED: HELLO TEST!");
 	}
 	public void stop() {
-		System.out.println("STOPPED: BYE TEST!");
+		logger.info("STOPPED: BYE TEST!");
 	}
 }
