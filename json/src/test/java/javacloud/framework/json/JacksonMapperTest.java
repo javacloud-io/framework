@@ -30,6 +30,12 @@ public class JacksonMapperTest extends ServiceTest {
 	private Externalizer externalizer;
 	
 	@Test
+	public void testNull() throws IOException {
+		Map<String, Object> m = Objects.asMap("a", "1", "b", null, "c", "3");
+		objectMapper.writeValue(System.out, m);
+	}
+	
+	@Test
 	public void testDict() throws IOException {
 		JsonConverter converter = new JsonConverter(externalizer);
 		Map<String, Object> dict = Objects.asMap();

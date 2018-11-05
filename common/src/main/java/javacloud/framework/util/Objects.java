@@ -129,8 +129,8 @@ public final class Objects {
 			return true;
 		}catch(InterruptedException ex) {
 			//IGNORE EX
+			return false;
 		}
-		return false;
 	}
 	
 	/**

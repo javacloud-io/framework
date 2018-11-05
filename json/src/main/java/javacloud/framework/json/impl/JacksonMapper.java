@@ -62,7 +62,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		setVisibility(PropertyAccessor.CREATOR,  Visibility.NONE);
 		
 		//DISABLEs
-		disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
+		//disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
 		disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		
