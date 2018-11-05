@@ -82,7 +82,7 @@ public class FlowExecutor {
 			protected List<HandlerTask> poll(int numberOfTasks) {
 				return pollTasks(numberOfTasks);
 			}
-		}, 0, 1, TimeUnit.SECONDS);
+		}, 0, 100, TimeUnit.MILLISECONDS);
 		
 		//SUBMIT WORKERS
 		workersPool = Executors.newScheduledThreadPool(numberOfWorkers);
@@ -92,7 +92,7 @@ public class FlowExecutor {
 				protected void run(HandlerTask task) {
 					runTask(task);
 				}
-			}, 0, 1, TimeUnit.SECONDS);
+			}, 0, 100, TimeUnit.MILLISECONDS);
 		}
 	}
 	

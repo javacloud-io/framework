@@ -2,6 +2,7 @@ package javacloud.framework.flow.builder;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.function.Function;
 
 import javacloud.framework.flow.StateAction;
 import javacloud.framework.flow.StateContext;
@@ -28,9 +29,23 @@ public class ActionBuilder {
 	 * @param handler
 	 * @return
 	 */
-	public ActionBuilder withStateHandler(StateHandler<?, ?> handler) {
+	public <T, R> ActionBuilder withStateHandler(StateHandler<T, R> handler) {
 		this.stateHandler = Objects.cast(handler);
 		return this;
+	}
+	
+	/**
+	 * 
+	 * @param function
+	 * @return
+	 */
+	public <T, R> ActionBuilder withStateHandler(Function<T, R> function) {
+		return withStateHandler(new StateHandler<T, R>() {
+			@Override
+			public R handle(T parameters, StateContext context) throws Exception {
+				return function.apply(parameters);
+			}
+		});
 	}
 	
 	/**

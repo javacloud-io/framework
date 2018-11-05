@@ -6,7 +6,7 @@ package javacloud.framework.util;
  * 
  * @author tobi
  */
-public abstract class OpCondition<T> implements java.util.function.Predicate<T> {
+public abstract class Condition<T> implements java.util.function.Predicate<T> {
 	public enum Op {
 		EQ,
 		NE,
@@ -28,7 +28,7 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param values
 	 */
 	@SafeVarargs
-	protected OpCondition(Op op, T... values) {
+	protected Condition(Op op, T... values) {
 		this.op = op;
 		this.values = values;
 	}
@@ -36,7 +36,7 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	/**
 	 * DUMP NOT NULL B
 	 */
-	protected OpCondition() {
+	protected Condition() {
 		this(Op.NULL);
 	}
 	
@@ -87,8 +87,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> EQ(T value) {
-		return new OpCondition<T>(Op.EQ, value) {
+	public static final <T> Condition<T> EQ(T value) {
+		return new Condition<T>(Op.EQ, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) == 0;
@@ -102,8 +102,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> NE(T value) {
-		return new OpCondition<T>(Op.NE, value) {
+	public static final <T> Condition<T> NE(T value) {
+		return new Condition<T>(Op.NE, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) != 0;
@@ -116,8 +116,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> LT(T value) {
-		return new OpCondition<T>(Op.LT, value) {
+	public static final <T> Condition<T> LT(T value) {
+		return new Condition<T>(Op.LT, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) < 0;
@@ -130,8 +130,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> LE(T value) {
-		return new OpCondition<T>(Op.LE, value) {
+	public static final <T> Condition<T> LE(T value) {
+		return new Condition<T>(Op.LE, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) <= 0;
@@ -144,8 +144,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> GT(T value) {
-		return new OpCondition<T>(Op.GT, value) {
+	public static final <T> Condition<T> GT(T value) {
+		return new Condition<T>(Op.GT, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) > 0;
@@ -158,8 +158,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> GE(T value) {
-		return new OpCondition<T>(Op.GE, value) {
+	public static final <T> Condition<T> GE(T value) {
+		return new Condition<T>(Op.GE, value) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) >= 0;
@@ -171,8 +171,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * 
 	 * @return
 	 */
-	public static final <T> OpCondition<T> NULL() {
-		return new OpCondition<T>(Op.NULL) {
+	public static final <T> Condition<T> NULL() {
+		return new Condition<T>(Op.NULL) {
 			@Override
 			public boolean test(Object v) {
 				return v == null;
@@ -184,8 +184,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * 
 	 * @return
 	 */
-	public static final <T> OpCondition<T> NOT_NULL() {
-		return new OpCondition<T>(Op.NOT_NULL) {
+	public static final <T> Condition<T> NOT_NULL() {
+		return new Condition<T>(Op.NOT_NULL) {
 			@Override
 			public boolean test(Object v) {
 				return v != null;
@@ -199,8 +199,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param v2
 	 * @return
 	 */
-	public static final <T> OpCondition<T> BETWEEN(T value1, T value2) {
-		return new OpCondition<T>(Op.BETWEEN, value1, value2) {
+	public static final <T> Condition<T> BETWEEN(T value1, T value2) {
+		return new Condition<T>(Op.BETWEEN, value1, value2) {
 			@Override
 			public boolean test(Object v) {
 				return Objects.compare(v, values[0]) >= 0 && Objects.compare(v, values[1]) <= 0;
@@ -213,8 +213,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @param value
 	 * @return
 	 */
-	public static final <T> OpCondition<T> STARTS_WITH(T value) {
-		return new OpCondition<T>(Op.STARTS_WITH, value) {
+	public static final <T> Condition<T> STARTS_WITH(T value) {
+		return new Condition<T>(Op.STARTS_WITH, value) {
 			@Override
 			public boolean test(Object v) {
 				return v.toString().startsWith(values[0].toString());
@@ -228,8 +228,8 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * @return
 	 */
 	@SafeVarargs
-	public static final <T> OpCondition<T> IN(T... values) {
-		return new OpCondition<T>(Op.IN, values) {
+	public static final <T> Condition<T> IN(T... values) {
+		return new Condition<T>(Op.IN, values) {
 			@Override
 			public boolean test(Object v) {
 				for(Object t: values) {
@@ -246,7 +246,7 @@ public abstract class OpCondition<T> implements java.util.function.Predicate<T> 
 	 * NOT AN OPERATOR JUST FOR NULL CONVERSION.
 	 * @return
 	 */
-	public static final <T> OpCondition<T> NOP() {
+	public static final <T> Condition<T> NOP() {
 		return null;
 	}
 }

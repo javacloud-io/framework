@@ -34,7 +34,7 @@ public abstract class TaskRunner<T> implements Runnable {
 			T task = taskQueue.poll(timeoutSeconds, TimeUnit.SECONDS);
 			//RUN ONLY IF AVAILABLE
 			if(task != null) {
-				logger.log(Level.FINE, "Run task: {0}", task);
+				logger.log(Level.FINE, "Running task: {0}", task);
 				run(task);
 			}
 		} catch(InterruptedException ex) {
