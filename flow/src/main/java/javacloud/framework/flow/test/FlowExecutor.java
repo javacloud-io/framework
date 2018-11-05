@@ -67,9 +67,9 @@ public class FlowExecutor {
 	}
 	//
 	private final Externalizer externalizer;
-	private final TaskQueue<HandlerTask>  taskQueue = new TaskQueue<HandlerTask>();
-	private final DelayQueue<HandlerTask> availableTasks   = new DelayQueue<>();
+	private final DelayQueue<HandlerTask> availableTasks = new DelayQueue<>();
 	
+	private final TaskQueue<HandlerTask>  taskQueue = new TaskQueue<HandlerTask>();
 	private final ScheduledExecutorService workersPool;
 	private final ScheduledExecutorService pollerPool;
 	public FlowExecutor(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
@@ -114,8 +114,9 @@ public class FlowExecutor {
 			HandlerTask task = availableTasks.poll();
 			if(task == null) {
 				break;
+			} else if(!task.isCancelled()) {
+				tasks.add(task);
 			}
-			tasks.add(task);
 		}
 		return tasks;
 	}
@@ -128,7 +129,7 @@ public class FlowExecutor {
 	protected void runTask(HandlerTask task) {
 		StateTransition transition = task.handler.execute(task.state);
 		
-		//FAILURE/SUCCESS
+		//FAILURE/SUCCESS => RUN COMPLETION
 		if(transition.isEnd()) {
 			task.run();
 		} else if(transition instanceof StateTransition.Retry) {

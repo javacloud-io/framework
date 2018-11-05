@@ -1,6 +1,8 @@
 package javacloud.framework.flow.internal;
 
 import java.util.Map;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.junit.Assert;
@@ -104,5 +106,32 @@ public class WorkflowTest extends TestCase {
 		Assert.assertFalse(state.isFailed());
 		//Assert.assertEquals("abc", output.get("t1"));
 		Assert.assertEquals("xyz", output.get("t2"));
+	}
+	
+	@Test
+	public void testCancel() throws Exception {
+		StateFlow workflow = new FlowBuilder()
+							.withStartAt("c1")
+							.withState("c1", new StateHandler<Map<String, Object>, StateHandler.Status>() {
+								@Override
+								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
+									if(context.getTryCount() < 5) {
+										return StateHandler.Status.RETRY;
+									}
+									context.setAttribute("t1", "abc");
+									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
+								}
+							},
+							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "c2")
+							.withState("c2", new StateHandler<Map<String, Object>, Map<String, Object>>() {
+								@Override
+								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
+									return Objects.asMap("t2", "xyz");
+								}
+							}, null).build();
+		
+		Future<FlowState> state = flowExecutor.submit(workflow, Objects.asMap("a", "b"));
+		Objects.sleep(5, TimeUnit.SECONDS);
+		state.cancel(true);
 	}
 }
