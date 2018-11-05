@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
-import javacloud.framework.util.UncheckedException;
+import javacloud.framework.util.Exceptions;
 /**
  * Simple bytes channel which guarantee transfer whole byte buffer.
  * @author aimee
@@ -38,7 +38,7 @@ public abstract class BytesChannelWriter implements WritableByteChannel {
 		try {
 			close();
 		}catch(IOException ex) {
-			throw UncheckedException.wrap(ex);
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 	/**

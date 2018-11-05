@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import javacloud.framework.config.ConfigSource;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.ResourceLoader;
-import javacloud.framework.util.UncheckedException;
 /**
  * 
  * @author ho
@@ -60,7 +60,7 @@ public class DefaultConfigSource implements ConfigSource {
 			Properties props = ResourceLoader.loadProperties(resource, loader);
 			return (props == null? new Properties() : props);
 		} catch (IOException ex) {
-			throw new UncheckedException("Unable to load config resource: " + resource, ex);
+			throw Exceptions.asUnchecked("Unable to load config resource: " + resource, ex);
 		}
 	}
 }

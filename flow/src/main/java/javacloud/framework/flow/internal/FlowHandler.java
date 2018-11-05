@@ -12,8 +12,8 @@ import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.builder.TransitionBuilder;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.internal.JsonConverter;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
 
 /**
  * start -> execute -[end]-> [success]
@@ -235,9 +235,9 @@ public class FlowHandler {
 			state.setFailed(true);
 			String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 			if(ex != null && error == null) {
-				error = UncheckedException.findReason(ex);
+				error = Exceptions.findReason(ex);
 				context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
-				state.setStackTrace(UncheckedException.toStackTrace(ex));
+				state.setStackTrace(Exceptions.toStackTrace(ex));
 			}
 			logger.log(Level.FINE, "Failed state: {0}, error: {1}", new Object[] {state.getName(), error});
 		}

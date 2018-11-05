@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 import javacloud.framework.util.ResourceLoader;
-import javacloud.framework.util.UncheckedException;
 
 /**
  * Utils to load all the components from resource + support reference + linke to sub resource
@@ -39,7 +39,7 @@ public class ComponentBuilder {
 			//
 			return build(bindings, loader);
 		} catch(IOException | ClassNotFoundException ex) {
-			throw UncheckedException.wrap(ex);
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 	

@@ -8,8 +8,8 @@ import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.spec.StateSpec;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
 
 /**
  * {
@@ -77,7 +77,7 @@ public class FailureBuilder {
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 				if(error == null && ex != null) {
-					error = UncheckedException.findReason(ex);
+					error = Exceptions.findReason(ex);
 				}
 				StateSpec.Catcher catcher = null;
 				if(error != null) {

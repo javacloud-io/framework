@@ -9,7 +9,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>javacloud-flow</artifactId>
   <packaging>jar</packaging>
-  <name>Framework json</name>
+  <name>Framework flow</name>
   
   <build>
 	<plugins>

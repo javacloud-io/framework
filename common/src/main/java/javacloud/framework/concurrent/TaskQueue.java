@@ -1,4 +1,4 @@
-package javacloud.framework.flow.worker;
+package javacloud.framework.concurrent;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -94,7 +94,7 @@ public class TaskQueue<T> {
 			logger.log(Level.FINE, "Uncaught issue occurred after reservation", ex);
 		} catch(CancellationException ex) {
 			//RESERVATION CANCELLED
-			logger.log(Level.FINE, "Cancelled reservation!");
+			logger.log(Level.FINE, "Reservation cancelled!");
 		}
 		return null;
 	}

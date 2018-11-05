@@ -9,12 +9,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
-import javacloud.framework.io.AlreadyExistsException;
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
-import javacloud.framework.util.NotFoundException;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
 import javacloud.framework.util.ValidationException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -69,11 +67,11 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 			}
 		}
 		//CLONFLICT
-		if(exception instanceof AlreadyExistsException) {
+		if(exception instanceof ValidationException.AlreadyExists) {
 			return	Status.CONFLICT.getStatusCode();
 		}
 		//NOT FOUND
-		if(exception instanceof NotFoundException
+		if(exception instanceof ValidationException.NotFound
 				|| exception instanceof java.io.FileNotFoundException) {
 			return	Status.NOT_FOUND.getStatusCode();
 		}
@@ -94,13 +92,8 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 * @return
 	 */
 	protected Map<String, Object> toEntity(E exception) {
-		String error;
 		//REASON ERROR
-		if(exception instanceof UncheckedException) {
-			error = ((UncheckedException)exception).getReason();
-		} else {
-			error = UncheckedException.findReason(exception);
-		}
+		String error = Exceptions.findReason(exception);
 		
 		//DETAILS MESSAGE LOCALE
 		String message;

@@ -1,13 +1,13 @@
 package javacloud.framework.security;
 
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
+import javacloud.framework.util.ValidationException;
 /**
  * 
  * @author aimee
  *
  */
-public class AuthenticationException extends UncheckedException {
+public class AuthenticationException extends ValidationException {
 	private static final long serialVersionUID = -3499627145582890978L;
 	
 	//STANDARD ERROR CODES

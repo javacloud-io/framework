@@ -11,17 +11,17 @@ import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javacloud.framework.concurrent.TaskPoller;
+import javacloud.framework.concurrent.TaskQueue;
+import javacloud.framework.concurrent.TaskRunner;
 import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.internal.FlowHandler;
 import javacloud.framework.flow.internal.FlowState;
-import javacloud.framework.flow.worker.TaskPoller;
-import javacloud.framework.flow.worker.TaskQueue;
-import javacloud.framework.flow.worker.TaskRunner;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Codecs;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
 
 /**
  * 
@@ -170,7 +170,7 @@ public class FlowExecutor {
 		try {
 			return submit(stateFlow, parameters).get();
 		} catch(InterruptedException | ExecutionException ex) {
-			throw UncheckedException.wrap(ex);
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 }

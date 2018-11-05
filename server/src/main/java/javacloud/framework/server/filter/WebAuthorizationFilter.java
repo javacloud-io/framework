@@ -9,8 +9,8 @@ import javacloud.framework.security.internal.Permissions;
 import javacloud.framework.server.internal.RequestWrapper;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Converters;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.UncheckedException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -104,7 +104,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		} catch(ServletException ex) {
-			AuthenticationException aex = UncheckedException.findCause(ex, AuthenticationException.class);
+			AuthenticationException aex = Exceptions.findCause(ex, AuthenticationException.class);
 			if(aex == null) {
 				throw ex;
 			}
@@ -134,7 +134,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 		} else {
 			//ANYTHING WILL ASSUMING AUTHZ ISSUE?
 			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, challengeScheme);
-			resp.setStatus(UncheckedException.isCausedBy(exception, AccessDeniedException.class) ?
+			resp.setStatus(Exceptions.isCausedBy(exception, AccessDeniedException.class) ?
 					HttpServletResponse.SC_FORBIDDEN : HttpServletResponse.SC_UNAUTHORIZED);
 			resp.getWriter().write((Codecs.encodeURL(entity)));
 		}

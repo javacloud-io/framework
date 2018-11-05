@@ -42,7 +42,7 @@ public final class Codecs {
 		try {
 			return new String(bytes, offset, len, UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw UncheckedException.wrap(ex);
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 	
@@ -55,7 +55,7 @@ public final class Codecs {
 		try {
 			return utf8.getBytes(UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw UncheckedException.wrap(ex);
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 	

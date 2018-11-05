@@ -1,6 +1,5 @@
 package javacloud.framework.util;
 
-import javacloud.framework.util.ValidationException;
 import junit.framework.TestCase;
 /**
  * 
@@ -12,14 +11,14 @@ public class ValidationTest extends TestCase {
 	 * 
 	 */
 	public void testGoodID() {
-		ValidationException.assertId("hO@ya8.com", "good id");
+		Exceptions.assertId("hO@ya8.com", "good id");
 	}
 	
 	/**
 	 * 
 	 */
 	public void testGoodEmail() {
-		ValidationException.assertId("ho@ya8.com", "good email");
-		ValidationException.assertEmail("administrator@jwt.issuer", "good email");
+		Exceptions.assertId("ho@ya8.com", "good email");
+		Exceptions.assertEmail("administrator@jwt.issuer", "good email");
 	}
 }
