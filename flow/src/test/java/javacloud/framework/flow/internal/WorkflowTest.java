@@ -14,7 +14,7 @@ import javacloud.framework.flow.builder.FlowBuilder;
 import javacloud.framework.flow.builder.RetryBuilder;
 import javacloud.framework.flow.builder.TransitionBuilder;
 import javacloud.framework.flow.internal.FlowState;
-import javacloud.framework.flow.spec.StateSpec;
+import javacloud.framework.flow.spi.RetrierSpec;
 import javacloud.framework.flow.test.FlowExecutor;
 import javacloud.framework.util.Objects;
 /**
@@ -92,7 +92,7 @@ public class WorkflowTest extends TestCase {
 									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
-							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "state6")
+							new RetryBuilder().withRetrier(new RetrierSpec().withMaxAttempts(5)).build(), "state6")
 							.withState("state6", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
@@ -122,7 +122,7 @@ public class WorkflowTest extends TestCase {
 									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
-							new RetryBuilder().withRetrier(new StateSpec.Retrier().withMaxAttempts(5)).build(), "c2")
+							new RetryBuilder().withRetrier(new RetrierSpec().withMaxAttempts(5)).build(), "c2")
 							.withState("c2", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {

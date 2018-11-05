@@ -1,12 +1,10 @@
-package javacloud.framework.flow.spec;
+package javacloud.framework.flow.spi;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
-import javacloud.framework.util.Objects;
 
 /**
  * 
@@ -32,116 +30,6 @@ public abstract class StateSpec {
 		Fail,
 		Choice,
 		Parallel
-	}
-	
-	public static class Retrier {
-		@JsonProperty("ErrorEquals")
-		private List<String> errorEquals;
-		
-		@JsonProperty("MaxAttempts")
-		private int maxAttempts		= 3;
-		
-		@JsonProperty("IntervalSeconds")
-		private int intervalSeconds	= 2;
-		
-		@JsonProperty("BackoffRate")
-		private double backoffRate 	= 1.0;
-		
-		public Retrier() {
-		}
-		
-		public int getMaxAttempts() {
-			return maxAttempts;
-		}
-		public Retrier withMaxAttempts(int maxAttempts) {
-			this.maxAttempts = maxAttempts;
-			return this;
-		}
-		
-		public int getIntervalSeconds() {
-			return intervalSeconds;
-		}
-		public Retrier withIntervalSeconds(int intervalSeconds) {
-			this.intervalSeconds = intervalSeconds;
-			return this;
-		}
-		
-		public double getBackoffRate() {
-			return backoffRate;
-		}
-		public Retrier withBackoffRate(double backoffRate) {
-			this.backoffRate = backoffRate;
-			return this;
-		}
-
-		public List<String> getErrorEquals() {
-			return errorEquals;
-		}
-		public Retrier withErrorEquals(List<String> errorEquals) {
-			this.errorEquals = errorEquals;
-			return this;
-		}
-		public Retrier withErrorEquals(String... errorEquals) {
-			this.errorEquals = Objects.asList(errorEquals);
-			return this;
-		}
-		
-		@Override
-		public String toString() {
-			return "Retry: " + maxAttempts + ", " + intervalSeconds + ", " + backoffRate;
-		}
-	}
-	
-	public static class Catcher {
-		@JsonProperty("ErrorEquals")
-		private List<String> errorEquals;
-		
-		@JsonProperty("Result")
-		private Object result;
-		
-		@JsonProperty("Output")
-		private Object output;
-		
-		@JsonProperty("Next")
-		private String next;
-		public Catcher() {
-		}
-		
-		public String getNext() {
-			return next;
-		}
-		public Catcher withNext(String next) {
-			this.next = next;
-			return this;
-		}
-		
-		public Object getResult() {
-			return result;
-		}
-		public Catcher withResult(Object result) {
-			this.result = result;
-			return this;
-		}
-		
-		public Object getOutput() {
-			return output;
-		}
-		public Catcher withOutput(Object output) {
-			this.output = output;
-			return this;
-		}
-		
-		public List<String> getErrorEquals() {
-			return errorEquals;
-		}
-		public Catcher withErrorEquals(List<String> errorEquals) {
-			this.errorEquals = errorEquals;
-			return this;
-		}
-		public Catcher withErrorEquals(String... errorEquals) {
-			this.errorEquals = Objects.asList(errorEquals);
-			return this;
-		}
 	}
 	
 	@JsonProperty("Type")
@@ -215,10 +103,10 @@ public abstract class StateSpec {
 		private boolean end;
 		
 		@JsonProperty("Retry")
-		private List<Retrier> retriers;
+		private List<RetrierSpec> retriers;
 		
 		@JsonProperty("Catch")
-		private List<Catcher> catchers;
+		private List<CatcherSpec> catchers;
 		
 		public Task() {
 		}
@@ -257,17 +145,17 @@ public abstract class StateSpec {
 			this.end = end;
 		}
 		
-		public List<Retrier> getRetriers() {
+		public List<RetrierSpec> getRetriers() {
 			return retriers;
 		}
-		public void setRetriers(List<Retrier> retriers) {
+		public void setRetriers(List<RetrierSpec> retriers) {
 			this.retriers = retriers;
 		}
 		
-		public List<Catcher> getCatchers() {
+		public List<CatcherSpec> getCatchers() {
 			return catchers;
 		}
-		public void setCatchers(List<Catcher> catchers) {
+		public void setCatchers(List<CatcherSpec> catchers) {
 			this.catchers = catchers;
 		}
 	}
@@ -430,4 +318,6 @@ public abstract class StateSpec {
 			this.branches = branches;
 		}
 	}
+	
+	//LOOP
 }

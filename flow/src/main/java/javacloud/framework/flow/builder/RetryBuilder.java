@@ -7,7 +7,7 @@ import java.util.Map;
 import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.flow.spec.StateSpec;
+import javacloud.framework.flow.spi.RetrierSpec;
 import javacloud.framework.util.Objects;
 
 /**
@@ -25,7 +25,7 @@ import javacloud.framework.util.Objects;
  *
  */
 public class RetryBuilder {
-	private Map<String, StateSpec.Retrier> retriers;
+	private Map<String, RetrierSpec> retriers;
 	public RetryBuilder() {
 	}
 	
@@ -35,7 +35,7 @@ public class RetryBuilder {
 	 * @param errors
 	 * @return
 	 */
-	public RetryBuilder withRetrier(StateSpec.Retrier retrier) {
+	public RetryBuilder withRetrier(RetrierSpec retrier) {
 		if(retriers == null) {
 			retriers = new HashMap<>();
 		}
@@ -57,9 +57,9 @@ public class RetryBuilder {
 	 * @param retriers
 	 * @return
 	 */
-	public RetryBuilder withRetriers(List<StateSpec.Retrier> retriers) {
+	public RetryBuilder withRetriers(List<RetrierSpec> retriers) {
 		if(!Objects.isEmpty(retriers)) {
-			for(StateSpec.Retrier retrier: retriers) {
+			for(RetrierSpec retrier: retriers) {
 				withRetrier(retrier);
 			}
 		}
@@ -75,7 +75,7 @@ public class RetryBuilder {
 			@Override
 			public StateTransition onRetry(StateContext context) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
-				StateSpec.Retrier retrier;
+				RetrierSpec retrier;
 				if(error != null) {
 					retrier = (retriers == null? null : retriers.get(error));
 				} else {

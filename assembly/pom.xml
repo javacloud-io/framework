@@ -27,14 +27,29 @@
   
   <dependencies>
 	<dependency>
-    	<groupId>io.javacloud.framework</groupId>
-      	<artifactId>javacloud-jaxrs</artifactId>
-      	<version>${project.version}</version>
+    		<groupId>io.javacloud.framework</groupId>
+      		<artifactId>javacloud-jaxrs</artifactId>
+      		<version>${project.version}</version>
 	</dependency>
 	<dependency>
-    	<groupId>io.javacloud.framework</groupId>
-    	<artifactId>javacloud-server</artifactId>
-    	<version>${project.version}</version>
+    		<groupId>io.javacloud.framework</groupId>
+    		<artifactId>javacloud-logging</artifactId>
+    		<version>${project.version}</version>
 	</dependency>
+	<dependency>
+                <groupId>io.javacloud.framework</groupId>
+                <artifactId>javacloud-txn</artifactId>
+                <version>${project.version}</version>
+        </dependency>
+	<dependency>
+                <groupId>io.javacloud.framework</groupId>
+                <artifactId>javacloud-flow</artifactId>
+                <version>${project.version}</version>
+        </dependency>
+	<dependency>
+                <groupId>io.javacloud.framework</groupId>
+                <artifactId>javacloud-server</artifactId>
+                <version>${project.version}</version>
+        </dependency>
   </dependencies>
 </project>

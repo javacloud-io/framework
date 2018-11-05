@@ -7,7 +7,7 @@ import java.util.Map;
 import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.flow.spec.StateSpec;
+import javacloud.framework.flow.spi.CatcherSpec;
 import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 
@@ -23,7 +23,7 @@ import javacloud.framework.util.Objects;
  *
  */
 public class FailureBuilder {
-	private Map<String, StateSpec.Catcher> catchers;
+	private Map<String, CatcherSpec> catchers;
 	public FailureBuilder() {
 	}
 	
@@ -33,7 +33,7 @@ public class FailureBuilder {
 	 * @param errors
 	 * @return
 	 */
-	public FailureBuilder withCatcher(StateSpec.Catcher catcher, String... errors) {
+	public FailureBuilder withCatcher(CatcherSpec catcher, String... errors) {
 		if(catchers == null) {
 			catchers = new HashMap<>();
 		}
@@ -58,9 +58,9 @@ public class FailureBuilder {
 	 * @param catchers
 	 * @return
 	 */
-	public FailureBuilder withCatchers(List<StateSpec.Catcher> catchers) {
+	public FailureBuilder withCatchers(List<CatcherSpec> catchers) {
 		if(!Objects.isEmpty(catchers)) {
-			for(StateSpec.Catcher catcher: catchers) {
+			for(CatcherSpec catcher: catchers) {
 				withCatcher(catcher);
 			}
 		}
@@ -79,7 +79,7 @@ public class FailureBuilder {
 				if(error == null && ex != null) {
 					error = Exceptions.findReason(ex);
 				}
-				StateSpec.Catcher catcher = null;
+				CatcherSpec catcher = null;
 				if(error != null) {
 					catcher = (catchers == null? null : catchers.get(error));
 				}
@@ -113,7 +113,7 @@ public class FailureBuilder {
 	 * @param catcher
 	 * @return
 	 */
-	protected OutputBuilder newOutputBuilder(StateSpec.Catcher catcher) {
+	protected OutputBuilder newOutputBuilder(CatcherSpec catcher) {
 		return new OutputBuilder();
 	}
 }

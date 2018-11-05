@@ -8,8 +8,8 @@ import javax.inject.Named;
 import com.google.inject.Inject;
 
 import javacloud.framework.cdi.test.ServiceTest;
-import javacloud.framework.flow.spec.FlowSpec;
-import javacloud.framework.flow.spec.StateSpec;
+import javacloud.framework.flow.spi.FlowSpec;
+import javacloud.framework.flow.spi.StateSpec;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.ResourceLoader;
 

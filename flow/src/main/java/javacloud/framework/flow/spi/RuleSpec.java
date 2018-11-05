@@ -1,4 +1,4 @@
-package javacloud.framework.flow.spec;
+package javacloud.framework.flow.spi;
 
 import java.util.Date;
 import java.util.List;

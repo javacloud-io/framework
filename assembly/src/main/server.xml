@@ -20,6 +20,8 @@
                 <include>io.javacloud.framework:javacloud-i18n</include>
                 <include>io.javacloud.framework:javacloud-security</include>
                 <include>io.javacloud.framework:javacloud-jaxrs</include>
+		<include>io.javacloud.framework:javacloud-txn</include>
+		<include>io.javacloud.framework:javacloud-flow</include>
                 <include>io.javacloud.framework:javacloud-server</include>
             </includes>
     	</dependencySet>
