@@ -162,9 +162,11 @@ public class FlowExecutor {
 	 */
 	public <T> Future<FlowState> submit(StateFlow stateFlow, T parameters) {
 		FlowHandler handler = new FlowHandler(stateFlow, externalizer);
+		String executionId = Codecs.randomID();
+		logger.log(Level.FINE, "Starting execution: {0}", executionId);
+		
 		FlowState state = handler.start(parameters);
-		state.setFlowId(Codecs.randomID());
-		logger.log(Level.FINE, "Started flow: {0}", state.getFlowId());
+		state.setExecutionId(executionId);
 		
 		//QUEUE TASK
 		HandlerTask task = new HandlerTask(handler, state);

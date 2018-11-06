@@ -98,10 +98,10 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public String getFlowId() {
+	public String getExecutionId() {
 		return flowId;
 	}
-	public void setFlowId(String flowId) {
+	public void setExecutionId(String flowId) {
 		this.flowId = flowId;
 	}
 	
