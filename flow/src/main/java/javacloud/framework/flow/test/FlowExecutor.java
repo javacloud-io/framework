@@ -10,6 +10,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javacloud.framework.concurrent.TaskPoller;
 import javacloud.framework.concurrent.TaskQueue;
@@ -29,6 +31,8 @@ import javacloud.framework.util.Objects;
  *
  */
 public class FlowExecutor {
+	private static final Logger logger = Logger.getLogger(FlowExecutor.class.getName());
+	
 	//KEEP THE ACTIVE 
 	static class HandlerTask extends FutureTask<FlowState> implements Delayed {
 		final FlowHandler handler;
@@ -153,7 +157,8 @@ public class FlowExecutor {
 	public <T> Future<FlowState> submit(StateFlow stateFlow, T parameters) {
 		FlowHandler handler = new FlowHandler(stateFlow, externalizer);
 		FlowState state = handler.start(parameters);
-		state.setExecutionId(Codecs.randomID());
+		state.setFlowId(Codecs.randomID());
+		logger.log(Level.FINE, "Started flow: {0}", state.getFlowId());
 		
 		//QUEUE TASK
 		HandlerTask task = new HandlerTask(handler, state);

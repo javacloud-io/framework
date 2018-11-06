@@ -73,7 +73,7 @@ public class FlowHandler {
 	 * @param state
 	 */
 	public void complete(FlowState state) {
-		logger.log(Level.FINE, "Completed execution: {0}", state.getExecutionId());
+		logger.log(Level.FINE, "Completed flow: {0}", state.getFlowId());
 	}
 	
 	/**

@@ -6,23 +6,25 @@ import javacloud.framework.flow.StateContext;
 import javacloud.framework.util.Objects;
 
 /**
- * Persistable across State execution in flow.
+ * Persistent across state execution in a flow.
  * 
  * @author ho
  *
  */
 public class FlowState {
-	private String 	name;
-	private long 	startedAt;
-	private int  	tryCount;
+	//ACTION STATE
+	private String 	name;			//executing state
+	private long 	startedAt;		//started in EPOC mills
+	private int  	tryCount;		
 	private String 	stackTrace;
-	
-	private String 	executionId;
-	private boolean failed;
 	
 	//INPUT/OUTPUT
 	private Object  input;
 	private Map<String, Object> attributes;
+	
+	//FLOW STATE
+	private String 	flowId;
+	private boolean failed;
 	public FlowState() {
 	}
 	
@@ -74,28 +76,6 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public String getExecutionId() {
-		return executionId;
-	}
-	public void setExecutionId(String executionId) {
-		this.executionId = executionId;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public boolean isFailed() {
-		return failed;
-	}
-	public void setFailed(boolean failed) {
-		this.failed = failed;
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
 	public Object getInput() {
 		return input;
 	}
@@ -112,6 +92,28 @@ public class FlowState {
 	}
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getFlowId() {
+		return flowId;
+	}
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean isFailed() {
+		return failed;
+	}
+	public void setFailed(boolean failed) {
+		this.failed = failed;
 	}
 	
 	/**

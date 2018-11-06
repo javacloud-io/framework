@@ -11,11 +11,11 @@ public interface StateContext {
 	public static final String ATTRIBUTE_ERROR 	= "StateError";
 	
 	/**
-	 * return execution ID;
+	 * return flow instant ID;
 	 * 
 	 * @return
 	 */
-	public String getExecutionId();
+	public String getFlowId();
 	
 	/**
 	 * return initial/raw INPUT parameters: String, Number, Dictionary...
