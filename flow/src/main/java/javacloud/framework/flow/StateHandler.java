@@ -17,7 +17,7 @@ public interface StateHandler<T, R> {
 		
 	//STATUS
 	public enum Status {
-		SUCCEED,
+		SUCCEEDED,
 		FAILED,
 		RETRY
 	}

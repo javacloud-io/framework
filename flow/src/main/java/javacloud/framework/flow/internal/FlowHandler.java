@@ -94,7 +94,7 @@ public class FlowHandler {
 		try {
 			Object parameters = onInput(action, context);
 			StateAction.Status status = onHandle(action, context, parameters);
-			if(status == StateHandler.Status.SUCCEED) {
+			if(status == StateHandler.Status.SUCCEEDED) {
 				return onSuccess(action, context);
 			} else if(status == StateHandler.Status.RETRY) {
 				return	onRetry(action, context);
