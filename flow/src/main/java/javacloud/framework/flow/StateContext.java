@@ -1,5 +1,7 @@
 package javacloud.framework.flow;
 
+import java.util.logging.Level;
+
 /**
  * https://states-language.net/spec.html
  * 
@@ -45,4 +47,12 @@ public interface StateContext {
 	 * @return
 	 */
 	public int getTryCount();
+	
+	/**
+	 * 
+	 * @param level
+	 * @param message
+	 * @param arguments
+	 */
+	public void log(Level level, String message, Object...arguments);
 }

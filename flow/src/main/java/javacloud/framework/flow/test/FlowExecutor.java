@@ -26,6 +26,12 @@ import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 
 /**
+ * A local execution to simulate state execution:
+ * 
+ * 1. Submit to get back future result
+ * 2. Cancel an execution
+ * 3. Graceful termination to wait for executing task to complete.
+ * 4. Simulate heart beat and enforce execution timeout.
  * 
  * @author ho
  *
@@ -91,7 +97,7 @@ public class FlowExecutor {
 		//SUBMIT WORKERS
 		workersPool = Executors.newScheduledThreadPool(numberOfWorkers);
 		for(int i = 0; i < numberOfWorkers; i ++) {
-			workersPool.scheduleAtFixedRate(new TaskRunner<HandlerTask>(taskQueue, reservationSeconds * 10) {
+			workersPool.scheduleAtFixedRate(new TaskRunner<HandlerTask>(taskQueue, reservationSeconds * 2) {
 				@Override
 				protected void run(HandlerTask task) {
 					runTask(task);
