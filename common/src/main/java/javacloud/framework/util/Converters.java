@@ -136,7 +136,7 @@ public final class Converters {
 			}
 			
 			//ASSUMING BASE64 STRING ENCODED?
-			return (value != null ? ByteBuffer.wrap(Codecs.decodeBase64((String)value, false)) : null);
+			return (value != null ? ByteBuffer.wrap(Codecs.Base64Decoder.apply((String)value, false)) : null);
 		}
 	};
 	//BYTES | BYTEB | BASE64 ENCODED
@@ -153,7 +153,7 @@ public final class Converters {
 			}
 			
 			//ASSUMING BASE64 STRING ENCODED?
-			return (value != null ? Codecs.decodeBase64((String)value, false) : null);
+			return (value != null ? Codecs.Base64Decoder.apply((String)value, false) : null);
 		}
 	};
 	//DATE
@@ -182,7 +182,7 @@ public final class Converters {
 			} else if(value instanceof Date) {
 				return DateFormats.getUTC(DateFormats.ISO8601_S3).format((Date)value);
 			} else if(value instanceof byte[]) {
-				return Codecs.encodeBase64((byte[])value, false);
+				return Codecs.Base64Encoder.apply((byte[])value, false);
 			} else if(value instanceof Object[]) {
 				return	Arrays.asList((Object[])value).toString();
 			}

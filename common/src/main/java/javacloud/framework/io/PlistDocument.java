@@ -1,4 +1,4 @@
-package javacloud.framework.util;
+package javacloud.framework.io;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +28,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import javacloud.framework.util.Codecs;
+import javacloud.framework.util.DateFormats;
+import javacloud.framework.util.Objects;
 /**
  * It's much more powerful to use XML Plist instead of java properties file.
  * 
@@ -36,8 +40,8 @@ import org.xml.sax.SAXException;
  * @author aimee
  *
  */
-public final class PlistXml {
-	private PlistXml() {
+public final class PlistDocument {
+	private PlistDocument() {
 	}
 	
 	/**
@@ -46,7 +50,7 @@ public final class PlistXml {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, Object> readDocument(InputStream ins) throws IOException {
+	public static Map<String, Object> readXml(InputStream ins) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			//DISABLE DTD VALIDATION BY RETURN DUMMY SOURCE
@@ -100,7 +104,7 @@ public final class PlistXml {
 		} else if("date".equals(type)) {
 			return DateFormats.getUTC().parse(element.getTextContent());
 		} else if("data".equals(type)) {
-			return	Codecs.decodeBase64(element.getTextContent(), false);
+			return	Codecs.Base64Decoder.apply(element.getTextContent(), false);
 		} else if("array".equals(type)) {
 			List<Object> list = new ArrayList<Object>();
 			NodeList elements = element.getChildNodes();
@@ -147,8 +151,8 @@ public final class PlistXml {
 	 * @param out
 	 * @throws IOException
 	 */
-	public static void writeDocument(Map<String, Object> plist, OutputStream out) throws IOException {
-		writeDocument(plist, out, false);
+	public static void writeXml(Map<String, Object> plist, OutputStream out) throws IOException {
+		writeXml(plist, out, false);
 	}
 	
 	/**
@@ -158,7 +162,7 @@ public final class PlistXml {
 	 * @param compact
 	 * @throws IOException
 	 */
-	public static void writeDocument(Map<String, Object> plist, OutputStream out, boolean compact) throws IOException {
+	public static void writeXml(Map<String, Object> plist, OutputStream out, boolean compact) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document xmlDoc = documentBuilder.newDocument();
@@ -217,13 +221,7 @@ public final class PlistXml {
 			return element;
 		} else if(value instanceof byte[]) {//BYTEs => ENCODE
 			//broken down in 64 characters/line
-			String base64;
-			if(compact) {
-				base64 = Codecs.encodeBase64((byte[])value, false);
-			} else {
-				base64 = Codecs.encodePEM((byte[])value);
-			}
-			
+			String base64 = Codecs.Base64Encoder.apply((byte[])value, false, !compact);
 			Node element = xmlDoc.createElement("data");
 			element.setTextContent(base64);
 			return element;

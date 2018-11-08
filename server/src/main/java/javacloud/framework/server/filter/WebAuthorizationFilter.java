@@ -129,14 +129,14 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 				
 		//ALWAYS ASSUMING REDIRECT
 		if(Objects.isEmpty(challengeScheme)) {
-			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Codecs.encodeURL(entity);
+			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Codecs.UrlEncoder.apply(entity, true);
 			resp.sendRedirect(RequestWrapper.buildURI(req, redirectUri));
 		} else {
 			//ANYTHING WILL ASSUMING AUTHZ ISSUE?
 			resp.setHeader(HttpHeaders.WWW_AUTHENTICATE, challengeScheme);
 			resp.setStatus(Exceptions.isCausedBy(exception, AccessDeniedException.class) ?
 					HttpServletResponse.SC_FORBIDDEN : HttpServletResponse.SC_UNAUTHORIZED);
-			resp.getWriter().write((Codecs.encodeURL(entity)));
+			resp.getWriter().write((Codecs.UrlEncoder.apply(entity, true)));
 		}
 	}
 }

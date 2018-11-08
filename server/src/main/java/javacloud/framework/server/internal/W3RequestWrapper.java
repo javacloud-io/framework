@@ -25,7 +25,7 @@ public class W3RequestWrapper extends HttpServletRequestWrapper {
 		if(Objects.isEmpty(queryString)) {
 			parameterMap = Objects.asMap();
 		}  else {
-			parameterMap = Objects.cast(Codecs.decodeURL(queryString, true));
+			parameterMap = Objects.cast(Codecs.UrlDecoder.apply(queryString, true));
 		}
 	}
 	

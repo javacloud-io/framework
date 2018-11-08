@@ -64,7 +64,7 @@ public final class JwtCodecs {
 		}
 		@Override
 		public String sign(String payload) {
-			return Codecs.encodeBase64(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
+			return Codecs.Base64Encoder.apply(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
 		}
 
 		@Override
@@ -94,7 +94,7 @@ public final class JwtCodecs {
 				Signature sig = Signature.getInstance(SHA256withRSA);
 				sig.initSign(privateKey);
 				sig.update(Codecs.toBytes(payload));
-				return Codecs.encodeBase64(sig.sign(), true);
+				return Codecs.Base64Encoder.apply(sig.sign(), true);
 			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
@@ -115,7 +115,7 @@ public final class JwtCodecs {
 				Signature sig = Signature.getInstance(SHA256withRSA);
 				sig.initVerify(publicKey);
 				sig.update(Codecs.toBytes(payload));
-				return sig.verify(Codecs.decodeBase64(signature, true));
+				return sig.verify(Codecs.Base64Decoder.apply(signature, true));
 			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
@@ -144,8 +144,8 @@ public final class JwtCodecs {
 				);
 			
 			byte[] claims = converter.toBytes(token.getClaims());
-			String payload = Codecs.encodeBase64(header, true)
-							+ "." + Codecs.encodeBase64(claims, true);
+			String payload = Codecs.Base64Encoder.apply(header, true)
+							+ "." + Codecs.Base64Encoder.apply(claims, true);
 			
 			return payload + "." + signer.sign(payload);
 		} catch(IOException ex) {
@@ -185,8 +185,8 @@ public final class JwtCodecs {
 			throw new JwtInvalidException();
 		}
 		try {
-			Map<String, Object> header = converter.toObject(Codecs.decodeBase64(payload.substring(0, idot), true),  Map.class);
-			Map<String, Object> claims = converter.toObject(Codecs.decodeBase64(payload.substring(idot + 1), true), Map.class);
+			Map<String, Object> header = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(0, idot), true),  Map.class);
+			Map<String, Object> claims = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(idot + 1), true), Map.class);
 			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
 		} catch(IOException ex) {
 			logger.log(Level.WARNING, "Problem decode JWT token", ex);

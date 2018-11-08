@@ -37,10 +37,10 @@ public class JwtTokenTest extends TestCase {
 	    KeyPair keyPair = keyGen.genKeyPair();
 	    
 	    System.out.println("----PUBLIC KEY----");
-	    System.out.println(Codecs.encodePEM(keyPair.getPublic().getEncoded()));
+	    System.out.println(Codecs.Base64Encoder.apply(keyPair.getPublic().getEncoded(), false, true));
 	    
 	    System.out.println("----PRIVATE KEY----");
-	    System.out.println(Codecs.encodePEM(keyPair.getPrivate().getEncoded()));
+	    System.out.println(Codecs.Base64Encoder.apply(keyPair.getPrivate().getEncoded(), false, true));
 	    
 		JwtCodecs.RS256S signer   = new JwtCodecs.RS256S(keyPair.getPrivate());
 		JwtCodecs.RS256V verifier = new JwtCodecs.RS256V(keyPair.getPublic());

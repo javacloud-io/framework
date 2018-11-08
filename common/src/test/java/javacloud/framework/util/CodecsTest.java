@@ -28,20 +28,20 @@ import junit.framework.TestCase;
 public class CodecsTest extends TestCase {
 	public void testBase64() {
 		String text = UUID.randomUUID().toString();
-		String base64 = Codecs.encodeBase64(text.getBytes(), false);
-		assertEquals(text, new String(Codecs.decodeBase64(base64, false)));
+		String base64 = Codecs.Base64Encoder.apply(text.getBytes(), false);
+		assertEquals(text, new String(Codecs.Base64Decoder.apply(base64, false)));
 	}
 	
 	public void testBase64Safe() {
 		String text = UUID.randomUUID().toString();
-		String base64 = Codecs.encodeBase64(text.getBytes(), true);
-		assertEquals(text, new String(Codecs.decodeBase64(base64, true)));
+		String base64 = Codecs.Base64Encoder.apply(text.getBytes(), true);
+		assertEquals(text, new String(Codecs.Base64Decoder.apply(base64, true)));
 	}
 	
 	public void testBaseHex() {
 		String text = UUID.randomUUID().toString();
-		String hex = Codecs.encodeHex(text.getBytes());
-		assertEquals(text, new String(Codecs.decodeHex(hex)));
+		String hex = new Codecs.HexEncoder().apply(text.getBytes());
+		assertEquals(text, new String(new Codecs.HexDecoder().apply(hex)));
 	}
 	
 	public void testUUID() {
@@ -61,9 +61,9 @@ public class CodecsTest extends TestCase {
 	
 	public void testSHA() {
 		byte[] sha = Digests.digest(Digests.SHA1, new byte[0]);
-		System.out.println(Codecs.encodeBase64(sha, false));
+		System.out.println(Codecs.Base64Encoder.apply(sha, false));
 		
 		sha = Digests.digest(Digests.SHA2, new byte[0]);
-		System.out.println(Codecs.encodeBase64(sha, false));
+		System.out.println(Codecs.Base64Encoder.apply(sha, false));
 	}
 }

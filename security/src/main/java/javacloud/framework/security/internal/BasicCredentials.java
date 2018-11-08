@@ -39,7 +39,7 @@ public class BasicCredentials implements Credentials {
 	 * @param base64Token
 	 */
 	public BasicCredentials(String base64Token) {
-		String stoken = Codecs.toUTF8(Codecs.decodeBase64(base64Token, false));
+		String stoken = Codecs.toUTF8(Codecs.Base64Decoder.apply(base64Token, false));
 		int index = stoken.indexOf(':');
 		if(index >= 0) {
 			this.name = stoken.substring(0, index);

@@ -17,8 +17,8 @@ package javacloud.framework.util;
 
 import java.util.Map;
 
+import javacloud.framework.io.PlistDocument;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.PlistXml;
 import junit.framework.TestCase;
 /**
  * 
@@ -34,6 +34,6 @@ public class PlistXmlTest extends TestCase {
 		props.put("null", null);	//ALOW NULL
 		
 		assertTrue(props.containsKey("null"));
-		PlistXml.writeDocument(props, System.out);
+		PlistDocument.writeXml(props, System.out);
 	}
 }

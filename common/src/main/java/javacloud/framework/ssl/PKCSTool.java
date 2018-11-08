@@ -269,17 +269,11 @@ public final class PKCSTool {
 		}
 		
 		//BASE64 ENCODED BROKEN DOWN TO 64 / LINE
-		char[] base64 = Codecs.encodeBase64(encoded, false).toCharArray();
-		for(int i = 1; i <= base64.length; i ++) {
-			writer.write(base64[i - 1]);
-			if(i % 64 == 0) {
-				writer.newLine();
-			}
-		}
+		String base64 = Codecs.Base64Encoder.apply(encoded, false, true);
 		
 		//MAKE SURE ADD END LINE
 		if(type != null && !type.isEmpty()) {
-			if(base64.length % 64 != 0) {
+			if(!base64.endsWith("\n")) {
 				writer.newLine();
 			}
 			writer.write("-----END ");
@@ -326,7 +320,7 @@ public final class PKCSTool {
 				buff = new StringBuilder();
 			} else if(line.startsWith("-----END ") && line.endsWith("-----")) {
 				//DECODE TYPE & BASE64
-				encodedMap.put(sline.substring(11, sline.length() - 5), Codecs.decodeBase64(buff.toString(), false));
+				encodedMap.put(sline.substring(11, sline.length() - 5), Codecs.Base64Decoder.apply(buff.toString(), false));
 			} else if(buff != null) {
 				//JUST APPEND TEXT LINE!
 				buff.append(line);

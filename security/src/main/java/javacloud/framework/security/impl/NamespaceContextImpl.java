@@ -75,7 +75,7 @@ public class NamespaceContextImpl implements NamespaceContext {
 		}
 		
 		//MAKE NEW KEY USING SAFE ENCODED
-		return Codecs.encodeBase64(md.digest(), true);
+		return Codecs.Base64Encoder.apply(md.digest(), true);
 	}
 	
 	/**
