@@ -28,8 +28,8 @@ import junit.framework.TestCase;
  */
 public class ConverterTest extends TestCase {
 	public void testString() {
-		String date = Converters.STRING.to(new Date());
-		Converters.DATE.to(date);
+		String date = Converters.STRING.apply(new Date());
+		Converters.DATE.apply(date);
 	}
 	
 	public void testStrings() {

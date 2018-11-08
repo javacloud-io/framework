@@ -1,6 +1,5 @@
 package javacloud.framework.flow.internal;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -146,8 +145,8 @@ public class FlowHandler {
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
 			logger.log(Level.FINE, "Converting input to parameters type: {0}", type);
 			try {
-				parameters = new JsonConverter(externalizer).convert(parameters, type);
-			} catch(IOException ex) {
+				parameters = new JsonConverter(externalizer).toConverter(type).apply(parameters);
+			} catch(RuntimeException ex) {
 				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
 				throw ex;
 			}

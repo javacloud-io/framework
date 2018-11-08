@@ -64,8 +64,8 @@ public class JwtTokenValidator implements TokenValidator {
 		grantToken.setScope((String)claims.get(JWT_SCOPE));
 		grantToken.setRoles((String)claims.get(JWT_ROLES));
 		
-		grantToken.setExpireAt(new Date(Converters.LONG.to(claims.get(JWT_EXPIRATION))));
-		grantToken.setIssuedAt(new Date(Converters.LONG.to(claims.get(JWT_ISSUEDAT))));
+		grantToken.setExpireAt(new Date(Converters.LONG.apply(claims.get(JWT_EXPIRATION))));
+		grantToken.setIssuedAt(new Date(Converters.LONG.apply(claims.get(JWT_ISSUEDAT))));
 		if(TokenGrant.isExpired(grantToken)) {
 			throw new AccessDeniedException(AccessDeniedException.EXPIRED_CREDENTIALS);
 		}

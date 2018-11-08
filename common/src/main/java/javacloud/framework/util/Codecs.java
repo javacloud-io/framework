@@ -211,7 +211,7 @@ public final class Codecs {
 				sb.append("&");
 				sb.append(URLEncoder.encode(name, UTF8));
 				sb.append("=");
-				sb.append(URLEncoder.encode(Converters.STRING.to(val), UTF8));
+				sb.append(URLEncoder.encode(Converters.STRING.apply(val), UTF8));
 			}
 		}
 		

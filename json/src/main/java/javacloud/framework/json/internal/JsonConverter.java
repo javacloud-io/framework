@@ -3,11 +3,13 @@ package javacloud.framework.json.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.function.Function;
 
 import javacloud.framework.io.BytesInputStream;
 import javacloud.framework.io.BytesOutputStream;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Codecs;
+import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 
 /**
@@ -93,22 +95,29 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * Convert an object to other
-	 * @param v
+	 * return converter for TYPE
 	 * @param type
 	 * @return
-	 * @throws IOException
 	 */
-	public <T> T convert(Object v, Class<T> type) throws IOException {
-		if(type.isInstance(v)) {
-			return Objects.cast(v);
-		}
-		if(v instanceof String) {
-			return toObject((String)v, type);
-		}
-		if(v instanceof byte[]) {
-			return toObject((byte[])v, type);
-		}
-		return (toObject(toBytes(v), type));
+	public <T> Function<Object, T> toConverter(final Class<T> type) {
+		return new Function<Object, T>() {
+			@Override
+			public T apply(Object value) {
+				try {
+					if(type.isInstance(value)) {
+						return Objects.cast(value);
+					}
+					if(value instanceof String) {
+						return toObject((String)value, type);
+					}
+					if(value instanceof byte[]) {
+						return toObject((byte[])value, type);
+					}
+					return (toObject(toBytes(value), type));
+				} catch(IOException ex) {
+					throw Exceptions.asUnchecked(ex);
+				}
+			}
+		};
 	}
 }

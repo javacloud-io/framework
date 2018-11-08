@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Converting from something to something else. String to bytes[] will automatically assuming base64 encoded!!!
@@ -18,17 +19,17 @@ public final class Converters {
 	}
 	
 	//ANYTHING
-	public static final Converter<Object> OBJECT = new Converter<Object>() {
+	public static final Function<Object, Object> OBJECT = new Function<Object, Object>() {
 		@Override
-		public Object to(Object value) {
+		public Object apply(Object value) {
 			return value;
 		}
 	};
 	
 	//BOOLEAN | NUMBER | STRING
-	public static final Converter<Boolean> BOOLEAN = new Converter<Boolean>() {
+	public static final Function<Object, Boolean> BOOLEAN = new Function<Object, Boolean>() {
 		@Override
-		public Boolean to(Object value) {
+		public Boolean apply(Object value) {
 			if(value instanceof Boolean) {
 				return (Boolean)value;
 			} else if(value instanceof Number) {
@@ -38,9 +39,9 @@ public final class Converters {
 		}
 	};
 	//BYTE | NUMBER | STRING
-	public static final Converter<Byte> BYTE = new Converter<Byte>() {
+	public static final Function<Object, Byte> BYTE = new Function<Object, Byte>() {
 		@Override
-		public Byte to(Object value) {
+		public Byte apply(Object value) {
 			if(value instanceof Byte) {
 				return (Byte)value;
 			} else if(value instanceof Number) {
@@ -50,9 +51,9 @@ public final class Converters {
 		}
 	};
 	//CHAR | NUMBER | STRING
-	public static final Converter<Character> CHARACTER = new Converter<Character>() {
+	public static final Function<Object, Character> CHARACTER = new Function<Object, Character>() {
 		@Override
-		public Character to(Object value) {
+		public Character apply(Object value) {
 			if(value instanceof Character) {
 				return (Character)value;
 			} else if(value instanceof Number) {
@@ -62,9 +63,9 @@ public final class Converters {
 		}
 	};
 	//INTEGER  | NUMBER | STRING
-	public static final Converter<Integer> INTEGER = new Converter<Integer>() {
+	public static final Function<Object, Integer> INTEGER = new Function<Object, Integer>() {
 		@Override
-		public Integer to(Object value) {
+		public Integer apply(Object value) {
 			if(value instanceof Integer) {
 				return (Integer)value;
 			} else if(value instanceof Number) {
@@ -74,9 +75,9 @@ public final class Converters {
 		}
 	};
 	//SHORT | NUMBER | STRING
-	public static final Converter<Short> SHORT = new Converter<Short>() {
+	public static final Function<Object, Short> SHORT = new Function<Object, Short>() {
 		@Override
-		public Short to(Object value) {
+		public Short apply(Object value) {
 			if(value instanceof Short) {
 				return (Short)value;
 			} else if(value instanceof Number) {
@@ -86,9 +87,9 @@ public final class Converters {
 		}
 	};
 	//LONG | NUMBER | DATE | STRING
-	public static final Converter<Long> LONG = new Converter<Long>() {
+	public static final Function<Object, Long> LONG = new Function<Object, Long>() {
 		@Override
-		public Long to(Object value) {
+		public Long apply(Object value) {
 			if(value instanceof Long) {
 				return (Long)value;
 			} else if(value instanceof Number) {
@@ -100,9 +101,9 @@ public final class Converters {
 		}
 	};
 	//FLOAT | NUMBER | STRING
-	public static final Converter<Float> FLOAT = new Converter<Float>() {
+	public static final Function<Object, Float> FLOAT = new Function<Object, Float>() {
 		@Override
-		public Float to(Object value) {
+		public Float apply(Object value) {
 			if(value instanceof Float) {
 				return (Float)value;
 			} else if(value instanceof Number) {
@@ -112,9 +113,9 @@ public final class Converters {
 		}
 	};
 	//DOUBLE | NUMBER | STRING
-	public static final Converter<Double> DOUBLE = new Converter<Double>() {
+	public static final Function<Object, Double> DOUBLE = new Function<Object, Double>() {
 		@Override
-		public Double to(Object value) {
+		public Double apply(Object value) {
 			if(value instanceof Double) {
 				return (Double)value;
 			} else if(value instanceof Number) {
@@ -125,9 +126,9 @@ public final class Converters {
 	};
 	
 	//BYTES | BYTEB | BASE64 ENCODED
-	public static final Converter<ByteBuffer> BYTEB = new Converter<ByteBuffer>() {
+	public static final Function<Object, ByteBuffer> BYTEB = new Function<Object, ByteBuffer>() {
 		@Override
-		public ByteBuffer to(Object value) {
+		public ByteBuffer apply(Object value) {
 			if(value instanceof ByteBuffer) {
 				return (ByteBuffer)value;
 			} else if(value instanceof byte[]) {
@@ -139,9 +140,9 @@ public final class Converters {
 		}
 	};
 	//BYTES | BYTEB | BASE64 ENCODED
-	public static final Converter<byte[]> BYTES = new Converter<byte[]>() {
+	public static final Function<Object, byte[]> BYTES = new Function<Object, byte[]>() {
 		@Override
-		public byte[] to(Object value) {
+		public byte[] apply(Object value) {
 			if(value instanceof ByteBuffer) {
 				ByteBuffer buf = (ByteBuffer)value;
 				byte[] dst = new byte[buf.remaining()];
@@ -156,9 +157,9 @@ public final class Converters {
 		}
 	};
 	//DATE
-	public static final Converter<Date> DATE = new Converter<Date>() {
+	public static final Function<Object, Date> DATE = new Function<Object, Date>() {
 		@Override
-		public Date to(Object value) {
+		public Date apply(Object value) {
 			if(value instanceof Date) {
 				return	(Date)value;
 			} else if(value instanceof Number) {
@@ -173,9 +174,9 @@ public final class Converters {
 		}
 	};
 	//STRING
-	public static final Converter<String> STRING = new Converter<String>() {
+	public static final Function<Object, String> STRING = new Function<Object, String>() {
 		@Override
-		public String to(Object value) {
+		public String apply(Object value) {
 			if(value instanceof String) {
 				return	(String)value;
 			} else if(value instanceof Date) {
@@ -190,7 +191,7 @@ public final class Converters {
 	};
 	
 	//PRIMITIVES MAP
-	public static final Map<Class<?>, Converter<?>> TYPES = Objects.asMap(
+	public static final Map<Class<?>, Function<Object, ?>> TYPES = Objects.asMap(
 			boolean.class, 		BOOLEAN,
 			Boolean.class, 		BOOLEAN,
 			byte.class,    		BYTE,
@@ -223,7 +224,7 @@ public final class Converters {
 		if(value instanceof Object[]) {
 			return toString(",", (Object[])value);
 		}
-		return STRING.to(value);
+		return STRING.apply(value);
 	}
 	
 	/**
@@ -240,10 +241,10 @@ public final class Converters {
 		
 		//Build the list with comma separated.
 		StringBuilder buf = new StringBuilder();
-		buf.append(STRING.to(list[0]));
+		buf.append(STRING.apply(list[0]));
 		for(int i = 1; i < list.length; i ++) {
 			buf.append(sep)
-			   .append(STRING.to(list[i]));
+			   .append(STRING.apply(list[i]));
 		}
 		return buf.toString();
 	}
@@ -313,9 +314,9 @@ public final class Converters {
 		}
 		
 		//PRIMITIVE OBJECT
-		Converter<?> c = TYPES.get(type);
+		Function<Object, ?> c = TYPES.get(type);
 		if(c != null) {
-			return (T)c.to(value);
+			return (T)c.apply(value);
 		}
 		
 		//UNKNOW TYPE => RETURN AS IS!!!
