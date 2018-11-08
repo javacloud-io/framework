@@ -145,25 +145,6 @@ public final class Codecs {
 			return buf;
 		}
 	}
-	public static class PEMEncoder implements Function<byte[], String> {
-		@Override
-		public String apply(byte[] encoded) {
-			String base64 = Base64Encoder.apply(encoded, false);
-			
-			char[] cbase64 = base64.toCharArray();
-			StringBuilder buf = new StringBuilder();
-			for(int i = 1; i <= cbase64.length; i ++) {
-				buf.append(cbase64[i - 1]);
-				if(i % 64 == 0) {
-					buf.append('\n');
-				}
-			}
-			
-			//ASSIGN NEW STRING
-			return buf.toString();
-		}
-		
-	}
 	
 	//consider replace '+' with '%20'
 	public static class UrlEncoder implements Function<Map<String, Object>, String> {
