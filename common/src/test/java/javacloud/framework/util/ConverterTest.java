@@ -15,7 +15,9 @@
  */
 package javacloud.framework.util;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javacloud.framework.util.Converters;
 import junit.framework.TestCase;
@@ -28,5 +30,23 @@ public class ConverterTest extends TestCase {
 	public void testString() {
 		String date = Converters.STRING.to(new Date());
 		Converters.DATE.to(date);
+	}
+	
+	public void testStrings() {
+		String[] list = Converters.toObject("1,2,3,4", String[].class);
+		assertEquals(4, list.length);
+		assertEquals("2", list[1]);
+	}
+	
+	public void testInts() {
+		int[] list = Converters.toObject("1,2,3,4", int[].class);
+		assertEquals(4, list.length);
+		assertEquals(2, list[1]);
+	}
+	
+	public void testList() {
+		List<String> list = Converters.toObject("1,2,3,4", new ArrayList<String>().getClass());
+		assertEquals(4, list.size());
+		assertEquals("2", list.get(1));
 	}
 }

@@ -199,7 +199,7 @@ public final class Codecs {
 			
 			//CONVERT TO LIST
 			List<Object> list;
-			if(value.getClass().isArray()) {
+			if(value instanceof Object[]) {
 				list =  Objects.asList((Object[])value);
 			} else if(value instanceof List) {
 				list = Objects.cast(value);

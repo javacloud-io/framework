@@ -1,5 +1,6 @@
 package javacloud.framework.util;
 
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -281,7 +282,7 @@ public final class Converters {
 	@SuppressWarnings("unchecked")
 	public static <T> T toObject(String value, Class<?> type) {
 		//STRING
-		if(type == String.class) {
+		if(type == String.class || type == Object.class) {
 			return (T)value;
 		}
 		
@@ -290,15 +291,25 @@ public final class Converters {
 			return	(T)Enum.valueOf(type.asSubclass(Enum.class), value);
 		}
 		
-		//ARRAY OF OBJECTS
+		//ARRAY OF STRING/OBJECT
 		if(type == String[].class) {
-			return (T)toArray(value, ",", true);
+			return Objects.cast(toArray(value, ",", true));
 		} else if(type.isArray()) {
-			ArrayList<Object> arr = new ArrayList<>();
+			ArrayList<Object> list = new ArrayList<>();
 			for(String s: toArray(value, ",", true)) {
-				arr.add(toObject(s, type.getComponentType()));
+				list.add(toObject(s, type.getComponentType()));
+			}
+			Object arr = Array.newInstance(type.getComponentType(), list.size());
+			for(int i =0; i < list.size(); i ++) {
+				Array.set(arr, i, list.get(i));
 			}
 			return (T)arr;
+		} else if(type.isAssignableFrom(ArrayList.class)) {
+			ArrayList<Object> list = new ArrayList<>();
+			for(String s: toArray(value, ",", true)) {
+				list.add(s);
+			}
+			return (T)list;
 		}
 		
 		//PRIMITIVE OBJECT

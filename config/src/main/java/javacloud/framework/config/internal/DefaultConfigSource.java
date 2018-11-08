@@ -1,5 +1,7 @@
 package javacloud.framework.config.internal;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
@@ -41,6 +43,14 @@ public class DefaultConfigSource implements ConfigSource {
 	}
 	
 	/**
+	 * Load from an external file
+	 * @param resource
+	 */
+	public DefaultConfigSource(File resource) {
+		this(loadProperties(resource));
+	}
+	
+	/**
 	 * 
 	 */
 	@Override
@@ -59,6 +69,21 @@ public class DefaultConfigSource implements ConfigSource {
 		try {
 			Properties props = ResourceLoader.loadProperties(resource, loader);
 			return (props == null? new Properties() : props);
+		} catch (IOException ex) {
+			throw Exceptions.asUnchecked("Unable to load config resource: " + resource, ex);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	static final Properties loadProperties(File resource) {
+		try (FileReader reader = new FileReader(resource)){
+			Properties props = new Properties();
+			props.load(reader);
+			return props;
 		} catch (IOException ex) {
 			throw Exceptions.asUnchecked("Unable to load config resource: " + resource, ex);
 		}
