@@ -1,10 +1,12 @@
-package javacloud.framework.flow.spi;
+package javacloud.framework.flow.spec;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import javacloud.framework.flow.StateTransition;
 
 /**
  * https://states-language.net/spec.html#state-type-table
@@ -14,15 +16,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "Type")
 @JsonSubTypes({
-	@JsonSubTypes.Type(value = StateSpec.Task.class, 	name = "Task"),
-	@JsonSubTypes.Type(value = StateSpec.Pass.class, 	name = "Pass"),
-	@JsonSubTypes.Type(value = StateSpec.Wait.class, 	name = "Wait"),
-	@JsonSubTypes.Type(value = StateSpec.Succeed.class, name = "Succeed"),
-	@JsonSubTypes.Type(value = StateSpec.Fail.class, 	name = "Fail"),
-	@JsonSubTypes.Type(value = StateSpec.Choice.class, 	name = "Choice"),
-	@JsonSubTypes.Type(value = StateSpec.Parallel.class,name = "Parallel")
+	@JsonSubTypes.Type(value = StateDefinition.Task.class, 	name = "Task"),
+	@JsonSubTypes.Type(value = StateDefinition.Pass.class, 	name = "Pass"),
+	@JsonSubTypes.Type(value = StateDefinition.Wait.class, 	name = "Wait"),
+	@JsonSubTypes.Type(value = StateDefinition.Succeed.class, name = "Succeed"),
+	@JsonSubTypes.Type(value = StateDefinition.Fail.class, 	name = "Fail"),
+	@JsonSubTypes.Type(value = StateDefinition.Choice.class, 	name = "Choice"),
+	@JsonSubTypes.Type(value = StateDefinition.Parallel.class,name = "Parallel")
 })
-public abstract class StateSpec {
+public abstract class StateDefinition {
 	//TYPE OF STATE
 	public static enum Type {
 		Task,
@@ -49,7 +51,7 @@ public abstract class StateSpec {
 	@JsonProperty("Output")
 	private Object	output;
 	
-	public StateSpec() {
+	public StateDefinition() {
 	}
 	
 	public Type getType() {
@@ -88,7 +90,7 @@ public abstract class StateSpec {
 	}
 	
 	//TASK
-	public static class Task extends StateSpec {
+	public static class Task extends StateDefinition implements StateTransition.Success {
 		@JsonProperty("Resource")
 		private String	resource;
 		
@@ -105,10 +107,10 @@ public abstract class StateSpec {
 		private boolean end;
 		
 		@JsonProperty("Retry")
-		private List<RetrierSpec> retriers;
+		private List<RetrierDefinition> retriers;
 		
 		@JsonProperty("Catch")
-		private List<CatcherSpec> catchers;
+		private List<CatcherDefinition> catchers;
 		
 		public Task() {
 		}
@@ -132,14 +134,14 @@ public abstract class StateSpec {
 		public void setHeartbeatSeconds(int heartbeatSeconds) {
 			this.heartbeatSeconds = heartbeatSeconds;
 		}
-		
+		@Override
 		public String getNext() {
 			return next;
 		}
 		public void setNext(String next) {
 			this.next = next;
 		}
-
+		@Override
 		public boolean isEnd() {
 			return end;
 		}
@@ -147,23 +149,23 @@ public abstract class StateSpec {
 			this.end = end;
 		}
 		
-		public List<RetrierSpec> getRetriers() {
+		public List<RetrierDefinition> getRetriers() {
 			return retriers;
 		}
-		public void setRetriers(List<RetrierSpec> retriers) {
+		public void setRetriers(List<RetrierDefinition> retriers) {
 			this.retriers = retriers;
 		}
 		
-		public List<CatcherSpec> getCatchers() {
+		public List<CatcherDefinition> getCatchers() {
 			return catchers;
 		}
-		public void setCatchers(List<CatcherSpec> catchers) {
+		public void setCatchers(List<CatcherDefinition> catchers) {
 			this.catchers = catchers;
 		}
 	}
 	
 	//PASS
-	public static class Pass extends StateSpec {
+	public static class Pass extends StateDefinition implements StateTransition.Success {
 		@JsonProperty("Next")
 		private String next;
 		
@@ -172,14 +174,14 @@ public abstract class StateSpec {
 		
 		public Pass() {
 		}
-		
+		@Override
 		public String getNext() {
 			return next;
 		}
 		public void setNext(String next) {
 			this.next = next;
 		}
-		
+		@Override
 		public boolean isEnd() {
 			return end;
 		}
@@ -189,7 +191,7 @@ public abstract class StateSpec {
 	}
 		
 	//WAIT
-	public static class Wait extends StateSpec {
+	public static class Wait extends StateDefinition implements StateTransition.Success {
 		@JsonProperty("Next")
 		private String next;
 		
@@ -204,24 +206,25 @@ public abstract class StateSpec {
 		private String timestamp;
 		public Wait() {
 		}
+		@Override
 		public String getNext() {
 			return next;
 		}
 		public void setNext(String next) {
 			this.next = next;
 		}
-
+		@Override
 		public boolean isEnd() {
 			return end;
 		}
 		public void setEnd(boolean end) {
 			this.end = end;
 		}
-		
-		public int getSeconds() {
+		@Override
+		public int getDelaySeconds() {
 			return seconds;
 		}
-		public void setSeconds(int seconds) {
+		public void setDelaySeconds(int seconds) {
 			this.seconds = seconds;
 		}
 		
@@ -234,13 +237,13 @@ public abstract class StateSpec {
 	}
 	
 	//SUCCEED TERMINATE
-	public static class Succeed extends StateSpec {
+	public static class Succeed extends StateDefinition {
 		public Succeed() {
 		}
 	}
 	
 	//FAIL TERMINATE
-	public static class Fail extends StateSpec {
+	public static class Fail extends StateDefinition {
 		@JsonProperty("Error")
 		private String error;
 		
@@ -264,18 +267,18 @@ public abstract class StateSpec {
 	}
 	
 	//CHOICE
-	public static class Choice extends StateSpec {
+	public static class Choice extends StateDefinition {
 		@JsonProperty("Choices")
-		private List<RuleSpec> rules;
+		private List<RuleDefinition> rules;
 		
 		@JsonProperty("Default")
 		private String next;
 		public Choice() {
 		}
-		public List<RuleSpec> getRules() {
+		public List<RuleDefinition> getRules() {
 			return rules;
 		}
-		public void setRules(List<RuleSpec> rules) {
+		public void setRules(List<RuleDefinition> rules) {
 			this.rules = rules;
 		}
 		
@@ -288,7 +291,7 @@ public abstract class StateSpec {
 	}
 	
 	//PARALLEL
-	public static class Parallel extends StateSpec {
+	public static class Parallel extends StateDefinition implements StateTransition.Success {
 		@JsonProperty("Next")
 		private String next;
 		
@@ -296,16 +299,18 @@ public abstract class StateSpec {
 		private boolean end;
 		
 		@JsonProperty("Branches")
-		private List<FlowSpec> branches;
+		private List<FlowDefinition> branches;
 		public Parallel() {
 		}
+		
+		@Override
 		public String getNext() {
 			return next;
 		}
 		public void setNext(String next) {
 			this.next = next;
 		}
-		
+		@Override
 		public boolean isEnd() {
 			return end;
 		}
@@ -313,10 +318,10 @@ public abstract class StateSpec {
 			this.end = end;
 		}
 		
-		public List<FlowSpec> getBranches() {
+		public List<FlowDefinition> getBranches() {
 			return branches;
 		}
-		public void setBranches(List<FlowSpec> branches) {
+		public void setBranches(List<FlowDefinition> branches) {
 			this.branches = branches;
 		}
 	}

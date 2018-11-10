@@ -7,7 +7,7 @@ package javacloud.framework.flow;
  * @param <T>
  * @param <R>
  */
-public interface StateHandler<T, R> {
+public interface StateFunction<T, R> {
 	//BUILT-IN ERRORS
 	public static final String ERROR_ALL 	   		= "States.ALL";
 	public static final String ERROR_TIMEOUT 		= "States.Timeout";

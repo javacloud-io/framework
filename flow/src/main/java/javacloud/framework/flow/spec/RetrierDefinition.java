@@ -1,4 +1,4 @@
-package javacloud.framework.flow.spi;
+package javacloud.framework.flow.spec;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class RetrierSpec {
+public class RetrierDefinition {
 	@JsonProperty("ErrorEquals")
 	private List<String> errorEquals;
 	
@@ -23,13 +23,13 @@ public class RetrierSpec {
 	@JsonProperty("BackoffRate")
 	private double backoffRate 	= 1.0;
 	
-	public RetrierSpec() {
+	public RetrierDefinition() {
 	}
 	
 	public int getMaxAttempts() {
 		return maxAttempts;
 	}
-	public RetrierSpec withMaxAttempts(int maxAttempts) {
+	public RetrierDefinition withMaxAttempts(int maxAttempts) {
 		this.maxAttempts = maxAttempts;
 		return this;
 	}
@@ -37,7 +37,7 @@ public class RetrierSpec {
 	public int getIntervalSeconds() {
 		return intervalSeconds;
 	}
-	public RetrierSpec withIntervalSeconds(int intervalSeconds) {
+	public RetrierDefinition withIntervalSeconds(int intervalSeconds) {
 		this.intervalSeconds = intervalSeconds;
 		return this;
 	}
@@ -45,7 +45,7 @@ public class RetrierSpec {
 	public double getBackoffRate() {
 		return backoffRate;
 	}
-	public RetrierSpec withBackoffRate(double backoffRate) {
+	public RetrierDefinition withBackoffRate(double backoffRate) {
 		this.backoffRate = backoffRate;
 		return this;
 	}
@@ -53,11 +53,11 @@ public class RetrierSpec {
 	public List<String> getErrorEquals() {
 		return errorEquals;
 	}
-	public RetrierSpec withErrorEquals(List<String> errorEquals) {
+	public RetrierDefinition withErrorEquals(List<String> errorEquals) {
 		this.errorEquals = errorEquals;
 		return this;
 	}
-	public RetrierSpec withErrorEquals(String... errorEquals) {
+	public RetrierDefinition withErrorEquals(String... errorEquals) {
 		this.errorEquals = Objects.asList(errorEquals);
 		return this;
 	}

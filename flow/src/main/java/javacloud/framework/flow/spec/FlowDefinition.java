@@ -1,4 +1,4 @@
-package javacloud.framework.flow.spi;
+package javacloud.framework.flow.spec;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author ho
  *
  */
-public class FlowSpec {
+public class FlowDefinition {
 	@JsonProperty("Comment")
 	private String comment;
 	
@@ -22,8 +22,8 @@ public class FlowSpec {
 	private String startAt;
 	
 	@JsonProperty("States")
-	private Map<String, StateSpec> states;
-	public FlowSpec() {
+	private Map<String, StateDefinition> states;
+	public FlowDefinition() {
 	}
 	
 	public String getComment() {
@@ -32,7 +32,7 @@ public class FlowSpec {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public FlowSpec withComment(String comment) {
+	public FlowDefinition withComment(String comment) {
 		this.comment = comment;
 		return this;
 	}
@@ -43,18 +43,18 @@ public class FlowSpec {
 	public void setStartAt(String startAt) {
 		this.startAt = startAt;
 	}
-	public FlowSpec withStartAt(String startAt) {
+	public FlowDefinition withStartAt(String startAt) {
 		this.startAt = startAt;
 		return this;
 	}
 	
-	public Map<String, StateSpec> getStates() {
+	public Map<String, StateDefinition> getStates() {
 		return states;
 	}
-	public void setStates(Map<String, StateSpec> states) {
+	public void setStates(Map<String, StateDefinition> states) {
 		this.states = states;
 	}
-	public FlowSpec withState(String name, StateSpec state) {
+	public FlowDefinition withState(String name, StateDefinition state) {
 		if(states == null) {
 			states = new LinkedHashMap<>();
 		}

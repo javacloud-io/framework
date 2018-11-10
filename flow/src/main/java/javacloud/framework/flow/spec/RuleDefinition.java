@@ -1,4 +1,4 @@
-package javacloud.framework.flow.spi;
+package javacloud.framework.flow.spec;
 
 import java.util.Date;
 import java.util.List;
@@ -8,21 +8,23 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import javacloud.framework.flow.StateTransition;
 import javacloud.framework.util.Objects;
+import javacloud.framework.util.ValidationException;
 
 /**
  * 
  * @author ho
  *
  */
-@JsonDeserialize(builder = RuleSpec.RuleBuilder.class)
-public abstract class RuleSpec {
+@JsonDeserialize(builder = RuleDefinition.RuleBuilder.class)
+public abstract class RuleDefinition implements StateTransition.Success {
 	@JsonProperty("Next")
 	private String next;
-	protected RuleSpec(String next) {
+	protected RuleDefinition(String next) {
 		this.next = next;
 	}
-	
+	@Override
 	public String getNext() {
 		return next;
 	}
@@ -239,7 +241,7 @@ public abstract class RuleSpec {
 	}
 	
 	//LOGICAL OPERATORS
-	public static class And extends RuleSpec {
+	public static class And extends RuleDefinition {
 		@JsonProperty("And")
 		private List<Condition> conditions;
 		public And(String next, List<Condition> conditions) {
@@ -250,7 +252,7 @@ public abstract class RuleSpec {
 			return conditions;
 		}
 	}
-	public static class Or extends RuleSpec {
+	public static class Or extends RuleDefinition {
 		@JsonProperty("Or")
 		private List<Condition> conditions;
 		public Or(String next, List<Condition> conditions) {
@@ -261,7 +263,7 @@ public abstract class RuleSpec {
 			return conditions;
 		}
 	}
-	public static class Not extends RuleSpec {
+	public static class Not extends RuleDefinition {
 		@JsonProperty("Not")
 		private Condition condition;
 		public Not(String next, Condition condition) {
@@ -300,7 +302,7 @@ public abstract class RuleSpec {
 			return this;
 		}
 		//
-		public RuleSpec build() {
+		public RuleDefinition build() {
 			switch(operator) {
 				case "Not":
 					return new Not(next, (Condition)value);
@@ -309,7 +311,7 @@ public abstract class RuleSpec {
 				case "And":
 					return new And(next, Objects.cast(value));
 			}
-			throw new IllegalArgumentException("Unknown rule with operator: [" + operator + "], value: [" + value + "]");
+			throw new ValidationException("Unknown rule [" + operator + " " + value + "]");
 		}
 	}
 	
@@ -370,7 +372,7 @@ public abstract class RuleSpec {
 				case "TimestampGreaterThanEquals":
 					return new TimestampGreaterThanEquals(variable, Objects.cast(value));
 			}
-			throw new IllegalArgumentException("Unknown condition with operator: [" + operator + "], value: [" + value + "]");
+			throw new ValidationException("Unknown condition [" + operator + " " + value + "]");
 		}
 	}
 }

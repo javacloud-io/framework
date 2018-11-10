@@ -8,8 +8,8 @@ import javax.inject.Named;
 import com.google.inject.Inject;
 
 import javacloud.framework.cdi.test.ServiceTest;
-import javacloud.framework.flow.spi.FlowSpec;
-import javacloud.framework.flow.spi.StateSpec;
+import javacloud.framework.flow.spec.FlowDefinition;
+import javacloud.framework.flow.spec.StateDefinition;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.ResourceLoader;
 
@@ -26,11 +26,11 @@ public class FlowSpecTest extends ServiceTest {
 	
 	@Test
 	public void testSpec() throws IOException {
-		FlowSpec flowSpec = null;
+		FlowDefinition flowSpec = null;
 		try(InputStream stream = ResourceLoader.getClassLoader().getResourceAsStream("hello-states.json")) {
-			flowSpec = externalizer.unmarshal(stream, FlowSpec.class);
+			flowSpec = externalizer.unmarshal(stream, FlowDefinition.class);
 		}
 		Assert.assertNotNull(flowSpec);
-		Assert.assertTrue(flowSpec.getStates().get("hello") instanceof StateSpec.Task);
+		Assert.assertTrue(flowSpec.getStates().get("hello") instanceof StateDefinition.Task);
 	}
 }

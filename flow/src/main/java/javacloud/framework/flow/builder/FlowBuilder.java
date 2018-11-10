@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javacloud.framework.flow.StateAction;
-import javacloud.framework.flow.StateFlow;
-import javacloud.framework.flow.StateHandler;
+import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFunction;
 
 /**
  * 
@@ -35,9 +35,9 @@ public class FlowBuilder {
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateHandler<?, ?> handler, String next) {
+	public FlowBuilder withState(String name, StateFunction<?, ?> handler, String next) {
 		return withState(name, new ActionBuilder()
-								.withStateHandler(handler)
+								.withStateFunction(handler)
 								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
 	}
@@ -49,9 +49,9 @@ public class FlowBuilder {
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateHandler<?, ?> handler, StateHandler.RetryHandler retryHandler, String next) {
+	public FlowBuilder withState(String name, StateFunction<?, ?> handler, StateFunction.RetryHandler retryHandler, String next) {
 		return withState(name, new ActionBuilder()
-								.withStateHandler(handler)
+								.withStateFunction(handler)
 								.withRetryHandler(retryHandler)
 								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
@@ -74,8 +74,8 @@ public class FlowBuilder {
 	 * 
 	 * @return
 	 */
-	public StateFlow build() {
-		return new StateFlow() {
+	public StateMachine build() {
+		return new StateMachine() {
 			@Override
 			public String getStartAt() {
 				return startAt;

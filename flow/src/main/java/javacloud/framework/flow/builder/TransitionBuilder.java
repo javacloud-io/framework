@@ -1,9 +1,8 @@
 package javacloud.framework.flow.builder;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateHandler;
+import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.util.Objects;
 
 /**
  * 
@@ -31,11 +30,6 @@ public class TransitionBuilder {
 	public static StateTransition.Success success(final String next, final int delaySeconds) {
 		return new StateTransition.Success() {
 			@Override
-			public boolean isEnd() {
-				return Objects.isEmpty(next);
-			}
-			
-			@Override
 			public int getDelaySeconds() {
 				return delaySeconds;
 			}
@@ -46,7 +40,7 @@ public class TransitionBuilder {
 			}
 			@Override
 			public String toString() {
-				return "Success";
+				return (delaySeconds == 0? "Success" : "SuccessWait");
 			}
 		};
 	}
@@ -88,9 +82,9 @@ public class TransitionBuilder {
 	 * @param result
 	 * @return
 	 */
-	public static StateHandler.Status succeed(StateContext context, Object result) {
+	public static StateFunction.Status succeed(StateContext context, Object result) {
 		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
-		return StateHandler.Status.SUCCEEDED;
+		return StateFunction.Status.SUCCEEDED;
 	}
 	
 	/**
@@ -99,8 +93,8 @@ public class TransitionBuilder {
 	 * @param error
 	 * @return
 	 */
-	public static StateHandler.Status fail(StateContext context, String error) {
+	public static StateFunction.Status fail(StateContext context, String error) {
 		context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
-		return StateHandler.Status.FAILED;
+		return StateFunction.Status.FAILED;
 	}
 }

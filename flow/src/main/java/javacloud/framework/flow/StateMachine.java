@@ -4,7 +4,7 @@ package javacloud.framework.flow;
  * @author ho
  *
  */
-public interface StateFlow {
+public interface StateMachine {
 	/**
 	 * return start STATE
 	 * @return

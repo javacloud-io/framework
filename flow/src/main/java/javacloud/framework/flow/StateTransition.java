@@ -28,12 +28,9 @@ public interface StateTransition {
 	
 	//SUCCEED -> NEXT
 	interface Success extends StateTransition {
-		/**
-		 * Delays second prior to move to next state
-		 * @return
-		 */
-		default public int getDelaySeconds() {
-			return 0;
+		@Override
+		default public boolean isEnd() {
+			return (getNext() == null);
 		}
 		
 		/**
@@ -41,6 +38,14 @@ public interface StateTransition {
 		 * @return
 		 */
 		public String getNext();
+		
+		/**
+		 * Delays second prior to move to next state
+		 * @return
+		 */
+		default public int getDelaySeconds() {
+			return 0;
+		}
 	}
 	
 	//FAILED -> TERMINATE

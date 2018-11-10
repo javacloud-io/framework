@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateHandler;
+import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.flow.spi.CatcherSpec;
+import javacloud.framework.flow.spec.CatcherDefinition;
 import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 
@@ -23,7 +23,7 @@ import javacloud.framework.util.Objects;
  *
  */
 public class FailureBuilder {
-	private Map<String, CatcherSpec> catchers;
+	private Map<String, CatcherDefinition> catchers;
 	public FailureBuilder() {
 	}
 	
@@ -33,13 +33,13 @@ public class FailureBuilder {
 	 * @param errors
 	 * @return
 	 */
-	public FailureBuilder withCatcher(CatcherSpec catcher, String... errors) {
+	public FailureBuilder withCatcher(CatcherDefinition catcher, String... errors) {
 		if(catchers == null) {
 			catchers = new HashMap<>();
 		}
 		if(Objects.isEmpty(errors)) {
 			if(Objects.isEmpty(catcher.getErrorEquals())) {
-				catchers.put(StateHandler.ERROR_ALL, catcher);
+				catchers.put(StateFunction.ERROR_ALL, catcher);
 			} else {
 				for(String error: catcher.getErrorEquals()) {
 					catchers.put(error, catcher);
@@ -58,9 +58,9 @@ public class FailureBuilder {
 	 * @param catchers
 	 * @return
 	 */
-	public FailureBuilder withCatchers(List<CatcherSpec> catchers) {
+	public FailureBuilder withCatchers(List<CatcherDefinition> catchers) {
 		if(!Objects.isEmpty(catchers)) {
-			for(CatcherSpec catcher: catchers) {
+			for(CatcherDefinition catcher: catchers) {
 				withCatcher(catcher);
 			}
 		}
@@ -71,20 +71,20 @@ public class FailureBuilder {
 	 * 
 	 * @return
 	 */
-	public StateHandler.FailureHandler build() {
-		return new StateHandler.FailureHandler() {
+	public StateFunction.FailureHandler build() {
+		return new StateFunction.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 				if(error == null && ex != null) {
 					error = Exceptions.findReason(ex);
 				}
-				CatcherSpec catcher = null;
+				CatcherDefinition catcher = null;
 				if(error != null) {
 					catcher = (catchers == null? null : catchers.get(error));
 				}
 				if(catcher == null && catchers != null) {
-					catcher = catchers.get(StateHandler.ERROR_ALL);
+					catcher = catchers.get(StateFunction.ERROR_ALL);
 				}
 				
 				//GIVE UP WITHOUT CATCHER
@@ -113,7 +113,7 @@ public class FailureBuilder {
 	 * @param catcher
 	 * @return
 	 */
-	protected OutputBuilder newOutputBuilder(CatcherSpec catcher) {
+	protected OutputBuilder newOutputBuilder(CatcherDefinition catcher) {
 		return new OutputBuilder();
 	}
 }

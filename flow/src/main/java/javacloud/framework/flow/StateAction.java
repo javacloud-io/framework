@@ -1,12 +1,13 @@
 package javacloud.framework.flow;
 
 /**
+ * An executable action
  * 
  * @author ho
  *
  */
-public interface StateAction extends StateHandler<Object, StateHandler.Status>, StateHandler.InputHandler<Object>,
-	StateHandler.OutputHandler, StateHandler.FailureHandler, StateHandler.RetryHandler {
+public interface StateAction extends StateFunction<Object, StateFunction.Status>, StateFunction.InputHandler<Object>,
+	StateFunction.OutputHandler, StateFunction.FailureHandler, StateFunction.RetryHandler {
 	/**
 	 * Generic InputHandler need type for conversion
 	 * @return

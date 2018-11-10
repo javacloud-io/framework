@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 import javacloud.framework.concurrent.TaskPoller;
 import javacloud.framework.concurrent.TaskQueue;
 import javacloud.framework.concurrent.TaskRunner;
-import javacloud.framework.flow.StateFlow;
+import javacloud.framework.flow.StateMachine;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.internal.FlowHandler;
 import javacloud.framework.flow.internal.FlowState;
@@ -142,26 +142,28 @@ public class FlowExecutor {
 		//FAILURE/SUCCESS => RUN COMPLETION
 		if(transition.isEnd()) {
 			task.run();
-		} else if(transition instanceof StateTransition.Retry) {
-			int delaySeconds = ((StateTransition.Retry)transition).getDelaySeconds();
-			if(delaySeconds < FlowHandler.MIN_DELAY_SECONDS) {
-				delaySeconds = FlowHandler.MIN_DELAY_SECONDS;
-			}
-			availableTasks.offer(task.renew(delaySeconds));
 		} else {
-			int delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
+			int delaySeconds = 0;
+			if(transition instanceof StateTransition.Retry) {
+				delaySeconds = ((StateTransition.Retry)transition).getDelaySeconds();
+				if(delaySeconds < FlowHandler.MIN_DELAY_SECONDS) {
+					delaySeconds = FlowHandler.MIN_DELAY_SECONDS;
+				}
+			} else if(transition instanceof StateTransition.Success) {
+				delaySeconds = ((StateTransition.Success)transition).getDelaySeconds();
+			}
 			availableTasks.offer(task.renew(delaySeconds));
 		}
 	}
 	
 	/**
 	 * 
-	 * @param stateFlow
+	 * @param stateMachine
 	 * @param parameters
 	 * @return
 	 */
-	public <T> Future<FlowState> submit(StateFlow stateFlow, T parameters) {
-		FlowHandler handler = new FlowHandler(stateFlow, externalizer);
+	public <T> Future<FlowState> submit(StateMachine stateMachine, T parameters) {
+		FlowHandler handler = new FlowHandler(stateMachine, externalizer);
 		String executionId = Codecs.randomID();
 		logger.log(Level.FINE, "Starting execution: {0}", executionId);
 		
@@ -176,13 +178,13 @@ public class FlowExecutor {
 	
 	/**
 	 * 
-	 * @param stateFlow
+	 * @param stateMachine
 	 * @param parameters
 	 * @return
 	 */
-	public <T> FlowState run(StateFlow stateFlow, T parameters) {
+	public <T> FlowState run(StateMachine stateMachine, T parameters) {
 		try {
-			return submit(stateFlow, parameters).get();
+			return submit(stateMachine, parameters).get();
 		} catch(InterruptedException | ExecutionException ex) {
 			throw Exceptions.asUnchecked(ex);
 		}

@@ -5,8 +5,8 @@ import java.util.logging.Logger;
 
 import javacloud.framework.flow.StateAction;
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateFlow;
-import javacloud.framework.flow.StateHandler;
+import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.builder.TransitionBuilder;
 import javacloud.framework.io.Externalizer;
@@ -28,10 +28,10 @@ public class FlowHandler {
 	
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
-	private final StateFlow stateFlow;
+	private final StateMachine stateMachine;
 	private final Externalizer externalizer;
-	public FlowHandler(StateFlow stateFlow, Externalizer externalizer) {
-		this.stateFlow 	  = stateFlow;
+	public FlowHandler(StateMachine stateMachine, Externalizer externalizer) {
+		this.stateMachine = stateMachine;
 		this.externalizer = externalizer;
 	}
 	
@@ -53,7 +53,7 @@ public class FlowHandler {
 	public <T> FlowState start(T input, String startAt) {
 		FlowState state = new FlowState();
 		state.setInput(input);
-		return onPrepare(state, Objects.isEmpty(startAt) ? stateFlow.getStartAt() : startAt);
+		return onPrepare(state, Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
 	}
 	
 	/**
@@ -86,16 +86,16 @@ public class FlowHandler {
 	 * @return
 	 */
 	protected StateTransition onExecute(FlowState state, FlowContext context) {
-		StateAction action = stateFlow.getState(state.getName());
+		StateAction action = stateMachine.getState(state.getName());
 		if(action == null) {
 			return onFailure(action, context, null);
 		}
 		try {
 			Object parameters = onInput(action, context);
 			StateAction.Status status = onHandle(action, context, parameters);
-			if(status == StateHandler.Status.SUCCEEDED) {
+			if(status == StateFunction.Status.SUCCEEDED) {
 				return onSuccess(action, context);
-			} else if(status == StateHandler.Status.RETRY) {
+			} else if(status == StateFunction.Status.RETRY) {
 				return	onRetry(action, context);
 			}
 			
@@ -147,7 +147,7 @@ public class FlowHandler {
 			try {
 				parameters = new JsonConverter(externalizer).toConverter(type).apply(parameters);
 			} catch(RuntimeException ex) {
-				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
+				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateFunction.ERROR_JSON_CONVERSION);
 				throw ex;
 			}
 		}
@@ -163,7 +163,7 @@ public class FlowHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	protected StateHandler.Status onHandle(StateAction action, FlowContext context, Object parameters) throws Exception {
+	protected StateFunction.Status onHandle(StateAction action, FlowContext context, Object parameters) throws Exception {
 		FlowState state = context.state;
 		try {
 			return	action.handle(parameters, context);
@@ -223,7 +223,7 @@ public class FlowHandler {
 		//NOT FOUND STATE
 		if(action == null) {
 			logger.log(Level.FINE, "Not found state: {0}", state.getName());
-			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_FOUND);
+			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateFunction.ERROR_NOT_FOUND);
 			transition = TransitionBuilder.failure();
 		} else {
 			transition = action.onFailure(context, ex);
