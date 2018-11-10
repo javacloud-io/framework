@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
+ * https://states-language.net/spec.html#state-type-table
  * 
  * @author ho
  *
@@ -22,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 	@JsonSubTypes.Type(value = StateSpec.Parallel.class,name = "Parallel")
 })
 public abstract class StateSpec {
+	//TYPE OF STATE
 	public static enum Type {
 		Task,
 		Pass,

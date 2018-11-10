@@ -1,4 +1,4 @@
-package javacloud.framework.util;
+package javacloud.framework.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,8 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
+
+import javacloud.framework.util.Objects;
 
 
 /**

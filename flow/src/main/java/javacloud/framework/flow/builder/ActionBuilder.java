@@ -107,7 +107,7 @@ public class ActionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public ActionBuilder withSuccessTransition(final StateTransition.Success transition) {
+	public ActionBuilder withOutputHandler(final StateTransition.Success transition) {
 		return withOutputHandler(new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
@@ -121,7 +121,7 @@ public class ActionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public ActionBuilder withFailureTransition(final StateTransition.Failure transition) {
+	public ActionBuilder withFailureHandler(final StateTransition.Failure transition) {
 		return withFailureHandler(new StateHandler.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
@@ -174,9 +174,9 @@ public class ActionBuilder {
 			@Override
 			public Class<?> getParametersType() {
 				if(stateHandler != null) {
-					return getActualTypeArguments(stateHandler.getClass());
+					return getActualParametersType(stateHandler.getClass());
 				} else if(inputHandler != null) {
-					return getActualTypeArguments(inputHandler.getClass());
+					return getActualParametersType(inputHandler.getClass());
 				}
 				return Object.class;
 			}
@@ -189,7 +189,7 @@ public class ActionBuilder {
 	 * @param handlerClass
 	 * @return
 	 */
-	protected Class<?> getActualTypeArguments(Class<?> handlerClass) {
+	protected Class<?> getActualParametersType(Class<?> handlerClass) {
 		Type type = ((ParameterizedType)handlerClass.getGenericInterfaces()[0]).getActualTypeArguments()[0];
 		if(type instanceof Class) {
 			return (Class<?>)type;

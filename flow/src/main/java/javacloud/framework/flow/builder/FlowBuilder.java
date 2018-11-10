@@ -38,7 +38,7 @@ public class FlowBuilder {
 	public FlowBuilder withState(String name, StateHandler<?, ?> handler, String next) {
 		return withState(name, new ActionBuilder()
 								.withStateHandler(handler)
-								.withSuccessTransition(TransitionBuilder.success(next))
+								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
 	}
 	/**
@@ -53,7 +53,7 @@ public class FlowBuilder {
 		return withState(name, new ActionBuilder()
 								.withStateHandler(handler)
 								.withRetryHandler(retryHandler)
-								.withSuccessTransition(TransitionBuilder.success(next))
+								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
 	}
 	/**
