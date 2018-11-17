@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javacloud.framework.flow.StateAction;
-import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateFunction;
 
 /**
@@ -74,8 +74,8 @@ public class FlowBuilder {
 	 * 
 	 * @return
 	 */
-	public StateMachine build() {
-		return new StateMachine() {
+	public StateFlow build() {
+		return new StateFlow() {
 			@Override
 			public String getStartAt() {
 				return startAt;

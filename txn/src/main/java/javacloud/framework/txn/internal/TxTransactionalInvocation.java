@@ -7,9 +7,8 @@ import java.util.logging.Logger;
 import javacloud.framework.txn.Propagation;
 import javacloud.framework.txn.Transactional;
 import javacloud.framework.txn.spi.TxTransaction;
+import javacloud.framework.txn.spi.TxTransactionException;
 import javacloud.framework.txn.spi.TxTransactionManager;
-import javacloud.framework.txn.spi.TxTransactionNotRequiredException;
-import javacloud.framework.txn.spi.TxTransactionRequiredException;
 
 /**
  * Default handle transactional invocation
@@ -36,7 +35,7 @@ public class TxTransactionalInvocation {
 		if(tx != null && tx.isActive()) {
 			if(propagation == Propagation.NEVER) {
 				//DONT NEED ACTIVE TRANSACTION BUT HAVE ONE
-				throw new TxTransactionNotRequiredException("An active transaction already exists");
+				throw new TxTransactionException.NotRequired("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
 				//FIXME: TO SUPPORT SUSPEND EXISTING TX AND RESUME AFTER DONE
 				return callable.call();
@@ -51,7 +50,7 @@ public class TxTransactionalInvocation {
 			return callable.call();
 		} else if(propagation == Propagation.MANDATORY) {
 			//NEED AN ACTIVE TRANSACTION BUT NOT FOUND ONE
-			throw new TxTransactionRequiredException("An active transaction does not exist");
+			throw new TxTransactionException.Required("An active transaction does not exist");
 		} else if(propagation == Propagation.NEVER
 				|| propagation == Propagation.NOT_SUPPORTED
 				|| propagation == Propagation.SUPPORTS) {

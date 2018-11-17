@@ -11,7 +11,7 @@ import org.junit.Test;
 import javacloud.framework.txn.Propagation;
 import javacloud.framework.txn.Transactional;
 import javacloud.framework.txn.spi.TxTransactionManager;
-import javacloud.framework.txn.spi.TxTransactionRequiredException;
+import javacloud.framework.txn.spi.TxTransactionException;
 import javacloud.framework.txn.sql.SqlTransaction;
 import javacloud.framework.txn.test.TxServiceTest;
 /**
@@ -35,7 +35,7 @@ public class DerbyServiceTest extends TxServiceTest {
 	/**
 	 * An exception will throw without any transaction
 	 */
-	@Test(expected=TxTransactionRequiredException.class)
+	@Test(expected=TxTransactionException.Required.class)
 	@Transactional(propagation=Propagation.MANDATORY)
 	public void testNoTx(){
 	}

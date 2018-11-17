@@ -16,10 +16,10 @@ import java.util.logging.Logger;
 import javacloud.framework.concurrent.TaskPoller;
 import javacloud.framework.concurrent.TaskQueue;
 import javacloud.framework.concurrent.TaskRunner;
-import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.flow.internal.FlowHandler;
-import javacloud.framework.flow.internal.FlowState;
+import javacloud.framework.flow.worker.FlowHandler;
+import javacloud.framework.flow.worker.StateExecution;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Exceptions;
@@ -40,15 +40,15 @@ public class FlowExecutor {
 	private static final Logger logger = Logger.getLogger(FlowExecutor.class.getName());
 	
 	//KEEP THE ACTIVE 
-	static class HandlerTask extends FutureTask<FlowState> implements Delayed {
+	static class HandlerTask extends FutureTask<StateExecution> implements Delayed {
 		final FlowHandler handler;
-		final FlowState state;
+		final StateExecution state;
 		long availableAt;
 		//INVOKE RUN TO COMPLETE TASK
-		public HandlerTask(FlowHandler handler, FlowState state) {
-			super(new Callable<FlowState>() {
+		public HandlerTask(FlowHandler handler, StateExecution state) {
+			super(new Callable<StateExecution>() {
 				@Override
-				public FlowState call() throws Exception {
+				public StateExecution call() throws Exception {
 					handler.complete(state);
 					return state;
 				}
@@ -158,16 +158,16 @@ public class FlowExecutor {
 	
 	/**
 	 * 
-	 * @param stateMachine
+	 * @param stateFlow
 	 * @param parameters
 	 * @return
 	 */
-	public <T> Future<FlowState> submit(StateMachine stateMachine, T parameters) {
-		FlowHandler handler = new FlowHandler(stateMachine, externalizer);
+	public <T> Future<StateExecution> submit(StateFlow stateFlow, T parameters) {
+		FlowHandler handler = new FlowHandler(stateFlow, externalizer);
 		String executionId = Codecs.randomID();
 		logger.log(Level.FINE, "Starting execution: {0}", executionId);
 		
-		FlowState state = handler.start(parameters);
+		StateExecution state = handler.start(parameters);
 		state.setExecutionId(executionId);
 		
 		//QUEUE TASK
@@ -178,13 +178,13 @@ public class FlowExecutor {
 	
 	/**
 	 * 
-	 * @param stateMachine
+	 * @param stateFlow
 	 * @param parameters
 	 * @return
 	 */
-	public <T> FlowState run(StateMachine stateMachine, T parameters) {
+	public <T> StateExecution run(StateFlow stateFlow, T parameters) {
 		try {
-			return submit(stateMachine, parameters).get();
+			return submit(stateFlow, parameters).get();
 		} catch(InterruptedException | ExecutionException ex) {
 			throw Exceptions.asUnchecked(ex);
 		}

@@ -1,8 +1,9 @@
-package javacloud.framework.flow.internal;
+package javacloud.framework.flow.worker;
 
 import java.util.Map;
 
 import javacloud.framework.flow.StateContext;
+import javacloud.framework.flow.spi.FlowExecution;
 import javacloud.framework.util.Objects;
 
 /**
@@ -11,10 +12,10 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FlowState {
+public class StateExecution {
 	//ACTION STATE
 	private String 	name;			//executing state
-	private long 	startedAt;		//started in EPOC mills
+	private long 	startUTC;		//started in EPOC mills
 	private int  	tryCount;		
 	private String 	stackTrace;
 	
@@ -23,9 +24,9 @@ public class FlowState {
 	private Map<String, Object> attributes;
 	
 	//FLOW STATE
-	private String 	flowId;
-	private boolean failed;
-	public FlowState() {
+	private String 	executionId;
+	private FlowExecution.Status status;
+	public StateExecution() {
 	}
 	
 	/**
@@ -43,11 +44,11 @@ public class FlowState {
 	 * 
 	 * @return
 	 */
-	public long getStartedAt() {
-		return startedAt;
+	public long getStartUTC() {
+		return startUTC;
 	}
-	public void setStartedAt(long startedAt) {
-		this.startedAt = startedAt;
+	public void setStartUTC(long startUTC) {
+		this.startUTC = startUTC;
 	}
 	
 	/**
@@ -99,21 +100,21 @@ public class FlowState {
 	 * @return
 	 */
 	public String getExecutionId() {
-		return flowId;
+		return executionId;
 	}
-	public void setExecutionId(String flowId) {
-		this.flowId = flowId;
+	public void setExecutionId(String executionId) {
+		this.executionId = executionId;
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public boolean isFailed() {
-		return failed;
+	public FlowExecution.Status getStatus() {
+		return status;
 	}
-	public void setFailed(boolean failed) {
-		this.failed = failed;
+	public void setStatus(FlowExecution.Status status) {
+		this.status = status;
 	}
 	
 	/**

@@ -8,14 +8,15 @@ import org.junit.Test;
 import org.junit.Assert;
 import junit.framework.TestCase;
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.builder.FlowBuilder;
 import javacloud.framework.flow.builder.RetryBuilder;
 import javacloud.framework.flow.builder.TransitionBuilder;
-import javacloud.framework.flow.internal.FlowState;
 import javacloud.framework.flow.spec.RetrierDefinition;
+import javacloud.framework.flow.spi.FlowExecution;
 import javacloud.framework.flow.test.FlowExecutor;
+import javacloud.framework.flow.worker.StateExecution;
 import javacloud.framework.util.Objects;
 /**
  * 
@@ -27,7 +28,7 @@ public class WorkflowTest extends TestCase {
 	
 	@Test
 	public void testSuccess() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state1")
 							.withState("state1", new StateFunction<Map<String, Object>, Map<String, Object>>() {
 								@Override
@@ -44,17 +45,17 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
+		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
-		Assert.assertFalse(state.isFailed());
+		Assert.assertTrue(state.getStatus() == FlowExecution.Status.SUCCEEDED);
 		//Assert.assertEquals("abc", output.get("t1"));
 		Assert.assertEquals("xyz", output.get("t2"));
 	}
 	
 	@Test
 	public void testFailure() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state3")
 							.withState("state3", new StateFunction<Map<String, Object>, Map<String, Object>>() {
 								@Override
@@ -70,17 +71,17 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
+		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
-		Assert.assertTrue(state.isFailed());
+		Assert.assertTrue(state.getStatus() == FlowExecution.Status.FAILED);
 		Assert.assertEquals("abc", output.get("t1"));
 		Assert.assertNull(output.get("t2"));
 	}
 	
 	@Test
 	public void testRetry() {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state5")
 							.withState("state5", new StateFunction<Map<String, Object>, StateFunction.Status>() {
 								@Override
@@ -100,17 +101,17 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		FlowState state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
+		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
 		Map<String, Object> output = state.output();
 		
-		Assert.assertFalse(state.isFailed());
+		Assert.assertTrue(state.getStatus() == FlowExecution.Status.SUCCEEDED);
 		//Assert.assertEquals("abc", output.get("t1"));
 		Assert.assertEquals("xyz", output.get("t2"));
 	}
 	
 	@Test
 	public void testCancel() throws Exception {
-		StateMachine workflow = new FlowBuilder()
+		StateFlow workflow = new FlowBuilder()
 							.withStartAt("c1")
 							.withState("c1", new StateFunction<Map<String, Object>, StateFunction.Status>() {
 								@Override
@@ -130,7 +131,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		Future<FlowState> state = flowExecutor.submit(workflow, Objects.asMap("a", "b"));
+		Future<StateExecution> state = flowExecutor.submit(workflow, Objects.asMap("a", "b"));
 		Objects.sleep(5, TimeUnit.SECONDS);
 		state.cancel(true);
 	}

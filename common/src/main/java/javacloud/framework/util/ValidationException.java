@@ -52,8 +52,16 @@ public class ValidationException extends IllegalArgumentException {
 		}
 	}
 	
+	//CONFLICT STATE
+	public static class Conflict extends ValidationException {
+		private static final long serialVersionUID = -2389670074826460467L;
+		public Conflict(String subject) {
+			super(subject);
+		}
+	}
+	
 	//ALREADY EXIST EXCEPTION
-	public static class AlreadyExists extends ValidationException {
+	public static class AlreadyExists extends Conflict {
 		private static final long serialVersionUID = -1725603370191594789L;
 		public AlreadyExists(String subject) {
 			super(subject);

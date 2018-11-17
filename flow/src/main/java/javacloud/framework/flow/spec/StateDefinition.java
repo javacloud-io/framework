@@ -16,24 +16,37 @@ import javacloud.framework.flow.StateTransition;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "Type")
 @JsonSubTypes({
-	@JsonSubTypes.Type(value = StateDefinition.Task.class, 	name = "Task"),
-	@JsonSubTypes.Type(value = StateDefinition.Pass.class, 	name = "Pass"),
-	@JsonSubTypes.Type(value = StateDefinition.Wait.class, 	name = "Wait"),
-	@JsonSubTypes.Type(value = StateDefinition.Succeed.class, name = "Succeed"),
-	@JsonSubTypes.Type(value = StateDefinition.Fail.class, 	name = "Fail"),
+	@JsonSubTypes.Type(value = StateDefinition.Task.class, 		name = "Task"),
+	@JsonSubTypes.Type(value = StateDefinition.Pass.class, 		name = "Pass"),
+	@JsonSubTypes.Type(value = StateDefinition.Wait.class, 		name = "Wait"),
+	@JsonSubTypes.Type(value = StateDefinition.Succeed.class, 	name = "Succeed"),
+	@JsonSubTypes.Type(value = StateDefinition.Fail.class, 		name = "Fail"),
 	@JsonSubTypes.Type(value = StateDefinition.Choice.class, 	name = "Choice"),
-	@JsonSubTypes.Type(value = StateDefinition.Parallel.class,name = "Parallel")
+	@JsonSubTypes.Type(value = StateDefinition.Parallel.class,	name = "Parallel")
 })
 public abstract class StateDefinition {
 	//TYPE OF STATE
 	public static enum Type {
-		Task,
-		Pass,
-		Wait,
-		Succeed,
-		Fail,
-		Choice,
-		Parallel
+		@JsonProperty("Task")
+		TASK,
+		
+		@JsonProperty("Task")
+		PASS,
+		
+		@JsonProperty("Wait")
+		WAIT,
+		
+		@JsonProperty("Succeed")
+		SUCCEED,
+		
+		@JsonProperty("Fail")
+		FAIL,
+		
+		@JsonProperty("Choice")
+		CHOICE,
+		
+		@JsonProperty("Parallel")
+		PARALLEL
 	}
 	
 	@JsonProperty("Type")

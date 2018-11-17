@@ -1,4 +1,4 @@
-package javacloud.framework.flow.internal;
+package javacloud.framework.flow.worker;
 
 import java.text.MessageFormat;
 import java.util.Map;
@@ -13,10 +13,11 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FlowContext implements StateContext {
+public class ActionContext implements StateContext {
 	private static final Logger logger = Logger.getLogger(StateContext.class.getName());
-	final FlowState  state;
-	public FlowContext(FlowState  state) {
+	
+	final StateExecution  state;
+	public ActionContext(StateExecution  state) {
 		this.state	= state;
 	}
 	
@@ -60,7 +61,8 @@ public class FlowContext implements StateContext {
 		if(!logger.isLoggable(level)) {
 			return;
 		}
-		//BASIC TO ADVANCE FORMAT
+		
+		//BASIC TO ADVANCE FORMAT ARGS
 		if(Objects.isEmpty(arguments)) {
 			logger.log(level, message);
 		} else if(arguments[arguments.length - 1] instanceof Throwable) {

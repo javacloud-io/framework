@@ -67,7 +67,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 			}
 		}
 		//CLONFLICT
-		if(exception instanceof ValidationException.AlreadyExists) {
+		if(exception instanceof ValidationException.Conflict) {
 			return	Status.CONFLICT.getStatusCode();
 		}
 		//NOT FOUND

@@ -15,4 +15,22 @@ public class TxTransactionException extends ValidationException {
 	public TxTransactionException(String message, Throwable cause) {
 		super(message, cause);
 	}
+	
+	//REQUIRED A TRANSACTION
+	public static class Required extends TxTransactionException {
+		private static final long serialVersionUID = 1799723808551192399L;
+
+		public Required(String message) {
+			super(message);
+		}
+	}
+	
+	//NOT REQUIRED A TRANSACTION
+	public static class NotRequired extends TxTransactionException {
+		private static final long serialVersionUID = 1799723808551192399L;
+
+		public NotRequired(String message) {
+			super(message);
+		}
+	}
 }

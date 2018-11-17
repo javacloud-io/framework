@@ -4,9 +4,10 @@ package javacloud.framework.flow;
  * @author ho
  *
  */
-public interface StateMachine {
+public interface StateFlow {
 	/**
 	 * return start STATE
+	 * 
 	 * @return
 	 */
 	public String getStartAt();

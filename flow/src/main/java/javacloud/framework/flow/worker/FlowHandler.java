@@ -1,14 +1,15 @@
-package javacloud.framework.flow.internal;
+package javacloud.framework.flow.worker;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.flow.StateAction;
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateMachine;
+import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.builder.TransitionBuilder;
+import javacloud.framework.flow.spi.FlowExecution;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Exceptions;
@@ -28,10 +29,10 @@ public class FlowHandler {
 	
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
-	private final StateMachine stateMachine;
+	private final StateFlow stateFlow;
 	private final Externalizer externalizer;
-	public FlowHandler(StateMachine stateMachine, Externalizer externalizer) {
-		this.stateMachine = stateMachine;
+	public FlowHandler(StateFlow stateFlow, Externalizer externalizer) {
+		this.stateFlow = stateFlow;
 		this.externalizer = externalizer;
 	}
 	
@@ -40,7 +41,7 @@ public class FlowHandler {
 	 * @param parameters
 	 * @return
 	 */
-	public <T> FlowState start(T parameters) {
+	public <T> StateExecution start(T parameters) {
 		return start(parameters, null);
 	}
 	
@@ -50,10 +51,10 @@ public class FlowHandler {
 	 * @param startAt;
 	 * @return
 	 */
-	public <T> FlowState start(T input, String startAt) {
-		FlowState state = new FlowState();
+	public <T> StateExecution start(T input, String startAt) {
+		StateExecution state = new StateExecution();
 		state.setInput(input);
-		return onPrepare(state, Objects.isEmpty(startAt) ? stateMachine.getStartAt() : startAt);
+		return onPrepare(state, Objects.isEmpty(startAt) ? stateFlow.getStartAt() : startAt);
 	}
 	
 	/**
@@ -61,8 +62,8 @@ public class FlowHandler {
 	 * @param state
 	 * @return
 	 */
-	public StateTransition execute(FlowState state) {
-		FlowContext context = new FlowContext(state);
+	public StateTransition execute(StateExecution state) {
+		ActionContext context = new ActionContext(state);
 		return onExecute(state, context);
 	}
 	
@@ -71,7 +72,7 @@ public class FlowHandler {
 	 * 
 	 * @param state
 	 */
-	public void complete(FlowState state) {
+	public void complete(StateExecution state) {
 		logger.log(Level.FINE, "Completed execution: {0}", state.getExecutionId());
 	}
 	
@@ -85,8 +86,8 @@ public class FlowHandler {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onExecute(FlowState state, FlowContext context) {
-		StateAction action = stateMachine.getState(state.getName());
+	protected StateTransition onExecute(StateExecution state, ActionContext context) {
+		StateAction action = stateFlow.getState(state.getName());
 		if(action == null) {
 			return onFailure(action, context, null);
 		}
@@ -112,7 +113,7 @@ public class FlowHandler {
 	 * @param name
 	 * @return
 	 */
-	protected FlowState onPrepare(FlowState state, String name) {
+	protected StateExecution onPrepare(StateExecution state, String name) {
 		//AN EMPTY INPUT IF NOT PROVIDED
 		logger.log(Level.FINE, "Preparing state: {0}", name);
 		Object input = state.getInput();
@@ -123,8 +124,9 @@ public class FlowHandler {
 		state.setAttributes(Objects.asMap());
 		
 		//RESET OTHERS
+		state.setStatus(FlowExecution.Status.INPROGRESS);
 		state.setName(name);
-		state.setStartedAt(System.currentTimeMillis());
+		state.setStartUTC(System.currentTimeMillis());
 		state.setTryCount(0);
 		state.setStackTrace(null);
 		return state;
@@ -163,8 +165,8 @@ public class FlowHandler {
 	 * @return
 	 * @throws Exception
 	 */
-	protected StateFunction.Status onHandle(StateAction action, FlowContext context, Object parameters) throws Exception {
-		FlowState state = context.state;
+	protected StateFunction.Status onHandle(StateAction action, ActionContext context, Object parameters) throws Exception {
+		StateExecution state = context.state;
 		try {
 			return	action.handle(parameters, context);
 		} finally {
@@ -179,16 +181,18 @@ public class FlowHandler {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onSuccess(StateAction action, FlowContext context) {
+	protected StateTransition onSuccess(StateAction action, ActionContext context) {
 		StateTransition.Success transition = action.onOutput(context);
 		
-		FlowState state = context.state;
+		StateExecution state = context.state;
 		logger.log(Level.FINE, "Succeed state: {0}, transition to: {1}", new Object[] {state.getName(), transition.getNext()});
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
 		if(!transition.isEnd()) {
 			state.setInput(state.output());
 			onPrepare(state, transition.getNext());
+		} else {
+			state.setStatus(FlowExecution.Status.SUCCEEDED);
 		}
 		return transition;
 	}
@@ -200,11 +204,11 @@ public class FlowHandler {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onRetry(StateAction action, FlowContext context) {
+	protected StateTransition onRetry(StateAction action, ActionContext context) {
 		StateTransition transition = action.onRetry(context);
-		FlowState state = context.state;
+		StateExecution state = context.state;
 		if(transition instanceof StateTransition.Failure) {
-			state.setFailed(true);
+			state.setStatus(FlowExecution.Status.FAILED);
 		}
 		logger.log(Level.FINE, "Retrying state: {0}, transition: {1}", new Object[] {state.getName(), transition});
 		return transition;
@@ -217,9 +221,9 @@ public class FlowHandler {
 	 * @param ex
 	 * @return
 	 */
-	protected StateTransition onFailure(StateAction action, FlowContext context, Exception ex) {
+	protected StateTransition onFailure(StateAction action, ActionContext context, Exception ex) {
 		StateTransition transition;
-		FlowState state = context.state;
+		StateExecution state = context.state;
 		//NOT FOUND STATE
 		if(action == null) {
 			logger.log(Level.FINE, "Not found state: {0}", state.getName());
@@ -231,7 +235,7 @@ public class FlowHandler {
 		
 		//HANDLE FAILURE, SET DETAILS ERROR IF HAVEN'T DONE SO
 		if(transition instanceof StateTransition.Failure) {
-			state.setFailed(true);
+			state.setStatus(FlowExecution.Status.FAILED);
 			String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 			if(ex != null && error == null) {
 				error = Exceptions.findReason(ex);
