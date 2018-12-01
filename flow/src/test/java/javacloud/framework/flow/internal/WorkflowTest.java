@@ -13,9 +13,9 @@ import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.builder.FlowBuilder;
 import javacloud.framework.flow.builder.RetryBuilder;
 import javacloud.framework.flow.builder.TransitionBuilder;
+import javacloud.framework.flow.internal.LocalFlowExecutor;
 import javacloud.framework.flow.spec.RetrierDefinition;
 import javacloud.framework.flow.spi.FlowExecution;
-import javacloud.framework.flow.test.FlowExecutor;
 import javacloud.framework.flow.worker.StateExecution;
 import javacloud.framework.util.Objects;
 /**
@@ -24,7 +24,7 @@ import javacloud.framework.util.Objects;
  *
  */
 public class WorkflowTest extends TestCase {
-	private static final FlowExecutor flowExecutor = new FlowExecutor();
+	private static final LocalFlowExecutor flowExecutor = new LocalFlowExecutor();
 	
 	@Test
 	public void testSuccess() {

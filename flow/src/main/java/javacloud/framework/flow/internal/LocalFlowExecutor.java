@@ -1,4 +1,4 @@
-package javacloud.framework.flow.test;
+package javacloud.framework.flow.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -13,9 +13,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javacloud.framework.concurrent.TaskPoller;
-import javacloud.framework.concurrent.TaskQueue;
-import javacloud.framework.concurrent.TaskRunner;
+import javacloud.framework.flow.worker.TaskPoller;
+import javacloud.framework.flow.worker.TaskQueue;
+import javacloud.framework.flow.worker.TaskRunner;
 import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.worker.FlowHandler;
@@ -36,8 +36,8 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FlowExecutor {
-	private static final Logger logger = Logger.getLogger(FlowExecutor.class.getName());
+public class LocalFlowExecutor {
+	private static final Logger logger = Logger.getLogger(LocalFlowExecutor.class.getName());
 	
 	//KEEP THE ACTIVE 
 	static class HandlerTask extends FutureTask<StateExecution> implements Delayed {
@@ -82,7 +82,7 @@ public class FlowExecutor {
 	private final TaskQueue<HandlerTask>  taskQueue = new TaskQueue<HandlerTask>();
 	private final ScheduledExecutorService workersPool;
 	private final ScheduledExecutorService pollerPool;
-	public FlowExecutor(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
+	public LocalFlowExecutor(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
 		this.externalizer = externalizer;
 		
 		//POLL EVERY SECOND
@@ -109,7 +109,7 @@ public class FlowExecutor {
 	/**
 	 * DEFAULT 5 WORKERS, 60 SECONDS RESERVATION
 	 */
-	public FlowExecutor() {
+	public LocalFlowExecutor() {
 		this(null, 2, 60);
 	}
 	

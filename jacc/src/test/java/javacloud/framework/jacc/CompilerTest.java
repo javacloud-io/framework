@@ -15,6 +15,8 @@ import javacloud.framework.jacc.JavaSource;
 import javacloud.framework.jacc.internal.InMemoryClassCollector;
 import javacloud.framework.jacc.internal.InMemoryClassLoader;
 import javacloud.framework.jacc.internal.JavaSourceFile;
+import javacloud.framework.jacc.util.JavaSourceTokenizer;
+import javacloud.framework.util.Pair;
 
 /**
  * 
@@ -22,10 +24,21 @@ import javacloud.framework.jacc.internal.JavaSourceFile;
  *
  */
 public class CompilerTest extends ServiceTest {
-	static final String CODE = "package io.test; \npublic class Hello {\n public static void sayHello() {\n\n} \n}"; 
+	static final String CODE = "package io.test; \npublic class HelloWorld {\n public static void sayHello() {\nSystem.out.println(\"Hello World!\");\n} \n}\n//13 3323 \r\n   //11111\n/* dsdsdsdsd \n * \n***/ //zzz"; 
 	@Inject
 	private JavaCompiler javaCompiler;
 	
+	@Test
+	public void testTokenizer() throws Exception {
+		JavaSourceTokenizer tokenizier = new JavaSourceTokenizer(CODE);
+		System.out.println("SOURCE CODE TOKENS");
+		while(tokenizier.hasMoreTokens()) {
+			System.out.print(tokenizier.getLineNo() + ":" + tokenizier.getColumnNo() + "\t");
+			
+			Pair<JavaSourceTokenizer.Type, String> token = tokenizier.nextToken();
+			System.out.println(token.getKey() + "\t" + token.getValue());
+		}
+	}
 	/**
 	 * 
 	 * @throws Exception
@@ -35,7 +48,8 @@ public class CompilerTest extends ServiceTest {
 		long starts = System.currentTimeMillis();
 		try {
 			List<JavaSource> sources = new ArrayList<JavaSource>();
-			sources.add(new JavaSourceFile("io.test.Hello", CODE));
+			String className = JavaSourceFile.resolveClassName(CODE);//"io.test.HelloWorld"
+			sources.add(new JavaSourceFile(CODE, className));
 			
 			InMemoryClassCollector collector = new InMemoryClassCollector();
 			boolean success = javaCompiler.compile(sources, collector);
@@ -49,7 +63,7 @@ public class CompilerTest extends ServiceTest {
 			} else {
 				System.out.println("COMPILATION SUCCESSFUL.");
 				InMemoryClassLoader classLoader = new InMemoryClassLoader(collector, CompilerTest.class.getClassLoader());
-				Class<?> helloClass = classLoader.loadClass("io.test.Hello");
+				Class<?> helloClass = classLoader.loadClass(className);
 				ServiceRunlist.get().runMethod(helloClass, "sayHello");
 			}
 		} finally {

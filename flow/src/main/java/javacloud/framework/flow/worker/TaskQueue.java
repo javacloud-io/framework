@@ -1,4 +1,4 @@
-package javacloud.framework.concurrent;
+package javacloud.framework.flow.worker;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
