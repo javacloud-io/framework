@@ -3,7 +3,7 @@ package javacloud.framework.jacc.internal;
 import java.net.URI;
 
 import javacloud.framework.jacc.JavaSource;
-import javacloud.framework.jacc.util.JavaSourceTokenizer;
+import javacloud.framework.jacc.util.JavaTokenizer;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Objects;
 /**
@@ -61,23 +61,23 @@ public class JavaSourceFile implements JavaSource {
 	 * @return
 	 */
 	public static final String resolveClassName(CharSequence source) {
-		JavaSourceTokenizer tokenizer = new JavaSourceTokenizer(source);
+		JavaTokenizer tokenizer = new JavaTokenizer(source);
 		String packageName = null;
 		String className   = null;
-		if(tokenizer.nextToken(JavaSourceTokenizer.Type.PACKAGE) != null) {
-			packageName = tokenizer.nextToken(JavaSourceTokenizer.Type.IDENTIFIER);
+		//PACKAGE NAME
+		if(tokenizer.nextToken(JavaTokenizer.Type.PACKAGE) != null) {
+			packageName = tokenizer.nextTokens((tt) -> (tt == JavaTokenizer.Type.IDENTIFIER || tt == JavaTokenizer.Type.DOT));
 		}
-		if(tokenizer.nextToken(JavaSourceTokenizer.Type.CLASS) != null) {
-			className = tokenizer.nextToken(JavaSourceTokenizer.Type.IDENTIFIER);
+		
+		//CLASS NAME
+		if(tokenizer.nextToken(JavaTokenizer.Type.CLASS) != null) {
+			className = tokenizer.nextToken(JavaTokenizer.Type.IDENTIFIER);
 		}
 		
 		//FULL CLASS NAME
-		if(!Objects.isEmpty(packageName)) {
-			packageName = packageName + '.';
-		}
 		if(Objects.isEmpty(className)) {
 			className = "Main";
 		}
-		return packageName + className;
+		return (Objects.isEmpty(packageName)? className : packageName + "." + className);
 	}
 }

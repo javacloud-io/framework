@@ -15,8 +15,6 @@ import javacloud.framework.jacc.JavaSource;
 import javacloud.framework.jacc.internal.InMemoryClassCollector;
 import javacloud.framework.jacc.internal.InMemoryClassLoader;
 import javacloud.framework.jacc.internal.JavaSourceFile;
-import javacloud.framework.jacc.util.JavaSourceTokenizer;
-import javacloud.framework.util.Pair;
 
 /**
  * 
@@ -28,17 +26,6 @@ public class CompilerTest extends ServiceTest {
 	@Inject
 	private JavaCompiler javaCompiler;
 	
-	@Test
-	public void testTokenizer() throws Exception {
-		JavaSourceTokenizer tokenizier = new JavaSourceTokenizer(CODE);
-		System.out.println("SOURCE CODE TOKENS");
-		while(tokenizier.hasMoreTokens()) {
-			System.out.print(tokenizier.getLineNo() + ":" + tokenizier.getColumnNo() + "\t");
-			
-			Pair<JavaSourceTokenizer.Type, String> token = tokenizier.nextToken();
-			System.out.println(token.getKey() + "\t" + token.getValue());
-		}
-	}
 	/**
 	 * 
 	 * @throws Exception

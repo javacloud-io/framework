@@ -1,5 +1,7 @@
 package javacloud.framework.io;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.function.Predicate;
 
 /**
@@ -8,13 +10,13 @@ import java.util.function.Predicate;
  *
  */
 public class TextScanner {
-	//CHAR STREAM
-	public interface Source {
+	//SOURCE CHAR STREAM
+	public interface CharStream {
 		/**
 		 * return true if END of stream
 		 * @return
 		 */
-		boolean isEnd();
+		boolean isEOT();
 		
 		/**
 		 * Advance cursor to next char if any. return true/false if not
@@ -28,7 +30,7 @@ public class TextScanner {
 		 */
 		char getChar();
 	}
-	private final Source source;
+	private final CharStream source;
 	private int lineNo		= 1;
 	private int columnNo	= 0;
 	
@@ -36,34 +38,71 @@ public class TextScanner {
 	 * 
 	 * @param source
 	 */
-	public TextScanner(Source source) {
+	protected TextScanner(CharStream source) {
 		this.source = source;
 	}
 	
 	/**
+	 * Scan from string source using absolute position
 	 * 
 	 * @param source
 	 */
 	public TextScanner(final CharSequence source) {
-		this(new Source() {
+		this(new CharStream() {
 			int cursor = 0;
 			@Override
 			public boolean nextChar() {
 				return (++ cursor < source.length());
 			}
 			@Override
-			public boolean isEnd() {
+			public boolean isEOT() {
 				return cursor >= source.length();
 			}
 			@Override
 			public char getChar() {
-				return (cursor < source.length()? source.charAt(cursor) : 0x00);//EOT
+				return (cursor < source.length()? source.charAt(cursor) : 0);//EOT
+			}
+		});
+	}
+	
+	/**
+	 * Scan from reader source using look a head
+	 * 
+	 * @param source
+	 */
+	public TextScanner(final Reader source) {
+		this(new CharStream() {
+			int cchar	= -2;	//NOT YET READ
+			@Override
+			public boolean nextChar() {
+				try {
+					cchar = source.read();
+				} catch(IOException ex) {
+					//ASSUMING EOF
+					cchar = -1;
+				}
+				return (cchar != -1);
+			}
+			@Override
+			public boolean isEOT() {
+				if(cchar == -2) {
+					nextChar();
+				}
+				return (cchar == -1);
+			}
+			@Override
+			public char getChar() {
+				if(cchar == -2) {
+					nextChar();
+				}
+				return (cchar >= 0? (char)cchar : 0);//EOT
 			}
 		});
 	}
 	
 	/**
 	 * return line number
+	 * 
 	 * @return
 	 */
 	public int getLineNo() {
@@ -71,7 +110,8 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return colume number
+	 * return column number
+	 * 
 	 * @return
 	 */
 	public int getColumnNo() {
@@ -80,17 +120,19 @@ public class TextScanner {
 	
 	/**
 	 * return true if has MORE
+	 * 
 	 * @return
 	 */
-	public boolean hasMoreTokens() {
-		return !source.isEnd();
+	public boolean hasMoreChars() {
+		return !source.isEOT();
 	}
 	
 	/**
 	 * return look ahead character
+	 * 
 	 * @return
 	 */
-	public char getCharacter() {
+	public char currChar() {
 		return source.getChar();
 	}
 	
@@ -99,8 +141,8 @@ public class TextScanner {
 	 * 
 	 * @return
 	 */
-	public boolean nextCharacter() {
-		if(!source.isEnd()) {
+	public boolean nextChar() {
+		if(!source.isEOT()) {
 			if(source.getChar() == '\n') {
 				lineNo ++;
 				columnNo = 0;
@@ -112,6 +154,20 @@ public class TextScanner {
 	}
 	
 	/**
+	 * return next token of number of chars
+	 * 
+	 * @param nchars
+	 * @return
+	 */
+	public String nextToken(int nchars) {
+		StringBuilder buf = new StringBuilder();
+		do {
+			buf.append(currChar());
+		} while(nextChar());
+		return buf.toString();
+	}
+	
+	/**
 	 * Skip token matches the matcher, example skipWhitespace()
 	 * skipToken((ch) -> Character.isWhitespace(ch))
 	 * 
@@ -120,7 +176,7 @@ public class TextScanner {
 	 */
 	public boolean skipToken(Predicate<Character> matcher) {
 		while(matcher.test(source.getChar())) {
-			if(! nextCharacter()) {
+			if(! nextChar()) {
 				return false;
 			}
 		}
@@ -136,12 +192,12 @@ public class TextScanner {
 	public String nextToken(Predicate<Character> matcher) {
 		StringBuilder buf = new StringBuilder();
 		do {
-			char ch = getCharacter();
-			if(!matcher.test(ch)) {
+			char ch = currChar();
+			if(! matcher.test(ch)) {
 				break;
 			}
 			buf.append(ch);
-		} while(nextCharacter());
+		} while(nextChar());
 		return buf.toString();
 	}
 	
@@ -152,27 +208,29 @@ public class TextScanner {
 	 * @return
 	 */
 	public String nextLine() {
-		return nextToken(new Predicate<Character>() {
-			boolean lf = false;
-			@Override
-			public boolean test(Character ch) {
-				//EOL: LF CR
-				if(ch == '\n') {
-					nextCharacter();
-					return false;
-				} else if(ch == '\r') {
-					lf = true;
-				} else if(lf) {
-					//ELF: LF
-					return false;
-				}
-				return true;
+		StringBuilder buf = new StringBuilder();
+		boolean lf = false;
+		do {
+			char ch = currChar();
+			if(ch == '\n') {
+				nextChar();	//SKIP \n
+				break;
+			} else if(lf) {
+				break;
 			}
-		});
+			//RESET MARKER
+			if(ch != '\r') {
+				buf.append(ch);
+				lf = false;
+			} else {
+				lf = true;
+			}
+		} while(nextChar());
+		return buf.toString();
 	}
 	
 	/** 
-	 * return next token match both start & slash character.
+	 * return next token end with both starChar & slashChar, such as comment.
 	 * cursor will be positioned at slashChar for matching, invokes nextCharacter() to skip.
 	 * 
 	 * @param starChar
@@ -180,24 +238,27 @@ public class TextScanner {
 	 * @return
 	 */
 	public String nextToken(char starChar, char slashChar) {
-		String token = nextToken(new Predicate<Character>() {
-			boolean star = false;
-			@Override
-			public boolean test(Character ch) {
-				if(ch == slashChar && star) {
-					return false;
-				}
-				//LEFT OVER STAR
-				star = (ch == starChar);
-				return true;
+		StringBuilder buf = new StringBuilder();
+		boolean star = false;
+		do {
+			char ch = currChar();
+			if(ch == slashChar && star) {
+				//KEEP CURSOR AT slashChar
+				break;
+			} else if(star) {
+				//PREVIOUS starChar
+				buf.append(starChar);
 			}
-		});
-		
-		//TRIM TRAIL starChar if MATCHED
-		if(getCharacter() == slashChar) {
-			return token.substring(0, token.length() - 1);
-		}
-		return token;
+			
+			//RESET MARKER
+			if(ch != starChar) {
+				buf.append(ch);
+				star = false;
+			} else {
+				star = true;
+			}
+		} while(nextChar());
+		return buf.toString();
 	}
 	
 	/**
@@ -209,17 +270,25 @@ public class TextScanner {
 	 * @return
 	 */
 	public String nextQuote(char quoteChar, char escapseChar) {
-		return nextToken(new Predicate<Character>() {
-			boolean escape = false;
-			@Override
-			public boolean test(Character ch) {
-				if(ch == quoteChar && !escape) {
-					return false;
-				}
-				//LEFT OVER STAR
-				escape = (ch == escapseChar);
-				return true;
+		StringBuilder buf = new StringBuilder();
+		boolean escape = false;
+		do {
+			char ch = currChar();
+			if(ch == quoteChar && !escape) {
+				break;
+			} else if(escape) {
+				//PREVIOUS escapseChar
+				buf.append(escapseChar);
 			}
-		});
+			
+			//RESET MARKER
+			if(ch != escapseChar) {
+				buf.append(ch);
+				escape = false;
+			} else {
+				escape = true;
+			}
+		} while(nextChar());
+		return buf.toString();
 	}
 }
