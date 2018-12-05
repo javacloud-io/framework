@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 public class JavaTokenizerTest extends TestCase {
 	@Test
 	public void testTokenizer() throws Exception {
-		InputStream source = ResourceLoader.getClassLoader().getResourceAsStream("java-1.7.sablecc");
+		InputStream source = ResourceLoader.getClassLoader().getResourceAsStream("source.java.txt");
 		TextScanner scanner= new TextScanner(new InputStreamReader(source));
 		JavaTokenizer tokenizier = new JavaTokenizer(scanner);
 		

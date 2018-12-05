@@ -1,0 +1,15 @@
+/**
+ * A testable java source
+ */
+package test.tokenizer;
+
+/**
+ * 
+ * @author ho
+ *
+ */
+public class TestTokenizer {
+	//comment line
+	
+	/*comment block*/
+}

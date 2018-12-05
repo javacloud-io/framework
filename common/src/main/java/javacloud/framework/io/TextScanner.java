@@ -1,39 +1,23 @@
 package javacloud.framework.io;
 
-import java.io.IOException;
 import java.io.Reader;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
- * Simple interface for scanning characters
+ * Simple interface for scanning characters, which supports:
+ * 
+ * 1. Emit token with EOL using 2 alternate characters: '\r' or '\n'
+ * 2. Emit token inside comment using combination of 2 characters: '*' and '/'
+ * 3. Emit token inside quote using end and escape characters: '"' and '\'
+ * 
  * @author ho
  *
  */
 public class TextScanner {
-	//SOURCE CHAR STREAM
-	public interface CharStream {
-		/**
-		 * return true if END of stream
-		 * @return
-		 */
-		boolean isEOT();
-		
-		/**
-		 * Advance cursor to next char if any. return true/false if not
-		 * @return
-		 */
-		boolean nextChar();
-		
-		/**
-		 * return char at current position
-		 * @return
-		 */
-		char getChar();
-	}
 	private final CharStream source;
 	private int lineNo		= 1;
 	private int columnNo	= 0;
-	
 	/**
 	 * 
 	 * @param source
@@ -48,21 +32,7 @@ public class TextScanner {
 	 * @param source
 	 */
 	public TextScanner(final CharSequence source) {
-		this(new CharStream() {
-			int cursor = 0;
-			@Override
-			public boolean nextChar() {
-				return (++ cursor < source.length());
-			}
-			@Override
-			public boolean isEOT() {
-				return cursor >= source.length();
-			}
-			@Override
-			public char getChar() {
-				return (cursor < source.length()? source.charAt(cursor) : 0);//EOT
-			}
-		});
+		this(CharStream.build(source));
 	}
 	
 	/**
@@ -71,33 +41,7 @@ public class TextScanner {
 	 * @param source
 	 */
 	public TextScanner(final Reader source) {
-		this(new CharStream() {
-			int cchar	= -2;	//NOT YET READ
-			@Override
-			public boolean nextChar() {
-				try {
-					cchar = source.read();
-				} catch(IOException ex) {
-					//ASSUMING EOF
-					cchar = -1;
-				}
-				return (cchar != -1);
-			}
-			@Override
-			public boolean isEOT() {
-				if(cchar == -2) {
-					nextChar();
-				}
-				return (cchar == -1);
-			}
-			@Override
-			public char getChar() {
-				if(cchar == -2) {
-					nextChar();
-				}
-				return (cchar >= 0? (char)cchar : 0);//EOT
-			}
-		});
+		this(CharStream.build(source));
 	}
 	
 	/**
@@ -154,17 +98,91 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return next token of number of chars
+	 * return a token with matches boundary or EMPTY to consumer
 	 * 
-	 * @param nchars
+	 * @param matcher
+	 * @param consumer
 	 * @return
 	 */
-	public String nextToken(int nchars) {
-		StringBuilder buf = new StringBuilder();
+	public boolean nextChars(Predicate<Character> matcher, Consumer<Character> consumer) {
 		do {
-			buf.append(currChar());
+			char ch = currChar();
+			if(! matcher.test(ch)) {
+				return hasMoreChars();
+			}
+			consumer.accept(ch);
 		} while(nextChar());
-		return buf.toString();
+		return false;
+	}
+	
+	/**
+	 * return next line from EOL: lf | cr | cr lf
+	 * cursor will be positioned to next LINE
+	 * 
+	 * @param lfChar
+	 * @param crChar
+	 * @param consumer
+	 * @return
+	 */
+	public boolean nextLine(char lfChar, char crChar, Consumer<Character> consumer) {
+		//move cursor pass  \r\n to next line
+		if(nextChars((ch) -> (ch != lfChar && ch != crChar), consumer)) {
+			char ch = currChar();
+			if(nextChar() && ch == lfChar && currChar() == crChar) {
+				return nextChar();
+			}
+			return hasMoreChars();
+		}
+		return false;
+	}
+	
+	/**
+	 * Return token until quoteChar with escapeChar, similar to string quote in java
+	 * 
+	 * @param escapseChar
+	 * @param quoteChar
+	 * @param unescape
+	 * @return
+	 */
+	public String nextToken(char escapseChar, char quoteChar, boolean unescape) {
+		Token token = (unescape? Token.quote(escapseChar) : new Token());
+		nextChars(Matcher.quote(escapseChar, quoteChar), token);
+		return token.toString();
+	}
+	
+	/**
+	 * 
+	 * @param starChar
+	 * @param slashChar
+	 * @return
+	 */
+	public String nextToken(char starChar, char slashChar) {
+		Token token = Token.slash(starChar);
+		nextChars(Matcher.slash(starChar, slashChar), token);
+		return token.toString();
+	}
+	
+	/**
+	 * return token matches boundary
+	 * 
+	 * @param matcher
+	 * @return
+	 */
+	public String nextToken(Predicate<Character> matcher) {
+		Token token = new Token();
+		nextChars(matcher, token);
+		return token.toString();
+	}
+	
+	/**
+	 * Next line with delimiter: '\r' | '\n' | '\r\n'
+	 * 
+	 * @return
+	 */
+	public String nextLine() {
+		Token token = new Token();
+		nextLine('\r', '\n', token);
+		return token.toString();
 	}
 	
 	/**
@@ -174,121 +192,114 @@ public class TextScanner {
 	 * @param matcher
 	 * @return
 	 */
-	public boolean skipToken(Predicate<Character> matcher) {
-		while(matcher.test(source.getChar())) {
-			if(! nextChar()) {
-				return false;
-			}
+	public boolean skipChars(Predicate<Character> matcher) {
+		return nextChars(matcher, (ch) -> {});
+	}
+	
+	/**
+	 * Skip standard whitespace characters
+	 * 
+	 * @return
+	 */
+	public boolean skipWhitespace() {
+		return skipChars((ch) -> Character.isWhitespace(ch));
+	}
+	
+	/**
+	 * Skip to next line
+	 * 
+	 * @return
+	 */
+	public boolean skipLine() {
+		return nextLine('\r', '\n', (ch) -> {});
+	}
+	
+	//TOKENS
+	public static class Token implements Consumer<Character> {
+		private final StringBuilder buf = new StringBuilder();
+		@Override
+		public void accept(Character ch) {
+			buf.append(ch.charValue());
 		}
-		return true;
+		
+		@Override
+		public String toString() {
+			return buf.toString();
+		}
+		
+		//UNESCAPE TOKEN
+		public static Token quote(char escapseChar) {
+			return new Token() {
+				boolean escaped = false;
+				@Override
+				public void accept(Character ch) {
+					if(escaped || ch != escapseChar) {
+						super.accept(ch.charValue());
+					}
+					escaped = (!escaped && ch == escapseChar);
+				}
+			};
+		}
+		
+		//SLASH TOKEN
+		public static Token slash(char starChar) {
+			return new Token() {
+				boolean stared = false;
+				@Override
+				public void accept(Character ch) {
+					if(stared) {
+						super.accept(starChar);
+					}
+					if(!(stared = (ch == starChar))) {
+						super.accept(ch);
+					}
+				}
+			};
+		}
 	}
-
-	/**
-	 * return a token with matches boundary or EMPTY
-	 * 
-	 * @param matcher
-	 * @return
-	 */
-	public String nextToken(Predicate<Character> matcher) {
-		StringBuilder buf = new StringBuilder();
-		do {
-			char ch = currChar();
-			if(! matcher.test(ch)) {
-				break;
-			}
-			buf.append(ch);
-		} while(nextChar());
-		return buf.toString();
-	}
-	
-	/**
-	 * return next line from EOL: lf | cr | cr lf
-	 * cursor will be positioned to next LINE
-	 * 
-	 * @return
-	 */
-	public String nextLine() {
-		StringBuilder buf = new StringBuilder();
-		boolean lf = false;
-		do {
-			char ch = currChar();
-			if(ch == '\n') {
-				nextChar();	//SKIP \n
-				break;
-			} else if(lf) {
-				break;
-			}
-			//RESET MARKER
-			if(ch != '\r') {
-				buf.append(ch);
-				lf = false;
-			} else {
-				lf = true;
-			}
-		} while(nextChar());
-		return buf.toString();
-	}
-	
-	/** 
-	 * return next token end with both starChar & slashChar, such as comment.
-	 * cursor will be positioned at slashChar for matching, invokes nextCharacter() to skip.
-	 * 
-	 * @param starChar
-	 * @param slashChar
-	 * @return
-	 */
-	public String nextToken(char starChar, char slashChar) {
-		StringBuilder buf = new StringBuilder();
-		boolean star = false;
-		do {
-			char ch = currChar();
-			if(ch == slashChar && star) {
-				//KEEP CURSOR AT slashChar
-				break;
-			} else if(star) {
-				//PREVIOUS starChar
-				buf.append(starChar);
-			}
-			
-			//RESET MARKER
-			if(ch != starChar) {
-				buf.append(ch);
-				star = false;
-			} else {
-				star = true;
-			}
-		} while(nextChar());
-		return buf.toString();
-	}
-	
-	/**
-	 * return next string with quote trailing
-	 * cursor will be positioned at quoteChar for matching, invokes nextCharacter() to skip.
-	 * 
-	 * @param quoteChar
-	 * @param escapseChar
-	 * @return
-	 */
-	public String nextQuote(char quoteChar, char escapseChar) {
-		StringBuilder buf = new StringBuilder();
-		boolean escape = false;
-		do {
-			char ch = currChar();
-			if(ch == quoteChar && !escape) {
-				break;
-			} else if(escape) {
-				//PREVIOUS escapseChar
-				buf.append(escapseChar);
-			}
-			
-			//RESET MARKER
-			if(ch != escapseChar) {
-				buf.append(ch);
-				escape = false;
-			} else {
-				escape = true;
-			}
-		} while(nextChar());
-		return buf.toString();
+		
+	//CHAR MATCHERS
+	public static abstract class Matcher implements Predicate<Character> {
+		/**
+		 * Matches quote char while supporting escape char, ex: '\""' -> '""'
+		 * 
+		 * @param escapseChar
+		 * @param quoteChar
+		 * @return
+		 */
+		public static Matcher quote(char escapseChar, char quoteChar) {
+			return new Matcher() {
+				boolean escaped = false;
+				@Override
+				public boolean test(Character ch) {
+					if(!escaped && ch == quoteChar) {
+						return false;
+					}
+					escaped = (!escaped && ch == escapseChar);
+					return true;
+				}
+			};
+		}
+		
+		/**
+		 * Matches double character only, ex: '*''/'
+		 * 
+		 * @param starChar
+		 * @param slashChar
+		 * @return
+		 */
+		public static Matcher slash(char starChar, char slashChar) {
+			return new Matcher() {
+				boolean stared = false;
+				@Override
+				public boolean test(Character ch) {
+					if(stared && ch == slashChar) {
+						return false;
+					}
+					stared = (ch == starChar);
+					return true;
+				}
+			};
+		}
 	}
 }

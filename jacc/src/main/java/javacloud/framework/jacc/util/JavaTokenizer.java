@@ -167,7 +167,7 @@ public class JavaTokenizer {
 			return false;
 		}
 		//MOVE TO NEXT NON-SPACE
-		return scanner.skipToken((ch) -> (Character.isWhitespace(ch)));
+		return scanner.skipChars((ch) -> (Character.isWhitespace(ch)));
 	}
 	
 	/**
@@ -467,7 +467,7 @@ public class JavaTokenizer {
 				comment = scanner.nextLine();
 			} else {
 				comment = scanner.nextToken('*', '/');
-				//ASSERT scanner.getCharacter() == '/'
+				//ASSERT scanner.currChar() == '/'
 				scanner.nextChar();
 			}
 		}
@@ -488,12 +488,12 @@ public class JavaTokenizer {
 			quote = "";
 		} else {
 			if(type == Type.QUOTE_D) {
-				quote = scanner.nextQuote('"', '\\');
-				//ASSERT scanner.getCharacter() == '"'
+				quote = scanner.nextToken('\\', '"', true);
+				//ASSERT scanner.currChar() == '"'
 				scanner.nextChar();
 			} else {
-				quote = scanner.nextQuote('\'', '\\');
-				//ASSERT scanner.getCharacter() == '\''
+				quote = scanner.nextToken('\\', '\'', true);
+				//ASSERT scanner.currChar() == '\''
 				scanner.nextChar();
 			}
 		}
