@@ -37,6 +37,7 @@ public class CompilerTest extends ServiceTest {
 			List<JavaSource> sources = new ArrayList<JavaSource>();
 			String className = JavaSourceFile.resolveClassName(CODE);//"io.test.HelloWorld"
 			sources.add(new JavaSourceFile(CODE, className));
+			System.out.println("MAIN CLASS: " + className);
 			
 			InMemoryClassCollector collector = new InMemoryClassCollector();
 			boolean success = javaCompiler.compile(sources, collector);
