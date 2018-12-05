@@ -116,27 +116,6 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return next line from EOL: lf | cr | cr lf
-	 * cursor will be positioned to next LINE
-	 * 
-	 * @param lfChar
-	 * @param crChar
-	 * @param consumer
-	 * @return
-	 */
-	public boolean nextLine(char lfChar, char crChar, Consumer<Character> consumer) {
-		//move cursor pass  \r\n to next line
-		if(nextChars((ch) -> (ch != lfChar && ch != crChar), consumer)) {
-			char ch = currChar();
-			if(nextChar() && ch == lfChar && currChar() == crChar) {
-				return nextChar();
-			}
-			return hasMoreChars();
-		}
-		return false;
-	}
-	
-	/**
 	 * Return token until quoteChar with escapeChar, similar to string quote in java
 	 * 
 	 * @param escapseChar
@@ -151,6 +130,7 @@ public class TextScanner {
 	}
 	
 	/**
+	 * Return token until matches both star & slash
 	 * 
 	 * @param starChar
 	 * @param slashChar
@@ -180,8 +160,8 @@ public class TextScanner {
 	 * @return
 	 */
 	public String nextLine() {
-		Token token = new Token();
-		nextLine('\r', '\n', token);
+		Token token = Token.line('\r', '\n');
+		nextChars(Matcher.line('\r', '\n'), token);
 		return token.toString();
 	}
 	
@@ -211,7 +191,7 @@ public class TextScanner {
 	 * @return
 	 */
 	public boolean skipLine() {
-		return nextLine('\r', '\n', (ch) -> {});
+		return nextChars(Matcher.line('\r', '\n'), (ch) -> {});
 	}
 	
 	//TOKENS
@@ -227,7 +207,7 @@ public class TextScanner {
 			return buf.toString();
 		}
 		
-		//UNESCAPE TOKEN
+		//UNESCAPE TOKEN WITHOUT ESCAPE CHAR
 		public static Token quote(char escapseChar) {
 			return new Token() {
 				boolean escaped = false;
@@ -241,7 +221,7 @@ public class TextScanner {
 			};
 		}
 		
-		//SLASH TOKEN
+		//SLASH TOKEN WITHOUT LAST STAR
 		public static Token slash(char starChar) {
 			return new Token() {
 				boolean stared = false;
@@ -251,6 +231,18 @@ public class TextScanner {
 						super.accept(starChar);
 					}
 					if(!(stared = (ch == starChar))) {
+						super.accept(ch);
+					}
+				}
+			};
+		}
+		
+		//LINE TOKEN WITHOUT LF | CR
+		public static Token line(char lfChar, char crChar) {
+			return new Token() {
+				@Override
+				public void accept(Character ch) {
+					if(ch != lfChar && ch != crChar) {
 						super.accept(ch);
 					}
 				}
@@ -297,6 +289,27 @@ public class TextScanner {
 						return false;
 					}
 					stared = (ch == starChar);
+					return true;
+				}
+			};
+		}
+		
+		/**
+		 * Matches end of line: lf | cr | lf cr
+		 * 
+		 * @param lfChar
+		 * @param crChar
+		 * @return
+		 */
+		public static Matcher line(char lfChar, char crChar) {
+			return new Matcher() {
+				int lastc = -1;
+				@Override
+				public boolean test(Character ch) {
+					if((lastc == crChar) || (lastc == lfChar && ch != crChar)) {
+						return false;
+					}
+					lastc = ch;
 					return true;
 				}
 			};

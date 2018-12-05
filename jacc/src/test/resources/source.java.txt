@@ -9,7 +9,14 @@ package test.tokenizer;
  *
  */
 public class TestTokenizer {
-	//comment line
+	//logic test
+	public void testOperators() {
+		int i = 0;
+		i ++;
+		i --;
+		--i;
+		++i;
+	}
 	
 	/*comment block*/
 }
