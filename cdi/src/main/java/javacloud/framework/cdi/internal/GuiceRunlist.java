@@ -25,6 +25,7 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 	}
 	
 	/**
+	 * Using IMPL class if requires dynamic lookup to ensure methods are available.
 	 * 
 	 * @param instance
 	 * @param methodName
