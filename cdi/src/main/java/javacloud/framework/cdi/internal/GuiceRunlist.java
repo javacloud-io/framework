@@ -36,15 +36,19 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 	protected <T> T runInstance(Object instance, String methodName, Object...args) throws Exception {
 		Method method;
 		if(instance instanceof Class<?>) {
-			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
-			method = resolveMethod(instance.getClass(), methodName, args);
+			method = resolveMethod((Class<?>)instance, methodName, args);
 		} else {
 			method = resolveMethod(instance.getClass(), methodName, args);
 		}
 		
-		//STATIC METHOD
+		//INVOKE STATIC METHOD
 		if(Modifier.isStatic(method.getModifiers())) {
 			return	Objects.cast(method.invoke(null, args));
+		}
+		
+		//LOOK UP INSTANCE BY CLASS PRIOR TO INVOKE
+		if(instance instanceof Class<?>) {
+			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
 		}
 		return	Objects.cast(method.invoke(instance, args));
 	}
@@ -52,8 +56,7 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 	/**
 	 * Resolve a method that best re-present the arguments
 	 */
-	protected Method resolveMethod(Class<?> zclass, String methodName, Object... args)
-			throws NoSuchMethodException {
+	protected Method resolveMethod(Class<?> zclass, String methodName, Object... args) throws NoSuchMethodException {
 		if(args == null || args.length == 0) {
 			return zclass.getMethod(methodName);
 		}
