@@ -29,7 +29,7 @@ public class JdkSourceFileAdapter extends SimpleJavaFileObject {
 	 */
 	@Override
 	public InputStream openInputStream() throws IOException {
-		return new BytesInputStream(source.asSequence().toString());
+		return new BytesInputStream(source.asChars().toString());
 	}
 
 	/**
@@ -37,6 +37,6 @@ public class JdkSourceFileAdapter extends SimpleJavaFileObject {
 	 */
 	@Override
 	public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
-		return source.asSequence();
+		return source.asChars();
 	}
 }

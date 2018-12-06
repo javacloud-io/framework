@@ -50,7 +50,7 @@ public class JavaSourceFile implements JavaSource {
 	 * return an input stream for reading
 	 */
 	@Override
-	public CharSequence asSequence() {
+	public CharSequence asChars() {
 		return source;
 	}
 	
