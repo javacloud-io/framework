@@ -1,6 +1,7 @@
 package javacloud.framework.jacc.impl;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -12,6 +13,7 @@ import javacloud.framework.jacc.DiagnosticListener;
  *
  */
 public class JdkDiagnosticAdapter implements javax.tools.DiagnosticListener<JavaFileObject> {
+	private static final Logger logger = Logger.getLogger(JdkDiagnosticAdapter.class.getName());
 	private final DiagnosticListener listener;
 	private final Locale locale;
 	/**
@@ -25,13 +27,16 @@ public class JdkDiagnosticAdapter implements javax.tools.DiagnosticListener<Java
 	}
 	
 	/**
-	 * 
+	 * report on failure only
 	 */
 	@Override
 	public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-		listener.onFailure(diagnostic.getSource().toUri(),
-							(int)diagnostic.getLineNumber(),
-							(int)diagnostic.getColumnNumber(),
-							diagnostic.getMessage(locale));
+		String message = diagnostic.getMessage(locale);
+		if(diagnostic.getKind() == Diagnostic.Kind.ERROR) {
+			listener.onFailure(diagnostic.getSource().toUri(),
+					(int)diagnostic.getLineNumber(), (int)diagnostic.getColumnNumber(), message);
+		} else {
+			logger.fine(message);
+		}
 	}
 }
