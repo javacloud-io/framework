@@ -1,5 +1,7 @@
 package javacloud.framework.jacc;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +12,13 @@ import org.junit.Test;
 
 import javacloud.framework.cdi.ServiceRunlist;
 import javacloud.framework.cdi.test.ServiceTest;
+import javacloud.framework.io.BytesChannelReader;
 import javacloud.framework.jacc.JavaCompiler;
 import javacloud.framework.jacc.JavaSource;
 import javacloud.framework.jacc.internal.InMemoryClassCollector;
 import javacloud.framework.jacc.internal.InMemoryClassLoader;
 import javacloud.framework.jacc.internal.JavaSourceFile;
+import javacloud.framework.util.ResourceLoader;
 
 /**
  * 
@@ -22,9 +26,19 @@ import javacloud.framework.jacc.internal.JavaSourceFile;
  *
  */
 public class CompilerTest extends ServiceTest {
-	static final String CODE = "package io.test; \npublic class HelloWorld {\n public static void sayHello() {\nSystem.out.println(\"Hello World!\");\n} \n}\n//13 3323 \r\n   //11111\n/* dsdsdsdsd \n * \n***/ //zzz"; 
 	@Inject
 	private JavaCompiler javaCompiler;
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 * @throws IOException
+	 */
+	static String loadSource(String name) throws IOException {
+		InputStream source = ResourceLoader.getClassLoader().getResourceAsStream(name);
+		return BytesChannelReader.toBytesStream(source).toString();
+	}
 	
 	/**
 	 * 
@@ -34,9 +48,11 @@ public class CompilerTest extends ServiceTest {
 	public void testCompile() throws Exception {
 		long starts = System.currentTimeMillis();
 		try {
+			String source = loadSource("hello.java.txt");
+			
 			List<JavaSource> sources = new ArrayList<JavaSource>();
-			String className = JavaSourceFile.resolveClassName(CODE);//"io.test.HelloWorld"
-			sources.add(new JavaSourceFile(CODE, className));
+			String className = JavaSourceFile.resolveClassName(source);//"io.test.HelloWorld"
+			sources.add(new JavaSourceFile(source, className));
 			System.out.println("MAIN CLASS: " + className);
 			
 			InMemoryClassCollector collector = new InMemoryClassCollector();

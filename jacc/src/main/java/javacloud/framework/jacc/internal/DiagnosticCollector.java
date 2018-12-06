@@ -15,13 +15,23 @@ import javacloud.framework.jacc.DiagnosticListener;
 public class DiagnosticCollector implements DiagnosticListener {
 	//SIMPLE METRIC COLLECTION
 	public static class Metric {
-		public final int lineNo;
-		public final int columnNo;
-		public final String reason;
+		private final int lineNo;
+		private final int columnNo;
+		private final String reason;
 		public Metric(int lineNo, int columnNo, String reason) {
 			this.lineNo = lineNo;
 			this.columnNo = columnNo;
 			this.reason = reason;
+		}
+		
+		public int getLineNo() {
+			return lineNo;
+		}
+		public int getColumnNo() {
+			return columnNo;
+		}
+		public String getReason() {
+			return reason;
 		}
 		
 		//COMPATIBLE WITH JAVA ERROR
