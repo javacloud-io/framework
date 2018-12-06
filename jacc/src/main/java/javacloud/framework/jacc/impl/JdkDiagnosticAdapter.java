@@ -35,6 +35,10 @@ public class JdkDiagnosticAdapter implements javax.tools.DiagnosticListener<Java
 		if(diagnostic.getKind() == Diagnostic.Kind.ERROR) {
 			listener.onFailure(diagnostic.getSource().toUri(),
 					(int)diagnostic.getLineNumber(), (int)diagnostic.getColumnNumber(), message);
+		} else if(diagnostic.getKind() == Diagnostic.Kind.WARNING
+				|| diagnostic.getKind() == Diagnostic.Kind.MANDATORY_WARNING) {
+			listener.onWarning(diagnostic.getSource().toUri(),
+					(int)diagnostic.getLineNumber(), (int)diagnostic.getColumnNumber(), message);
 		} else {
 			logger.fine(message);
 		}

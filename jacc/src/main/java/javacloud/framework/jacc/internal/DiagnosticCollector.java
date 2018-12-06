@@ -50,6 +50,13 @@ public class DiagnosticCollector implements DiagnosticListener {
 	}
 	
 	/**
+	 * FIXME: COLLECT WARNING METRICS
+	 */
+	@Override
+	public void onWarning(URI file, int lineNo, int columnNo, String reason) {
+	}
+	
+	/**
 	 * return resource which has failure
 	 * 
 	 * @return

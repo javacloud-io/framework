@@ -15,5 +15,14 @@ public interface DiagnosticListener {
 	 * @param columnNo
 	 * @param reason
 	 */
+	public void onWarning(URI file, int lineNo, int columnNo, String reason);
+	
+	/**
+	 * 
+	 * @param file
+	 * @param lineNo
+	 * @param columnNo
+	 * @param reason
+	 */
 	public void onFailure(URI file, int lineNo, int columnNo, String reason);
 }
