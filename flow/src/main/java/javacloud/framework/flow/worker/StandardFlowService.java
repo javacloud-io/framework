@@ -248,7 +248,7 @@ public class StandardFlowService {
 					public <R> R getOutput(Class<R> type) {
 						Object output = state.output();
 						if(output != null && externalizer != null && !type.isInstance(output)) {
-							output = new JsonConverter(externalizer).toConverter(type).apply(output);
+							output = new JsonConverter(externalizer).to(type).apply(output);
 						}
 						return Objects.cast(output);
 					}

@@ -147,7 +147,7 @@ public class FlowExecutor {
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
 			logger.log(Level.FINE, "Converting input to parameters type: {0}", type);
 			try {
-				parameters = new JsonConverter(externalizer).toConverter(type).apply(parameters);
+				parameters = new JsonConverter(externalizer).to(type).apply(parameters);
 			} catch(RuntimeException ex) {
 				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
 				throw ex;

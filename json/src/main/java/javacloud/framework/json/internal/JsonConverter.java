@@ -99,7 +99,7 @@ public final class JsonConverter implements Externalizer {
 	 * @param type
 	 * @return
 	 */
-	public <T> Function<Object, T> toConverter(final Class<T> type) {
+	public <T> Function<Object, T> to(final Class<T> type) {
 		return new Function<Object, T>() {
 			@Override
 			public T apply(Object value) {
