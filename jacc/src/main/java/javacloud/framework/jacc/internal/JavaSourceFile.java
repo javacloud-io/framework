@@ -6,6 +6,7 @@ import javacloud.framework.jacc.JavaSource;
 import javacloud.framework.jacc.util.JavaTokenizer;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Objects;
+import javacloud.framework.util.Pair;
 /**
  * 
  * @author ho
@@ -21,7 +22,7 @@ public class JavaSourceFile implements JavaSource {
 	 */
 	public JavaSourceFile(CharSequence source, String className) {
 		if(Objects.isEmpty(className)) {
-			className = resolveClassName(source);
+			className = resolveMainClass(source);
 		} else if(className.endsWith(JAVA_EXTENSION)) {
 			className = className.substring(0, className.length() - JAVA_EXTENSION.length());
 		}
@@ -60,18 +61,21 @@ public class JavaSourceFile implements JavaSource {
 	 * @param source
 	 * @return
 	 */
-	public static final String resolveClassName(CharSequence source) {
+	public static final String resolveMainClass(CharSequence source) {
 		JavaTokenizer tokenizer = new JavaTokenizer(source);
 		String packageName = null;
 		String className   = null;
-		//PACKAGE NAME
-		if(tokenizer.nextToken(JavaTokenizer.Type.PACKAGE) != null) {
-			packageName = tokenizer.nextTokens((tt) -> (tt == JavaTokenizer.Type.IDENTIFIER || tt == JavaTokenizer.Type.DOT));
-		}
 		
-		//CLASS NAME
-		if(tokenizer.nextToken(JavaTokenizer.Type.CLASS) != null) {
-			className = tokenizer.nextToken(JavaTokenizer.Type.IDENTIFIER);
+		//PACKAGE NAME
+		while(tokenizer.hasMoreTokens()) {
+			Pair<JavaTokenizer.Type, String> token = tokenizer.nextToken();
+			
+			if(token.getKey() == JavaTokenizer.Type.PACKAGE) {
+				packageName = tokenizer.nextTokens((tt) -> (tt == JavaTokenizer.Type.IDENTIFIER || tt == JavaTokenizer.Type.DOT));
+			} else if(token.getKey() == JavaTokenizer.Type.CLASS) {
+				className = tokenizer.nextToken(JavaTokenizer.Type.IDENTIFIER);
+				break;
+			}
 		}
 		
 		//FULL CLASS NAME

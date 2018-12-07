@@ -41,7 +41,17 @@ import javacloud.framework.util.Objects;
  *
  */
 public final class PlistDocument {
-	private PlistDocument() {
+	private final Map<String, Object> plist;
+	public PlistDocument(Map<String, Object> plist) {
+		this.plist = plist;
+	}
+	
+	/**
+	 * return root xmlElement
+	 * @return
+	 */
+	public Map<String, Object> plist() {
+		return	plist;
 	}
 	
 	/**
@@ -50,7 +60,7 @@ public final class PlistDocument {
 	 * @return
 	 * @throws IOException
 	 */
-	public static Map<String, Object> readXml(InputStream ins) throws IOException {
+	public static PlistDocument readXml(InputStream ins) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			//DISABLE DTD VALIDATION BY RETURN DUMMY SOURCE
@@ -73,7 +83,7 @@ public final class PlistDocument {
 	        while(element != null && element.getNodeType() != Node.ELEMENT_NODE) {
 	        	element = element.getNextSibling();
 	        }
-			return (element == null? Objects.asMap() : Objects.cast(parseElement(element)));
+			return new PlistDocument(element == null? Objects.asMap() : Objects.cast(parseElement(element)));
 		} catch (ParserConfigurationException ex) {
 			throw new IOException(ex);
 		} catch (SAXException ex) {
@@ -151,18 +161,17 @@ public final class PlistDocument {
 	 * @param out
 	 * @throws IOException
 	 */
-	public static void writeXml(Map<String, Object> plist, OutputStream out) throws IOException {
-		writeXml(plist, out, false);
+	public void writeXml(OutputStream out) throws IOException {
+		writeXml(out, false);
 	}
 	
 	/**
 	 * Recursively write the XML using NODE type. In compact mode, we just transfer every in raw format.
-	 * @param plist
 	 * @param out
 	 * @param compact
 	 * @throws IOException
 	 */
-	public static void writeXml(Map<String, Object> plist, OutputStream out, boolean compact) throws IOException {
+	public void writeXml(OutputStream out, boolean compact) throws IOException {
 		try {
 			DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document xmlDoc = documentBuilder.newDocument();

@@ -51,7 +51,7 @@ public class CompilerTest extends ServiceTest {
 			String source = loadSource("hello.java.txt");
 			
 			List<JavaSource> sources = new ArrayList<JavaSource>();
-			String className = JavaSourceFile.resolveClassName(source);//"io.test.HelloWorld"
+			String className = JavaSourceFile.resolveMainClass(source);//"io.test.HelloWorld"
 			sources.add(new JavaSourceFile(source, className));
 			System.out.println("MAIN CLASS: " + className);
 			

@@ -34,6 +34,6 @@ public class PlistXmlTest extends TestCase {
 		props.put("null", null);	//ALOW NULL
 		
 		assertTrue(props.containsKey("null"));
-		PlistDocument.writeXml(props, System.out);
+		new PlistDocument(props).writeXml(System.out);
 	}
 }
