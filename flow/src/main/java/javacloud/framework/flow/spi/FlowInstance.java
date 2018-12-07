@@ -7,7 +7,7 @@ import java.util.Date;
  * @author ho
  *
  */
-public interface FlowRegister {
+public interface FlowInstance {
 	/**
 	 * 
 	 * 

@@ -3,18 +3,19 @@ package javacloud.framework.flow.builder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javacloud.framework.flow.StateAction;
-import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateFlow;
+import javacloud.framework.flow.StateHandler;
 
 /**
+ * Helper to build workflow with function and next
  * 
  * @author hvho
  *
  */
 public class FlowBuilder {
 	private String startAt;
-	private Map<String, StateAction> states;
+	private Map<String, StateFunction> states;
 	public FlowBuilder() {
 	}
 	
@@ -31,27 +32,27 @@ public class FlowBuilder {
 	/**
 	 * 
 	 * @param name
-	 * @param function
+	 * @param stateHandler
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateFunction<?, ?> function, String next) {
-		return withState(name, new ActionBuilder()
-								.withStateFunction(function)
+	public FlowBuilder withState(String name, StateHandler<?, ?> stateHandler, String next) {
+		return withState(name, new FunctionBuilder()
+								.withStateHandler(stateHandler)
 								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
 	}
 	/**
 	 * 
 	 * @param name
-	 * @param function
+	 * @param stateHandler
 	 * @param retryHandler
 	 * @param next
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateFunction<?, ?> function, StateFunction.RetryHandler retryHandler, String next) {
-		return withState(name, new ActionBuilder()
-								.withStateFunction(function)
+	public FlowBuilder withState(String name, StateHandler<?, ?> stateHandler, StateHandler.RetryHandler retryHandler, String next) {
+		return withState(name, new FunctionBuilder()
+								.withStateHandler(stateHandler)
 								.withRetryHandler(retryHandler)
 								.withOutputHandler(TransitionBuilder.success(next))
 								.build());
@@ -59,14 +60,14 @@ public class FlowBuilder {
 	/**
 	 * 
 	 * @param name
-	 * @param action
+	 * @param function
 	 * @return
 	 */
-	public FlowBuilder withState(String name, StateAction action) {
+	public FlowBuilder withState(String name, StateFunction function) {
 		if(states == null) {
 			states = new LinkedHashMap<>();
 		}
-		states.put(name, action);
+		states.put(name, function);
 		return this;
 	}
 	
@@ -82,7 +83,7 @@ public class FlowBuilder {
 			}
 			
 			@Override
-			public StateAction getState(String name) {
+			public StateFunction getState(String name) {
 				return (states == null? null : states.get(name));
 			}
 		};

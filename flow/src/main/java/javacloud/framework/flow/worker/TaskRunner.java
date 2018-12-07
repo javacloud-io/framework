@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 public abstract class TaskRunner<T> implements Runnable {
 	private static final Logger logger = Logger.getLogger(TaskRunner.class.getName());
 	
-	private final TaskQueue<T> taskQueue;
+	private final ReservationQueue<T> taskQueue;
 	private final int timeoutSeconds;
 	/**
 	 * 
 	 * @param coordinator
 	 * @param timeoutSeconds
 	 */
-	public TaskRunner(TaskQueue<T> taskQueue, int timeoutSeconds) {
+	public TaskRunner(ReservationQueue<T> taskQueue, int timeoutSeconds) {
 		this.taskQueue 		= taskQueue;
 		this.timeoutSeconds = timeoutSeconds;
 	}

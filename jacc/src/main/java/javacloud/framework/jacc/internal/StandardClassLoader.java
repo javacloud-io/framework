@@ -7,9 +7,9 @@ import java.nio.ByteBuffer;
  * @author ho
  *
  */
-public class InMemoryClassLoader extends ClassLoader {
-	private final InMemoryClassCollector collector;
-	public InMemoryClassLoader(InMemoryClassCollector collector, ClassLoader parent) {
+public class StandardClassLoader extends ClassLoader {
+	private final StandardClassCollector collector;
+	public StandardClassLoader(StandardClassCollector collector, ClassLoader parent) {
 		super(parent);
 		this.collector = collector;
 	}

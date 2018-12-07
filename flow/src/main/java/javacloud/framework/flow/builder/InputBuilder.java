@@ -1,7 +1,7 @@
 package javacloud.framework.flow.builder;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.json.internal.JsonPath;
 import javacloud.framework.json.internal.JsonTemplate;
 /**
@@ -46,8 +46,8 @@ public class InputBuilder {
 	 * 
 	 * @return
 	 */
-	public StateFunction.InputHandler<?> build() {
-		return new StateFunction.InputHandler<Object>() {
+	public StateHandler.InputHandler<?> build() {
+		return new StateHandler.InputHandler<Object>() {
 			@Override
 			public Object onInput(StateContext context) {
 				//NOT DEFINED => USING ORIGINAL INPUT

@@ -9,11 +9,11 @@ import org.junit.Assert;
 import junit.framework.TestCase;
 import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateFlow;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.builder.FlowBuilder;
 import javacloud.framework.flow.builder.RetryBuilder;
 import javacloud.framework.flow.builder.TransitionBuilder;
-import javacloud.framework.flow.internal.LocalFlowExecutor;
+import javacloud.framework.flow.internal.StandardFlowExecutor;
 import javacloud.framework.flow.spec.RetrierDefinition;
 import javacloud.framework.flow.spi.FlowExecution;
 import javacloud.framework.flow.worker.StateExecution;
@@ -24,20 +24,20 @@ import javacloud.framework.util.Objects;
  *
  */
 public class WorkflowTest extends TestCase {
-	private static final LocalFlowExecutor flowExecutor = new LocalFlowExecutor();
+	private static final StandardFlowExecutor flowExecutor = new StandardFlowExecutor();
 	
 	@Test
 	public void testSuccess() {
 		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state1")
-							.withState("state1", new StateFunction<Map<String, Object>, Map<String, Object>>() {
+							.withState("state1", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									context.setAttribute("t1", "abc");
 									return Objects.asMap("t1", "abc");
 								}
 							}, "state2")
-							.withState("state2", new StateFunction<Map<String, Object>, Map<String, Object>>() {
+							.withState("state2", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
@@ -57,17 +57,17 @@ public class WorkflowTest extends TestCase {
 	public void testFailure() {
 		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state3")
-							.withState("state3", new StateFunction<Map<String, Object>, Map<String, Object>>() {
+							.withState("state3", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									return Objects.asMap("t1", "abc");
 								}
 							}, "state4")
-							.withState("state4", new StateFunction<Map<String, Object>, StateFunction.Status>() {
+							.withState("state4", new StateHandler<Map<String, Object>, StateHandler.Status>() {
 								@Override
-								public StateFunction.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									context.setAttribute("t2", "xyz");
-									return StateFunction.Status.FAILED;
+									return StateHandler.Status.FAILED;
 								}
 							}, null).build();
 		
@@ -83,18 +83,18 @@ public class WorkflowTest extends TestCase {
 	public void testRetry() {
 		StateFlow workflow = new FlowBuilder()
 							.withStartAt("state5")
-							.withState("state5", new StateFunction<Map<String, Object>, StateFunction.Status>() {
+							.withState("state5", new StateHandler<Map<String, Object>, StateHandler.Status>() {
 								@Override
-								public StateFunction.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									if(context.getTryCount() < 5) {
-										return StateFunction.Status.RETRY;
+										return StateHandler.Status.RETRY;
 									}
 									context.setAttribute("t1", "abc");
 									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
 							new RetryBuilder().withRetrier(new RetrierDefinition().withMaxAttempts(5)).build(), "state6")
-							.withState("state6", new StateFunction<Map<String, Object>, Map<String, Object>>() {
+							.withState("state6", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									return Objects.asMap("t2", "xyz");
@@ -113,18 +113,18 @@ public class WorkflowTest extends TestCase {
 	public void testCancel() throws Exception {
 		StateFlow workflow = new FlowBuilder()
 							.withStartAt("c1")
-							.withState("c1", new StateFunction<Map<String, Object>, StateFunction.Status>() {
+							.withState("c1", new StateHandler<Map<String, Object>, StateHandler.Status>() {
 								@Override
-								public StateFunction.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
+								public StateHandler.Status handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									if(context.getTryCount() < 5) {
-										return StateFunction.Status.RETRY;
+										return StateHandler.Status.RETRY;
 									}
 									context.setAttribute("t1", "abc");
 									return TransitionBuilder.succeed(context, Objects.asMap("t1", "abc"));
 								}
 							},
 							new RetryBuilder().withRetrier(new RetrierDefinition().withMaxAttempts(5)).build(), "c2")
-							.withState("c2", new StateFunction<Map<String, Object>, Map<String, Object>>() {
+							.withState("c2", new StateHandler<Map<String, Object>, Map<String, Object>>() {
 								@Override
 								public Map<String, Object> handle(Map<String, Object> parameters, StateContext context) throws Exception {
 									return Objects.asMap("t2", "xyz");

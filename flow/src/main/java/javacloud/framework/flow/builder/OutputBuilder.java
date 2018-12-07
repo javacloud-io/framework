@@ -1,7 +1,7 @@
 package javacloud.framework.flow.builder;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.json.internal.JsonPath;
 import javacloud.framework.json.internal.JsonTemplate;
@@ -9,6 +9,7 @@ import javacloud.framework.util.Objects;
 
 /**
  * By default RESULT will overwrite the INPUT to be OUTPUT. OUTPUT will be AS IS to pass to INPUT
+ * 
  * @author ho
  *
  */
@@ -65,8 +66,8 @@ public class OutputBuilder {
 	 * 
 	 * @return
 	 */
-	public StateFunction.OutputHandler build() {
-		return new StateFunction.OutputHandler() {
+	public StateHandler.OutputHandler build() {
+		return new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
 				Object finalResult;

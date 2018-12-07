@@ -1,5 +1,6 @@
 package javacloud.framework.flow;
 /**
+ * Workflow describe as state machine with start STATE and transition to next...
  * 
  * @author ho
  *
@@ -17,5 +18,5 @@ public interface StateFlow {
 	 * @param name
 	 * @return
 	 */
-	public StateAction getState(String name);
+	public StateFunction getState(String name);
 }

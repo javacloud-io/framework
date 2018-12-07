@@ -15,8 +15,8 @@ import javacloud.framework.cdi.test.ServiceTest;
 import javacloud.framework.io.BytesChannelReader;
 import javacloud.framework.jacc.JavaCompiler;
 import javacloud.framework.jacc.JavaSource;
-import javacloud.framework.jacc.internal.InMemoryClassCollector;
-import javacloud.framework.jacc.internal.InMemoryClassLoader;
+import javacloud.framework.jacc.internal.StandardClassCollector;
+import javacloud.framework.jacc.internal.StandardClassLoader;
 import javacloud.framework.jacc.internal.JavaSourceFile;
 import javacloud.framework.util.ResourceLoader;
 
@@ -55,18 +55,18 @@ public class CompilerTest extends ServiceTest {
 			sources.add(new JavaSourceFile(source, className));
 			System.out.println("MAIN CLASS: " + className);
 			
-			InMemoryClassCollector collector = new InMemoryClassCollector();
+			StandardClassCollector collector = new StandardClassCollector();
 			boolean success = javaCompiler.compile(sources, collector);
 			if(!success) {
 				System.out.println("COMPILATION ERROR:");
 				for(URI file: collector.getFailures()) {
-					for (InMemoryClassCollector.Metric metric: collector.getMetrics(file)) {
+					for (StandardClassCollector.Metric metric: collector.getMetrics(file)) {
 						System.out.println(file + ":" + metric);
 					}
 				}
 			} else {
 				System.out.println("COMPILATION SUCCESSFUL.");
-				InMemoryClassLoader classLoader = new InMemoryClassLoader(collector, CompilerTest.class.getClassLoader());
+				StandardClassLoader classLoader = new StandardClassLoader(collector, CompilerTest.class.getClassLoader());
 				Class<?> helloClass = classLoader.loadClass(className);
 				ServiceRunlist.get().runMethod(helloClass, "sayHello");
 			}

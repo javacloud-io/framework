@@ -15,9 +15,9 @@ import java.util.Map;
  * @author ho
  *
  */
-public class InMemoryClassCollector extends DiagnosticCollector implements ClassCollector {
+public class StandardClassCollector extends DiagnosticCollector implements ClassCollector {
 	private final Map<String, BytesOutputStream> bytesCode = new HashMap<>();
-	public InMemoryClassCollector() {
+	public StandardClassCollector() {
 	}
 	
 	/**
@@ -32,6 +32,7 @@ public class InMemoryClassCollector extends DiagnosticCollector implements Class
 	
 	/**
 	 * return byte code for the class
+	 * 
 	 * @param className
 	 * @return
 	 */

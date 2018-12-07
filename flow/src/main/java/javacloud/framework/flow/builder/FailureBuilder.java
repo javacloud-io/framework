@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.spec.CatcherDefinition;
 import javacloud.framework.util.Exceptions;
@@ -39,7 +39,7 @@ public class FailureBuilder {
 		}
 		if(Objects.isEmpty(errors)) {
 			if(Objects.isEmpty(catcher.getErrorEquals())) {
-				catchers.put(StateFunction.ERROR_ALL, catcher);
+				catchers.put(StateHandler.ERROR_ALL, catcher);
 			} else {
 				for(String error: catcher.getErrorEquals()) {
 					catchers.put(error, catcher);
@@ -71,8 +71,8 @@ public class FailureBuilder {
 	 * 
 	 * @return
 	 */
-	public StateFunction.FailureHandler build() {
-		return new StateFunction.FailureHandler() {
+	public StateHandler.FailureHandler build() {
+		return new StateHandler.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
@@ -84,7 +84,7 @@ public class FailureBuilder {
 					catcher = (catchers == null? null : catchers.get(error));
 				}
 				if(catcher == null && catchers != null) {
-					catcher = catchers.get(StateFunction.ERROR_ALL);
+					catcher = catchers.get(StateHandler.ERROR_ALL);
 				}
 				
 				//GIVE UP WITHOUT CATCHER

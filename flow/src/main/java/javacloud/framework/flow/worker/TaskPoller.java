@@ -6,9 +6,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javacloud.framework.flow.worker.TaskQueue.Reservation;
-
 /**
+ * Poll task only if has worker available to work using reservation Queue
  * 
  * @author ho
  *
@@ -16,7 +15,7 @@ import javacloud.framework.flow.worker.TaskQueue.Reservation;
 public abstract class TaskPoller<T> implements Runnable {
 	private static final Logger logger = Logger.getLogger(TaskPoller.class.getName());
 	
-	private final TaskQueue<T> taskQueue;
+	private final ReservationQueue<T> taskQueue;
 	private final int numberOfWorkers;
 	private final int reservationSeconds;
 	/**
@@ -25,7 +24,7 @@ public abstract class TaskPoller<T> implements Runnable {
 	 * @param numberOfWorkers
 	 * @param reservationSeconds
 	 */
-	public TaskPoller(TaskQueue<T> taskQueue, int numberOfWorkers, int reservationSeconds) {
+	public TaskPoller(ReservationQueue<T> taskQueue, int numberOfWorkers, int reservationSeconds) {
 		this.taskQueue = taskQueue;
 		this.numberOfWorkers = numberOfWorkers;
 		this.reservationSeconds = reservationSeconds;
@@ -37,9 +36,9 @@ public abstract class TaskPoller<T> implements Runnable {
 	 */
 	@Override
 	public void run() {
-		List<TaskQueue.Reservation<T>> reservations = new ArrayList<>();
+		List<ReservationQueue.Ticket<T>> reservations = new ArrayList<>();
 		for(int i = 0; i < numberOfWorkers; i ++) {
-			Reservation<T> reservation = taskQueue.reserve(reservationSeconds, TimeUnit.SECONDS);
+			ReservationQueue.Ticket<T> reservation = taskQueue.reserve(reservationSeconds, TimeUnit.SECONDS);
 			if(reservation == null) {
 				break;
 			}
@@ -53,7 +52,7 @@ public abstract class TaskPoller<T> implements Runnable {
 				List<T> tasks = poll(reservations.size());
 				logger.log(Level.FINE, "Confirming {0} and cancelling {1} reservation(s)", new Object[]{tasks.size(), reservations.size() - tasks.size()});
 				for(int i = 0; i < reservations.size(); i ++) {
-					TaskQueue.Reservation<T> reservation = reservations.get(i);
+					ReservationQueue.Ticket<T> reservation = reservations.get(i);
 					if(i < tasks.size()) {
 						reservation.confirm(tasks.get(i));
 					} else {
@@ -63,7 +62,7 @@ public abstract class TaskPoller<T> implements Runnable {
 			} catch(Exception ex) {
 				logger.log(Level.WARNING, "Cancelling all {0} reservation(s) due to unexpected error: {1}", new Object[] {reservations.size(), ex});
 				for(int i = 0; i < reservations.size(); i ++) {
-					TaskQueue.Reservation<T> reservation = reservations.get(i);
+					ReservationQueue.Ticket<T> reservation = reservations.get(i);
 					reservation.cancel(ex);
 				}
 			}

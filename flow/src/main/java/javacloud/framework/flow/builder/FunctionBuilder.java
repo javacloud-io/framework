@@ -4,9 +4,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.function.Function;
 
-import javacloud.framework.flow.StateAction;
-import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateContext;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.util.Objects;
 
@@ -15,22 +15,22 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class ActionBuilder {
-	private StateFunction<Object, Object> 	stateFunction;
-	private StateFunction.InputHandler<Object> inputHandler;
-	private StateFunction.OutputHandler	 outputHandler;
-	private StateFunction.FailureHandler failureHandler;
-	private StateFunction.RetryHandler	 retryHandler;
-	public ActionBuilder() {
+public class FunctionBuilder {
+	private StateHandler<Object, Object>	stateHandler;
+	private StateHandler.InputHandler<Object> inputHandler;
+	private StateHandler.OutputHandler	 outputHandler;
+	private StateHandler.FailureHandler  failureHandler;
+	private StateHandler.RetryHandler	 retryHandler;
+	public FunctionBuilder() {
 	}
 	
 	/**
 	 * 
-	 * @param stateFunction
+	 * @param stateHandler
 	 * @return
 	 */
-	public <T, R> ActionBuilder withStateFunction(StateFunction<T, R> stateFunction) {
-		this.stateFunction = Objects.cast(stateFunction);
+	public <T, R> FunctionBuilder withStateHandler(StateHandler<T, R> stateHandler) {
+		this.stateHandler = Objects.cast(stateHandler);
 		return this;
 	}
 	
@@ -39,8 +39,8 @@ public class ActionBuilder {
 	 * @param function
 	 * @return
 	 */
-	public <T, R> ActionBuilder withStateFunction(Function<T, R> function) {
-		return withStateFunction(new StateFunction<T, R>() {
+	public <T, R> FunctionBuilder withStateHandler(Function<T, R> function) {
+		return withStateHandler(new StateHandler<T, R>() {
 			@Override
 			public R handle(T parameters, StateContext context) throws Exception {
 				return function.apply(parameters);
@@ -53,8 +53,8 @@ public class ActionBuilder {
 	 * @param status
 	 * @return
 	 */
-	public ActionBuilder withStateFunction(final StateFunction.Status status) {
-		return withStateFunction(new StateFunction<Object, StateFunction.Status>() {
+	public FunctionBuilder withStateHandler(final StateHandler.Status status) {
+		return withStateHandler(new StateHandler<Object, StateHandler.Status>() {
 			@Override
 			public Status handle(Object parameters, StateContext context) throws Exception {
 				return status;
@@ -64,41 +64,41 @@ public class ActionBuilder {
 	
 	/**
 	 * 
-	 * @param handler
+	 * @param inputHandler
 	 * @return
 	 */
-	public ActionBuilder withInputHandler(StateFunction.InputHandler<?>  handler) {
-		this.inputHandler = Objects.cast(handler);
+	public FunctionBuilder withInputHandler(StateHandler.InputHandler<?>  inputHandler) {
+		this.inputHandler = Objects.cast(inputHandler);
 		return this;
 	}
 	
 	/**
 	 * 
-	 * @param handler
+	 * @param outputHandler
 	 * @return
 	 */
-	public ActionBuilder withOutputHandler(StateFunction.OutputHandler  handler) {
-		this.outputHandler = handler;
+	public FunctionBuilder withOutputHandler(StateHandler.OutputHandler  outputHandler) {
+		this.outputHandler = outputHandler;
 		return this;
 	}
 	
 	/**
 	 * 
-	 * @param handler
+	 * @param failureHandler
 	 * @return
 	 */
-	public ActionBuilder withFailureHandler(StateFunction.FailureHandler  handler) {
-		this.failureHandler = handler;
+	public FunctionBuilder withFailureHandler(StateHandler.FailureHandler failureHandler) {
+		this.failureHandler = failureHandler;
 		return this;
 	}
 	
 	/**
 	 * 
-	 * @param handler
+	 * @param retryHandler
 	 * @return
 	 */
-	public ActionBuilder withRetryHandler(StateFunction.RetryHandler handler) {
-		this.retryHandler = handler;
+	public FunctionBuilder withRetryHandler(StateHandler.RetryHandler retryHandler) {
+		this.retryHandler = retryHandler;
 		return this;
 	}
 	
@@ -107,8 +107,8 @@ public class ActionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public ActionBuilder withOutputHandler(final StateTransition.Success transition) {
-		return withOutputHandler(new StateFunction.OutputHandler() {
+	public FunctionBuilder withOutputHandler(final StateTransition.Success transition) {
+		return withOutputHandler(new StateHandler.OutputHandler() {
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
 				return transition;
@@ -121,8 +121,8 @@ public class ActionBuilder {
 	 * @param transition
 	 * @return
 	 */
-	public ActionBuilder withFailureHandler(final StateTransition.Failure transition) {
-		return withFailureHandler(new StateFunction.FailureHandler() {
+	public FunctionBuilder withFailureHandler(final StateTransition.Failure transition) {
+		return withFailureHandler(new StateHandler.FailureHandler() {
 			@Override
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				return transition;
@@ -134,28 +134,29 @@ public class ActionBuilder {
 	 * 
 	 * @return
 	 */
-	public  StateAction build() {
-		return new StateAction() {
+	public  StateFunction build() {
+		return new StateFunction() {
 			@Override
 			public Object onInput(StateContext context) {
 				return (inputHandler == null? context.getInput() : inputHandler.onInput(context));
 			}
 			@Override
-			public StateFunction.Status handle(Object parameters, StateContext context) throws Exception {
-				if(stateFunction == null) {
-					return StateFunction.Status.SUCCEEDED;
+			public StateHandler.Status handle(Object parameters, StateContext context) throws Exception {
+				if(stateHandler == null) {
+					return StateHandler.Status.SUCCEEDED;
 				}
 				//RESPECT STATUS
-				Object result = stateFunction.handle(parameters, context);
-				if(result instanceof StateFunction.Status) {
+				Object result = stateHandler.handle(parameters, context);
+				if(result instanceof StateHandler.Status) {
 					return Objects.cast(result);
 				}
 				//SUCCESS WITH NO RESULT
 				if(result == null || result instanceof Void) {
-					return StateFunction.Status.SUCCEEDED; 
+					return StateHandler.Status.SUCCEEDED; 
 				}
 				return TransitionBuilder.succeed(context, result);
 			}
+			
 			@Override
 			public StateTransition.Success onOutput(StateContext context) {
 				return (outputHandler == null? TransitionBuilder.success(null) : outputHandler.onOutput(context));
@@ -173,8 +174,8 @@ public class ActionBuilder {
 			
 			@Override
 			public Class<?> getParametersType() {
-				if(stateFunction != null) {
-					return getActualParametersType(stateFunction.getClass());
+				if(stateHandler != null) {
+					return getActualParametersType(stateHandler.getClass());
 				} else if(inputHandler != null) {
 					return getActualParametersType(inputHandler.getClass());
 				}

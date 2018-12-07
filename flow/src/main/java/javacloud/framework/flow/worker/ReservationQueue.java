@@ -24,29 +24,29 @@ import java.util.logging.Logger;
  * 
  * @param <T>
  */
-public class TaskQueue<T> {
-	private static final Logger logger = Logger.getLogger(TaskQueue.class.getName());
+public class ReservationQueue<T> {
+	private static final Logger logger = Logger.getLogger(ReservationQueue.class.getName());
 	
 	/**
 	 * Holding the reservation of a worker need to confirm or cancel after reserved
 	 * 
 	 * @param <T>
 	 */
-	public interface Reservation<T> {
+	public interface Ticket<T> {
 		void confirm(T value);
 		void cancel(Throwable cause);
 	}
 	
 	//OFFER ONLY IF WORKER AVAILABLE
-	private final SynchronousQueue<Reservation<T>> reservationQueue;
-	public TaskQueue(boolean fair) {
+	private final SynchronousQueue<Ticket<T>> reservationQueue;
+	public ReservationQueue(boolean fair) {
 		reservationQueue = new SynchronousQueue<>(fair);
 	}
 	
 	/**
 	 * 
 	 */
-	public TaskQueue() {
+	public ReservationQueue() {
 		this(true);
 	}
 	
@@ -57,8 +57,8 @@ public class TaskQueue<T> {
 	 * @param unit
 	 * @return
 	 */
-	public Reservation<T> reserve(long timeout, TimeUnit unit) {
-		ReservationTask<T> resveration = new ReservationTask<T>(timeout, unit);
+	public Ticket<T> reserve(long timeout, TimeUnit unit) {
+		FutureTicket<T> resveration = new FutureTicket<T>(timeout, unit);
 		if(reservationQueue.offer(resveration)) {
 			return resveration;
 		}
@@ -76,7 +76,7 @@ public class TaskQueue<T> {
 	 * @throws InterruptedException
 	 */
 	public T poll(long timeout, TimeUnit unit) throws InterruptedException {
-		ReservationTask<T> resveration = (ReservationTask<T>)reservationQueue.poll(timeout, unit);
+		FutureTicket<T> resveration = (FutureTicket<T>)reservationQueue.poll(timeout, unit);
 		//DONT HAVE AVAILABLE RESERVATION
 		if(resveration == null) {
 			logger.log(Level.FINE, "No reservation available after {0}(ms) timeout", unit.toMillis(timeout));
@@ -100,10 +100,10 @@ public class TaskQueue<T> {
 	}
 	
 	//PROMISE WITH FUTURE
-	static class ReservationTask<T> extends FutureTask<T> implements Reservation<T> {
+	static class FutureTicket<T> extends FutureTask<T> implements Ticket<T> {
 		final long timeout;
 		final TimeUnit unit;
-		public ReservationTask(long timeout, TimeUnit unit) {
+		public FutureTicket(long timeout, TimeUnit unit) {
 			super(new Callable<T>() {
 				@Override
 				public T call() throws Exception {

@@ -3,10 +3,10 @@ package javacloud.framework.flow.worker;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javacloud.framework.flow.StateAction;
+import javacloud.framework.flow.StateFunction;
 import javacloud.framework.flow.StateContext;
 import javacloud.framework.flow.StateFlow;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 import javacloud.framework.flow.builder.TransitionBuilder;
 import javacloud.framework.flow.spi.FlowExecution;
@@ -24,14 +24,14 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FlowHandler {
-	private static final Logger logger = Logger.getLogger(FlowHandler.class.getName());
+public class FlowExecutor {
+	private static final Logger logger = Logger.getLogger(FlowExecutor.class.getName());
 	
 	public  static final int MIN_DELAY_SECONDS = 2;
 	
 	private final StateFlow stateFlow;
 	private final Externalizer externalizer;
-	public FlowHandler(StateFlow stateFlow, Externalizer externalizer) {
+	public FlowExecutor(StateFlow stateFlow, Externalizer externalizer) {
 		this.stateFlow = stateFlow;
 		this.externalizer = externalizer;
 	}
@@ -63,7 +63,7 @@ public class FlowHandler {
 	 * @return
 	 */
 	public StateTransition execute(StateExecution state) {
-		ActionContext context = new ActionContext(state);
+		FunctionContext context = new FunctionContext(state);
 		return onExecute(state, context);
 	}
 	
@@ -86,24 +86,24 @@ public class FlowHandler {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onExecute(StateExecution state, ActionContext context) {
-		StateAction action = stateFlow.getState(state.getName());
-		if(action == null) {
-			return onFailure(action, context, null);
+	protected StateTransition onExecute(StateExecution state, FunctionContext context) {
+		StateFunction function = stateFlow.getState(state.getName());
+		if(function == null) {
+			return onFailure(function, context, null);
 		}
 		try {
-			Object parameters = onInput(action, context);
-			StateAction.Status status = onHandle(action, context, parameters);
-			if(status == StateFunction.Status.SUCCEEDED) {
-				return onSuccess(action, context);
-			} else if(status == StateFunction.Status.RETRY) {
-				return	onRetry(action, context);
+			Object parameters = onInput(function, context);
+			StateFunction.Status status = onHandle(function, context, parameters);
+			if(status == StateHandler.Status.SUCCEEDED) {
+				return onSuccess(function, context);
+			} else if(status == StateHandler.Status.RETRY) {
+				return	onRetry(function, context);
 			}
 			
 			//UNKNOWN FAILURE
-			return onFailure(action, context, null);
+			return onFailure(function, context, null);
 		} catch(Exception ex) {
-			return onFailure(action, context, ex);
+			return onFailure(function, context, ex);
 		}
 	}
 	
@@ -135,21 +135,21 @@ public class FlowHandler {
 	/**
 	 * Filter the input and AUTO convert the parameters for handler if not applicable.
 	 * 
-	 * @param action
+	 * @param function
 	 * @param context
 	 * @return
 	 * @throws Exception
 	 */
-	protected Object onInput(StateAction action, StateContext context) throws Exception {
-		Object parameters = action.onInput(context);
-		Class<?> type = action.getParametersType();
+	protected Object onInput(StateFunction function, StateContext context) throws Exception {
+		Object parameters = function.onInput(context);
+		Class<?> type = function.getParametersType();
 		//PARAMETERS CONVERSION!!!
 		if(parameters != null && externalizer != null && !type.isInstance(parameters)) {
 			logger.log(Level.FINE, "Converting input to parameters type: {0}", type);
 			try {
 				parameters = new JsonConverter(externalizer).toConverter(type).apply(parameters);
 			} catch(RuntimeException ex) {
-				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateFunction.ERROR_JSON_CONVERSION);
+				context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_JSON_CONVERSION);
 				throw ex;
 			}
 		}
@@ -157,18 +157,18 @@ public class FlowHandler {
 	}
 	
 	/**
-	 * Handle the action and increase try-count
+	 * Handle the function and increase try-count
 	 * 
-	 * @param action
+	 * @param function
 	 * @param context
 	 * @param parameters
 	 * @return
 	 * @throws Exception
 	 */
-	protected StateFunction.Status onHandle(StateAction action, ActionContext context, Object parameters) throws Exception {
+	protected StateHandler.Status onHandle(StateFunction function, FunctionContext context, Object parameters) throws Exception {
 		StateExecution state = context.state;
 		try {
-			return	action.handle(parameters, context);
+			return	function.handle(parameters, context);
 		} finally {
 			state.setTryCount(state.getTryCount() + 1);
 		}
@@ -177,12 +177,12 @@ public class FlowHandler {
 	/**
 	 * OUTPUT = {RESULT + INPUT}
 	 * 
-	 * @param action
+	 * @param function
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onSuccess(StateAction action, ActionContext context) {
-		StateTransition.Success transition = action.onOutput(context);
+	protected StateTransition onSuccess(StateFunction function, FunctionContext context) {
+		StateTransition.Success transition = function.onOutput(context);
 		
 		StateExecution state = context.state;
 		logger.log(Level.FINE, "Succeed state: {0}, transition to: {1}", new Object[] {state.getName(), transition.getNext()});
@@ -200,12 +200,12 @@ public class FlowHandler {
 	/**
 	 * Retry to control the state 
 	 * 
-	 * @param action
+	 * @param function
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onRetry(StateAction action, ActionContext context) {
-		StateTransition transition = action.onRetry(context);
+	protected StateTransition onRetry(StateFunction function, FunctionContext context) {
+		StateTransition transition = function.onRetry(context);
 		StateExecution state = context.state;
 		if(transition instanceof StateTransition.Failure) {
 			state.setStatus(FlowExecution.Status.FAILED);
@@ -216,21 +216,21 @@ public class FlowHandler {
 	
 	/**
 	 * 
-	 * @param action
+	 * @param function
 	 * @param context
 	 * @param ex
 	 * @return
 	 */
-	protected StateTransition onFailure(StateAction action, ActionContext context, Exception ex) {
+	protected StateTransition onFailure(StateFunction function, FunctionContext context, Exception ex) {
 		StateTransition transition;
 		StateExecution state = context.state;
 		//NOT FOUND STATE
-		if(action == null) {
+		if(function == null) {
 			logger.log(Level.FINE, "Not found state: {0}", state.getName());
-			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateFunction.ERROR_NOT_FOUND);
+			context.setAttribute(StateContext.ATTRIBUTE_ERROR, StateHandler.ERROR_NOT_FOUND);
 			transition = TransitionBuilder.failure();
 		} else {
-			transition = action.onFailure(context, ex);
+			transition = function.onFailure(context, ex);
 		}
 		
 		//HANDLE FAILURE, SET DETAILS ERROR IF HAVEN'T DONE SO

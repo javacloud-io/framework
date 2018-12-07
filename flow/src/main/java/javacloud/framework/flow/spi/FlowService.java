@@ -3,11 +3,12 @@ package javacloud.framework.flow.spi;
 import javacloud.framework.flow.spec.FlowDefinition;
 
 /**
+ * Interface to register/manage/execute the workflow
  * 
  * @author ho
  *
  */
-public interface FlowClient {
+public interface FlowService {
 	/**
 	 * Register a flow and return registration
 	 * 
@@ -15,7 +16,7 @@ public interface FlowClient {
 	 * @param flowDefinition
 	 * @return
 	 */
-	public FlowRegister registerFlow(String flowName, FlowDefinition flowDefinition);
+	public FlowInstance registerFlow(String flowName, FlowDefinition flowDefinition);
 	
 	/**
 	 * 
@@ -23,7 +24,7 @@ public interface FlowClient {
 	 * @param reason
 	 * @return
 	 */
-	public FlowRegister deleteFlow(String flowName, String reason);
+	public FlowInstance deleteFlow(String flowName, String reason);
 	
 	/**
 	 * 

@@ -1,7 +1,7 @@
 package javacloud.framework.flow.builder;
 
 import javacloud.framework.flow.StateContext;
-import javacloud.framework.flow.StateFunction;
+import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.StateTransition;
 
 /**
@@ -82,9 +82,9 @@ public class TransitionBuilder {
 	 * @param result
 	 * @return
 	 */
-	public static StateFunction.Status succeed(StateContext context, Object result) {
+	public static StateHandler.Status succeed(StateContext context, Object result) {
 		context.setAttribute(StateContext.ATTRIBUTE_RESULT, result);
-		return StateFunction.Status.SUCCEEDED;
+		return StateHandler.Status.SUCCEEDED;
 	}
 	
 	/**
@@ -93,8 +93,8 @@ public class TransitionBuilder {
 	 * @param error
 	 * @return
 	 */
-	public static StateFunction.Status fail(StateContext context, String error) {
+	public static StateHandler.Status fail(StateContext context, String error) {
 		context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
-		return StateFunction.Status.FAILED;
+		return StateHandler.Status.FAILED;
 	}
 }

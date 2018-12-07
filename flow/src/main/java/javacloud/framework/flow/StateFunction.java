@@ -1,55 +1,34 @@
 package javacloud.framework.flow;
 
 /**
+ * An executable action
  * 
  * @author ho
  *
- * @param <T>
- * @param <R>
  */
-public interface StateFunction<T, R> {
-	//BUILT-IN ERRORS
-	public static final String ERROR_ALL 	   		= "States.ALL";
-	public static final String ERROR_TIMEOUT 		= "States.Timeout";
-	public static final String ERROR_NOT_FOUND 		= "States.NotFound";
-	public static final String ERROR_NOT_RETRYABLE 	= "States.NotRetryable";
-	public static final String ERROR_JSON_CONVERSION= "States.JsonConversion";
-		
-	//STATUS
-	public enum Status {
-		SUCCEEDED,
-		FAILED,
-		RETRY
-	}
-	
-	//HANDLE TASK
+public interface StateFunction extends StateHandler<Object, StateHandler.Status>, StateHandler.InputHandler<Object>,
+	StateHandler.OutputHandler, StateHandler.FailureHandler, StateHandler.RetryHandler {
 	/**
-	 * Using Status as R for flow control
-	 * 
-	 * @param parameters
-	 * @param context
+	 * Generic InputHandler need type for conversion
 	 * @return
-	 * @throws Exception
 	 */
-	public R handle(T parameters, StateContext context) throws Exception;
+	public Class<?> getParametersType();
 	
-	//INPUT FILTER 
-	public interface InputHandler<T> {
-		public T onInput(StateContext context);
+	/**
+	 * Default function timeout
+	 * 
+	 * @return
+	 */
+	default public int getTimeoutSeconds() {
+		return 120;
 	}
 	
-	//OUTPUT FILTER
-	public interface OutputHandler {
-		public StateTransition.Success onOutput(StateContext context);
-	}
-	
-	//HANDLE FAILURE
-	public interface FailureHandler {
-		public StateTransition onFailure(StateContext context, Exception ex);
-	}
-	
-	//HANDLE RETRY
-	public interface RetryHandler {
-		public StateTransition onRetry(StateContext context);
+	/**
+	 * Default heart beat to keep function alive
+	 * 
+	 * @return
+	 */
+	default public int getHeartbeatSeconds() {
+		return 10;
 	}
 }
