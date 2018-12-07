@@ -22,11 +22,13 @@ public class JavaSourceFile implements JavaSource {
 	 */
 	public JavaSourceFile(CharSequence source, String className) {
 		if(Objects.isEmpty(className)) {
-			className = resolveMainClass(source);
+			if(Objects.isEmpty(className = resolveMainClass(source))) {
+				className = "Main";
+			}
 		} else if(className.endsWith(JAVA_EXTENSION)) {
 			className = className.substring(0, className.length() - JAVA_EXTENSION.length());
 		}
-		this.uri = URI.create("src://" + className.replaceAll("\\.", "/") + JAVA_EXTENSION);
+		this.uri = URI.create("file:///" + className.replaceAll("\\.", "/") + JAVA_EXTENSION);
 		this.source = source;
 	}
 	
@@ -69,7 +71,6 @@ public class JavaSourceFile implements JavaSource {
 		//PACKAGE NAME
 		while(tokenizer.hasMoreTokens()) {
 			Pair<JavaTokenizer.Type, String> token = tokenizer.nextToken();
-			
 			if(token.getKey() == JavaTokenizer.Type.PACKAGE) {
 				packageName = tokenizer.nextTokens((tt) -> (tt == JavaTokenizer.Type.IDENTIFIER || tt == JavaTokenizer.Type.DOT));
 			} else if(token.getKey() == JavaTokenizer.Type.CLASS) {
@@ -78,9 +79,9 @@ public class JavaSourceFile implements JavaSource {
 			}
 		}
 		
-		//FULL CLASS NAME
+		//NOT FOUND CLASS NAME
 		if(Objects.isEmpty(className)) {
-			className = "Main";
+			return null;
 		}
 		return (Objects.isEmpty(packageName)? className : packageName + "." + className);
 	}
