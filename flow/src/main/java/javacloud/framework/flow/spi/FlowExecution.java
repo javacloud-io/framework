@@ -2,6 +2,8 @@ package javacloud.framework.flow.spi;
 
 import java.util.Date;
 
+import javacloud.framework.util.Objects;
+
 /**
  * 
  * @author ho
@@ -50,14 +52,24 @@ public interface FlowExecution {
 	public Status getStatus();
 	
 	/**
+	 * return default output without conversion
+	 * 
+	 * @return
+	 */
+	default public <R> R getOutput() {
+		return Objects.cast(getOutput(Object.class));
+	}
+	
+	/**
+	 * return output of TYPE conversion
 	 * 
 	 * @param type
 	 * @return
 	 */
-	public <T> T getOutput(Class<T> type);
+	public <R> R getOutput(Class<R> type);
 	
 	/**
-	 * Date which is completed
+	 * Date which is completed, null if haven't yet
 	 * 
 	 * @return
 	 */

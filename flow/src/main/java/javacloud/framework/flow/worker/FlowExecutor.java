@@ -38,11 +38,11 @@ public class FlowExecutor {
 	
 	/**
 	 * 
-	 * @param parameters
+	 * @param input
 	 * @return
 	 */
-	public <T> StateExecution start(T parameters) {
-		return start(parameters, null);
+	public <T> FlowState start(T input) {
+		return start(input, null);
 	}
 	
 	/**
@@ -51,8 +51,8 @@ public class FlowExecutor {
 	 * @param startAt;
 	 * @return
 	 */
-	public <T> StateExecution start(T input, String startAt) {
-		StateExecution state = new StateExecution();
+	public <T> FlowState start(T input, String startAt) {
+		FlowState state = new FlowState();
 		state.setInput(input);
 		return onPrepare(state, Objects.isEmpty(startAt) ? stateFlow.getStartAt() : startAt);
 	}
@@ -62,8 +62,8 @@ public class FlowExecutor {
 	 * @param state
 	 * @return
 	 */
-	public StateTransition execute(StateExecution state) {
-		FunctionContext context = new FunctionContext(state);
+	public StateTransition execute(FlowState state) {
+		FlowContext context = new FlowContext(state);
 		return onExecute(state, context);
 	}
 	
@@ -72,7 +72,7 @@ public class FlowExecutor {
 	 * 
 	 * @param state
 	 */
-	public void complete(StateExecution state) {
+	public void complete(FlowState state) {
 		logger.log(Level.FINE, "Completed execution: {0}", state.getExecutionId());
 	}
 	
@@ -86,7 +86,7 @@ public class FlowExecutor {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onExecute(StateExecution state, FunctionContext context) {
+	protected StateTransition onExecute(FlowState state, FlowContext context) {
 		StateFunction function = stateFlow.getState(state.getName());
 		if(function == null) {
 			return onFailure(function, context, null);
@@ -113,7 +113,7 @@ public class FlowExecutor {
 	 * @param name
 	 * @return
 	 */
-	protected StateExecution onPrepare(StateExecution state, String name) {
+	protected FlowState onPrepare(FlowState state, String name) {
 		//AN EMPTY INPUT IF NOT PROVIDED
 		logger.log(Level.FINE, "Preparing state: {0}", name);
 		Object input = state.getInput();
@@ -165,8 +165,8 @@ public class FlowExecutor {
 	 * @return
 	 * @throws Exception
 	 */
-	protected StateHandler.Status onHandle(StateFunction function, FunctionContext context, Object parameters) throws Exception {
-		StateExecution state = context.state;
+	protected StateHandler.Status onHandle(StateFunction function, FlowContext context, Object parameters) throws Exception {
+		FlowState state = context.state;
 		try {
 			return	function.handle(parameters, context);
 		} finally {
@@ -181,10 +181,10 @@ public class FlowExecutor {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onSuccess(StateFunction function, FunctionContext context) {
+	protected StateTransition onSuccess(StateFunction function, FlowContext context) {
 		StateTransition.Success transition = function.onOutput(context);
 		
-		StateExecution state = context.state;
+		FlowState state = context.state;
 		logger.log(Level.FINE, "Succeed state: {0}, transition to: {1}", new Object[] {state.getName(), transition.getNext()});
 		
 		//PREPARE NEXT STEP (OUTPUT -> INPUT)
@@ -204,9 +204,9 @@ public class FlowExecutor {
 	 * @param context
 	 * @return
 	 */
-	protected StateTransition onRetry(StateFunction function, FunctionContext context) {
+	protected StateTransition onRetry(StateFunction function, FlowContext context) {
 		StateTransition transition = function.onRetry(context);
-		StateExecution state = context.state;
+		FlowState state = context.state;
 		if(transition instanceof StateTransition.Failure) {
 			state.setStatus(FlowExecution.Status.FAILED);
 		}
@@ -221,9 +221,9 @@ public class FlowExecutor {
 	 * @param ex
 	 * @return
 	 */
-	protected StateTransition onFailure(StateFunction function, FunctionContext context, Exception ex) {
+	protected StateTransition onFailure(StateFunction function, FlowContext context, Exception ex) {
 		StateTransition transition;
-		StateExecution state = context.state;
+		FlowState state = context.state;
 		//NOT FOUND STATE
 		if(function == null) {
 			logger.log(Level.FINE, "Not found state: {0}", state.getName());

@@ -13,10 +13,9 @@ import javacloud.framework.flow.StateHandler;
 import javacloud.framework.flow.builder.FlowBuilder;
 import javacloud.framework.flow.builder.RetryBuilder;
 import javacloud.framework.flow.builder.TransitionBuilder;
-import javacloud.framework.flow.internal.StandardFlowExecutor;
 import javacloud.framework.flow.spec.RetrierDefinition;
 import javacloud.framework.flow.spi.FlowExecution;
-import javacloud.framework.flow.worker.StateExecution;
+import javacloud.framework.flow.worker.StandardFlowService;
 import javacloud.framework.util.Objects;
 /**
  * 
@@ -24,7 +23,7 @@ import javacloud.framework.util.Objects;
  *
  */
 public class WorkflowTest extends TestCase {
-	private static final StandardFlowExecutor flowExecutor = new StandardFlowExecutor();
+	private static final StandardFlowService flowExecutor = new StandardFlowService();
 	
 	@Test
 	public void testSuccess() {
@@ -45,8 +44,8 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
-		Map<String, Object> output = state.output();
+		FlowExecution state = flowExecutor.execute(workflow, Objects.asMap("a", "b"));
+		Map<String, Object> output = state.getOutput();
 		
 		Assert.assertTrue(state.getStatus() == FlowExecution.Status.SUCCEEDED);
 		//Assert.assertEquals("abc", output.get("t1"));
@@ -71,8 +70,8 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
-		Map<String, Object> output = state.output();
+		FlowExecution state = flowExecutor.execute(workflow, Objects.asMap("a", "b"));
+		Map<String, Object> output = state.getOutput();
 		
 		Assert.assertTrue(state.getStatus() == FlowExecution.Status.FAILED);
 		Assert.assertEquals("abc", output.get("t1"));
@@ -101,8 +100,8 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		StateExecution state = flowExecutor.run(workflow, Objects.asMap("a", "b"));
-		Map<String, Object> output = state.output();
+		FlowExecution state = flowExecutor.execute(workflow, Objects.asMap("a", "b"));
+		Map<String, Object> output = state.getOutput();
 		
 		Assert.assertTrue(state.getStatus() == FlowExecution.Status.SUCCEEDED);
 		//Assert.assertEquals("abc", output.get("t1"));
@@ -131,7 +130,7 @@ public class WorkflowTest extends TestCase {
 								}
 							}, null).build();
 		
-		Future<StateExecution> state = flowExecutor.submit(workflow, Objects.asMap("a", "b"));
+		Future<FlowExecution> state = flowExecutor.startExecution(workflow, Objects.asMap("a", "b"));
 		Objects.sleep(5, TimeUnit.SECONDS);
 		state.cancel(true);
 	}

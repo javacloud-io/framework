@@ -8,12 +8,13 @@ import java.util.Date;
  *
  */
 public interface FlowInstance {
+	public String getName();
 	/**
 	 * 
 	 * 
 	 * @return
 	 */
-	public int getRevision();
+	public String getVersion();
 	
 	/**
 	 * 

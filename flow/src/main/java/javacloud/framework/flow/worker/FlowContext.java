@@ -13,11 +13,11 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class FunctionContext implements StateContext {
+public class FlowContext implements StateContext {
 	private static final Logger logger = Logger.getLogger(StateContext.class.getName());
 	
-	final StateExecution  state;
-	public FunctionContext(StateExecution  state) {
+	final FlowState  state;
+	public FlowContext(FlowState  state) {
 		this.state	= state;
 	}
 	

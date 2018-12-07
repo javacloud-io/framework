@@ -1,5 +1,6 @@
-package javacloud.framework.flow.internal;
+package javacloud.framework.flow.worker;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.DelayQueue;
@@ -10,17 +11,15 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.flow.StateFlow;
 import javacloud.framework.flow.StateTransition;
-import javacloud.framework.flow.worker.FlowExecutor;
-import javacloud.framework.flow.worker.ReservationQueue;
-import javacloud.framework.flow.worker.StateExecution;
-import javacloud.framework.flow.worker.TaskPoller;
-import javacloud.framework.flow.worker.TaskRunner;
+import javacloud.framework.flow.spi.FlowExecution;
 import javacloud.framework.io.Externalizer;
+import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
@@ -36,19 +35,21 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class StandardFlowExecutor {
-	private static final Logger logger = Logger.getLogger(StandardFlowExecutor.class.getName());
+public class StandardFlowService {
+	private static final Logger logger = Logger.getLogger(StandardFlowService.class.getName());
 	
 	//KEEP THE ACTIVE 
-	static class ExecutionTask extends FutureTask<StateExecution> implements Delayed {
+	static class ExecutionTask extends FutureTask<FlowState> implements Delayed {
 		final FlowExecutor executor;
-		final StateExecution state;
+		final FlowState state;
 		long availableAt;
+		final Date startDate = new Date();
+		Date completionDate	 = null;
 		//INVOKE RUN TO COMPLETE TASK
-		public ExecutionTask(FlowExecutor executor, StateExecution state) {
-			super(new Callable<StateExecution>() {
+		public ExecutionTask(FlowExecutor executor, FlowState state) {
+			super(new Callable<FlowState>() {
 				@Override
-				public StateExecution call() throws Exception {
+				public FlowState call() throws Exception {
 					executor.complete(state);
 					return state;
 				}
@@ -77,12 +78,12 @@ public class StandardFlowExecutor {
 	}
 	//
 	private final Externalizer externalizer;
-	private final DelayQueue<ExecutionTask> availableTasks = new DelayQueue<>();
+	private final DelayQueue<ExecutionTask> availableTasks 	= new DelayQueue<>();
 	
-	private final ReservationQueue<ExecutionTask>  taskQueue = new ReservationQueue<ExecutionTask>();
+	private final ReservationQueue<ExecutionTask>  taskQueue= new ReservationQueue<ExecutionTask>();
 	private final ScheduledExecutorService workersPool;
 	private final ScheduledExecutorService pollerPool;
-	public StandardFlowExecutor(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
+	public StandardFlowService(Externalizer externalizer, int numberOfWorkers, int reservationSeconds) {
 		this.externalizer = externalizer;
 		
 		//POLL EVERY SECOND
@@ -107,9 +108,9 @@ public class StandardFlowExecutor {
 	}
 	
 	/**
-	 * DEFAULT 5 WORKERS, 60 SECONDS RESERVATION
+	 * DEFAULT 2 WORKERS, 60 SECONDS RESERVATION
 	 */
-	public StandardFlowExecutor() {
+	public StandardFlowService() {
 		this(null, 2, 60);
 	}
 	
@@ -142,6 +143,7 @@ public class StandardFlowExecutor {
 		//FAILURE/SUCCESS => RUN COMPLETION
 		if(transition.isEnd()) {
 			task.run();
+			task.completionDate = new Date();
 		} else {
 			int delaySeconds = 0;
 			if(transition instanceof StateTransition.Retry) {
@@ -157,36 +159,101 @@ public class StandardFlowExecutor {
 	}
 	
 	/**
+	 * Execute and return the execution result
 	 * 
 	 * @param stateFlow
-	 * @param parameters
+	 * @param input
 	 * @return
 	 */
-	public <T> Future<StateExecution> submit(StateFlow stateFlow, T parameters) {
-		FlowExecutor executor = new FlowExecutor(stateFlow, externalizer);
-		String executionId = Codecs.randomID();
-		logger.log(Level.FINE, "Starting execution: {0}", executionId);
-		
-		StateExecution state = executor.start(parameters);
-		state.setExecutionId(executionId);
-		
-		//QUEUE TASK
-		ExecutionTask task = new ExecutionTask(executor, state);
-		availableTasks.offer(task);
-		return task;
+	public <T> FlowExecution execute(StateFlow stateFlow, T input) {
+		try {
+			return startExecution(stateFlow, input).get();
+		} catch(InterruptedException | ExecutionException ex) {
+			throw Exceptions.asUnchecked(ex);
+		}
 	}
 	
 	/**
 	 * 
 	 * @param stateFlow
-	 * @param parameters
+	 * @param input
 	 * @return
 	 */
-	public <T> StateExecution run(StateFlow stateFlow, T parameters) {
-		try {
-			return submit(stateFlow, parameters).get();
-		} catch(InterruptedException | ExecutionException ex) {
-			throw Exceptions.asUnchecked(ex);
-		}
+	public <T> Future<FlowExecution> startExecution(StateFlow stateFlow, T input) {
+		FlowExecutor executor = new FlowExecutor(stateFlow, externalizer);
+		String executionId = Codecs.randomID();
+		logger.log(Level.FINE, "Starting execution: {0}", executionId);
+		
+		FlowState state = executor.start(input);
+		state.setExecutionId(executionId);
+		
+		//QUEUE TASK
+		final ExecutionTask task = new ExecutionTask(executor, state);
+		availableTasks.offer(task);
+		return new Future<FlowExecution>() {
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				return task.cancel(mayInterruptIfRunning);
+			}
+
+			@Override
+			public boolean isCancelled() {
+				return task.isCancelled();
+			}
+
+			@Override
+			public boolean isDone() {
+				return task.isDone();
+			}
+
+			@Override
+			public FlowExecution get() throws InterruptedException, ExecutionException {
+				return flowExecution(task.get());
+			}
+
+			@Override
+			public FlowExecution get(long timeout, TimeUnit unit)
+					throws InterruptedException, ExecutionException, TimeoutException {
+				return flowExecution(task.get(timeout, unit));
+			}
+			
+			FlowExecution flowExecution(FlowState state) {
+				return new FlowExecution() {
+					@Override
+					public String getId() {
+						return state.getExecutionId();
+					}
+
+					@Override
+					public String getName() {
+						return state.getName();
+					}
+
+					@Override
+					public Date getStartDate() {
+						return task.startDate;
+					}
+					
+					@Override
+					public Date getCompletionDate() {
+						return task.completionDate;
+					}
+					
+					@Override
+					public Status getStatus() {
+						return state.getStatus();
+					}
+
+					@Override
+					public <R> R getOutput(Class<R> type) {
+						Object output = state.output();
+						if(output != null && externalizer != null && !type.isInstance(output)) {
+							output = new JsonConverter(externalizer).toConverter(type).apply(output);
+						}
+						return Objects.cast(output);
+					}
+				};
+			}
+		};
 	}
 }

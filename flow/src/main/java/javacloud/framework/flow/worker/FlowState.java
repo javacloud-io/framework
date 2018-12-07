@@ -12,7 +12,7 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public class StateExecution {
+public class FlowState {
 	//ACTION STATE
 	private String 	name;			//executing state
 	private long 	startUTC;		//started in EPOC mills
@@ -26,7 +26,7 @@ public class StateExecution {
 	//FLOW STATE
 	private String 	executionId;
 	private FlowExecution.Status status;
-	public StateExecution() {
+	public FlowState() {
 	}
 	
 	/**
