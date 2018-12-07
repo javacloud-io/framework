@@ -19,7 +19,7 @@ public class InMemoryClassLoader extends ClassLoader {
 	 */
 	@Override
 	protected Class<?> findClass(String name) throws ClassNotFoundException {
-		ByteBuffer buf = collector.getBytes(name);
+		ByteBuffer buf = collector.asBytes(name);
 		if(buf == null) {
 			throw new ClassNotFoundException(name);
 		}

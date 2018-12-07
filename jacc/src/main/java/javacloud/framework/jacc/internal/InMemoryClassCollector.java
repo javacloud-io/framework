@@ -35,7 +35,7 @@ public class InMemoryClassCollector extends DiagnosticCollector implements Class
 	 * @param className
 	 * @return
 	 */
-	public ByteBuffer getBytes(String className) {
+	public ByteBuffer asBytes(String className) {
 		BytesOutputStream out = bytesCode.get(className);
 		return (out == null? null: out.byteBuffer());
 	}
