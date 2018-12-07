@@ -230,7 +230,7 @@ public class JsonPath {
 	 * @param path
 	 * @return
 	 */
-	public static final boolean is(String path) {
+	public static final boolean isRef(String path) {
 		return !Objects.isEmpty(path) && path.startsWith(ROOT);
 	}
 }

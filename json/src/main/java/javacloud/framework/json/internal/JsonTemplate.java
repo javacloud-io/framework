@@ -90,7 +90,7 @@ public class JsonTemplate {
 	protected Object evalString(String expr) {
 		if(Objects.isEmpty(expr)) {
 			return expr;
-		} else if(JsonPath.is(expr)) {
+		} else if(JsonPath.isRef(expr)) {
 			return jsonPath.select(expr);
 		}
 		

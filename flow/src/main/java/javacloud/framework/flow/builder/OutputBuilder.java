@@ -76,7 +76,7 @@ public class OutputBuilder {
 				String resultPath = JsonPath.ROOT;
 				if(result == null) {
 					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
-				} else if(result instanceof String && JsonPath.is((String)result)){
+				} else if(result instanceof String && JsonPath.isRef((String)result)){
 					resultPath = (String)result;
 					finalResult = context.getAttribute(StateContext.ATTRIBUTE_RESULT);
 				} else {
