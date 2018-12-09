@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -14,6 +15,8 @@ import javacloud.framework.util.Objects;
 import javacloud.framework.util.ResourceLoader;
 
 /**
+ * ENSURE SANDBOX classes doesn't have access or damage its creator
+ * 
  * 1. Executable class is java Function or has main()
  * 2. Limited environment variables will be provided
  * 
@@ -21,8 +24,12 @@ import javacloud.framework.util.ResourceLoader;
  *
  */
 public class StandardSandbox {
+	public static final Set<String> BLACKLISTED_CLASSES = Objects.asSet(
+			StandardSandbox.class.getName(),
+			Process.class.getName()
+		);
 	private static Map<String, String> originEnv;
-	private Set<String> blacklistedClasses = Objects.asSet(StandardSandbox.class.getName());
+	private Set<String> blacklistedClasses;
 	public StandardSandbox() {
 	}
 	
@@ -65,24 +72,28 @@ public class StandardSandbox {
 	}
 	
 	/**
-	 * return blacklisted classes
-	 * 
-	 * @return
-	 */
-	public Set<String> getBlacklistedClasses() {
-		return blacklistedClasses;
-	}
-
-	/**
+	 * Reset to a specific list of classes
 	 * 
 	 * @param blacklistedClasses
 	 */
-	public void setBlacklistedClasses(Set<String> blacklistedClasses) {
-		this.blacklistedClasses.clear();
+	public void resetBlacklistedClasses(Set<String> blacklistedClasses) {
+		this.blacklistedClasses = blacklistedClasses;
+	}
+	
+	/**
+	 * Accumulate blacklisted classes
+	 * 
+	 * @param blacklistedClasses
+	 * @return
+	 */
+	public StandardSandbox withBlacklistedClasses(Set<String> blacklistedClasses) {
+		if(this.blacklistedClasses == null) {
+			this.blacklistedClasses = new HashSet<>();
+		}
 		if(! Objects.isEmpty(blacklistedClasses)) {
 			this.blacklistedClasses.addAll(blacklistedClasses);
 		}
-		this.blacklistedClasses.add(StandardSandbox.class.getName());
+		return this;
 	}
 	
 	/**
@@ -93,7 +104,8 @@ public class StandardSandbox {
 	 * @throws Exception
 	 */
 	public <R> R execute(StandardClassCollector collector, Object input) throws Exception {
-		ClassLoader classLoader = collector.asClassLoader(ResourceLoader.getClassLoader(), (name) -> blacklistedClasses.contains(name));
+		ClassLoader classLoader = collector.asClassLoader(ResourceLoader.getClassLoader(),
+				(name) -> (blacklistedClasses == null || blacklistedClasses.contains(name)));
 		Class<?> mainClass = classLoader.loadClass(collector.getMainClass());
 		return execute(mainClass, input);
 	}

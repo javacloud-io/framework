@@ -82,7 +82,7 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 			@Override
 			protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 				if(blacklisted.test(name)) {
-					throw new ClassNotFoundException(name);
+					throw new SecurityException(name + " is blacklisted");
 				}
 				return super.loadClass(name, resolve);
 			}
