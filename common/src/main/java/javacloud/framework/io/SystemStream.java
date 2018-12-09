@@ -3,6 +3,8 @@ package javacloud.framework.io;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+
+import javacloud.framework.util.Objects;
 /**
  * ThreadLocal to safely redirect IN/OUT/ERR. To avoid leaking, .get()/.remove() should be call to check-in/out.
  * 
@@ -90,6 +92,14 @@ public final class SystemStream {
 	}
 	
 	/**
+	 * FLUSH SAME AS CLOSE
+	 */
+	public static void flush() {
+		System.out.flush();
+		System.err.flush();
+	}
+	
+	/**
 	 * Bind the new out/err
 	 * 
 	 * @param out
@@ -119,21 +129,10 @@ public final class SystemStream {
 	public static void unbind() {
 		try {
 			flush();
+			Objects.closeQuietly(TOUT.get(), TERR.get());
 		} finally {
 			TOUT.remove();
 			TERR.remove();
 		}
-	}
-	
-	/**
-	 * FLUSH SAME AS CLOSE
-	 */
-	public static void flush() {
-		try {
-			TOUT.get().flush();
-		} catch(IOException ex) {}
-		try {
-			TERR.get().flush();
-		} catch(IOException ex) {}
 	}
 }

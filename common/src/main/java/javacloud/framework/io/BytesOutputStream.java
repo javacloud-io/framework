@@ -1,5 +1,6 @@
 package javacloud.framework.io;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -42,5 +43,11 @@ public class BytesOutputStream extends java.io.ByteArrayOutputStream {
 	 */
 	public ByteBuffer byteBuffer() {
 		return ByteBuffer.wrap(buf, 0, count);
+	}
+
+	@Override
+	public void close() throws IOException {
+		flush();
+		super.close();
 	}
 }
