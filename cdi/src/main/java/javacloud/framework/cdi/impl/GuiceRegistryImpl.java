@@ -27,16 +27,29 @@ public class GuiceRegistryImpl extends GuiceRegistry {
 	}
 	
 	/**
-	 * Make sure to insert the default module
+	 * By default, registry is configure in Stage.PRODUCTION . This will take more load time but more realizable.
+	 * In DEVELOPMENT or SERVERLESS environment, should use Stage.DEVELOPMENT.
+	 * 
 	 */
 	@Override
 	protected Injector createInjector() {
-		return new GuiceBuilder.StageBuilder(Stage.PRODUCTION) {
+		return createInjector(Stage.PRODUCTION, ResourceLoader.getClassLoader());
+	}
+	
+	/**
+	 * Make sure to insert the default module
+	 * 
+	 * @param stage
+	 * @param classLoader
+	 * @return
+	 */
+	protected Injector createInjector(Stage stage, ClassLoader classLoader) {
+		return new GuiceBuilder.StageBuilder(stage) {
 			@Override
 			public Injector build(List<Module> modules, List<Module> overrides) {
 				modules.add(0, new GuiceModuleImpl());
 				return super.build(modules, overrides);
 			}
-		}.build(CDI_SERVICES , ResourceLoader.getClassLoader());
+		}.build(CDI_SERVICES , classLoader);
 	}
 }

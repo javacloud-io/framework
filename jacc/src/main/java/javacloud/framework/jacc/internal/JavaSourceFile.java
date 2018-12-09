@@ -14,6 +14,7 @@ import javacloud.framework.util.Pair;
  */
 public class JavaSourceFile implements JavaSource {
 	public static final String JAVA_EXTENSION = ".java";
+	
 	private final URI uri;
 	private final CharSequence source;
 	/**
@@ -21,10 +22,8 @@ public class JavaSourceFile implements JavaSource {
 	 * @param className
 	 */
 	public JavaSourceFile(CharSequence source, String className) {
-		if(Objects.isEmpty(className)) {
-			if(Objects.isEmpty(className = resolveMainClass(source))) {
-				className = "Main";
-			}
+		if(Objects.isEmpty(className) && Objects.isEmpty(className = resolveMainClass(source))) {
+			className = "Main";
 		} else if(className.endsWith(JAVA_EXTENSION)) {
 			className = className.substring(0, className.length() - JAVA_EXTENSION.length());
 		}
@@ -79,10 +78,12 @@ public class JavaSourceFile implements JavaSource {
 			}
 		}
 		
-		//NOT FOUND CLASS NAME
+		//NOT FOUND MAIN CLASS
 		if(Objects.isEmpty(className)) {
 			return null;
+		} else if(Objects.isEmpty(packageName)) {
+			return className;
 		}
-		return (Objects.isEmpty(packageName)? className : packageName + "." + className);
+		return (packageName + "." + className);
 	}
 }

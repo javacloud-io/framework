@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  * @author aimee
  *
  */
-public final class BytesOutputStream extends java.io.ByteArrayOutputStream {
+public class BytesOutputStream extends java.io.ByteArrayOutputStream {
 	public BytesOutputStream() {
 		this(64);
 	}

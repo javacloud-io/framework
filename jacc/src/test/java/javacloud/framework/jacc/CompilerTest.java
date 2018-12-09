@@ -16,7 +16,6 @@ import javacloud.framework.io.BytesChannelReader;
 import javacloud.framework.jacc.JavaCompiler;
 import javacloud.framework.jacc.JavaSource;
 import javacloud.framework.jacc.internal.StandardClassCollector;
-import javacloud.framework.jacc.internal.StandardClassLoader;
 import javacloud.framework.jacc.internal.JavaSourceFile;
 import javacloud.framework.util.ResourceLoader;
 
@@ -66,7 +65,7 @@ public class CompilerTest extends ServiceTest {
 				}
 			} else {
 				System.out.println("COMPILATION SUCCESSFUL.");
-				StandardClassLoader classLoader = new StandardClassLoader(collector, CompilerTest.class.getClassLoader());
+				ClassLoader classLoader = collector.asClassLoader(CompilerTest.class.getClassLoader());
 				Class<?> helloClass = classLoader.loadClass(className);
 				ServiceRunlist.get().runMethod(helloClass, "sayHello");
 			}
