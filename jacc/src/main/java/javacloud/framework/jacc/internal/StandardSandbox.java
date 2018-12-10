@@ -19,6 +19,7 @@ import javacloud.framework.util.ResourceLoader;
  * 
  * 1. Executable class is java Function or has main()
  * 2. Limited environment variables will be provided
+ * 3. Sandbox is only secure if class is loaded from ClassCollector with blacklisted
  * 
  * @author ho
  *

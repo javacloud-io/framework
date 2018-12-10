@@ -6,6 +6,7 @@ import javacloud.framework.jacc.ClassCollector;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.security.AccessControlException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,7 +83,7 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 			@Override
 			protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
 				if(blacklisted.test(name)) {
-					throw new SecurityException(name + " is blacklisted");
+					throw new AccessControlException(name + " is blacklisted");
 				}
 				return super.loadClass(name, resolve);
 			}
