@@ -72,10 +72,10 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 			return zclass.getMethod(methodName, types);
 		} catch(NoSuchMethodException ex) {
 			Method method = findMethod(zclass, methodName, types);
-			if(method == null) {
-				throw ex;
+			if(method != null) {
+				return method;
 			}
-			return method;
+			throw ex;
 		}
 	}
 	

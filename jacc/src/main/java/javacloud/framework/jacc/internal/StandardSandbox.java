@@ -3,16 +3,17 @@ package javacloud.framework.jacc.internal;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.security.AccessControlException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
+import javacloud.framework.cdi.ServiceRegistry;
 import javacloud.framework.cdi.ServiceRunlist;
 import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.ResourceLoader;
 
 /**
  * ENSURE SANDBOX classes doesn't have access or damage its creator
@@ -24,14 +25,20 @@ import javacloud.framework.util.ResourceLoader;
  * @author ho
  *
  */
-public class StandardSandbox {
+public class StandardSandbox extends ClassLoader {
+	//DEFAULT BLACKLISTED CLASS
 	public static final Set<String> BLACKLISTED_CLASSES = Objects.asSet(
 			StandardSandbox.class.getName(),
 			Process.class.getName()
 		);
 	private static Map<String, String> originEnv;
-	private Set<String> blacklistedClasses;
-	public StandardSandbox() {
+	private Predicate<String> blacklistedClasses;
+	/**
+	 * 
+	 * @param sharedClassLoader
+	 */
+	public StandardSandbox(ClassLoader sharedClassLoader) {
+		super(sharedClassLoader);
 	}
 	
 	/**
@@ -43,32 +50,40 @@ public class StandardSandbox {
 	}
 	
 	/**
-	 * Reset all environment variables
+	 * Reset all environment variables to new seedEnv
 	 * 
+	 * @param seedEnv
 	 */
 	@SuppressWarnings("serial")
-	public static synchronized void resetEnvironment() {
-		if(originEnv == null) {
-			try {
-				Map<String, String> env = System.getenv();
-				
-				//ACCESS TO BACKED MAP FIELD
-				Class<?> envClass = env.getClass();
-				Field fm = envClass.getDeclaredField("m");
-				fm.setAccessible(true);
-				
-				//REPLACE BACKING MAP && REDIRECT
-				originEnv = Objects.cast(fm.get(env));
-				fm.set(env, new HashMap<String, String>() {
+	public static synchronized void resetEnvironment(Map<String, String> seedEnv) {
+		try {
+			Map<String, String> env = System.getenv();
+			
+			//ACCESS TO BACKED MAP FIELD
+			Class<?> envClass = env.getClass();
+			Field fm = envClass.getDeclaredField("m");
+			fm.setAccessible(true);
+			
+			//REPLACE BACKING MAP && REDIRECT
+			Map<String, String> backedEnv = Objects.cast(fm.get(env));
+			if(originEnv == null) {
+				originEnv = backedEnv;
+				//OVERRIDE PUT INCASE OF OTHER DID SIMILAR
+				backedEnv = new HashMap<String, String>() {
 					@Override
 					public String put(String key, String value) {
 						return originEnv.put(key, value);
 					}
-				});
-				fm.setAccessible(false);
-			} catch(Exception ex) {
-				throw Exceptions.asUnchecked(ex);
+				};
+				fm.set(env, backedEnv);
 			}
+			//SEED ALL ENTRIES
+			if(!Objects.isEmpty(seedEnv)) {
+				backedEnv.putAll(seedEnv);
+			}
+			fm.setAccessible(false);
+		} catch(Exception ex) {
+			throw Exceptions.asUnchecked(ex);
 		}
 	}
 	
@@ -78,7 +93,7 @@ public class StandardSandbox {
 	 * @param blacklistedClasses
 	 */
 	public void resetBlacklistedClasses(Set<String> blacklistedClasses) {
-		this.blacklistedClasses = blacklistedClasses;
+		this.blacklistedClasses = (className) -> {return blacklistedClasses.contains(className);};
 	}
 	
 	/**
@@ -89,11 +104,19 @@ public class StandardSandbox {
 	 */
 	public StandardSandbox withBlacklistedClasses(Set<String> blacklistedClasses) {
 		if(this.blacklistedClasses == null) {
-			this.blacklistedClasses = new HashSet<>();
+			resetBlacklistedClasses(blacklistedClasses);
+			return this;
 		}
-		if(! Objects.isEmpty(blacklistedClasses)) {
-			this.blacklistedClasses.addAll(blacklistedClasses);
-		}
+		return withBlacklistedClasses((className) -> {return blacklistedClasses.contains(className);});
+	}
+	
+	/**
+	 * Allows complicated blacklisted
+	 * @param blacklistedClasses
+	 * @return
+	 */
+	public StandardSandbox withBlacklistedClasses(Predicate<String> blacklistedClasses) {
+		this.blacklistedClasses = this.blacklistedClasses.or(blacklistedClasses);
 		return this;
 	}
 	
@@ -105,8 +128,7 @@ public class StandardSandbox {
 	 * @throws Exception
 	 */
 	public <R> R execute(StandardClassCollector collector, Object input) throws Exception {
-		ClassLoader classLoader = collector.asClassLoader(ResourceLoader.getClassLoader(),
-				(name) -> (blacklistedClasses == null || blacklistedClasses.contains(name)));
+		ClassLoader classLoader = collector.asClassLoader(this);
 		Class<?> mainClass = classLoader.loadClass(collector.getMainClass());
 		return execute(mainClass, input);
 	}
@@ -119,18 +141,20 @@ public class StandardSandbox {
 	 * @throws Exception
 	 */
 	public <R> R execute(Class<?> mainClass, Object input) throws Exception {
+		//INVOCATED WITH FUNCTION
 		if(Function.class.isAssignableFrom(mainClass)) {
 			Object parameters  = convertParameters(input, getActualParametersType(mainClass));
-			return execute(mainClass, "apply", parameters);
+			Function<Object, R> instance  = Objects.cast(ServiceRegistry.get().getInstance(mainClass));
+			return instance.apply(parameters);
 		}
 		
-		//ASSSUMING MAIN
+		//DEFAULT TO MAIN(String[]) FUNCTION
 		String[] parameters  = convertParameters(input, String[].class);
 		return execute(mainClass, "main", parameters);
 	}
 	
 	/**
-	 * Execute class using GUICE is dangerous, but we would love to allows INJECTION of basic object
+	 * Execute class using GUICE is dangerous, but we would love to allows INJECTION of basic objects
 	 * 
 	 * @param mainClass
 	 * @param methodName
@@ -140,6 +164,18 @@ public class StandardSandbox {
 	 */
 	public <R> R execute(Class<?> mainClass, String methodName, Object input) throws Exception {
 		return ServiceRunlist.get().runMethod(mainClass, methodName, input);
+	}
+	
+	/**
+	 *  Blacklisted class that in the list.
+	 *  
+	 */
+	@Override
+	protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+		if(blacklistedClasses != null && blacklistedClasses.test(name)) {
+			throw new AccessControlException(name + " is blacklisted");
+		}
+		return super.loadClass(name, resolve);
 	}
 	
 	/**

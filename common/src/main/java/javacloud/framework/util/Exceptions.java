@@ -135,14 +135,15 @@ public final class Exceptions {
 	}
 	
 	/**
-	 * Unchecked with a message
+	 * Unchecked with a new message if applicable
+	 * 
 	 * @param message
 	 * @param t
 	 * @return
 	 */
 	public static RuntimeException asUnchecked(String message, Throwable t) {
 		if(t instanceof RuntimeException) {
-			t = findRootCause(t);
+			return (RuntimeException)t;
 		}
 		return new RuntimeException(message, t);
 	}

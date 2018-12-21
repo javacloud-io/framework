@@ -6,11 +6,8 @@ import javacloud.framework.jacc.ClassCollector;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.security.AccessControlException;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.common.base.Predicate;
 
 /**
  * Capture the class byte code in memory for just in time lookup.
@@ -72,22 +69,12 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 	}
 	
 	/**
-	 * Exception will through if class is blacklisted
 	 * 
 	 * @param parent
-	 * @param blacklisted
 	 * @return
 	 */
-	public ClassLoader asClassLoader(ClassLoader parent, Predicate<String> blacklisted) {
+	public ClassLoader asClassLoader(ClassLoader parent) {
 		return new ClassLoader(parent) {
-			@Override
-			protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
-				if(blacklisted.test(name)) {
-					throw new AccessControlException(name + " is blacklisted");
-				}
-				return super.loadClass(name, resolve);
-			}
-
 			/**
 			 * loadClass() always delegate to find class from PARENT first, if no such class found it will invoke this class.
 			 */
@@ -100,15 +87,5 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 				return defineClass(name, buf, null);
 			}
 		};
-	}
-	
-	/**
-	 * Allows all the class to be accessible
-	 * 
-	 * @param parent
-	 * @return
-	 */
-	public ClassLoader asClassLoader(ClassLoader parent) {
-		return asClassLoader(parent, (name) -> {return false;});
 	}
 }
