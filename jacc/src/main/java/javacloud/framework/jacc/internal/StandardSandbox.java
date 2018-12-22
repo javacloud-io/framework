@@ -121,16 +121,17 @@ public class StandardSandbox extends ClassLoader {
 	}
 	
 	/**
+	 * Execute main class from collector and return output
 	 * 
 	 * @param collector
 	 * @param input
 	 * @return
 	 * @throws Exception
 	 */
-	public <R> R execute(StandardClassCollector collector, Object input) throws Exception {
+	public <T, R> R invoke(StandardClassCollector collector, T input) throws Exception {
 		ClassLoader classLoader = collector.asClassLoader(this);
 		Class<?> mainClass = classLoader.loadClass(collector.getMainClass());
-		return execute(mainClass, input);
+		return invoke(mainClass, input);
 	}
 	
 	/**
@@ -141,7 +142,7 @@ public class StandardSandbox extends ClassLoader {
 	 * @return
 	 * @throws Exception
 	 */
-	public <R> R execute(Class<?> mainClass, Object input) throws Exception {
+	public <T, R> R invoke(Class<?> mainClass, T input) throws Exception {
 		//INVOCATED WITH FUNCTION
 		if(Function.class.isAssignableFrom(mainClass)) {
 			Object parameters  = convertParameters(input, getActualParametersType(mainClass));

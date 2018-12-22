@@ -19,7 +19,7 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 	private final Map<String, BytesOutputStream> bytesCode = new HashMap<>();
 	private String mainClass;
 	/**
-	 * 
+	 * Set main class
 	 * @param mainClass
 	 */
 	public StandardClassCollector(String mainClass) {
@@ -27,7 +27,7 @@ public class StandardClassCollector extends DiagnosticCollector implements Class
 	}
 	
 	/**
-	 * 
+	 * Auto discover by the collector
 	 */
 	public StandardClassCollector() {
 		this(null);

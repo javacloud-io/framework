@@ -25,7 +25,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * Type of converter
 	 */
 	@Override
 	public String type() {
@@ -33,7 +33,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * serialize object to stream
 	 */
 	@Override
 	public void marshal(Object v, OutputStream dst) throws IOException {
@@ -41,7 +41,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * return object from stream 
 	 */
 	@Override
 	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
@@ -49,7 +49,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * return byte from object
 	 * @param v
 	 * @return
 	 * @throws IOException
@@ -61,7 +61,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * return string from object
 	 * @param v
 	 * @return
 	 * @throws IOException
@@ -73,7 +73,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * return object from byte buffer
 	 * @param buf
 	 * @param type
 	 * @return
@@ -84,7 +84,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * 
+	 * return object from string
 	 * @param utf8
 	 * @param type
 	 * @return

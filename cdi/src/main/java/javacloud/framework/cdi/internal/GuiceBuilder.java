@@ -41,7 +41,7 @@ public abstract class GuiceBuilder {
 	 * @return
 	 */
 	public Injector build(String resource, ClassLoader loader) {
-		logger.info("Registering service modules from resource: " + resource);
+		logger.fine("Register service modules from resource: " + resource);
 		List<Module> modules = loadModules(resource, loader);
 		
 		//ALWAYS MAKE SURE IT AT LEAST EMPTY

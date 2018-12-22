@@ -57,9 +57,9 @@ public class CompilerTest extends ServiceTest {
 			StandardClassCollector collector = new StandardClassCollector();
 			boolean success = javaCompiler.compile(sources, collector);
 			if(!success) {
-				System.out.println("COMPILATION ERROR:");
+				System.out.println("COMPILATION ERROR!");
 				for(URI file: collector.getFailures()) {
-					for (StandardClassCollector.Metric metric: collector.getMetrics(file)) {
+					for (StandardClassCollector.Diagnostic metric: collector.getFailures(file)) {
 						System.out.println(file + ":" + metric);
 					}
 				}

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javacloud.framework.jacc.DiagnosticListener;
+import javacloud.framework.util.Objects;
 /**
  * Simple diagnostic
  * @author ho
@@ -14,14 +15,14 @@ import javacloud.framework.jacc.DiagnosticListener;
  */
 public class DiagnosticCollector implements DiagnosticListener {
 	//SIMPLE METRIC COLLECTION
-	public static class Metric {
-		private final int lineNo;
-		private final int columnNo;
-		private final String reason;
-		public Metric(int lineNo, int columnNo, String reason) {
-			this.lineNo = lineNo;
+	public static class Diagnostic {
+		private int	lineNo;
+		private int columnNo;
+		private String message;
+		public Diagnostic(int lineNo, int columnNo, String message) {
+			this.lineNo   = lineNo;
 			this.columnNo = columnNo;
-			this.reason = reason;
+			this.message  = message;
 		}
 		
 		public int getLineNo() {
@@ -30,19 +31,20 @@ public class DiagnosticCollector implements DiagnosticListener {
 		public int getColumnNo() {
 			return columnNo;
 		}
-		public String getReason() {
-			return reason;
+		public String getMessage() {
+			return message;
 		}
 		
 		//COMPATIBLE WITH JAVA ERROR
 		@Override
 		public String toString() {
-			return "[" + lineNo + "," + columnNo + "] " + reason;
+			return "[" + lineNo + "," + columnNo + "] " + message;
 		}
 	}
 	
 	//KEEP METRICS PER FILE
-	private final Map<URI, List<Metric>> metrics = new LinkedHashMap<>();
+	private boolean succeeded = true;
+	private final Map<URI, List<Diagnostic>> failures = new LinkedHashMap<>();
 	public DiagnosticCollector() {
 	}
 	
@@ -51,12 +53,12 @@ public class DiagnosticCollector implements DiagnosticListener {
 	 */
 	@Override
 	public void onFailure(URI file, int lineNo, int columnNo, String reason) {
-		List<Metric> failures = metrics.get(file);
-		if(failures == null) {
-			failures = new ArrayList<Metric>();
-			metrics.put(file, failures);
+		List<Diagnostic> diagnostics = failures.get(file);
+		if(diagnostics == null) {
+			diagnostics = new ArrayList<Diagnostic>();
+			failures.put(file, diagnostics);
 		}
-		failures.add(new Metric(lineNo, columnNo, reason));
+		diagnostics.add(new Diagnostic(lineNo, columnNo, reason));
 	}
 	
 	/**
@@ -72,7 +74,7 @@ public class DiagnosticCollector implements DiagnosticListener {
 	 * @return
 	 */
 	public Iterable<URI> getFailures() {
-		return metrics.keySet();
+		return failures.keySet();
 	}
 	
 	/**
@@ -81,7 +83,16 @@ public class DiagnosticCollector implements DiagnosticListener {
 	 * @param file
 	 * @return
 	 */
-	public List<Metric> getMetrics(URI file) {
-		return metrics.get(file);
+	public List<Diagnostic> getFailures(URI file) {
+		return failures.get(file);
+	}
+	
+	/**
+	 * return true if actual has failures
+	 * 
+	 * @return
+	 */
+	public boolean isSucceeded() {
+		return succeeded && Objects.isEmpty(failures);
 	}
 }
