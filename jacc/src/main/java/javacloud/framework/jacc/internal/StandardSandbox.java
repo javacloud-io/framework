@@ -1,6 +1,7 @@
 package javacloud.framework.jacc.internal;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.security.AccessControlException;
@@ -11,7 +12,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javacloud.framework.cdi.ServiceRegistry;
-import javacloud.framework.cdi.ServiceRunlist;
 import javacloud.framework.util.Exceptions;
 import javacloud.framework.util.Objects;
 
@@ -134,6 +134,7 @@ public class StandardSandbox extends ClassLoader {
 	}
 	
 	/**
+	 * Execute a function or static main(String[])
 	 * 
 	 * @param mainClass
 	 * @param input
@@ -150,20 +151,8 @@ public class StandardSandbox extends ClassLoader {
 		
 		//DEFAULT TO MAIN(String[]) FUNCTION
 		String[] parameters  = convertParameters(input, String[].class);
-		return execute(mainClass, "main", parameters);
-	}
-	
-	/**
-	 * Execute class using GUICE is dangerous, but we would love to allows INJECTION of basic objects
-	 * 
-	 * @param mainClass
-	 * @param methodName
-	 * @param input
-	 * @return
-	 * @throws Exception
-	 */
-	public <R> R execute(Class<?> mainClass, String methodName, Object input) throws Exception {
-		return ServiceRunlist.get().runMethod(mainClass, methodName, input);
+		Method mainMethod = mainClass.getMethod("main", String[].class);
+		return Objects.cast(mainMethod.invoke(null, (Object)parameters));
 	}
 	
 	/**
