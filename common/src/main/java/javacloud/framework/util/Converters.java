@@ -259,7 +259,7 @@ public final class Converters {
 	 */
 	public static String[] toArray(String value, String sep, boolean trim) {
 		//MAKE SURE RETURN EMPTY LIST
-		if(value == null) {
+		if(Objects.isEmpty(value)) {
 			return new String[0];
 		}
 		

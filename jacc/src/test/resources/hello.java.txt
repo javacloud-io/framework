@@ -1,9 +1,11 @@
 package io.test;
+import javacloud.framework.util.*;
 /**
  * 
  */
 public class HelloWorld {
 	public static void sayHello() {
+		System.out.println(System.getProperties());
 		System.out.println("Hello World!"); 
 	}
 }

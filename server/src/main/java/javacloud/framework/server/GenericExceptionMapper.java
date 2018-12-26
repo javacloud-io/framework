@@ -93,7 +93,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 */
 	protected Map<String, Object> toEntity(E exception) {
 		//REASON ERROR
-		String error = Exceptions.findReason(exception);
+		String error = Exceptions.getReason(exception);
 		
 		//DETAILS MESSAGE LOCALE
 		String message;

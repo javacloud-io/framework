@@ -2,7 +2,7 @@ package javacloud.framework.jacc.internal;
 
 import java.net.URI;
 
-import javacloud.framework.jacc.JavaSource;
+import javacloud.framework.jacc.JavaCompiler;
 import javacloud.framework.jacc.util.JavaTokenizer;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Objects;
@@ -12,7 +12,7 @@ import javacloud.framework.util.Pair;
  * @author ho
  *
  */
-public class JavaSourceFile implements JavaSource {
+public class JavaSourceFile implements JavaCompiler.Source {
 	public static final String JAVA_EXTENSION = ".java";
 	
 	private final URI uri;

@@ -3,6 +3,8 @@ package javacloud.framework.io;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import javacloud.framework.util.Codecs;
+
 /**
  * Extended to allow direct access to the buffer.
  * @author aimee
@@ -49,5 +51,15 @@ public class BytesOutputStream extends java.io.ByteArrayOutputStream {
 	public void close() throws IOException {
 		flush();
 		super.close();
+	}
+	
+	/**
+	 * Write string buffer
+	 * 
+	 * @param utf8
+	 */
+	public void write(String utf8) {
+		byte[] buf = Codecs.toBytes(utf8);
+		write(buf, 0, buf.length);
 	}
 }

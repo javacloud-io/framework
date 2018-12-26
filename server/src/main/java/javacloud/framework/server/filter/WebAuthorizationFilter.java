@@ -104,7 +104,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 		} catch(AuthenticationException ex) {
 			responseError(req, resp, ex);
 		} catch(ServletException ex) {
-			AuthenticationException aex = Exceptions.findCause(ex, AuthenticationException.class);
+			AuthenticationException aex = Exceptions.getCause(ex, AuthenticationException.class);
 			if(aex == null) {
 				throw ex;
 			}

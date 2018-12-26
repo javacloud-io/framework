@@ -2,33 +2,43 @@ package javacloud.framework.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.regex.Pattern;
-import java.util.zip.CRC32;
 
 /**
+ * Unchecked exceptions
  * 
  * @author ho
  *
  */
-public final class Exceptions {
+public final class Exceptions extends RuntimeException {
+	private static final long serialVersionUID = -3859926551631789301L;
+	
 	// DOMAIN & EMAIL
 	public static final String REGEX_DOMAIN = "^[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*$";
 	public static final String REGEX_EMAIL 	= "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	// User input ID, alpha numeric...
 	public static final String REGEX_ID 	= "^[_\\p{L}0-9-@\\.:]+$";
-	private Exceptions() {
+	
+	// Internal unchecked construction
+	private Exceptions(Throwable cause) {
+		super(cause);
 	}
+	private Exceptions(String message, Throwable cause) {
+		super(message, cause);
+	}
+	
 	/**
 	 * Find the root cause of the exception at any KIND.
 	 * 
 	 * @param t
 	 * @return
 	 */
-	public static Throwable findRootCause(Throwable t) {
+	public static Throwable getRootCause(Throwable t) {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
-			t = cause;
+			t = getCause(cause);
 			cause = t.getCause();
 		}
 		return t;
@@ -42,17 +52,34 @@ public final class Exceptions {
 	 * @param causedBy
 	 * @return
 	 */
-	public static <T extends Throwable> T findCause(Throwable t, Class<T> causedBy) {
+	public static <T extends Throwable> T getCause(Throwable t, Class<T> causedBy) {
 		Throwable cause = (t != null ? t.getCause() : null);
 		while(cause != null) {
+			cause = getCause(cause);
 			//OK, found it...
-			if(causedBy.isInstance(cause.getClass())) {
+			if(causedBy.isInstance(cause)) {
 				return Objects.cast(cause);
 			}
 			//OK, recursive
 			t = cause.getCause();
 		}
 		return null;
+	}
+	
+	/**
+	 * Unwrap the exception if being wrapped somehow
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public static Throwable getCause(Throwable t) {
+		if(t instanceof Exceptions) {
+			return t.getCause();
+		}
+		if(t instanceof InvocationTargetException) {
+			return ((InvocationTargetException)t).getTargetException();
+		}
+		return t;
 	}
 	
 	/**
@@ -71,7 +98,7 @@ public final class Exceptions {
 			return true;
 		}
 		//Hunt it down.
-		return (findCause(t, causedBy) != null);
+		return (getCause(t, causedBy) != null);
 	}
 	
 	/**
@@ -80,7 +107,7 @@ public final class Exceptions {
 	 * @param t
 	 * @return
 	 */
-	public static String findReason(Throwable cause) {
+	public static String getReason(Throwable cause) {
 		if(cause instanceof ValidationException) {
 			return ((ValidationException)cause).getReason();
 		}
@@ -89,34 +116,23 @@ public final class Exceptions {
 	}
 	
 	/**
-	 * Consistent hash using crc32 is OK.
-	 * 
-	 * @param cause
-	 * @return
-	 */
-	public static final String crc32Reason(Throwable cause) {
-		CRC32 crc = new CRC32();
-		//CLASS NAME
-		String message = cause.getClass().getName();
-		crc.update(message.getBytes());
-		
-		//+ MESSAGE
-		message = cause.getMessage();
-		if(message != null && !message.isEmpty()) {
-			crc.update(message.getBytes());
-		}
-		return Long.toHexString(crc.getValue()).toUpperCase();
-	}
-	
-	/**
-	 * 
+	 * return stack trace string with depth
 	 * @param t
+	 * @param depth
 	 * @return
 	 */
-	public static String toStackTrace(Throwable t) {
+	public static String getStackTrace(Throwable t, int depth) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
 		PrintWriter s = new PrintWriter(out);
-		t.printStackTrace(s);
+		if(depth < 0) {
+			t.printStackTrace(s);
+		} else {
+			s.println(t);
+			StackTraceElement[] stackTraces = t.getStackTrace();
+			for(int i = 0; i < depth && i < stackTraces.length; i ++) {
+				s.println("\tat " + stackTraces[i]);
+			}
+		}
 		s.flush();
 		return out.toString();
 	}
@@ -131,7 +147,7 @@ public final class Exceptions {
 		if(t instanceof RuntimeException) {
 			return (RuntimeException)t;
 		}
-		return new RuntimeException(t);
+		return new Exceptions(t);
 	}
 	
 	/**
@@ -142,10 +158,7 @@ public final class Exceptions {
 	 * @return
 	 */
 	public static RuntimeException asUnchecked(String message, Throwable t) {
-		if(t instanceof RuntimeException) {
-			return (RuntimeException)t;
-		}
-		return new RuntimeException(message, t);
+		return new Exceptions(message, getCause(t));
 	}
 	
 	/**

@@ -7,6 +7,9 @@ package javacloud.framework.util;
  * @param <R>
  */
 public interface Function<T, R> extends java.util.function.Function<T, R> {
+	/**
+	 * Default implementation redirect to invoke
+	 */
 	@Override
 	default public R apply(T input) {
 		try {

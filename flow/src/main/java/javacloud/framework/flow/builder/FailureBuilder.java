@@ -77,7 +77,7 @@ public class FailureBuilder {
 			public StateTransition onFailure(StateContext context, Exception ex) {
 				String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 				if(error == null && ex != null) {
-					error = Exceptions.findReason(ex);
+					error = Exceptions.getReason(ex);
 				}
 				CatcherDefinition catcher = null;
 				if(error != null) {

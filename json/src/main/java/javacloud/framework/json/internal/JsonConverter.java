@@ -3,6 +3,7 @@ package javacloud.framework.json.internal;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.util.function.Function;
 
 import javacloud.framework.io.BytesInputStream;
@@ -80,6 +81,13 @@ public final class JsonConverter implements Externalizer {
 	 * @throws IOException
 	 */
 	public <T> T toObject(byte[] buf, Class<?> type) throws IOException {
+		if(buf == null) {
+			return null;
+		}
+		//SUPPORT EMPTY ARRAY
+		if(buf.length == 0 && type.isArray()) {
+			return Objects.cast(Array.newInstance(type.getComponentType(), 0));
+		}
 		return unmarshal(new BytesInputStream(buf), type);
 	}
 	
@@ -91,6 +99,13 @@ public final class JsonConverter implements Externalizer {
 	 * @throws IOException
 	 */
 	public <T> T toObject(String utf8, Class<?> type) throws IOException {
+		if(utf8 == null) {
+			return null;
+		}
+		//SUPPORT EMPTY ARRAY
+		if(utf8.isEmpty() && type.isArray()) {
+			return Objects.cast(Array.newInstance(type.getComponentType(), 0));
+		}
 		return unmarshal(new BytesInputStream(utf8), type);
 	}
 	

@@ -238,9 +238,9 @@ public class FlowExecutor {
 			state.setStatus(FlowExecution.Status.FAILED);
 			String error = context.getAttribute(StateContext.ATTRIBUTE_ERROR);
 			if(ex != null && error == null) {
-				error = Exceptions.findReason(ex);
+				error = Exceptions.getReason(ex);
 				context.setAttribute(StateContext.ATTRIBUTE_ERROR, error);
-				state.setStackTrace(Exceptions.toStackTrace(ex));
+				state.setStackTrace(Exceptions.getStackTrace(ex, -1));
 			}
 			logger.log(Level.FINE, "Failed state: {0}, error: {1}", new Object[] {state.getName(), error});
 		}

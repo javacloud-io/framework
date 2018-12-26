@@ -6,7 +6,7 @@ import java.io.InputStream;
 import javax.tools.SimpleJavaFileObject;
 
 import javacloud.framework.io.BytesInputStream;
-import javacloud.framework.jacc.JavaSource;
+import javacloud.framework.jacc.JavaCompiler;
 
 /**
  * 
@@ -14,12 +14,12 @@ import javacloud.framework.jacc.JavaSource;
  *
  */
 public class JdkSourceFileAdapter extends SimpleJavaFileObject {
-	private final JavaSource source;
+	private final JavaCompiler.Source source;
 	/**
 	 * 
 	 * @param source
 	 */
-	public JdkSourceFileAdapter(JavaSource source) {
+	public JdkSourceFileAdapter(JavaCompiler.Source source) {
 		super(source.file(), Kind.SOURCE);
 		this.source = source;
 	}
