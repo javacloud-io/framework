@@ -30,39 +30,20 @@ public final class Exceptions extends RuntimeException {
 	}
 	
 	/**
-	 * Find the root cause of the exception at any KIND.
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static Throwable getRootCause(Throwable t) {
-		Throwable cause = (t != null ? t.getCause() : null);
-		while(cause != null) {
-			t = getCause(cause);
-			cause = t.getCause();
-		}
-		return t;
-	}
-	
-	/**
-	 * Find the root cause which is kind of causedBy.
-	 * return NULL if NOT FOUND ANY.
+	 * Walk through the exception trace with cause, find one that matches the causeBy class or NONE.
 	 * 
 	 * @param t
 	 * @param causedBy
 	 * @return
 	 */
 	public static <T extends Throwable> T getCause(Throwable t, Class<T> causedBy) {
-		Throwable cause = (t != null ? t.getCause() : null);
-		while(cause != null) {
-			cause = getCause(cause);
-			//OK, found it...
-			if(causedBy.isInstance(cause)) {
+		do {
+			Throwable cause = (t != null ? resolveCause(t) : null);
+			if(cause == null || causedBy.isInstance(cause)) {
 				return Objects.cast(cause);
 			}
-			//OK, recursive
 			t = cause.getCause();
-		}
+		}while(t != null);
 		return null;
 	}
 	
@@ -72,7 +53,7 @@ public final class Exceptions extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public static Throwable getCause(Throwable t) {
+	static Throwable resolveCause(Throwable t) {
 		if(t instanceof Exceptions) {
 			return t.getCause();
 		}
@@ -158,7 +139,7 @@ public final class Exceptions extends RuntimeException {
 	 * @return
 	 */
 	public static RuntimeException asUnchecked(String message, Throwable t) {
-		return new Exceptions(message, getCause(t));
+		return new Exceptions(message, resolveCause(t));
 	}
 	
 	/**

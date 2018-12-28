@@ -143,17 +143,21 @@ public class StandardSandbox extends ClassLoader {
 	 * @throws Exception
 	 */
 	public <T, R> R invoke(Class<?> mainClass, T input) throws Exception {
-		//INVOCATED WITH FUNCTION
-		if(Function.class.isAssignableFrom(mainClass)) {
-			Object parameters  = convertParameters(input, getActualParametersType(mainClass));
-			Function<Object, R> instance  = Objects.cast(ServiceRegistry.get().getInstance(mainClass));
-			return instance.apply(parameters);
+		try {
+			//INVOCATED WITH FUNCTION
+			if(Function.class.isAssignableFrom(mainClass)) {
+				Object parameters  = convertParameters(input, getActualParametersType(mainClass));
+				Function<Object, R> instance  = Objects.cast(ServiceRegistry.get().getInstance(mainClass));
+				return instance.apply(parameters);
+			}
+			
+			//DEFAULT TO MAIN(String[]) FUNCTION
+			String[] parameters  = convertParameters(input, String[].class);
+			Method mainMethod = mainClass.getMethod("main", String[].class);
+			return Objects.cast(mainMethod.invoke(null, (Object)parameters));
+		} catch(Exception ex) {
+			throw Exceptions.getCause(ex, Exception.class);
 		}
-		
-		//DEFAULT TO MAIN(String[]) FUNCTION
-		String[] parameters  = convertParameters(input, String[].class);
-		Method mainMethod = mainClass.getMethod("main", String[].class);
-		return Objects.cast(mainMethod.invoke(null, (Object)parameters));
 	}
 	
 	/**

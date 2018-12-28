@@ -18,7 +18,7 @@ public class ValidationException extends IllegalArgumentException {
 	}
 	
 	/**
-	 * 
+	 * A validation message
 	 * @param message
 	 */
 	public ValidationException(String message) {
@@ -26,7 +26,7 @@ public class ValidationException extends IllegalArgumentException {
 	}
 	
 	/**
-	 * 
+	 * Pass through only for subclass
 	 */
 	protected ValidationException(Throwable cause) {
 		super(cause);
@@ -38,8 +38,8 @@ public class ValidationException extends IllegalArgumentException {
 	public String getReason() {
 		String reason = getMessage();
 		if(Objects.isEmpty(reason)) {
-			Throwable cause = Exceptions.getRootCause(this);
-			return cause.getClass().getSimpleName();
+			Throwable cause = getCause();
+			return (cause == null? getClass().getSimpleName() : cause.getClass().getSimpleName());
 		}
 		return reason;
 	}
