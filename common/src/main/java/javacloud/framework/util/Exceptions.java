@@ -30,6 +30,46 @@ public final class Exceptions extends RuntimeException {
 	}
 	
 	/**
+	 * Wrap as runtime exception
+	 * 
+	 * @param t
+	 * @return
+	 */
+	public static RuntimeException wrap(Throwable t) {
+		if(t instanceof RuntimeException) {
+			return (RuntimeException)t;
+		}
+		return new Exceptions(t);
+	}
+	
+	/**
+	 * Unchecked with a new message if applicable
+	 * 
+	 * @param message
+	 * @param t
+	 * @return
+	 */
+	public static RuntimeException wrap(String message, Throwable t) {
+		return new Exceptions(message, unwrap(t));
+	}
+	
+	/**
+	 * Resolve the exception if being wrapped some how
+	 * 
+	 * @param t
+	 * @return
+	 */
+	static Throwable unwrap(Throwable t) {
+		if(t instanceof Exceptions) {
+			return t.getCause();
+		}
+		if(t instanceof InvocationTargetException) {
+			return ((InvocationTargetException)t).getTargetException();
+		}
+		return t;
+	}
+	
+	/**
 	 * Walk through the exception trace with cause, find one that matches the causeBy class or NONE.
 	 * 
 	 * @param t
@@ -38,29 +78,13 @@ public final class Exceptions extends RuntimeException {
 	 */
 	public static <T extends Throwable> T getCause(Throwable t, Class<T> causedBy) {
 		do {
-			Throwable cause = (t != null ? resolveCause(t) : null);
+			Throwable cause = (t != null ? unwrap(t) : null);
 			if(cause == null || causedBy.isInstance(cause)) {
 				return Objects.cast(cause);
 			}
 			t = cause.getCause();
 		}while(t != null);
 		return null;
-	}
-	
-	/**
-	 * Unwrap the exception if being wrapped somehow
-	 * 
-	 * @param t
-	 * @return
-	 */
-	static Throwable resolveCause(Throwable t) {
-		if(t instanceof Exceptions) {
-			return t.getCause();
-		}
-		if(t instanceof InvocationTargetException) {
-			return ((InvocationTargetException)t).getTargetException();
-		}
-		return t;
 	}
 	
 	/**
@@ -116,30 +140,6 @@ public final class Exceptions extends RuntimeException {
 		}
 		s.flush();
 		return out.toString();
-	}
-	
-	/**
-	 * Wrap as runtime exception
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static RuntimeException asUnchecked(Throwable t) {
-		if(t instanceof RuntimeException) {
-			return (RuntimeException)t;
-		}
-		return new Exceptions(t);
-	}
-	
-	/**
-	 * Unchecked with a new message if applicable
-	 * 
-	 * @param message
-	 * @param t
-	 * @return
-	 */
-	public static RuntimeException asUnchecked(String message, Throwable t) {
-		return new Exceptions(message, resolveCause(t));
 	}
 	
 	/**

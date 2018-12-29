@@ -83,7 +83,7 @@ public class StandardSandbox extends ClassLoader {
 			}
 			fm.setAccessible(false);
 		} catch(Exception ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 	

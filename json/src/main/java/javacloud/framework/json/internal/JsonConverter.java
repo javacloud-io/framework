@@ -130,7 +130,7 @@ public final class JsonConverter implements Externalizer {
 					}
 					return (toObject(toBytes(value), type));
 				} catch(IOException ex) {
-					throw Exceptions.asUnchecked(ex);
+					throw Exceptions.wrap(ex);
 				}
 			}
 		};

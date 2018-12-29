@@ -70,7 +70,7 @@ public class DefaultConfigSource implements ConfigSource {
 			Properties props = ResourceLoader.loadProperties(resource, loader);
 			return (props == null? new Properties() : props);
 		} catch (IOException ex) {
-			throw Exceptions.asUnchecked("Unable to load config resource: " + resource, ex);
+			throw Exceptions.wrap("Unable to load config resource: " + resource, ex);
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class DefaultConfigSource implements ConfigSource {
 			props.load(reader);
 			return props;
 		} catch (IOException ex) {
-			throw Exceptions.asUnchecked("Unable to load config resource: " + resource, ex);
+			throw Exceptions.wrap("Unable to load config resource: " + resource, ex);
 		}
 	}
 }

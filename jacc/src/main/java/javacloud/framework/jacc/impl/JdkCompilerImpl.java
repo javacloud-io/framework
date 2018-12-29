@@ -85,7 +85,7 @@ public class JdkCompilerImpl implements JavaCompiler {
 				Class<?> javaToolClass = ResourceLoader.getClassLoader().loadClass("com.sun.tools.javac.api.JavacTool");
 				impl = (javax.tools.JavaCompiler)javaToolClass.getMethod("create").invoke(null);
 			} catch(Exception ex) {
-				throw Exceptions.asUnchecked(ex);
+				throw Exceptions.wrap(ex);
 			}
 		}
 		return impl;

@@ -46,7 +46,7 @@ public class MessageManagerImpl implements MessageManager {
 			bundlesControl.discoverBundles(ResourceLoader.getClassLoader());
 			logger.log(Level.FINE, "Discovered i18n resource bundles: {}", bundlesControl.getBundleNames());
 		}catch(IOException ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 	

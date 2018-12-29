@@ -169,7 +169,7 @@ public class StandardFlowService {
 		try {
 			return startExecution(stateFlow, input).get();
 		} catch(InterruptedException | ExecutionException ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 	

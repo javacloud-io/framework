@@ -62,7 +62,7 @@ public final class Hmacs {
 			hmac.init(secret);
 			return hmac;
 		}catch(InvalidKeyException | NoSuchAlgorithmException ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 }

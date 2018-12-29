@@ -39,7 +39,7 @@ public class ComponentBuilder {
 			//
 			return build(bindings, loader);
 		} catch(IOException | ClassNotFoundException ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 	

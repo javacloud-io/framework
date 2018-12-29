@@ -38,7 +38,7 @@ public abstract class BytesChannelWriter implements WritableByteChannel {
 		try {
 			close();
 		}catch(IOException ex) {
-			throw Exceptions.asUnchecked(ex);
+			throw Exceptions.wrap(ex);
 		}
 	}
 	/**

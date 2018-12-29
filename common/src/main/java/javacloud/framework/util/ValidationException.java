@@ -39,7 +39,7 @@ public class ValidationException extends IllegalArgumentException {
 		String reason = getMessage();
 		if(Objects.isEmpty(reason)) {
 			Throwable cause = getCause();
-			return (cause == null? getClass().getSimpleName() : cause.getClass().getSimpleName());
+			return (cause == null? "ValidationException" : cause.getClass().getSimpleName());
 		}
 		return reason;
 	}
