@@ -14,13 +14,13 @@ import javacloud.framework.util.ResourceLoader;
  * @author ho
  *
  */
-public class DefaultConfigSource implements ConfigSource {
+public class StandardConfigSource implements ConfigSource {
 	private final Map<String, String> properties;
 	/**
 	 * 
 	 * @param properties
 	 */
-	public DefaultConfigSource(Map<String, String> properties) {
+	public StandardConfigSource(Map<String, String> properties) {
 		this.properties = properties;
 	}
 	
@@ -29,7 +29,7 @@ public class DefaultConfigSource implements ConfigSource {
 	 * @param properties
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public DefaultConfigSource(Properties properties) {
+	public StandardConfigSource(Properties properties) {
 		this.properties = (Map)properties;
 	}
 	
@@ -38,7 +38,7 @@ public class DefaultConfigSource implements ConfigSource {
 	 * @param resource
 	 * @param loader
 	 */
-	public DefaultConfigSource(String resource, ClassLoader loader) {
+	public StandardConfigSource(String resource, ClassLoader loader) {
 		this(loadProperties(resource, loader));
 	}
 	
@@ -46,7 +46,7 @@ public class DefaultConfigSource implements ConfigSource {
 	 * Load from an external file
 	 * @param resource
 	 */
-	public DefaultConfigSource(File resource) {
+	public StandardConfigSource(File resource) {
 		this(loadProperties(resource));
 	}
 	
