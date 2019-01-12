@@ -55,4 +55,12 @@ public class ObjectsTest extends TestCase {
 		List<Object> list = Objects.asList((Object[])v);
 		Assert.assertEquals(3, list.size());
 	}
+	
+	public void testSimilarity() {
+		assertEquals(1.0f, Objects.similarity("a", "a"));
+		assertEquals(1.0f, Objects.similarity("abc", "abc"));
+		assertEquals(0.0f, Objects.similarity("abc", "bac"));
+		assertTrue(Objects.similarity("abc", "a") > 0.3333);
+		assertEquals(0.2f, Objects.similarity("night", "nacht"));
+	}
 }

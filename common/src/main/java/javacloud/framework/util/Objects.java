@@ -22,26 +22,23 @@ public final class Objects {
 	 * NULL <= NULL < NOT NULL
 	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static final Comparator<Object> COMPARER = new Comparator() {
-		@Override
-		public int compare(Object v1, Object v2) {
-			//OK, NULL OUT FIRST
-			if(v1 == null) {
-				return (v2 == null? 0 : -1);
-			} else if(v2 == null) {
-				return (v1 == null? 0 : 1);
-			}
-			
-			//USING NATIVE COMPARE
-			if(v1 instanceof Comparable) {
-				return ((Comparable)v1).compareTo(v2);
-			} else if(v2 instanceof Comparable) {
-				return -((Comparable)v2).compareTo(v1);
-			}
-			
-			//GIVE UP? USING HASH
-			return signum(v1.hashCode() - v2.hashCode());
+	public static final Comparator<Object> COMPARATOR = (v1, v2) -> {
+		//OK, NULL OUT FIRST
+		if(v1 == null) {
+			return (v2 == null? 0 : -1);
+		} else if(v2 == null) {
+			return (v1 == null? 0 : 1);
 		}
+		
+		//USING NATIVE COMPARE
+		if(v1 instanceof Comparable) {
+			return ((Comparable)v1).compareTo(v2);
+		} else if(v2 instanceof Comparable) {
+			return -((Comparable)v2).compareTo(v1);
+		}
+		
+		//GIVE UP? USING HASH
+		return signum(v1.hashCode() - v2.hashCode());
 	};
 	
 	//PROTECTED
@@ -56,7 +53,29 @@ public final class Objects {
 	 * @return
 	 */
 	public static int compare(Object o1, Object o2) {
-		return COMPARER.compare(o1, o2);
+		return COMPARATOR.compare(o1, o2);
+	}
+	
+	/**
+	 * return similarity between string with value [0,1] similar to string compare
+	 * 
+	 * @param ta
+	 * @param tb
+	 * @return
+	 */
+	public static float similarity(String ta, String tb) {
+		int la = ta.length(), lb = tb.length();
+		//one characters can't match set of 2
+		if(la == 0 || lb == 0) {
+			return (la == lb? 1.0f : 0);
+		}
+		//count matches in both
+		int lm = Math.min(la, lb);
+		int nt = 0;
+		while(nt < lm && ta.charAt(nt) == tb.charAt(nt)) {
+			nt ++;
+		}
+		return (2.0f * nt) / (la + lb);
 	}
 	
 	/**
