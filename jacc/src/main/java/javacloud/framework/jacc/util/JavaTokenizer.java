@@ -130,12 +130,8 @@ public class JavaTokenizer {
 		SEMI,			//';'
 		AT,				//'@'
 		
-		BRC_L,			//'{'
-		BRC_R,			//'}'
-		BKT_L,			//'['
-		BKT_R,			//']'
-		PAREN_L,		//'('
-		PAREN_R,		//')'
+		LPAREN,			//'([{'
+		RPAREN,			//')]}'
 		
 		UNKNOWN;		//not recognized yet
 		
@@ -359,18 +355,10 @@ public class JavaTokenizer {
 			type = Type.COMMA;
 		} else if(ch == '@') {
 			type = Type.AT;
-		} else if(ch == '(') {
-			type = Type.PAREN_L;
-		} else if(ch == ')') {
-			type = Type.PAREN_R;
-		} else if(ch == '{') {
-			type = Type.BRC_L;
-		} else if(ch == '}') {
-			type = Type.BRC_R;
-		} else if(ch == '[') {
-			type = Type.BKT_L;
-		} else if(ch == ']') {
-			type = Type.BKT_R;
+		} else if(ch == '(' || ch == '[' || ch == '{') {
+			type = Type.LPAREN;
+		} else if(ch == ')' || ch == ']' || ch == '}') {
+			type = Type.RPAREN;
 		} else {
 			type = Type.UNKNOWN;
 		}
