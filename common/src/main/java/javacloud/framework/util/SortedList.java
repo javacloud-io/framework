@@ -21,7 +21,9 @@ public class SortedList<E> extends ArrayList<E> {
 	 */
 	public SortedList(int initialCapacity, Comparator<E> comparator) {
 		super(initialCapacity);
-		this.comparator = comparator;
+		if(comparator != null) {
+			this.comparator = comparator;
+		}
 	}
 	
 	/**
@@ -33,13 +35,19 @@ public class SortedList<E> extends ArrayList<E> {
 	}
 	
 	/**
-	 * replace the element at index
+	 * insert the element at index
+	 * 
 	 * @param index
 	 * @param e
 	 * @return
 	 */
-	protected E replace(int index, E e) {
-		return	super.set(index, e);
+	protected boolean insert(int index, E e) {
+		if(index >= 0) {
+			super.set(index, e);//replacement
+			return false;
+		}
+		super.add(-index - 1, e);
+		return true;
 	}
 	
 	/**
@@ -57,16 +65,11 @@ public class SortedList<E> extends ArrayList<E> {
 	@Override
 	public boolean add(E e) {
 		if(isEmpty()) {
-			super.add(e);
-		} else {
-			int index = indexOf(e);
-			if(index >= 0) {
-				replace(index, e);//ask for replacement
-				return false;
-			}
-			super.add(-index - 1, e);
+			return super.add(e);
 		}
-		return true;
+		//insert at correct location
+		int index = indexOf(e);
+		return insert(index, e);
 	}
 	
 	/**
@@ -83,11 +86,20 @@ public class SortedList<E> extends ArrayList<E> {
 	}
 	
 	/**
-	 * Optimize for range operation
+	 * FIXME: Optimize for range operation
 	 */
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-		return super.addAll(c);
+		if(c == null || c.isEmpty()) {
+			return false;
+		}
+		int count = 0;
+		for(E e: c) {
+			if(add(e)) {
+				count ++;
+			}
+		}
+		return (count > 0);
 	}
 	
 	/**
@@ -132,7 +144,7 @@ public class SortedList<E> extends ArrayList<E> {
 		add(e);
 		return o;
 	}
-	
+	//NOT SUPPORT SPECIFIC INDEX
 	@Override
 	public void add(int index, E e) {
 		add(e);
@@ -140,12 +152,6 @@ public class SortedList<E> extends ArrayList<E> {
 	
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		boolean added = false;
-		for(E e: c) {
-			if(add(e)) {
-				added = true;
-			}
-		}
-		return added;
+		return addAll(c);
 	}
 }
