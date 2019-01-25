@@ -1,7 +1,7 @@
 package io.test;
 import javacloud.framework.util.*;
 /**
- * 
+ * Just a test
  */
 public class HelloWorld {
 	public static void sayHello() {

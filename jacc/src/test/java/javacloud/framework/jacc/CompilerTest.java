@@ -73,5 +73,4 @@ public class CompilerTest extends ServiceTest {
 			System.out.println("\nESLAPED: " + (System.currentTimeMillis() - starts));
 		}
 	}
-
 }

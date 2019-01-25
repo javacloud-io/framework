@@ -2,12 +2,12 @@ package javacloud.framework.jacc;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Map;
 
 import org.junit.Test;
 
 import javacloud.framework.io.TextScanner;
 import javacloud.framework.jacc.util.JavaTokenizer;
-import javacloud.framework.util.Pair;
 import javacloud.framework.util.ResourceLoader;
 import junit.framework.TestCase;
 /**
@@ -26,7 +26,7 @@ public class JavaTokenizerTest extends TestCase {
 		while(tokenizier.hasMoreTokens()) {
 			System.out.print(scanner.getLineNo() + ":" + scanner.getColumnNo() + "\t");
 			
-			Pair<JavaTokenizer.Type, String> token = tokenizier.nextToken();
+			Map.Entry<JavaTokenizer.Type, String> token = tokenizier.nextToken();
 			System.out.println(token.getKey() + (token.getKey() == JavaTokenizer.Type.COMMENT_B? "\n" : "\t") + token.getValue());
 		}
 	}

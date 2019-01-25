@@ -1,12 +1,12 @@
 package javacloud.framework.jacc.internal;
 
 import java.net.URI;
+import java.util.Map;
 
 import javacloud.framework.jacc.JavaCompiler;
 import javacloud.framework.jacc.util.JavaTokenizer;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Objects;
-import javacloud.framework.util.Pair;
 /**
  * 
  * @author ho
@@ -69,7 +69,7 @@ public class JavaSourceFile implements JavaCompiler.Source {
 		
 		//PACKAGE NAME
 		while(tokenizer.hasMoreTokens()) {
-			Pair<JavaTokenizer.Type, String> token = tokenizer.nextToken();
+			Map.Entry<JavaTokenizer.Type, String> token = tokenizer.nextToken();
 			if(token.getKey() == JavaTokenizer.Type.PACKAGE) {
 				packageName = tokenizer.nextTokens((tt) -> (tt == JavaTokenizer.Type.IDENTIFIER || tt == JavaTokenizer.Type.DOT));
 			} else if(token.getKey() == JavaTokenizer.Type.CLASS) {

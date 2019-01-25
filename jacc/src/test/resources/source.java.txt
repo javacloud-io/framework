@@ -1,9 +1,7 @@
-/**
- * A testable java source
- */
 package test.tokenizer;
 
 /**
+ * Test command
  * 
  * @author ho
  *

@@ -1,5 +1,6 @@
 package javacloud.framework.jacc.util;
 
+import java.util.Map;
 import java.util.function.Predicate;
 
 import javacloud.framework.io.TextScanner;
@@ -171,7 +172,7 @@ public class JavaTokenizer {
 	 * 
 	 * @return
 	 */
-	public Pair<Type, String> nextToken() {
+	public Map.Entry<Type, String> nextToken() {
 		//LOOK AHEAD ONE CHARACTER
 		char ch = scanner.currChar();
 		if(Character.isDigit(ch)) {
@@ -376,7 +377,7 @@ public class JavaTokenizer {
 	 */
 	public String nextToken(Predicate<Type> matcher) {
 		while(hasMoreTokens()) {
-			Pair<Type, String> token = nextToken();
+			Map.Entry<Type, String> token = nextToken();
 			if(matcher.test(token.getKey())) {
 				return token.getValue();
 			}
@@ -403,7 +404,7 @@ public class JavaTokenizer {
 	public String nextTokens(Predicate<Type> matcher) {
 		StringBuilder sb = new StringBuilder();
 		while(hasMoreTokens()) {
-			Pair<Type, String> token = nextToken();
+			Map.Entry<Type, String> token = nextToken();
 			if(!matcher.test(token.getKey())) {
 				break;
 			}
@@ -417,7 +418,7 @@ public class JavaTokenizer {
 	 * 
 	 * @return
 	 */
-	protected Pair<Type, String> nextNumber() {
+	protected Map.Entry<Type, String> nextNumber() {
 		String identifier = scanner.nextToken((ch) -> ch == '.' || Character.isLetterOrDigit(ch));
 		return new Pair<>(Type.NUMBER, identifier); 
 	}
@@ -427,7 +428,7 @@ public class JavaTokenizer {
 	 * 
 	 * @return
 	 */
-	protected Pair<Type, String> nextIdentifier() {
+	protected Map.Entry<Type, String> nextIdentifier() {
 		String identifier = scanner.nextToken((ch) -> Character.isJavaIdentifierPart(ch));
 		try {
 			Type type = Type.valueOf(identifier.toUpperCase());
@@ -444,7 +445,7 @@ public class JavaTokenizer {
 	 * return next comment
 	 * @return
 	 */
-	protected Pair<Type, String> nextComment() {
+	protected Map.Entry<Type, String> nextComment() {
 		Type type = (scanner.currChar() == '*'? Type.COMMENT_B : Type.COMMENT_L);
 		String comment;
 		//SKIP * or /
@@ -467,7 +468,7 @@ public class JavaTokenizer {
 	 * 
 	 * @return
 	 */
-	protected Pair<Type, String> nextQuote() {
+	protected Map.Entry<Type, String> nextQuote() {
 		Type type = (scanner.currChar() == '"'? Type.QUOTE_D : Type.QUOTE_S);
 		String quote;
 		//SKIP " or '
