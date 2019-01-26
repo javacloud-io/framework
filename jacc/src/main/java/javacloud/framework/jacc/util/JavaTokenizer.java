@@ -134,7 +134,7 @@ public class JavaTokenizer {
 		LPAREN,			//'([{'
 		RPAREN,			//')]}'
 		
-		UNKNOWN;		//not recognized yet
+		TEXT;		//not recognized yet
 		
 		public boolean isKeyword() {
 			return this.ordinal() < IDENTIFIER.ordinal();
@@ -361,7 +361,7 @@ public class JavaTokenizer {
 		} else if(ch == ')' || ch == ']' || ch == '}') {
 			type = Type.RPAREN;
 		} else {
-			type = Type.UNKNOWN;
+			type = Type.TEXT;
 		}
 		
 		//ADVANCE NEXT TOKEN
