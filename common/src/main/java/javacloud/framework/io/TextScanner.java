@@ -121,11 +121,12 @@ public class TextScanner {
 	 * @param escapseChar
 	 * @param quoteChar
 	 * @param unescape
-	 * @return
+	 * @return empty if not matches
 	 */
 	public String nextToken(char escapseChar, char quoteChar, boolean unescape) {
 		Token token = (unescape? Token.quote(escapseChar) : new Token());
-		return	nextChars(Matcher.quote(escapseChar, quoteChar), token)? token.toString() : null;
+		nextChars(Matcher.quote(escapseChar, quoteChar), token);
+		return token.toString();
 	}
 	
 	/**
@@ -133,22 +134,24 @@ public class TextScanner {
 	 * 
 	 * @param starChar
 	 * @param slashChar
-	 * @return
+	 * @return empty if not matches
 	 */
 	public String nextToken(char starChar, char slashChar) {
 		Token token = Token.slash(starChar);
-		return	nextChars(Matcher.slash(starChar, slashChar), token)? token.toString() : null;
+		nextChars(Matcher.slash(starChar, slashChar), token);
+		return token.toString();
 	}
 	
 	/**
 	 * return token matches boundary
 	 * 
 	 * @param matcher
-	 * @return
+	 * @return empty if not matches
 	 */
 	public String nextToken(Predicate<Character> matcher) {
 		Token token = new Token();
-		return	nextChars(matcher, token)? token.toString() : null;
+		nextChars(matcher, token);
+		return token.toString();
 	}
 	
 	/**
@@ -158,7 +161,8 @@ public class TextScanner {
 	 */
 	public String nextLine() {
 		Token token = Token.line('\r', '\n');
-		return	nextChars(Matcher.line('\r', '\n'), token)? token.toString() : null;
+		nextChars(Matcher.line('\r', '\n'), token);
+		return token.toString();
 	}
 	
 	/**
@@ -193,6 +197,9 @@ public class TextScanner {
 	//TOKENS
 	public static class Token implements Consumer<Character> {
 		private final StringBuilder buf = new StringBuilder();
+		public boolean isEmpty() {
+			return (buf.length() == 0);
+		}
 		@Override
 		public void accept(Character ch) {
 			buf.append(ch.charValue());
