@@ -152,8 +152,8 @@ public class StandardSandbox extends ClassLoader {
 			}
 			
 			//DEFAULT TO MAIN(String[]) FUNCTION
-			String[] parameters  = convertParameters(input, String[].class);
 			Method mainMethod = mainClass.getMethod("main", String[].class);
+			String[] parameters  = convertParameters(input, String[].class);
 			return Objects.cast(mainMethod.invoke(null, (Object)parameters));
 		} catch(Exception ex) {
 			throw Exceptions.getCause(ex, Exception.class);
