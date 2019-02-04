@@ -147,7 +147,7 @@ public class StandardSandbox extends ClassLoader {
 			//INVOCATED WITH FUNCTION
 			if(Function.class.isAssignableFrom(mainClass)) {
 				Object parameters  = convertParameters(input, getActualParametersType(mainClass));
-				Function<Object, R> instance  = Objects.cast(ServiceRegistry.get().getInstance(mainClass));
+				Function<Object, R> instance  = Objects.cast(ServiceRegistry.get().getUnmanagedInstance(mainClass));
 				return instance.apply(parameters);
 			}
 			

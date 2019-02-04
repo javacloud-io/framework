@@ -74,6 +74,15 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 			return instances;
 		}
 	}
+	
+	/**
+	 * Return new on fly object with dependency injection.
+	 * FIXME: return instance not managed by GUICE !!!
+	 */
+	@Override
+	public <T> T getUnmanagedInstance(Class<T> type) {
+		return getInstance(type);
+	}
 
 	/**
 	 * return internal injector of guice registry

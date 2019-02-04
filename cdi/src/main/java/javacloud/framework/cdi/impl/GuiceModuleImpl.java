@@ -8,6 +8,7 @@ import com.google.inject.Scopes;
 import javacloud.framework.cdi.LazySingleton;
 import javacloud.framework.cdi.internal.GuiceModule;
 /**
+ * Special use to always lazy singleton.
  * 
  * @author ho
  *
