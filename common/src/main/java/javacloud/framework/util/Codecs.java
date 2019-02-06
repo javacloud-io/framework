@@ -120,7 +120,7 @@ public final class Codecs {
 		 * @param upper
 		 * @return
 		 */
-		public String apply(byte[] bytes, boolean upper) {
+		public static String apply(byte[] bytes, boolean upper) {
 			StringBuilder sb = new StringBuilder((bytes.length << 1));
 			for(int i = 0; i < bytes.length; i ++) {
 				byte hi = (byte) ((bytes[i] & 0xF0) >> 4);
@@ -135,7 +135,9 @@ public final class Codecs {
 	public static class HexDecoder implements Function<String, byte[]> {
 		@Override
 		public byte[] apply(String digits) {
-			char[] cdigits = digits.toCharArray();
+			return apply(digits.toCharArray());
+		}
+		public static byte[] apply(char[] cdigits) {
 			byte[] buf = new byte[(cdigits.length >> 1)];
 			for(int i = 0, j = 0; i < buf.length; i ++) {
 				int hi = Character.digit(cdigits[j ++], 16);
