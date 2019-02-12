@@ -3,6 +3,8 @@ package javacloud.framework.config.internal;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -51,11 +53,30 @@ public class StandardConfigSource implements ConfigSource {
 	}
 	
 	/**
+	 * Standard configuration from -name value pair
+	 * @param arguments
+	 */
+	public StandardConfigSource(String[] arguments) {
+		this(parseProperties(arguments));
+	}
+	
+	/**
 	 * 
 	 */
 	@Override
 	public String getProperty(String name) {
 		return properties.get(name);
+	}
+	
+	/**
+	 * 
+	 * @param name
+	 * @param defval
+	 * @return
+	 */
+	public String getProperty(String name, String defval) {
+		String val = getProperty(name);
+		return (val == null? defval: val);
 	}
 	
 	/**
@@ -87,5 +108,40 @@ public class StandardConfigSource implements ConfigSource {
 		} catch (IOException ex) {
 			throw Exceptions.wrap("Unable to load config resource: " + resource, ex);
 		}
+	}
+	
+	/**
+	 * Command line: CMD [options][operands]
+	 * options: -X -Y --xyz value...
+	 * operands: A B C
+	 * 
+	 * @param arguments
+	 * @return
+	 */
+	static final Properties parseProperties(String[] arguments) {
+		Properties props = new Properties();
+		if(arguments != null) {
+			List<String> operands = new ArrayList<>();
+			for(int i = 0; i < arguments.length;) {
+				String opt = arguments[i ++];
+				if(opt.startsWith("-")) {
+					String val = null;
+					//expected value after --
+					if(opt.startsWith("--")) {
+						opt = opt.substring(2);
+						if(i < arguments.length && !arguments[i].startsWith("-")) {
+							val = arguments[i ++];
+						}
+					} else {
+						opt = opt.substring(1);
+					}
+					props.put(opt, val == null? "" : val);
+				} else {
+					operands.add(opt);
+				}
+			}
+			props.put("", operands);
+		}
+		return props;
 	}
 }

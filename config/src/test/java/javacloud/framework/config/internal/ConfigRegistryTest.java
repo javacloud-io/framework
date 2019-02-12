@@ -1,4 +1,6 @@
-package javacloud.framework.config;
+package javacloud.framework.config.internal;
+
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -7,6 +9,7 @@ import org.junit.Test;
 
 import javacloud.framework.cdi.test.ServiceTest;
 import javacloud.framework.config.ConfigManager;
+import javacloud.framework.config.internal.StandardConfigSource;
 import javacloud.framework.util.ResourceLoader;
 /**
  * 
@@ -35,5 +38,14 @@ public class ConfigRegistryTest extends ServiceTest {
 	@Test
 	public void testLoader() {
 		Assert.assertNotNull(ResourceLoader.loadService(ConfigManager.class));
+	}
+	
+	/**
+	 * 
+	 */
+	public void testCliArgs() {
+		Properties props = StandardConfigSource.parseProperties(new String[]{"-X", "-Y", "--xyz", "abc", "1", "2"});
+		Assert.assertEquals("", props.get("X"));
+		Assert.assertEquals("abc", props.get("xyz"));
 	}
 }

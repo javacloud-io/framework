@@ -1,4 +1,4 @@
-package javacloud.framework.config;
+package javacloud.framework.config.internal;
 
 import javacloud.framework.config.ConfigProperty;
 
