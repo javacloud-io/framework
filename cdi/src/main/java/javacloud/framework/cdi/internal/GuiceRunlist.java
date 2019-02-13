@@ -48,7 +48,7 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 		
 		//LOOK UP INSTANCE BY CLASS PRIOR TO INVOKE
 		if(instance instanceof Class<?>) {
-			instance = ServiceRegistry.get().getUnmanagedInstance((Class<?>)instance);
+			instance = ServiceRegistry.get().getSpotInstance((Class<?>)instance);
 		}
 		return	Objects.cast(method.invoke(instance, args));
 	}

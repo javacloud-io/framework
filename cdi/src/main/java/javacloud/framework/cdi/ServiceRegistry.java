@@ -54,8 +54,9 @@ public abstract class ServiceRegistry {
 	/**
 	 * return an unmanaged instance regardless of their annotation. It's like new() with dependency injection.
 	 * This will enable special use case where guest want to access host instance without interference.
+	 * 
 	 * @param type
 	 * @return
 	 */
-	public abstract <T> T getUnmanagedInstance(Class<T> type);
+	public abstract <T> T getSpotInstance(Class<T> type);
 }
