@@ -15,6 +15,7 @@
     		<includes>
     			<include>io.javacloud.framework:javacloud-common</include>
     			<include>io.javacloud.framework:javacloud-logging</include>
+    			<include>io.javacloud.framework:javacloud-cdi</include>
     			<include>io.javacloud.framework:javacloud-config</include>
     			<include>io.javacloud.framework:javacloud-i18n</include>
                 <include>io.javacloud.framework:javacloud-json</include>

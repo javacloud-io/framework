@@ -15,13 +15,14 @@
     		<includes>
                 <include>io.javacloud.framework:javacloud-common</include>
                 <include>io.javacloud.framework:javacloud-logging</include>
+                <include>io.javacloud.framework:javacloud-cdi</include>
                 <include>io.javacloud.framework:javacloud-json</include>
                 <include>io.javacloud.framework:javacloud-config</include>
                 <include>io.javacloud.framework:javacloud-i18n</include>
                 <include>io.javacloud.framework:javacloud-security</include>
                 <include>io.javacloud.framework:javacloud-jaxrs</include>
-		<include>io.javacloud.framework:javacloud-txn</include>
-		<include>io.javacloud.framework:javacloud-flow</include>
+		        <include>io.javacloud.framework:javacloud-txn</include>
+		        <include>io.javacloud.framework:javacloud-flow</include>
                 <include>io.javacloud.framework:javacloud-server</include>
             </includes>
     	</dependencySet>

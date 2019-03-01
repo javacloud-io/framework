@@ -3,11 +3,11 @@
   <parent>
   	<groupId>io.javacloud.framework</groupId>
   	<artifactId>framework</artifactId>
-  	<version>0.2</version>
+  	<version>0.3.0</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>javacloud-assemply</artifactId>
+  <artifactId>javacloud-stack</artifactId>
   <packaging>pom</packaging>
   <name>Framework assembly</name>
   
@@ -19,6 +19,7 @@
                 <descriptors>
                		<descriptor>${basedir}/src/main/client.xml</descriptor>
                 	<descriptor>${basedir}/src/main/server.xml</descriptor>
+                	<descriptor>${basedir}/src/main/client-deps.xml</descriptor>
 		</descriptors>
             </configuration>
      	</plugin>
@@ -37,19 +38,19 @@
     		<version>${project.version}</version>
 	</dependency>
 	<dependency>
-                <groupId>io.javacloud.framework</groupId>
-                <artifactId>javacloud-txn</artifactId>
-                <version>${project.version}</version>
-        </dependency>
+            <groupId>io.javacloud.framework</groupId>
+            <artifactId>javacloud-txn</artifactId>
+            <version>${project.version}</version>
+    </dependency>
 	<dependency>
-                <groupId>io.javacloud.framework</groupId>
-                <artifactId>javacloud-flow</artifactId>
-                <version>${project.version}</version>
-        </dependency>
+            <groupId>io.javacloud.framework</groupId>
+            <artifactId>javacloud-flow</artifactId>
+            <version>${project.version}</version>
+    </dependency>
 	<dependency>
-                <groupId>io.javacloud.framework</groupId>
-                <artifactId>javacloud-server</artifactId>
-                <version>${project.version}</version>
-        </dependency>
+            <groupId>io.javacloud.framework</groupId>
+            <artifactId>javacloud-server</artifactId>
+            <version>${project.version}</version>
+    </dependency>
   </dependencies>
 </project>
