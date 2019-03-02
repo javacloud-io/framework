@@ -11,7 +11,7 @@
   <url>www.javacloud.io</url>
   
   <scm>
-    <url>scm:git:https://github.com/javacloud/framework.git</url>
+    <url>scm:git:https://github.com/javacloud-io/framework.git</url>
   </scm>
 
   <licenses>
