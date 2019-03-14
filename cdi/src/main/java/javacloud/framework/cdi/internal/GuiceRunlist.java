@@ -7,13 +7,13 @@ import javacloud.framework.cdi.ServiceRegistry;
 import javacloud.framework.cdi.ServiceRunlist;
 import javacloud.framework.util.Objects;
 /**
+ * Implement a runList using Guice.
  * 
  * @author ho
  *
  */
 public abstract class GuiceRunlist extends ServiceRunlist {
 	protected GuiceRunlist() {
-		
 	}
 	
 	/**
@@ -48,7 +48,7 @@ public abstract class GuiceRunlist extends ServiceRunlist {
 		
 		//LOOK UP INSTANCE BY CLASS PRIOR TO INVOKE
 		if(instance instanceof Class<?>) {
-			instance = ServiceRegistry.get().getSpotInstance((Class<?>)instance);
+			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
 		}
 		return	Objects.cast(method.invoke(instance, args));
 	}

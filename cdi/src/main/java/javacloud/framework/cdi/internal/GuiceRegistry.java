@@ -10,7 +10,6 @@ import java.util.List;
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.ProvisionException;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
@@ -75,23 +74,7 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 	}
 	
 	/**
-	 * Return new on fly object with dependency injection. This object is not managed by Guice!!!
-	 * To simply the construction this type of object have to have default constructor.
-	 */
-	@Override
-	public <T> T getSpotInstance(Class<T> type) {
-		try {
-			T instance = type.newInstance();
-			injector.injectMembers(instance);
-			return instance;
-		}catch(InstantiationException | IllegalAccessException ex) {
-			//UNABLE TO PROVISION
-			throw new ProvisionException("Unable to instantiate with default constructor", ex);
-		}
-	}
-
-	/**
-	 * return internal injector of guice registry
+	 * return internal root injector of guice registry
 	 * @return
 	 */
 	public static final Injector getInjector() {
