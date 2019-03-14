@@ -7,7 +7,7 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>javacloud-assembly</artifactId>
+  <artifactId>javacloud-stack</artifactId>
   <packaging>pom</packaging>
   <name>Framework assembly</name>
   
