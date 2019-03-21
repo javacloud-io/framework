@@ -29,12 +29,14 @@ public class CodecsTest extends TestCase {
 	public void testBase64() {
 		String text = UUID.randomUUID().toString();
 		String base64 = Codecs.Base64Encoder.apply(text.getBytes(), false);
+		System.out.println("Base64:" + base64);
 		assertEquals(text, new String(Codecs.Base64Decoder.apply(base64, false)));
 	}
 	
 	public void testBase64Safe() {
 		String text = UUID.randomUUID().toString();
 		String base64 = Codecs.Base64Encoder.apply(text.getBytes(), true);
+		System.out.println("Base64 safe:" + base64);
 		assertEquals(text, new String(Codecs.Base64Decoder.apply(base64, true)));
 	}
 	
@@ -65,5 +67,6 @@ public class CodecsTest extends TestCase {
 		
 		sha = Digests.digest(Digests.SHA2, new byte[0]);
 		System.out.println(Codecs.Base64Encoder.apply(sha, false));
+		System.out.println(Codecs.Base64Encoder.apply(sha, true));
 	}
 }

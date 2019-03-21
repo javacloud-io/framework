@@ -5,11 +5,10 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import javax.xml.bind.DatatypeConverter;
 
 /**
  * Quick & simple encoding utils. Trying to delegate to system utils
@@ -41,7 +40,7 @@ public final class Codecs {
 		 * @return
 		 */
 		public static String apply(byte[] bytes, boolean safe, boolean pretty) {
-			String	base64 = DatatypeConverter.printBase64Binary(bytes);
+			String	base64 = Base64.getEncoder().encodeToString(bytes);
 			if(safe) {
 				char[] chars = base64.toCharArray();
 				int count = 0;
@@ -104,7 +103,7 @@ public final class Codecs {
 				}
 				base64 = new String(chars);
 			}
-			return	DatatypeConverter.parseBase64Binary(base64);
+			return	Base64.getDecoder().decode(base64);
 		}
 	}
 	
