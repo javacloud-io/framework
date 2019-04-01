@@ -16,8 +16,8 @@ import java.util.function.Predicate;
  */
 public class TextScanner {
 	private final CharStream source;
-	private int lineNo		= 1;
-	private int columnNo	= 0;
+	private int lineNumber		= 1;	//1 based
+	private int columnNumber	= 1;
 	/**
 	 * 
 	 * @param source
@@ -49,8 +49,8 @@ public class TextScanner {
 	 * 
 	 * @return
 	 */
-	public int getLineNo() {
-		return lineNo;
+	public int getLineNumber() {
+		return lineNumber;
 	}
 	
 	/**
@@ -58,8 +58,8 @@ public class TextScanner {
 	 * 
 	 * @return
 	 */
-	public int getColumnNo() {
-		return columnNo;
+	public int getColumnNumber() {
+		return columnNumber;
 	}
 	
 	/**
@@ -88,10 +88,10 @@ public class TextScanner {
 	public boolean nextChar() {
 		if(!source.isEOT()) {
 			if(source.getChar() == '\n') {
-				lineNo ++;
-				columnNo = 0;
+				lineNumber ++;
+				columnNumber = 1;
 			} else {
-				columnNo ++;
+				columnNumber ++;
 			}
 		}
 		return source.nextChar();
