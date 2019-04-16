@@ -51,7 +51,7 @@ public class ReservationQueue<T> {
 	}
 	
 	/**
-	 * Call by poller to reserve a worker prior to pulling task
+	 * Call by poller to reserve a worker prior to pulling task. Reserve only success if there is worker waiting
 	 * 
 	 * @param timeout
 	 * @param unit

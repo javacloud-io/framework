@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Poll available task from task Queue and execute if available. This work in conjunction with TaskPoller to avoid flooding the workers.
  * 
  * @author ho
  *
