@@ -1,9 +1,10 @@
 package javacloud.framework.json.internal;
 
 import java.beans.PropertyDescriptor;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +64,7 @@ public class JsonPath {
 		
 		//FORWARD UNTIL NOT ABLE TO SET
 		Object dict = this.root;
-		Stack<Pair<Object, String>> stack = new Stack<>();
+		Deque<Pair<Object, String>> stack = new ArrayDeque<>();
 		String[] segments = segments(path);
 		for(int i = 1; i < segments.length; i ++) {
 			Object v = getProperty(dict, segments[i]);
