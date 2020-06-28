@@ -31,6 +31,7 @@ public class ObjectsTest extends TestCase {
 	
 	public void testCompare() {
 		Assert.assertTrue(Objects.compare(1, 2) < 0);
+		Assert.assertTrue(Objects.compare(1, 1.0) != 0);
 		Assert.assertTrue(Objects.compare("aa", "ab") < 0);
 	}
 	
