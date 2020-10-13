@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javacloud.framework.util.Converters;
 import junit.framework.TestCase;
 /**
  * 

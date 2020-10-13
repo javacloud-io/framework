@@ -2,8 +2,6 @@ package javacloud.framework.util;
 
 import org.junit.Test;
 
-import javacloud.framework.util.Condition;
-
 import org.junit.Assert;
 import junit.framework.TestCase;
 /**

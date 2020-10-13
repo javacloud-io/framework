@@ -6,8 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import javacloud.framework.cdi.test.ServiceTest;
-import javacloud.framework.i18n.LocaleContext;
-import javacloud.framework.i18n.MessageManager;
 /**
  * 
  * @author ho

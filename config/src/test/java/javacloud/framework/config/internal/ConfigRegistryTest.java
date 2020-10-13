@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import javacloud.framework.cdi.test.ServiceTest;
 import javacloud.framework.config.ConfigManager;
-import javacloud.framework.config.internal.StandardConfigSource;
 import javacloud.framework.util.ResourceLoader;
 /**
  * 

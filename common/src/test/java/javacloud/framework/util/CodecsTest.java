@@ -16,8 +16,6 @@
 package javacloud.framework.util;
 import java.util.UUID;
 
-import javacloud.framework.util.Codecs;
-import javacloud.framework.util.Digests;
 import junit.framework.TestCase;
 
 /**

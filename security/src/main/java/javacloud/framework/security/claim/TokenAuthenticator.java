@@ -5,7 +5,6 @@ import javacloud.framework.security.AuthenticationException;
 import javacloud.framework.security.Authenticator;
 import javacloud.framework.security.Credentials;
 import javacloud.framework.security.InvalidCredentialsException;
-import javacloud.framework.security.claim.TokenGrant;
 import javacloud.framework.security.internal.AuthorizationGrant;
 import javacloud.framework.security.internal.Permissions;
 import javacloud.framework.security.internal.TokenCredentials;

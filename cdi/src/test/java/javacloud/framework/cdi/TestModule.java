@@ -15,7 +15,6 @@
  */
 package javacloud.framework.cdi;
 
-import javacloud.framework.cdi.LazySingleton;
 import javacloud.framework.cdi.internal.GuiceModule;
 
 import javax.inject.Singleton;

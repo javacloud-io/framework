@@ -1,7 +1,5 @@
 package javacloud.framework.cdi;
 
-import javacloud.framework.cdi.ServiceRegistry;
-import javacloud.framework.cdi.ServiceRunlist;
 import javacloud.framework.cdi.TestModule.TestServiceImpl;
 import javacloud.framework.cdi.test.ServiceTest;
 

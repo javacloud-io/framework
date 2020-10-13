@@ -1,6 +1,5 @@
 package javacloud.framework.security;
 
-import javacloud.framework.security.AuthenticationException;
 /**
  * Denied access due to not enough permission in some case.
  * 

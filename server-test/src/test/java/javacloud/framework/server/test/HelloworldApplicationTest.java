@@ -20,8 +20,6 @@ import javax.ws.rs.core.Application;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javacloud.framework.server.test.ServiceApplicationTest;
-
 /**
  * Using per class server test
  * 

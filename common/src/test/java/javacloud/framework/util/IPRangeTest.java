@@ -3,8 +3,6 @@ package javacloud.framework.util;
 import java.net.UnknownHostException;
 
 import org.junit.Test;
-
-import javacloud.framework.util.Jvms;
 import junit.framework.TestCase;
 /**
  * 

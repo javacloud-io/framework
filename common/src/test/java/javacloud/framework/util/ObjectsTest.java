@@ -18,9 +18,6 @@ package javacloud.framework.util;
 import java.util.List;
 
 import org.junit.Assert;
-
-import javacloud.framework.util.Converters;
-import javacloud.framework.util.Objects;
 import junit.framework.TestCase;
 /**
  * 

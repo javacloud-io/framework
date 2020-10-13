@@ -1,6 +1,5 @@
 package javacloud.framework.security;
 
-import javacloud.framework.security.AuthenticationException;
 /**
  * 
  * @author tobi

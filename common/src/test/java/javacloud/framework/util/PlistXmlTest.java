@@ -18,7 +18,6 @@ package javacloud.framework.util;
 import java.util.Map;
 
 import javacloud.framework.io.PlistDocument;
-import javacloud.framework.util.Objects;
 import junit.framework.TestCase;
 /**
  * 

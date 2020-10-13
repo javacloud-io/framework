@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javacloud.framework.cdi.test.ServiceTest;
 import javacloud.framework.io.Externalizer;
-import javacloud.framework.json.JsonValue;
 import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Objects;
 
