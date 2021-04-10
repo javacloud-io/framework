@@ -11,20 +11,20 @@ import java.io.Reader;
  */
 public interface CharStream {
 	/**
-	 * return true if END of stream
-	 * @return
+	 * 
+	 * @return true if END of stream
 	 */
 	public boolean isEOT();
 	
 	/**
-	 * Advance cursor to next char if any. return true/false if not
-	 * @return
+	 * Advance cursor to next char if any.
+	 * @return true/false if not
 	 */
 	public boolean nextChar();
 	
 	/**
-	 * return char at current position
-	 * @return
+	 * 
+	 * @return char at current position
 	 */
 	public char getChar();
 	

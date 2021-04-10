@@ -29,6 +29,7 @@ import javacloud.framework.util.Objects;
 public final class JwtCodecs {
 	private static final Logger logger = Logger.getLogger(JwtCodecs.class.getName());
 	private static final String SHA256withRSA = "SHA256withRSA";
+	
 	/**
 	 * NONE
 	 */
@@ -123,7 +124,7 @@ public final class JwtCodecs {
 	}
 	
 	//PROTECTED
-	private JsonConverter converter;
+	private final JsonConverter converter;
 	public JwtCodecs(Externalizer externalizer) {
 		this.converter = new JsonConverter(externalizer);
 	}

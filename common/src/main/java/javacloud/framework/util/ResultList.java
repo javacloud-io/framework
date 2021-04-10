@@ -1,6 +1,5 @@
 package javacloud.framework.util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -15,8 +14,10 @@ import java.util.List;
 public class ResultList<T> implements Iterable<T> {
 	private int count;		//total item count possibly bigger than items
 	private List<T> items;
+	
 	public ResultList() {
 	}
+	
 	/**
 	 * return a total sublist
 	 * @param items
@@ -80,19 +81,7 @@ public class ResultList<T> implements Iterable<T> {
 	}
 	
 	/**
-	 * Assuming item is sortable
-	 * @param comparator
-	 * @return
-	 */
-	public ResultList<T> sortItems() {
-		if(items != null) {
-			items.sort(null);
-		}
-		return this;
-	}
-	
-	/**
-	 * return internal iterator
+	 * @return internal iterator
 	 */
 	@Override
 	public Iterator<T> iterator() {
@@ -100,22 +89,5 @@ public class ResultList<T> implements Iterable<T> {
 			return Collections.emptyIterator();
 		}
 		return items.iterator();
-	}
-	
-	/**
-	 * return true if adding actually change the list
-	 * 
-	 * @param item
-	 * @return
-	 */
-	public boolean addItem(T item) {
-		if(items == null) {
-			items = new ArrayList<>();
-		}
-		boolean added = items.add(item);
-		if(added && count < items.size()) {
-			count = items.size();
-		}
-		return added;
 	}
 }

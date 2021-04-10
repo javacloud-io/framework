@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javacloud.framework.util.Exceptions;
+import javacloud.framework.util.GenericException;
 import javacloud.framework.util.Objects;
 import javacloud.framework.util.ResourceLoader;
 
@@ -39,7 +39,7 @@ public class ComponentBuilder {
 			//
 			return build(bindings, loader);
 		} catch(IOException | ClassNotFoundException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class ComponentBuilder {
 			
 			// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS
 			if(typeClass == null && binding.implClass() == null) {
-				Package pkg = Package.getPackage(binding.name());
+				Package pkg = loader.getDefinedPackage(binding.name());
 				if(pkg == null) {
 					String subresource = ResourceLoader.META_INF + binding.name();
 					logger.log(Level.FINE, "Including components from resource file: {0}", subresource);

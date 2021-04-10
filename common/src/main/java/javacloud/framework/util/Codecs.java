@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 /**
  * Quick & simple encoding utils. Trying to delegate to system utils
+ * 
  * @author tobi
  *
  */
@@ -153,7 +154,7 @@ public final class Codecs {
 			try {
 				return apply(params, true);
 			} catch (IOException ex) {
-				throw Exceptions.wrap(ex);
+				throw GenericException.of(ex);
 			}
 		}
 		
@@ -201,13 +202,14 @@ public final class Codecs {
 		}
 		
 	}
+	
 	public static class UrlDecoder implements Function<String, Map<String, Object>> {
 		@Override
 		public Map<String, Object> apply(String params) {
 			try {
 				return apply(params, true);
 			} catch (IOException ex) {
-				throw Exceptions.wrap(ex);
+				throw GenericException.of(ex);
 			}
 		}
 		
@@ -272,31 +274,30 @@ public final class Codecs {
 	}
 	
 	/**
-	 * return UTF8 string encoded.
 	 * 
 	 * @param bytes
 	 * @param offset
 	 * @param len
-	 * @return
+	 * @return UTF8 string encoded.
 	 */
 	public static String toUTF8(byte[] bytes, int offset, int len) {
 		try {
 			return new String(bytes, offset, len, UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	
 	/**
-	 * return byte encoded of UTF8
+	 * 
 	 * @param utf8
-	 * @return
+	 * @return byte encoded of UTF8
 	 */
 	public static byte[] toBytes(String utf8) {
 		try {
 			return utf8.getBytes(UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	

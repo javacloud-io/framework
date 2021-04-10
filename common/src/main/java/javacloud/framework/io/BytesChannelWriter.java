@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.WritableByteChannel;
 
-import javacloud.framework.util.Exceptions;
+import javacloud.framework.util.GenericException;
 /**
  * Simple bytes channel which guarantee transfer whole byte buffer.
+ * 
  * @author aimee
  *
  */
@@ -38,9 +39,10 @@ public abstract class BytesChannelWriter implements WritableByteChannel {
 		try {
 			close();
 		}catch(IOException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
+	
 	/**
 	 * 
 	 * @param wbc

@@ -57,11 +57,10 @@ public final class Objects {
 	}
 	
 	/**
-	 * return similarity between string with value [0,1] similar to string compare
 	 * 
 	 * @param ta
 	 * @param tb
-	 * @return
+	 * @return similarity between string with value [0,1] similar to string compare
 	 */
 	public static float similarity(String ta, String tb) {
 		int la = ta.length(), lb = tb.length();
@@ -153,9 +152,9 @@ public final class Objects {
 	}
 	
 	/**
-	 * return sign of the number
+	 * 
 	 * @param num
-	 * @return
+	 * @return sign of the number
 	 */
 	public static int signum(long num) {
 		return (num > 0? 1: (num < 0? -1 : 0));
@@ -182,20 +181,18 @@ public final class Objects {
 	}
 	
 	/**
-	 * return true if list is empty
 	 * 
 	 * @param value
-	 * @return
+	 * @return true if list is empty
 	 */
 	public static boolean isEmpty(Object[] value) {
 		return value == null || value.length == 0;
 	}
 	
 	/**
-	 * return true if collection is empty
 	 * 
 	 * @param collection
-	 * @return
+	 * @return true if collection is empty
 	 */
 	public static boolean isEmpty(Map<?, ?> collection) {
 		return collection == null || collection.isEmpty();

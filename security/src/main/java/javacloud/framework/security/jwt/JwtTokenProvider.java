@@ -19,8 +19,9 @@ import java.util.Map;
  *
  */
 public abstract class JwtTokenProvider implements TokenProvider {
-	private JwtCodecs	jwtCodecs;
-	private JwtSigner	jwtSigner;
+	private final JwtCodecs	jwtCodecs;
+	private final JwtSigner	jwtSigner;
+	
 	/**
 	 * 
 	 * @param externalizer
@@ -58,11 +59,9 @@ public abstract class JwtTokenProvider implements TokenProvider {
 			JwtTokenValidator.JWT_EXPIRATION,	expireAt.getTime()
 		);
 		
-		//TOKEN
+		//TOKEN details
 		TokenGrant token = new TokenGrant(jwtCodecs.encodeJWT(new JwtToken(jwtTokenType(), claims), jwtSigner),
-				type,
-				authzGrant.getName(),
-				authzGrant.getAudience());
+				type, authzGrant.getName(), authzGrant.getAudience());
 		token.setScope(authzGrant.getScope());
 		token.setRoles(roles);
 		token.setIssuedAt(issuedAt);

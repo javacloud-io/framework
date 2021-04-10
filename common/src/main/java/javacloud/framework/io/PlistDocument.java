@@ -47,8 +47,8 @@ public final class PlistDocument {
 	}
 	
 	/**
-	 * return root xmlElement
-	 * @return
+	 * 
+	 * @return root xmlElement
 	 */
 	public Map<String, Object> plist() {
 		return	plist;

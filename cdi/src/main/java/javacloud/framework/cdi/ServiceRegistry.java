@@ -42,12 +42,11 @@ public abstract class ServiceRegistry {
 	public abstract <T> T getInstance(Class<T> type, String name);
 	
 	/**
-	 * return all instances of the given service type, intended for plugin and extension. Plugin should bind
-	 * with random name
 	 * 
 	 * @param type
 	 * @param names
-	 * @return
+	 * @return all instances of the given service type, intended for plugin and extension. Plugin should bind
+	 * with random name
 	 */
 	public abstract <T> List<T> getInstances(Class<T> type, String... names);
 }

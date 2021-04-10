@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 /**
  * TODO:
- * 
  * Should consider make it thread safe using thread local.
  * 
  * @author tobi

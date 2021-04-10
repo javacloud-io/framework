@@ -12,6 +12,7 @@ import java.util.Map;
 public class Pair<K,V> implements Map.Entry<K, V> {
 	private K key;
 	private V value;
+	
 	/**
 	 * 
 	 * @param key
@@ -31,7 +32,7 @@ public class Pair<K,V> implements Map.Entry<K, V> {
 	}
 	
 	/**
-	 * return key
+	 * @return key
 	 */
 	@Override
 	public K getKey() {
@@ -39,7 +40,7 @@ public class Pair<K,V> implements Map.Entry<K, V> {
 	}
 	
 	/**
-	 * return the value
+	 * @return the value
 	 */
 	@Override
 	public V getValue() {

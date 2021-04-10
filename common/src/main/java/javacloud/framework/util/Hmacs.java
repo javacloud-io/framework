@@ -18,6 +18,7 @@ public final class Hmacs {
 	
 	/**
 	 * SHA1 using HMAC algorithm with a known secret KEY.
+	 * 
 	 * @param secret
 	 * @param bytes
 	 * @return
@@ -28,6 +29,7 @@ public final class Hmacs {
 	
 	/**
 	 * Digest bytes data using specified algorithm and secret.
+	 * 
 	 * @param algorithm
 	 * @param secret
 	 * @param bytes
@@ -52,9 +54,9 @@ public final class Hmacs {
 	}
 	
 	/**
-	 * return MAC and always initialize with KEY.
+	 * 
 	 * @param secret
-	 * @return
+	 * @return MAC and always initialize with KEY.
 	 */
 	public static javax.crypto.Mac get(Key secret) {
 		try {
@@ -62,7 +64,7 @@ public final class Hmacs {
 			hmac.init(secret);
 			return hmac;
 		}catch(InvalidKeyException | NoSuchAlgorithmException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 }

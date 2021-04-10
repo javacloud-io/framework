@@ -40,6 +40,7 @@ public final class KeyChain {
 	//Certificate chain always start with user certificate & end with trusted/self-signed
 	private	PrivateKey privateKey;
 	private	X509Certificate[] x509Certificates;
+	
 	/**
 	 * 
 	 * @param privateKey
@@ -51,31 +52,31 @@ public final class KeyChain {
 	}
 	
 	/**
-	 * return the private key
-	 * @return
+	 * 
+	 * @return the private key
 	 */
 	public PrivateKey getPrivateKey() {
 		return privateKey;
 	}
 	
 	/**
-	 * return all certificate chains.
-	 * @return
+	 * 
+	 * @return all certificate chains.
 	 */
 	public X509Certificate[] getCertificates() {
 		return x509Certificates;
 	}
 	
 	/**
-	 * return the first certificate of THE CHAINs.
+	 * @return the first certificate of THE CHAINs.
 	 */
 	public X509Certificate getCertificate() {
 		return	(x509Certificates == null || x509Certificates.length == 0? null : x509Certificates[0]);
 	}
 	
 	/**
-	 * return certificate store for advance manipulation.
-	 * @return
+	 * 
+	 * @return certificate store for advance manipulation.
 	 * @throws NoSuchProviderException 
 	 * @throws NoSuchAlgorithmException 
 	 * @throws InvalidAlgorithmParameterException 
@@ -154,11 +155,10 @@ public final class KeyChain {
 	
 	/**
 	 * Resolve the certificate chains, find the longest as possible to form the complete chain.
-	 * return true if resolved does change the certificates.
 	 * 
 	 * Assuming the x509Certificates[0] always the leaf one!!!
 	 * @param chains
-	 * @return
+	 * @return true if resolved does change the certificates.
 	 */
 	public boolean resolveCertificates(KeyChain...chains) {
 		//DON'T RESOLVE ANYTHING

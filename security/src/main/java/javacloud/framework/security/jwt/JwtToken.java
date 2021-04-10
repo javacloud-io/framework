@@ -2,6 +2,8 @@ package javacloud.framework.security.jwt;
 
 import java.util.Map;
 
+import javacloud.framework.util.Objects;
+
 /**
  * Simple token representation with Dictionary claims set.
  * 
@@ -56,5 +58,15 @@ public final class JwtToken {
 	 */
 	public Map<String, Object> getClaims() {
 		return claims;
+	}
+	
+	/**
+	 * 
+	 * @param <T>
+	 * @param name
+	 * @return
+	 */
+	public <T> T getClaim(String name) {
+		return	Objects.cast(claims == null? null : claims.get(name));
 	}
 }

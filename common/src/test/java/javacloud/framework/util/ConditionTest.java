@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  * @author ho
  *
  */
-public class OpConditionTest extends TestCase {
+public class ConditionTest extends TestCase {
 	@Test
 	public void testEQ() {
 		Condition<String> eq = Condition.EQ("124");

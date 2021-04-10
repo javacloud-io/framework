@@ -10,10 +10,9 @@ package javacloud.framework.config;
  */
 public interface ConfigSource {
 	/**
-	 * return property value of given property name
 	 * 
 	 * @param name
-	 * @return
+	 * @return property value of given property name
 	 */
 	public String getProperty(String name);
 }

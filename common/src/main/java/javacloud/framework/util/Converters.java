@@ -38,6 +38,7 @@ public final class Converters {
 			return (value != null ? Boolean.valueOf((String)value) : null);
 		}
 	};
+	
 	//BYTE | NUMBER | STRING
 	public static final Function<Object, Byte> BYTE = new Function<Object, Byte>() {
 		@Override
@@ -50,6 +51,7 @@ public final class Converters {
 			return (value != null ? Byte.valueOf((String)value) : null);
 		}
 	};
+	
 	//CHAR | NUMBER | STRING
 	public static final Function<Object, Character> CHARACTER = new Function<Object, Character>() {
 		@Override
@@ -62,6 +64,7 @@ public final class Converters {
 			return (value != null ? (((String)value).length() == 0? '\0' : ((String)value).charAt(0)) : null);
 		}
 	};
+	
 	//INTEGER  | NUMBER | STRING
 	public static final Function<Object, Integer> INTEGER = new Function<Object, Integer>() {
 		@Override
@@ -74,6 +77,7 @@ public final class Converters {
 			return (value != null ? Integer.valueOf((String)value) : null);
 		}
 	};
+	
 	//SHORT | NUMBER | STRING
 	public static final Function<Object, Short> SHORT = new Function<Object, Short>() {
 		@Override
@@ -86,6 +90,7 @@ public final class Converters {
 			return (value != null ? Short.valueOf((String)value) : null);
 		}
 	};
+	
 	//LONG | NUMBER | DATE | STRING
 	public static final Function<Object, Long> LONG = new Function<Object, Long>() {
 		@Override
@@ -100,6 +105,7 @@ public final class Converters {
 			return (value != null ? Long.valueOf((String)value) : null);
 		}
 	};
+	
 	//FLOAT | NUMBER | STRING
 	public static final Function<Object, Float> FLOAT = new Function<Object, Float>() {
 		@Override
@@ -112,6 +118,7 @@ public final class Converters {
 			return (value != null ? Float.valueOf((String)value) : null);
 		}
 	};
+	
 	//DOUBLE | NUMBER | STRING
 	public static final Function<Object, Double> DOUBLE = new Function<Object, Double>() {
 		@Override
@@ -139,6 +146,7 @@ public final class Converters {
 			return (value != null ? ByteBuffer.wrap(Codecs.Base64Decoder.apply((String)value, false)) : null);
 		}
 	};
+	
 	//BYTES | BYTEB | BASE64 ENCODED
 	public static final Function<Object, byte[]> BYTES = new Function<Object, byte[]>() {
 		@Override
@@ -156,6 +164,7 @@ public final class Converters {
 			return (value != null ? Codecs.Base64Decoder.apply((String)value, false) : null);
 		}
 	};
+	
 	//DATE
 	public static final Function<Object, Date> DATE = new Function<Object, Date>() {
 		@Override
@@ -169,10 +178,11 @@ public final class Converters {
 			try {
 				return (value != null? DateFormats.getUTC(DateFormats.ISO8601_S3).parse((String)value) : null);
 			}catch(ParseException ex) {
-				throw Exceptions.wrap(ex);
+				throw GenericException.of(ex);
 			}
 		}
 	};
+	
 	//STRING
 	public static final Function<Object, String> STRING = new Function<Object, String>() {
 		@Override

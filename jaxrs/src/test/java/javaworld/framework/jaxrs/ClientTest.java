@@ -20,7 +20,7 @@ public class ClientTest extends ServiceTest {
 	@Inject ClientManager clientManager;
 	@Test
 	public void testClient() {
-		client.target("https://172.217.5.196").request().get();
+		client.target("https://www.google.com").request().get();
 		
 		Client c = clientManager.getClient(Client.class);
 		Assert.assertSame(client, c);

@@ -40,7 +40,7 @@ public final class BlindTrustProvider extends java.security.Provider {
 	
 	//PROTECTED
 	private BlindTrustProvider() {
-		super(TRUST_NAME, 1.0D, TRUST_NAME);
+		super(TRUST_NAME, "1.0.0", TRUST_NAME);
 		AccessController.doPrivileged(new PrivilegedAction<Object>() {
 			public Object run() {
 				put("TrustManagerFactory." + TRUST_ALG, BlindTrustManagerFactorySpi.class.getName());

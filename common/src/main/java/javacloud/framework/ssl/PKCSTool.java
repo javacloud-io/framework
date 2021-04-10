@@ -2,7 +2,6 @@ package javacloud.framework.ssl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -105,10 +104,9 @@ public final class PKCSTool {
 	}
 	
 	/**
-	 * RETURN RSA KEY PAIR
 	 * 
 	 * @param keySize
-	 * @return
+	 * @return RSA KEY PAIR
 	 * @throws NoSuchAlgorithmException
 	 */
 	public static KeyPair createKeyPair(int keySize) throws NoSuchAlgorithmException {
@@ -118,27 +116,6 @@ public final class PKCSTool {
 		 
 		//GENERATE KEYPAIR
 		return	keyGen.generateKeyPair();
-	}
-	
-	/**
-	 * Special conversion from javax to java certificate.
-	 * 
-	 * @param xcerts
-	 * @return
-	 * @throws javax.security.cert.CertificateEncodingException 
-	 * @throws CertificateException 
-	 */
-	public static KeyChain createKeyChain(javax.security.cert.X509Certificate[] xcerts)
-		throws CertificateException, javax.security.cert.CertificateEncodingException {
-		X509Certificate[] certs = (xcerts == null? null : new X509Certificate[xcerts.length]);
-		
-		if(xcerts != null) {
-			for(int i = 0; i < xcerts.length; i ++) {
-				certs[i] = (X509Certificate)CertificateFactory.getInstance("X.509")
-					.generateCertificate(new ByteArrayInputStream(xcerts[i].getEncoded()));
-			}
-		}
-		return new KeyChain(null, certs);
 	}
 	
 	/**

@@ -11,7 +11,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
-import javacloud.framework.util.Exceptions;
+import javacloud.framework.util.GenericException;
 import javacloud.framework.util.Objects;
 import javacloud.framework.util.ValidationException;
 
@@ -93,7 +93,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 */
 	protected Map<String, Object> toEntity(E exception) {
 		//REASON ERROR
-		String error = Exceptions.getReason(exception);
+		String error = GenericException.getReason(exception);
 		
 		//DETAILS MESSAGE LOCALE
 		String message;

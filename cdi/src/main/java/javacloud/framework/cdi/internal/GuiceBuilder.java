@@ -1,6 +1,5 @@
 package javacloud.framework.cdi.internal;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -90,7 +89,7 @@ public abstract class GuiceBuilder {
 					//LOAD ALL MODULES/SERVICES
 					if(Module.class.isAssignableFrom(typeClass)) {
 						logger.fine("Registering module: " + typeClass);
-						zmodules.add((Module)typeClass.newInstance());
+						zmodules.add((Module)typeClass.getConstructor().newInstance());
 					} else {
 						zservices.add(binding);
 					}
@@ -126,7 +125,7 @@ public abstract class GuiceBuilder {
 				zmodules.add(dynamicModule);
 			}
 			return zmodules;
-		} catch(IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+		} catch(Exception ex) {
 			throw new ConfigurationException(Arrays.asList(new Message(ex.getClass() + ": " + ex.getMessage())));
 		}
 	}

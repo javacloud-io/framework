@@ -18,6 +18,7 @@ public class TextScanner {
 	private final CharStream source;
 	private int lineNumber		= 1;	//1 based
 	private int columnNumber	= 1;
+	
 	/**
 	 * 
 	 * @param source
@@ -45,45 +46,41 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return line number
 	 * 
-	 * @return
+	 * @return line number
 	 */
 	public int getLineNumber() {
 		return lineNumber;
 	}
 	
 	/**
-	 * return column number
 	 * 
-	 * @return
+	 * @return column number
 	 */
 	public int getColumnNumber() {
 		return columnNumber;
 	}
 	
 	/**
-	 * return true if has MORE
 	 * 
-	 * @return
+	 * @return true if has MORE
 	 */
 	public boolean hasMoreChars() {
 		return !source.isEOT();
 	}
 	
 	/**
-	 * return look ahead character
 	 * 
-	 * @return
+	 * @return look ahead character
 	 */
 	public char currChar() {
 		return source.getChar();
 	}
 	
 	/**
-	 * Move to next char and return false if has NONE.
+	 * Move to next char.
 	 * 
-	 * @return
+	 * @return false if has NONE.
 	 */
 	public boolean nextChar() {
 		if(!source.isEOT()) {
@@ -98,11 +95,10 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return a token with matches boundary or EMPTY to consumer
 	 * 
 	 * @param matcher
 	 * @param consumer
-	 * @return
+	 * @return a token with matches boundary or EMPTY to consumer
 	 */
 	public boolean nextChars(Predicate<Character> matcher, Consumer<Character> consumer) {
 		do {
@@ -116,12 +112,11 @@ public class TextScanner {
 	}
 	
 	/**
-	 * Return token until quoteChar with escapeChar, similar to string quote in java
 	 * 
 	 * @param escapseChar
 	 * @param quoteChar
 	 * @param unescape
-	 * @return empty if not matches
+	 * @return token until quoteChar with escapeChar, similar to string quote in java or empty if not matches
 	 */
 	public String nextToken(char escapseChar, char quoteChar, boolean unescape) {
 		Token token = (unescape? Token.quote(escapseChar) : new Token());
@@ -134,7 +129,7 @@ public class TextScanner {
 	 * 
 	 * @param starChar
 	 * @param slashChar
-	 * @return empty if not matches
+	 * @return token until matches both star & slash or empty if not matches
 	 */
 	public String nextToken(char starChar, char slashChar) {
 		Token token = Token.slash(starChar);
@@ -143,10 +138,9 @@ public class TextScanner {
 	}
 	
 	/**
-	 * return token matches boundary
 	 * 
 	 * @param matcher
-	 * @return empty if not matches
+	 * @return token matches boundary or empty if not matches
 	 */
 	public String nextToken(Predicate<Character> matcher) {
 		Token token = new Token();

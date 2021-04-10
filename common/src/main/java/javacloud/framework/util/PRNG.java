@@ -27,10 +27,9 @@ public final class PRNG {
 	}
 	
 	/**
-	 * return next bytes LENGTH
 	 * 
 	 * @param len
-	 * @return
+	 * @return next bytes LENGTH
 	 */
 	public static byte[] nextBytes(int len) {
 		byte[] bytes = new byte[len];
@@ -39,10 +38,9 @@ public final class PRNG {
 	}
 	
 	/**
-	 * return next big integer with number of bytes
 	 * 
 	 * @param len
-	 * @return
+	 * @return next big integer with number of bytes
 	 */
 	public static BigInteger nextBInteger(int len) {
 		return new BigInteger(len << 3, SRAND);

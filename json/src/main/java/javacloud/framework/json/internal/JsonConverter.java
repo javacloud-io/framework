@@ -10,7 +10,7 @@ import javacloud.framework.io.BytesInputStream;
 import javacloud.framework.io.BytesOutputStream;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Codecs;
-import javacloud.framework.util.Exceptions;
+import javacloud.framework.util.GenericException;
 import javacloud.framework.util.Objects;
 
 /**
@@ -20,7 +20,8 @@ import javacloud.framework.util.Objects;
  *
  */
 public final class JsonConverter implements Externalizer {
-	private Externalizer externalizer;
+	private final Externalizer externalizer;
+	
 	public JsonConverter(Externalizer externalizer) {
 		this.externalizer = externalizer;
 	}
@@ -130,7 +131,7 @@ public final class JsonConverter implements Externalizer {
 					}
 					return (toObject(toBytes(value), type));
 				} catch(IOException ex) {
-					throw Exceptions.wrap(ex);
+					throw GenericException.of(ex);
 				}
 			}
 		};

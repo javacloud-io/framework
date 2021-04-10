@@ -14,6 +14,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Wrapping around AES/DES/3DES. Should use AES all the time if NEED TO.
+ * 
  * @author tobi
  *
  */
@@ -45,6 +46,7 @@ public class Cryptos {
 	
 	/**
 	 * Encrypt byte block using cipher
+	 * 
 	 * @param cipher
 	 * @param bytes
 	 * @return
@@ -54,7 +56,7 @@ public class Cryptos {
 		try {
 			return cipher.doFinal();
 		}catch(BadPaddingException | IllegalBlockSizeException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	
@@ -71,7 +73,7 @@ public class Cryptos {
 		try {
 			return cipher.doFinal();
 		}catch(BadPaddingException | IllegalBlockSizeException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	
@@ -110,6 +112,7 @@ public class Cryptos {
 	
 	/**
 	 * Make sure to correct passing the initializing VECTOR.
+	 * 
 	 * @param transformation 
 	 * @param opmode
 	 * @param key
@@ -122,7 +125,7 @@ public class Cryptos {
 			cipher.init(opmode, key, ivSpec);
 			return cipher;
 		} catch (InvalidKeyException |  NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 }

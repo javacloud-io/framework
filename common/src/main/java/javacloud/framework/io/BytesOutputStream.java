@@ -7,6 +7,7 @@ import javacloud.framework.util.Codecs;
 
 /**
  * Extended to allow direct access to the buffer.
+ * 
  * @author aimee
  *
  */
@@ -24,24 +25,24 @@ public class BytesOutputStream extends java.io.ByteArrayOutputStream {
 	}
 	
 	/**
-	 * return current byte count.
-	 * @return
+	 * 
+	 * @return current byte count.
 	 */
 	public int count() {
 		return	count;
 	}
 	
 	/**
-	 * return the current internal buffer.
-	 * @return
+	 * 
+	 * @return the current internal buffer.
 	 */
 	public byte[] byteArray() {
 		return buf;
 	}
 	
 	/**
-	 * Return the byte buffer!
-	 * @return
+	 * 
+	 * @return the byte buffer!
 	 */
 	public ByteBuffer byteBuffer() {
 		return ByteBuffer.wrap(buf, 0, count);

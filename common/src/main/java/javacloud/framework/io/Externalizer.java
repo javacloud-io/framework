@@ -15,8 +15,8 @@ public interface Externalizer {
 	public static final String XML  = "xml";
 	
 	/**
-	 * return content type identifier
-	 * @return
+	 * 
+	 * @return content type identifier
 	 */
 	public String type();
 	

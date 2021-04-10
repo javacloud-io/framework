@@ -19,6 +19,7 @@ public abstract class ProxyInvocationHandler implements InvocationHandler {
 			NATIVE_METHODS.add(m.getName());
 		}
 	}
+	
 	protected ProxyInvocationHandler() {
 	}
 	

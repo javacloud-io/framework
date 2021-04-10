@@ -25,9 +25,10 @@ public final class Jvms {
 	//protected
 	private Jvms() {
 	}
+	
 	/**
-	 * Return java home folder.
-	 * @return
+	 * 
+	 * @return java home folder.
 	 */
 	public static String getJavaHome() {
 		return System.getProperty("java.home");
@@ -42,17 +43,16 @@ public final class Jvms {
 	}
 	
 	/**
-	 * Return user home folder
-	 * @return
+	 * 
+	 * @return user home folder
 	 */
 	public static String getUserHome() {
 		return System.getProperty("user.dir");
 	}
 	
 	/**
-	 * return full vendor os/version
 	 * 
-	 * @return
+	 * @return full vendor os/version
 	 */
 	public static String getOsDetails() {
 		return	System.getProperty("os.arch") + "; " + System.getProperty("os.name") + "/" + System.getProperty("os.version");
@@ -83,9 +83,8 @@ public final class Jvms {
 	}
 	
 	/**
-	 * return current local host address.
 	 * 
-	 * @return
+	 * @return current local host address.
 	 * @throws UnknownHostException
 	 */
 	public static InetAddress getLocalAddress() throws UnknownHostException {

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  * @author ho
  *
  */
-public final class Exceptions extends RuntimeException {
+public final class GenericException extends RuntimeException {
 	private static final long serialVersionUID = -3859926551631789301L;
 	
 	// DOMAIN & EMAIL
@@ -22,10 +22,11 @@ public final class Exceptions extends RuntimeException {
 	public static final String REGEX_ID 	= "^[_\\p{L}0-9-@\\.:]+$";
 	
 	// Internal unchecked construction
-	private Exceptions(Throwable cause) {
+	private GenericException(Throwable cause) {
 		super(cause);
 	}
-	private Exceptions(String message, Throwable cause) {
+	
+	private GenericException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
@@ -35,11 +36,11 @@ public final class Exceptions extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public static RuntimeException wrap(Throwable t) {
+	public static RuntimeException of(Throwable t) {
 		if(t instanceof RuntimeException) {
 			return (RuntimeException)t;
 		}
-		return new Exceptions(t);
+		return new GenericException(t);
 	}
 	
 	/**
@@ -49,8 +50,8 @@ public final class Exceptions extends RuntimeException {
 	 * @param t
 	 * @return
 	 */
-	public static RuntimeException wrap(String message, Throwable t) {
-		return new Exceptions(message, unwrap(t));
+	public static RuntimeException of(String message, Throwable t) {
+		return new GenericException(message, unwrap(t));
 	}
 	
 	/**
@@ -60,7 +61,7 @@ public final class Exceptions extends RuntimeException {
 	 * @return
 	 */
 	static Throwable unwrap(Throwable t) {
-		if(t instanceof Exceptions) {
+		if(t instanceof GenericException) {
 			return t.getCause();
 		}
 		if(t instanceof InvocationTargetException) {
@@ -107,10 +108,9 @@ public final class Exceptions extends RuntimeException {
 	}
 	
 	/**
-	 * return the reason code for given exception.
 	 * 
 	 * @param t
-	 * @return
+	 * @return the reason code for given exception.
 	 */
 	public static String getReason(Throwable cause) {
 		if(cause instanceof ValidationException) {
@@ -121,10 +121,10 @@ public final class Exceptions extends RuntimeException {
 	}
 	
 	/**
-	 * return stack trace string with depth
+	 * 
 	 * @param t
 	 * @param depth
-	 * @return
+	 * @return stack trace string with depth
 	 */
 	public static String getStackTrace(Throwable t, int depth) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);

@@ -12,7 +12,7 @@ import javax.inject.Singleton;
 import javacloud.framework.i18n.LocaleContext;
 import javacloud.framework.i18n.MessageManager;
 import javacloud.framework.i18n.internal.MessageBundlesControl;
-import javacloud.framework.util.Exceptions;
+import javacloud.framework.util.GenericException;
 import javacloud.framework.util.ProxyInvocationHandler;
 import javacloud.framework.util.ResourceLoader;
 /**
@@ -46,7 +46,7 @@ public class MessageManagerImpl implements MessageManager {
 			bundlesControl.discoverBundles(ResourceLoader.getClassLoader());
 			logger.log(Level.FINE, "Discovered i18n resource bundles: {}", bundlesControl.getBundleNames());
 		}catch(IOException ex) {
-			throw Exceptions.wrap(ex);
+			throw GenericException.of(ex);
 		}
 	}
 	

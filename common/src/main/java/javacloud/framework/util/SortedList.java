@@ -256,9 +256,11 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	 */
 	public static class Unique<E> extends SortedList<E> {
 		private static final long serialVersionUID = -4619743868807763169L;
+		
 		public Unique() {
 			super();
 		}
+		
 		public Unique(int initialCapacity, Comparator<E> comparator) {
 			super(initialCapacity, comparator);
 		}
