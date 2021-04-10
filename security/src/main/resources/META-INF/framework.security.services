@@ -3,5 +3,5 @@
 javacloud.framework.security.NamespaceContext=javacloud.framework.security.impl.NamespaceContextImpl
 
 # SP only need JWT AccessToken authenticator
-javacloud.framework.security.claim.TokenValidator=javacloud.framework.security.jwt.JwtTokenValidator
+javacloud.framework.security.token.TokenValidator=javacloud.framework.security.jwt.JwtTokenValidator
 javacloud.framework.security.Authenticator#access_token=javacloud.framework.security.impl.AccessTokenAuthenticator

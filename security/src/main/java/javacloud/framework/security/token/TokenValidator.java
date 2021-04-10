@@ -1,4 +1,4 @@
-package javacloud.framework.security.claim;
+package javacloud.framework.security.token;
 
 import javacloud.framework.security.AuthenticationException;
 

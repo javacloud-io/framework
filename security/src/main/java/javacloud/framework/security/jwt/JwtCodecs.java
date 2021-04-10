@@ -41,7 +41,7 @@ public final class JwtCodecs {
 
 		@Override
 		public String sign(String payload) {
-			return "";
+			return payload;
 		}
 		
 		@Override

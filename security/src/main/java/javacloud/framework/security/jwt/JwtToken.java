@@ -11,6 +11,18 @@ import javacloud.framework.util.Objects;
  *
  */
 public final class JwtToken {
+	public static final String CLAIM_ISSUER 		= "iss";
+	public static final String CLAIM_SUBJECT 		= "sub";
+	public static final String CLAIM_AUDIENCE		= "aud";
+	public static final String CLAIM_SCOPE 			= "scope";
+	public static final String CLAIM_EXPIRATION 	= "exp";
+	public static final String CLAIM_ISSUEDAT 		= "iat";
+	
+	//custom fields
+	public static final String CLAIM_ID			= "jti";	//ID
+	public static final String CLAIM_TYPE 		= "jtt";	//type
+	public static final String CLAIM_ROLES 		= "roles";	//subject roles
+	
 	private String type;
 	private String algorithm;
 	private Map<String, Object> claims;

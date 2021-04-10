@@ -4,9 +4,9 @@ import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AccessGrant;
 import javacloud.framework.security.AuthenticationException;
 import javacloud.framework.security.IdParameters;
-import javacloud.framework.security.claim.TokenAuthenticator;
-import javacloud.framework.security.claim.TokenGrant;
-import javacloud.framework.security.claim.TokenValidator;
+import javacloud.framework.security.token.TokenAuthenticator;
+import javacloud.framework.security.token.TokenGrant;
+import javacloud.framework.security.token.TokenValidator;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

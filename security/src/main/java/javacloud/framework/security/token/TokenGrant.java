@@ -1,4 +1,4 @@
-package javacloud.framework.security.claim;
+package javacloud.framework.security.token;
 
 import java.security.Principal;
 import java.util.Date;
@@ -14,21 +14,26 @@ import javacloud.framework.security.IdParameters;
  *
  */
 public class TokenGrant implements Principal {
+	private final String  raw;		// raw token
 	private final String  id;		//token ID
-	private IdParameters.GrantType 	type;		//type of token
-	private	String 	subject;	//sub
-	private String  audience;	//aud
+	
+	private final IdParameters.GrantType 	type;		//type of token
+	private	final String 	subject;	//sub
+	private final String  audience;	//aud
 	private String	scope;		//scope
 	
 	private String	roles;		//custom roles
 	private	Date 	issuedAt;	//iat UTC
 	private	Date 	expireAt;	//exp UTC
-	public TokenGrant(String id, IdParameters.GrantType type, String subject, String audience) {
+	
+	public TokenGrant(String raw, String id, IdParameters.GrantType type, String subject, String audience) {
+		this.raw= raw;
 		this.id = id;
 		this.type = type;
 		this.subject = subject;
 		this.audience= audience;
 	}
+	
 	public String getId() {
 		return id;
 	}
@@ -118,7 +123,7 @@ public class TokenGrant implements Principal {
 	 */
 	@Override
 	public String toString() {
-		return id;
+		return raw;
 	}
 	
 	/**

@@ -1,4 +1,4 @@
-package javacloud.framework.security.claim;
+package javacloud.framework.security.token;
 
 import javacloud.framework.security.AccessGrant;
 import javacloud.framework.security.AuthenticationException;
@@ -19,7 +19,8 @@ import java.util.Set;
  *
  */
 public class TokenAuthenticator implements Authenticator {
-	private TokenValidator tokenValidator;
+	private final TokenValidator tokenValidator;
+	
 	public TokenAuthenticator(TokenValidator tokenValidator) {
 		this.tokenValidator = tokenValidator;
 	}
