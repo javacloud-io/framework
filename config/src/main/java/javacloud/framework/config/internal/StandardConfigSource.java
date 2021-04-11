@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import javacloud.framework.config.ConfigSource;
 import javacloud.framework.util.GenericException;
 import javacloud.framework.util.ResourceLoader;
 /**

@@ -1,7 +1,5 @@
 package javacloud.framework.security.jwt;
 
-import java.util.Date;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -9,7 +7,6 @@ import javax.inject.Singleton;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
-import javacloud.framework.security.IdParameters;
 import javacloud.framework.security.token.TokenGrant;
 import javacloud.framework.security.token.TokenValidator;
 import javacloud.framework.util.Converters;
@@ -41,23 +38,14 @@ public class JwtTokenValidator implements TokenValidator {
 	 */
 	@Override
 	public TokenGrant validateToken(String token) throws AuthenticationException {
-		JwtToken jwtToken = jwtCodecs.decodeJWT(token, jwtVerifier);
+		JwtToken jwt = jwtCodecs.decodeJWT(token, jwtVerifier);
 		
-		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
-		TokenGrant grantToken = new TokenGrant(token,
-				jwtToken.getClaim(JwtToken.CLAIM_ID),
-				IdParameters.GrantType.valueOf(jwtToken.getClaim(JwtToken.CLAIM_TYPE)),
-				jwtToken.getClaim(JwtToken.CLAIM_SUBJECT),
-				jwtToken.getClaim(JwtToken.CLAIM_AUDIENCE));
-		
-		grantToken.setScope(jwtToken.getClaim(JwtToken.CLAIM_SCOPE));
-		grantToken.setRoles(jwtToken.getClaim(JwtToken.CLAIM_ROLES));
-		
-		grantToken.setExpireAt(new Date(Converters.LONG.apply(jwtToken.getClaim(JwtToken.CLAIM_EXPIRATION))));
-		grantToken.setIssuedAt(new Date(Converters.LONG.apply(jwtToken.getClaim(JwtToken.CLAIM_ISSUEDAT))));
-		if(TokenGrant.isExpired(grantToken)) {
+		long expireAt = Converters.LONG.apply(jwt.getClaim(JwtToken.CLAIM_EXPIRATION));
+		if (expireAt > System.currentTimeMillis()) {
 			throw new AccessDeniedException(AccessDeniedException.EXPIRED_CREDENTIALS);
 		}
-		return grantToken;
+		
+		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
+		return new JwtTokenGrant(token, jwt);
 	}
 }

@@ -13,18 +13,14 @@ import javacloud.framework.security.IdParameters;
  * @author tobi
  *
  */
-public class TokenGrant implements Principal {
-	private final String  raw;		// raw token
-	private final String  id;		//token ID
+public abstract class TokenGrant implements Principal {
+	private final String  raw;	// raw token
+	private final String  id;	// token ID
 	
-	private final IdParameters.GrantType 	type;		//type of token
-	private	final String 	subject;	//sub
-	private final String  audience;	//aud
-	private String	scope;		//scope
-	
-	private String	roles;		//custom roles
-	private	Date 	issuedAt;	//iat UTC
-	private	Date 	expireAt;	//exp UTC
+	// type of token
+	private final IdParameters.GrantType type;
+	private	final String subject;	// sub
+	private final String audience;	// aud
 	
 	public TokenGrant(String raw, String id, IdParameters.GrantType type, String subject, String audience) {
 		this.raw= raw;
@@ -74,49 +70,33 @@ public class TokenGrant implements Principal {
 	 * 
 	 * @return
 	 */
-	public String getScope() {
-		return scope;
-	}
-
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
+	public abstract String getScope();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public String getRoles() {
-		return roles;
-	}
-	
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public Date getExpireAt() {
-		return expireAt;
-	}
-
-	public void setExpireAt(Date expireAt) {
-		this.expireAt = expireAt;
-	}
+	public abstract String getRoles();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Date getIssuedAt() {
-		return issuedAt;
-	}
-
-	public void setIssuedAt(Date issuedAt) {
-		this.issuedAt = issuedAt;
-	}
+	public abstract Date getExpireAt();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public abstract Date getIssuedAt();
+	
+	/**
+	 * 
+	 * @param <T>
+	 * @param name
+	 * @return custom claim
+	 */
+	public abstract <T> T getClaim(String name);
 	
 	/**
 	 * return token id encoded.
@@ -124,16 +104,5 @@ public class TokenGrant implements Principal {
 	@Override
 	public String toString() {
 		return raw;
-	}
-	
-	/**
-	 * If expired if has expiry and too OLD.
-	 * 
-	 * @param token
-	 * @return
-	 */
-	public static boolean isExpired(TokenGrant token) {
-		return (token.expireAt != null
-					&& token.expireAt.getTime() < System.currentTimeMillis());
 	}
 }

@@ -1,4 +1,4 @@
-# Default framework data InMemory registry
+# Default services bindings
 #
 #
 javax.ws.rs.client.Client=javacloud.framework.jaxrs.impl.HttpClientProvider

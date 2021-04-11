@@ -30,101 +30,8 @@ public final class JwtCodecs {
 	private static final Logger logger = Logger.getLogger(JwtCodecs.class.getName());
 	private static final String SHA256withRSA = "SHA256withRSA";
 	
-	/**
-	 * NONE
-	 */
-	public static class NONE implements JwtSigner, JwtVerifier {
-		@Override
-		public String getAlgorithm() {
-			return ALG_NONE;
-		}
-
-		@Override
-		public String sign(String payload) {
-			return payload;
-		}
-		
-		@Override
-		public boolean verify(String payload, String signature) {
-			return (signature != null && signature.isEmpty());
-		}
-	}
-	
-	/**
-	 *	HMAC SHA-256
-	 */
-	public final static class HS256 implements JwtSigner, JwtVerifier {
-		private Key secret;
-		public HS256(byte[] secret) {
-			this.secret = new SecretKeySpec(secret, Hmacs.HmacSHA2);
-		}
-
-		@Override
-		public String getAlgorithm() {
-			return ALG_HS256;
-		}
-		@Override
-		public String sign(String payload) {
-			return Codecs.Base64Encoder.apply(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
-		}
-
-		@Override
-		public boolean verify(String payload, String signature) {
-			String sexpected = sign(payload);
-			return sexpected.equals(signature);
-		}
-	}
-	
-	/**
-	 * RS256S
-	 */
-	public static final class RS256S implements JwtSigner {
-		private PrivateKey privateKey;
-		public RS256S(PrivateKey privateKey) {
-			this.privateKey = privateKey;
-		}
-		
-		@Override
-		public String getAlgorithm() {
-			return ALG_RS256;
-		}
-
-		@Override
-		public String sign(String payload) {
-			try {
-				Signature sig = Signature.getInstance(SHA256withRSA);
-				sig.initSign(privateKey);
-				sig.update(Codecs.toBytes(payload));
-				return Codecs.Base64Encoder.apply(sig.sign(), true);
-			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
-				throw new JwtInvalidException();
-			}
-		}
-	}
-	
-	/**
-	 * RS256V
-	 */
-	public static final class RS256V implements JwtVerifier {
-		private PublicKey publicKey;
-		public RS256V(PublicKey publicKey) {
-			this.publicKey = publicKey;
-		}
-		@Override
-		public boolean verify(String payload, String signature) {
-			try {
-				Signature sig = Signature.getInstance(SHA256withRSA);
-				sig.initVerify(publicKey);
-				sig.update(Codecs.toBytes(payload));
-				return sig.verify(Codecs.Base64Decoder.apply(signature, true));
-			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
-				throw new JwtInvalidException();
-			}
-		}
-	}
-	
-	//PROTECTED
 	private final JsonConverter converter;
+	
 	public JwtCodecs(Externalizer externalizer) {
 		this.converter = new JsonConverter(externalizer);
 	}
@@ -192,6 +99,102 @@ public final class JwtCodecs {
 		} catch(IOException ex) {
 			logger.log(Level.WARNING, "Problem decode JWT token", ex);
 			throw new JwtInvalidException();
+		}
+	}
+	
+	/**
+	 * NONE
+	 */
+	public static class NONE implements JwtSigner, JwtVerifier {
+		@Override
+		public String getAlgorithm() {
+			return ALG_NONE;
+		}
+
+		@Override
+		public String sign(String payload) {
+			return payload;
+		}
+		
+		@Override
+		public boolean verify(String payload, String signature) {
+			return (signature != null && signature.isEmpty());
+		}
+	}
+	
+	/**
+	 *	HMAC SHA-256
+	 */
+	public final static class HS256 implements JwtSigner, JwtVerifier {
+		private final Key secret;
+		
+		public HS256(byte[] secret) {
+			this.secret = new SecretKeySpec(secret, Hmacs.HmacSHA2);
+		}
+
+		@Override
+		public String getAlgorithm() {
+			return ALG_HS256;
+		}
+		@Override
+		public String sign(String payload) {
+			return Codecs.Base64Encoder.apply(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
+		}
+
+		@Override
+		public boolean verify(String payload, String signature) {
+			String sexpected = sign(payload);
+			return sexpected.equals(signature);
+		}
+	}
+	
+	/**
+	 * RS256S
+	 */
+	public static final class RS256S implements JwtSigner {
+		private final PrivateKey privateKey;
+		
+		public RS256S(PrivateKey privateKey) {
+			this.privateKey = privateKey;
+		}
+		
+		@Override
+		public String getAlgorithm() {
+			return ALG_RS256;
+		}
+
+		@Override
+		public String sign(String payload) {
+			try {
+				Signature sig = Signature.getInstance(SHA256withRSA);
+				sig.initSign(privateKey);
+				sig.update(Codecs.toBytes(payload));
+				return Codecs.Base64Encoder.apply(sig.sign(), true);
+			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
+				throw new JwtInvalidException();
+			}
+		}
+	}
+	
+	/**
+	 * RS256V
+	 */
+	public static final class RS256V implements JwtVerifier {
+		private final PublicKey publicKey;
+		
+		public RS256V(PublicKey publicKey) {
+			this.publicKey = publicKey;
+		}
+		@Override
+		public boolean verify(String payload, String signature) {
+			try {
+				Signature sig = Signature.getInstance(SHA256withRSA);
+				sig.initVerify(publicKey);
+				sig.update(Codecs.toBytes(payload));
+				return sig.verify(Codecs.Base64Decoder.apply(signature, true));
+			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
+				throw new JwtInvalidException();
+			}
 		}
 	}
 }

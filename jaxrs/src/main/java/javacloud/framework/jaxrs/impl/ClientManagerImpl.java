@@ -15,13 +15,14 @@ import javacloud.framework.util.ProxyInvocationHandler;
 @Singleton
 public class ClientManagerImpl implements ClientManager {
 	private final Client client;
+	
 	@Inject
 	public ClientManagerImpl(Client client) {
 		this.client = client;
 	}
 	
 	/**
-	 * return default client if compatible type
+	 * @return default client if compatible type
 	 */
 	@Override
 	public <T> T getClient(Class<T> type) {

@@ -25,7 +25,7 @@ public class JsonPath {
 	private static final Logger logger = Logger.getLogger(JsonPath.class.getName());
 	public static final String ROOT = "$";
 	
-	private Object root;
+	private final Object root;
 	public JsonPath(Object root) {
 		this.root = root;
 	}

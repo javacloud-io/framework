@@ -1,4 +1,4 @@
-package javacloud.framework.config;
+package javacloud.framework.config.internal;
 /**
  * To discover the configuration during runtime in both testing and production.
  * 

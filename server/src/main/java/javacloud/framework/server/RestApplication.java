@@ -22,16 +22,16 @@ import javacloud.framework.util.ResourceLoader;
  *
  */
 //@ApplicationPath(context)
-public class ServiceApplication extends ResourceConfig {
+public class RestApplication extends ResourceConfig {
 	private static final String SERVER_COMPONENTS = ResourceLoader.META_INF + "javacloud.server.components";
-	private static final Logger logger = Logger.getLogger(ServiceApplication.class.getName());
+	private static final Logger logger = Logger.getLogger(RestApplication.class.getName());
 	
 	/**
 	 * Configure how the resource should be combine, object should be inject...
 	 * 
 	 * @param serviceLocator
 	 */
-	public ServiceApplication(String...packages) {
+	public RestApplication(String...packages) {
 		configure(packages);
 	}
 	

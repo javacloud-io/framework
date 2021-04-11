@@ -26,6 +26,7 @@ public final class JwtToken {
 	private String type;
 	private String algorithm;
 	private Map<String, Object> claims;
+	
 	/**
 	 * 
 	 * @param type

@@ -3,7 +3,7 @@ package javacloud.framework.config.impl;
 import javax.inject.Singleton;
 
 import javacloud.framework.config.ConfigManager;
-import javacloud.framework.config.ConfigSource;
+import javacloud.framework.config.internal.ConfigSource;
 import javacloud.framework.config.internal.ConfigSourceResolver;
 import javacloud.framework.config.internal.StandardConfigSource;
 import javacloud.framework.util.Converters;
@@ -20,21 +20,21 @@ import javacloud.framework.util.ResourceLoader;
 @Singleton
 public class ConfigManagerImpl implements ConfigManager {
 	private static final String MAIN_CONFIG = "META-INF/javacloud.config.properties";
-	
 	private final ConfigSourceResolver sourceResolver;
+	
 	public ConfigManagerImpl() {
-		//DEFAULT SOURCES FROM PROPERTIES
+		//DEFAULT SOURCES FROM system properties
 		this.sourceResolver = new ConfigSourceResolver(new StandardConfigSource(MAIN_CONFIG, ResourceLoader.getClassLoader()))
 			.overrideBy(new StandardConfigSource(System.getProperties()));
 		
-		//DYNAMIC DISCOVER SOURCES
+		//DYNAMIC DISCOVER SOURCES from class path
 		for(ConfigSource source: ResourceLoader.loadServices(ConfigSource.class)) {
 			this.sourceResolver.overrideBy(source);
 		}
 	}
 	
 	/**
-	 * return property setting using NAME
+	 * @return property setting using NAME
 	 */
 	@Override
 	public <T> T getProperty(String name, Class<T> type) {
@@ -46,7 +46,7 @@ public class ConfigManagerImpl implements ConfigManager {
 	}
 	
 	/**
-	 * return safe config bundle
+	 * @return safe config bundle
 	 */
 	@Override
 	public <T> T getConfig(Class<T> type) {

@@ -20,15 +20,21 @@ import java.util.UUID;
  *
  */
 public abstract class JwtTokenProvider implements TokenProvider {
+	private final String jwtType;
 	private final JwtCodecs	jwtCodecs;
 	private final JwtSigner	jwtSigner;
+	
+	protected JwtTokenProvider(Externalizer externalizer, JwtSigner jwtSigner) {
+		this("JWT", externalizer, jwtSigner);
+	}
 	
 	/**
 	 * 
 	 * @param externalizer
 	 * @param jwtSigner
 	 */
-	protected JwtTokenProvider(Externalizer externalizer, JwtSigner jwtSigner) {
+	protected JwtTokenProvider(String jwtType, Externalizer externalizer, JwtSigner jwtSigner) {
+		this.jwtType = jwtType;
 		this.jwtCodecs = new JwtCodecs(externalizer);
 		this.jwtSigner  = jwtSigner;
 	}
@@ -38,58 +44,52 @@ public abstract class JwtTokenProvider implements TokenProvider {
 	 */
 	@Override
 	public TokenGrant issueToken(AccessGrant authzGrant, IdParameters.GrantType type) {
+		//EXPIRATION
+		Date issuedAt = new Date();
+		Date expireAt = new Date(issuedAt.getTime() + jwtTtls(type) * 1000L);
+		
+		//Compose JWT TOKEN
+		Map<String, Object> claims = jwtClaims(authzGrant);
+		claims.put(JwtToken.CLAIM_TYPE, 		type.name());
+		claims.put(JwtToken.CLAIM_ISSUEDAT, 	issuedAt.getTime());
+		claims.put(JwtToken.CLAIM_EXPIRATION,	expireAt.getTime());
+		
+		//TOKEN details
+		JwtToken jwt = new JwtToken(jwtType, claims);
+		return new JwtTokenGrant(jwtCodecs.encodeJWT(jwt, jwtSigner), jwt);
+	}
+	
+	/**
+	 * 
+	 * @param authzGrant
+	 * @return
+	 */
+	protected Map<String, Object> jwtClaims(AccessGrant authzGrant) {
 		//SCOPE/ROLES
 		String roles = null;
 		if(!Objects.isEmpty(authzGrant.getRoles())) {
 			roles = Converters.toString(" ", authzGrant.getRoles().toArray());
 		}
-		
-		//EXPIRATION
-		Date issuedAt = new Date();
-		Date expireAt = new java.util.Date(issuedAt.getTime() + jwtTokenTTL(type) * 1000L);
-		String uuid   = UUID.randomUUID().toString();
-		
-		//Compose JWT TOKEN
-		Map<String, Object> claims = Objects.asMap(
-				JwtToken.CLAIM_ID,			uuid,
-				JwtToken.CLAIM_TYPE, 		type.name(),
-				JwtToken.CLAIM_ISSUER, 		jwtTokenIssuer(),
-				JwtToken.CLAIM_SUBJECT, 	authzGrant.getName(),
-				JwtToken.CLAIM_AUDIENCE, 	authzGrant.getAudience(),
-				JwtToken.CLAIM_SCOPE, 		authzGrant.getScope(),
-				JwtToken.CLAIM_ROLES, 		roles,
-				JwtToken.CLAIM_ISSUEDAT, 	issuedAt.getTime(),
-				JwtToken.CLAIM_EXPIRATION,	expireAt.getTime()
-		);
-		
-		//TOKEN details
-		TokenGrant token = new TokenGrant(jwtCodecs.encodeJWT(new JwtToken(jwtTokenType(), claims), jwtSigner),
-				uuid, type, authzGrant.getName(), authzGrant.getAudience());
-		token.setScope(authzGrant.getScope());
-		token.setRoles(roles);
-		token.setIssuedAt(issuedAt);
-		token.setExpireAt(expireAt);
-		return token;
+		return	Objects.asMap(
+					JwtToken.CLAIM_ID,			UUID.randomUUID().toString(),
+					JwtToken.CLAIM_ISSUER, 		jwtIssuer(authzGrant),
+					JwtToken.CLAIM_SUBJECT, 	authzGrant.getName(),
+					JwtToken.CLAIM_AUDIENCE, 	authzGrant.getAudience(),
+					JwtToken.CLAIM_SCOPE, 		authzGrant.getScope(),
+					JwtToken.CLAIM_ROLES, 		roles
+				);
 	}
 	
 	/**
-	 * return token TTL in seconds
+	 * 
+	 * @return the actual issuer/null
+	 */
+	protected abstract String jwtIssuer(AccessGrant authzGrant);
+	
+	/**
 	 * 
 	 * @param type
-	 * @return
+	 * @return token TTL in seconds
 	 */
-	protected abstract int jwtTokenTTL(IdParameters.GrantType type);
-	
-	/**
-	 * return the actual issuer
-	 * 
-	 * @return
-	 */
-	protected abstract String jwtTokenIssuer();
-	
-	/**
-	 * 
-	 * @return
-	 */
-	protected abstract String jwtTokenType();
+	protected abstract int jwtTtls(IdParameters.GrantType type);
 }

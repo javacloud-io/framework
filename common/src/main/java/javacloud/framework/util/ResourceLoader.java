@@ -20,6 +20,7 @@ import java.util.Set;
  */
 public final class ResourceLoader {
 	public static final String META_INF = "META-INF/";
+	
 	private ResourceLoader() {
 	}
 	

@@ -1,7 +1,7 @@
 package javacloud.framework.config.impl;
 
-import javacloud.framework.config.ConfigSource;
 import javacloud.framework.config.internal.ConfigInvocationHandler;
+import javacloud.framework.config.internal.ConfigSource;
 /**
  * Default configuration handler using single source to look up the value
  * 
@@ -10,6 +10,7 @@ import javacloud.framework.config.internal.ConfigInvocationHandler;
  */
 public class ConfigInvocationHandlerImpl extends ConfigInvocationHandler {
 	private final ConfigSource source;
+	
 	public ConfigInvocationHandlerImpl(ConfigSource source) {
 		this.source = source;
 	}

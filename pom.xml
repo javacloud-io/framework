@@ -36,6 +36,7 @@
     <logback.version>1.2.3</logback.version>
     <derby.version>10.14.2.0</derby.version>
     <gremlin.version>3.4.8</gremlin.version>
+    <grpc.version>1.36.0</grpc.version>
   </properties>
   
   <modules>
@@ -569,6 +570,38 @@
             </exclusions>
         </dependency>
         
+        <!-- grpc/netty -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-context</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-api</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-core</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        
         <!-- Jersey test-->
         <dependency>
             <groupId>org.glassfish.jersey.test-framework</groupId>
@@ -623,13 +656,12 @@
             <version>${grizzly.version}</version>
         </dependency>
 
-	<!--Embeded derby and driver -->
-	<dependency>
+	    <!--Embeded derby and driver -->
+	    <dependency>
     	   <groupId>org.apache.derby</groupId>
     	   <artifactId>derby</artifactId>
     	   <version>${derby.version}</version>
-	</dependency>
- 
+	    </dependency>
 	</dependencies>
   </dependencyManagement>
 </project>

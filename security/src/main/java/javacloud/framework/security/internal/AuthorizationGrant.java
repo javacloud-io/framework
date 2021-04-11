@@ -13,8 +13,9 @@ public class AuthorizationGrant implements AccessGrant {
 	private Principal	subject;
 	private	Set<String>	roles;
 	
-	private String		audience;
-	private String 		scope;
+	private String audience;
+	private String scope;
+	
 	/**
 	 * Grant authentication with permission set associated with.
 	 * @param subject
@@ -22,7 +23,7 @@ public class AuthorizationGrant implements AccessGrant {
 	 */
 	public AuthorizationGrant(Principal subject, Set<String> roles) {
 		this.subject = subject;
-		this.roles  = roles;
+		this.roles = roles;
 	}
 	
 	/**
@@ -30,12 +31,11 @@ public class AuthorizationGrant implements AccessGrant {
 	 */
 	@Override
 	public String getName() {
-		return (subject != null? subject.getName() : null);
+		return (subject == null? null : subject.getName());
 	}
 
 	/**
-	 * return the original principal can be a STRING...
-	 * @return
+	 * @return the original principal can be a STRING...
 	 */
 	@Override
 	public Principal getSubject() {
@@ -43,8 +43,7 @@ public class AuthorizationGrant implements AccessGrant {
 	}
 	
 	/**
-	 * return all roles
-	 * @return
+	 * @return all roles
 	 */
 	@Override
 	public Set<String> getRoles() {
@@ -58,6 +57,7 @@ public class AuthorizationGrant implements AccessGrant {
 	public String getAudience() {
 		return audience;
 	}
+	
 	public AuthorizationGrant withAudience(String audience) {
 		this.audience = audience;
 		return this;
@@ -70,6 +70,7 @@ public class AuthorizationGrant implements AccessGrant {
 	public String getScope() {
 		return scope;
 	}
+	
 	/**
 	 * 
 	 * @param scope

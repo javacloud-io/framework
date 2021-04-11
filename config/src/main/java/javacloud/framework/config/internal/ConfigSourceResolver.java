@@ -2,8 +2,6 @@ package javacloud.framework.config.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javacloud.framework.config.ConfigSource;
 /**
  * Single source of configure with highest priority on the top
  * 
@@ -12,6 +10,7 @@ import javacloud.framework.config.ConfigSource;
  */
 public class ConfigSourceResolver implements ConfigSource {
 	private final List<ConfigSource> sources = new ArrayList<>();
+	
 	public ConfigSourceResolver() {
 	}
 	

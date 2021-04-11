@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import javacloud.framework.cdi.test.ServiceTest;
 import javacloud.framework.config.ConfigManager;
-import javacloud.framework.util.ResourceLoader;
 /**
  * 
  * @author ho
@@ -18,6 +17,7 @@ import javacloud.framework.util.ResourceLoader;
 public class ConfigRegistryTest extends ServiceTest {
 	@Inject
 	ConfigManager configRegistry;
+	
 	@Test
 	public void testProperties() {
 		SimpleConfig config = configRegistry.getConfig(SimpleConfig.class);
@@ -29,14 +29,6 @@ public class ConfigRegistryTest extends ServiceTest {
 		
 		//test native implementation
 		Assert.assertNotEquals(0, config.hashCode());
-	}
-	
-	/**
-	 * 
-	 */
-	@Test
-	public void testLoader() {
-		Assert.assertNotNull(ResourceLoader.loadService(ConfigManager.class));
 	}
 	
 	/**
