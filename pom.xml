@@ -27,7 +27,7 @@
     <tomcat.version>10.0.4</tomcat.version>
     <httpclient.version>4.5.6</httpclient.version>
     <guice.version>4.2.3</guice.version>
-    <guava.version>29.0-jre</guava.version>
+    <guava.version>30.0-jre</guava.version>
     <jackson.version>2.11.3</jackson.version>
     <jersey.version>2.32</jersey.version>
     <hk2.version>2.6.1</hk2.version>
