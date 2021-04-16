@@ -21,12 +21,6 @@
   </build>
   
   <dependencies>
-    <dependency>
-      	<groupId>junit</groupId>
-      	<artifactId>junit</artifactId>
-      	<scope>test</scope>
-    </dependency>
-	
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>
@@ -39,6 +33,20 @@
         <artifactId>javacloud-cdi</artifactId>
         <version>${project.version}</version>
         <scope>provided</scope>
+    </dependency>
+    
+    <!-- Tests -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

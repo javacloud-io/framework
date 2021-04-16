@@ -21,12 +21,6 @@
   </build>
   
   <dependencies>
-    <dependency>
-      	<groupId>junit</groupId>
-      	<artifactId>junit</artifactId>
-      	<scope>test</scope>
-    </dependency>
-	
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>
@@ -71,6 +65,20 @@
     <dependency>
         <groupId>org.glassfish.hk2</groupId>
         <artifactId>guice-bridge</artifactId>
+    </dependency>
+    
+    <!-- Tests -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

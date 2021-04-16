@@ -1,4 +1,4 @@
-package javacloud.framework.server.test;
+package javacloud.framework.server.junit;
 
 import javax.ws.rs.core.Application;
 

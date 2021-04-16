@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javacloud.framework.server.test;
+package javacloud.framework.server.junit;
 
 import javax.ws.rs.core.Application;
 

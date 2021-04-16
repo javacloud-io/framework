@@ -1,4 +1,4 @@
-package javacloud.framework.txn.sql;
+package javacloud.framework.txn.test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,9 +10,10 @@ import org.junit.Test;
 
 import javacloud.framework.txn.Propagation;
 import javacloud.framework.txn.Transactional;
+import javacloud.framework.txn.junit.TxServiceTest;
 import javacloud.framework.txn.spi.TxTransactionManager;
+import javacloud.framework.txn.sql.SqlTransaction;
 import javacloud.framework.txn.spi.TxTransactionException;
-import javacloud.framework.txn.test.TxServiceTest;
 /**
  * 
  * @author ho

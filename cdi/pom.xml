@@ -17,16 +17,27 @@
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
 		</plugin>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>**/test/</exclude>
+                    <exclude>**/META-INF/javacloud.*</exclude>
+                </excludes>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>test-jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
 	</plugins>
   </build>
   
-  <dependencies>
-    <dependency>
-      	<groupId>junit</groupId>
-      	<artifactId>junit</artifactId>
-      	<scope>provided</scope>
-    </dependency>
-    
+  <dependencies>    
     <!-- JavaCloud -->
     <dependency>
         <groupId>io.javacloud.framework</groupId>
@@ -42,6 +53,13 @@
     <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice</artifactId>
+    </dependency>
+    
+    <!-- Tests -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

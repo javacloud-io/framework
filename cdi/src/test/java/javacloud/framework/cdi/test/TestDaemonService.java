@@ -1,4 +1,4 @@
-package javacloud.framework.cdi;
+package javacloud.framework.cdi.test;
 
 import java.util.logging.Logger;
 

@@ -1,4 +1,4 @@
-package javacloud.framework.txn.sql;
+package javacloud.framework.txn.test;
 
 import javax.inject.Singleton;
 import javax.sql.DataSource;

@@ -1,5 +1,5 @@
 #DataSource
-javax.sql.DataSource=javacloud.framework.txn.sql.DerbyDataSourceProvider
+javax.sql.DataSource=javacloud.framework.txn.test.DerbyDataSourceProvider
 
 #Sql module
 javacloud.framework.txn.sql.SqlTransactionalModule

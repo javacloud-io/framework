@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javacloud.framework.server.test;
-
-import javax.ws.rs.ApplicationPath;
-
-import org.glassfish.jersey.server.ResourceConfig;
+package javacloud.framework.cdi.test;
 /**
  * 
  * @author ho
  *
  */
-@ApplicationPath("/v1/*")
-public class TestApplication extends ResourceConfig {
-	public TestApplication() {
-		packages("javacloud.framework.server.rest");
-	}
+public interface TestLazyService {
+
 }

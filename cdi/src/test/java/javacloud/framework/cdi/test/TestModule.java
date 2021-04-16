@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javacloud.framework.cdi;
+package javacloud.framework.cdi.test;
 
+import javacloud.framework.cdi.LazySingleton;
 import javacloud.framework.cdi.internal.GuiceModule;
 
 import javax.inject.Singleton;

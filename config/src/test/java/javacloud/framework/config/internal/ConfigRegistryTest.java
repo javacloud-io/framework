@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javacloud.framework.cdi.test.ServiceTest;
+import javacloud.framework.cdi.junit.ServiceTest;
 import javacloud.framework.config.ConfigManager;
 /**
  * 

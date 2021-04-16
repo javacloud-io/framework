@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package javacloud.framework.cdi;
+package javacloud.framework.server.junit;
 
-import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+
+import org.glassfish.jersey.server.ResourceConfig;
 /**
  * 
  * @author ho
  *
  */
-public class TestInject {
-	@Inject
-	TestService service;
-	public TestService getService() {
-		return service;
+@ApplicationPath("/v1/*")
+public class TestApplication extends ResourceConfig {
+	public TestApplication() {
+		packages("javacloud.framework.server.rest");
 	}
 }

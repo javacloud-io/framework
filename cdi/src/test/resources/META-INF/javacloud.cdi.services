@@ -6,4 +6,4 @@
 # interface-class=implementation-class
 # interface-class:named=implementation-class
 
-javacloud.framework.cdi.TestModule
+javacloud.framework.cdi.test.TestModule

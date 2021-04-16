@@ -1,6 +1,6 @@
 package javaworld.framework.jaxrs;
 
-import javacloud.framework.cdi.test.ServiceTest;
+import javacloud.framework.cdi.junit.ServiceTest;
 import javacloud.framework.jaxrs.ClientManager;
 
 import javax.inject.Inject;
