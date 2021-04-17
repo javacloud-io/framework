@@ -45,12 +45,6 @@
         <version>${project.version}</version>
     </dependency>
     <dependency>
-        <groupId>io.javacloud.framework</groupId>
-        <artifactId>javacloud-logging</artifactId>
-        <version>${project.version}</version>
-        <scope>test</scope>
-    </dependency>
-    <dependency>
         <groupId>com.google.inject</groupId>
         <artifactId>guice</artifactId>
     </dependency>
@@ -60,6 +54,12 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-logging</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 </project>

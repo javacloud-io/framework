@@ -75,6 +75,12 @@
     </dependency>
     <dependency>
         <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-logging</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
         <artifactId>javacloud-cdi</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
