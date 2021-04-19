@@ -78,30 +78,30 @@ public final class ResourceLoader {
 			throws IOException, ClassNotFoundException {
 		//NOT FOUND THE RESOURCE => NULL
 		Properties properties = loadProperties(resource, loader);
-		if(properties == null) {
+		if (properties == null) {
 			return null;
 		}
 		
 		//LOAD ALL THE BINDINGS
 		List<Binding> bindings = new ArrayList<Binding>();
-		for(Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
+		for (Enumeration<?> ename = properties.keys(); ename.hasMoreElements(); ) {
 			String ztype = (String)ename.nextElement();
 			String zimpl = properties.getProperty(ztype);
 			
 			//FIND MAPPING NAMED, using # to look for name
 			Binding binding = new Binding();
 			int idot = ztype.lastIndexOf('#');
-			if(idot > 0) {
+			if (idot > 0) {
 				binding.name = ztype.substring(idot + 1);
 				ztype = ztype.substring(0, idot);
 			}
 			
 			//NO IMPL => CHECK TO SEE IF BINDING IS PACKAGE
-			if(zimpl == null || zimpl.isEmpty()) {
+			if (zimpl == null || zimpl.isEmpty()) {
 				idot = ztype.lastIndexOf('.');
 				
 				//DOESN'T LOOK LIKE CLASS NAME => ASSUMING PACKAGE NAME
-				if(idot < 0 || idot >= ztype.length() || Character.isLowerCase(ztype.charAt(idot + 1))) {
+				if (idot < 0 || idot >= ztype.length() || Character.isLowerCase(ztype.charAt(idot + 1))) {
 					binding.name = ztype;
 				} else {
 					binding.typeClass = loader.loadClass(ztype);
@@ -127,7 +127,7 @@ public final class ResourceLoader {
 	public static Properties loadProperties(String resource, ClassLoader loader) throws IOException {
 		//MAKE SURE USING DEFAULT ONE
 		URL url = loader.getResource(resource);
-		if(url == null) {
+		if (url == null) {
 			return null;
 		}
 		return loadProperties(url);
@@ -153,21 +153,25 @@ public final class ResourceLoader {
 	static final class OrderedProperties extends Properties {
 		private static final long serialVersionUID = 1L;
 		private final Set<Object> keys = new LinkedHashSet<Object>();
+		
 		//ORDER KEYS
 		@Override
 		public synchronized Enumeration<Object> keys() {
 			return Collections.enumeration(keys);
 		}
+		
 		//ORDER KEYS
 		@Override
 		public Set<Object> keySet() {
 			return keys;
 		}
+		
 		@Override
 		public synchronized Object put(Object key, Object value) {
 			keys.add(key);
 			return super.put(key, value);
 		}
+		
 		@Override
 		public synchronized Object remove(Object key) {
 			keys.remove(key);
@@ -175,19 +179,23 @@ public final class ResourceLoader {
 		}
 	}
 	
-	//BINDING INFO
+	//BINDING INFO (typeClass#name = implClass)
 	public static final class Binding {
 		private String 	 name;
 		private Class<?> typeClass;
 		private Class<?> implClass;
+		
 		public Binding() {
 		}
+		
 		public String name() {
 			return name;
 		}
+		
 		public Class<?> typeClass() {
 			return typeClass;
 		}
+		
 		public Class<?> implClass() {
 			return implClass;
 		}

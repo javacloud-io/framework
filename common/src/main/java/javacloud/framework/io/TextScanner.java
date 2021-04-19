@@ -103,7 +103,7 @@ public class TextScanner {
 	public boolean nextChars(Predicate<Character> matcher, Consumer<Character> consumer) {
 		do {
 			char ch = currChar();
-			if(! matcher.test(ch)) {
+			if (!matcher.test(ch)) {
 				return hasMoreChars();
 			}
 			consumer.accept(ch);
@@ -191,9 +191,11 @@ public class TextScanner {
 	//TOKENS
 	public static class Token implements Consumer<Character> {
 		private final StringBuilder buf = new StringBuilder();
+		
 		public boolean isEmpty() {
 			return (buf.length() == 0);
 		}
+		
 		@Override
 		public void accept(Character ch) {
 			buf.append(ch.charValue());
@@ -210,7 +212,7 @@ public class TextScanner {
 				boolean escaped = false;
 				@Override
 				public void accept(Character ch) {
-					if(escaped || ch != escapseChar) {
+					if (escaped || ch != escapseChar) {
 						super.accept(ch.charValue());
 					}
 					escaped = (!escaped && ch == escapseChar);
@@ -224,10 +226,10 @@ public class TextScanner {
 				boolean stared = false;
 				@Override
 				public void accept(Character ch) {
-					if(stared) {
+					if (stared) {
 						super.accept(starChar);
 					}
-					if(!(stared = (ch == starChar))) {
+					if (!(stared = (ch == starChar))) {
 						super.accept(ch);
 					}
 				}
@@ -239,7 +241,7 @@ public class TextScanner {
 			return new Token() {
 				@Override
 				public void accept(Character ch) {
-					if(ch != lfChar && ch != crChar) {
+					if (ch != lfChar && ch != crChar) {
 						super.accept(ch);
 					}
 				}
@@ -261,7 +263,7 @@ public class TextScanner {
 				boolean escaped = false;
 				@Override
 				public boolean test(Character ch) {
-					if(!escaped && ch == quoteChar) {
+					if (!escaped && ch == quoteChar) {
 						return false;
 					}
 					escaped = (!escaped && ch == escapseChar);
@@ -303,7 +305,7 @@ public class TextScanner {
 				int lastc = -1;
 				@Override
 				public boolean test(Character ch) {
-					if((lastc == crChar) || (lastc == lfChar && ch != crChar)) {
+					if ((lastc == crChar) || (lastc == lfChar && ch != crChar)) {
 						return false;
 					}
 					lastc = ch;

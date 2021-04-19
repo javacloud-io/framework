@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 @Singleton
 public class JacksonMapper extends ObjectMapper implements Externalizer {
 	private static final long serialVersionUID = -6439745503024511184L;
+	
 	/**
 	 * DEFAULT FEATURES
 	 */

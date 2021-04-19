@@ -1,7 +1,8 @@
 package javacloud.framework.config.impl;
 
+import javacloud.framework.config.ConfigSource;
 import javacloud.framework.config.internal.ConfigInvocationHandler;
-import javacloud.framework.config.internal.ConfigSource;
+import javacloud.framework.util.Objects;
 /**
  * Default configuration handler using single source to look up the value
  * 
@@ -21,9 +22,6 @@ public class ConfigInvocationHandlerImpl extends ConfigInvocationHandler {
 	@Override
 	protected String resolveValue(String name, String value) {
 		String svalue = source.getProperty(name);
-		if(svalue != null) {
-			return svalue;
-		}
-		return value;
+		return (Objects.isEmpty(svalue) ? value : svalue);
 	}
 }

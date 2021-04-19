@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
+import javacloud.framework.config.ConfigSource;
+import javacloud.framework.util.Converters;
 import javacloud.framework.util.GenericException;
 import javacloud.framework.util.ResourceLoader;
 /**
@@ -16,7 +19,8 @@ import javacloud.framework.util.ResourceLoader;
  *
  */
 public class StandardConfigSource implements ConfigSource {
-	private final Map<String, String> properties;
+	protected final Map<String, String> properties;
+	
 	/**
 	 * 
 	 * @param properties
@@ -29,9 +33,9 @@ public class StandardConfigSource implements ConfigSource {
 	 * 
 	 * @param properties
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public StandardConfigSource(Properties properties) {
-		this.properties = (Map)properties;
+		this(properties.entrySet().stream()
+					   .collect(Collectors.toMap(e -> (String)e.getKey(), e -> Converters.toString(e.getValue()))));
 	}
 	
 	/**

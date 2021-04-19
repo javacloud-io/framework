@@ -13,7 +13,7 @@ public interface MessageManager {
 	 * @param args
 	 * @return
 	 */
-	public String getString(String key, Object... args);
+	String getString(String key, Object... args);
 	
 	/**
 	 * return strong type bundle messages definition using ConfigProperty
@@ -21,5 +21,5 @@ public interface MessageManager {
 	 * @param type
 	 * @return
 	 */
-	public <T> T getBundle(Class<T> type);
+	<T> T getBundle(Class<T> type);
 }

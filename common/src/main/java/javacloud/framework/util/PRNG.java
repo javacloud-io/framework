@@ -14,6 +14,7 @@ import java.security.SecureRandom;
 public final class PRNG {
 	//SHA1PRNG by default
 	private static final SecureRandom SRAND = new SecureRandom();
+	
 	private PRNG() {
 	}
 	

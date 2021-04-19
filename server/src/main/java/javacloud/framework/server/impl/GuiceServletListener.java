@@ -2,7 +2,7 @@ package javacloud.framework.server.impl;
 
 import javax.servlet.ServletContextEvent;
 
-import javacloud.framework.cdi.ServiceRunlist;
+import javacloud.framework.cdi.ServiceBootstrapper;
 import javacloud.framework.cdi.internal.GuiceRegistry;
 
 import com.google.inject.Injector;
@@ -29,7 +29,7 @@ public class GuiceServletListener extends GuiceServletContextListener {
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		super.contextInitialized(servletContextEvent);
 		try {
-			ServiceRunlist.get().startServices();
+			ServiceBootstrapper.get().startup();
 		}catch(Exception ex) {
 			throw new IllegalStateException(ex);
 		}
@@ -41,7 +41,7 @@ public class GuiceServletListener extends GuiceServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		try {
-			ServiceRunlist.get().stopServices();
+			ServiceBootstrapper.get().shutdown();
 		}catch(Exception ex) {
 			throw new IllegalStateException(ex);
 		} finally {

@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 @Singleton
 public class LocaleContextImpl implements LocaleContext {
 	private static final ThreadLocal<Locale[]> LOCALES = new ThreadLocal<Locale[]>();
+	
 	public LocaleContextImpl() {
 		
 	}
@@ -33,10 +34,10 @@ public class LocaleContextImpl implements LocaleContext {
 	@Override
 	public void set(String tags) {
 		Locale[] locales = null;
-		if(!Objects.isEmpty(tags)) {
+		if (!Objects.isEmpty(tags)) {
 			String[] ltags = Converters.toArray(tags, ",", true);
 			locales = new Locale[ltags.length];
-			for(int i = 0; i < ltags.length; i ++) {
+			for (int i = 0; i < ltags.length; i ++) {
 				locales[i] = Locale.forLanguageTag(ltags[i]);
 			}
 		}
@@ -58,11 +59,11 @@ public class LocaleContextImpl implements LocaleContext {
 	@Override
 	public Locale next(Locale locale) {
 		Locale[] locales = LOCALES.get();
-		if(locale == null || Objects.isEmpty(locales)) {
+		if (locale == null || Objects.isEmpty(locales)) {
 			return null;
 		}
 		//return previous one if next match
-		for(int i = 1; i < locales.length; i ++) {
+		for (int i = 1; i < locales.length; i ++) {
 			if(locales[i - 1].equals(locale)) {
 				return locales[i];
 			}

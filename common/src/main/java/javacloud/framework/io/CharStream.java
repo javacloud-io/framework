@@ -71,14 +71,14 @@ public interface CharStream {
 			}
 			@Override
 			public boolean isEOT() {
-				if(cchar == Integer.MIN_VALUE) {
+				if (cchar == Integer.MIN_VALUE) {
 					nextChar();
 				}
 				return (cchar == -1);
 			}
 			@Override
 			public char getChar() {
-				if(cchar == Integer.MIN_VALUE) {
+				if (cchar == Integer.MIN_VALUE) {
 					nextChar();
 				}
 				return (cchar >= 0? (char)cchar : 0);//EOT

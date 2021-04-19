@@ -3,8 +3,9 @@ package javacloud.framework.config.impl;
 import javax.inject.Singleton;
 
 import javacloud.framework.config.ConfigManager;
-import javacloud.framework.config.internal.ConfigSource;
+import javacloud.framework.config.ConfigSource;
 import javacloud.framework.config.internal.ConfigSourceResolver;
+import javacloud.framework.config.internal.SystemConfigSource;
 import javacloud.framework.config.internal.StandardConfigSource;
 import javacloud.framework.util.Converters;
 import javacloud.framework.util.ProxyInvocationHandler;
@@ -25,7 +26,7 @@ public class ConfigManagerImpl implements ConfigManager {
 	public ConfigManagerImpl() {
 		//DEFAULT SOURCES FROM system properties
 		this.sourceResolver = new ConfigSourceResolver(new StandardConfigSource(MAIN_CONFIG, ResourceLoader.getClassLoader()))
-			.overrideBy(new StandardConfigSource(System.getProperties()));
+			.overrideBy(SystemConfigSource.get());
 		
 		//DYNAMIC DISCOVER SOURCES from class path
 		for(ConfigSource source: ResourceLoader.loadServices(ConfigSource.class)) {

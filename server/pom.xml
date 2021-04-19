@@ -17,10 +17,6 @@
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-compiler-plugin</artifactId>
 		</plugin>
-        <plugin>
-			<groupId>org.apache.tomcat.maven</groupId>
-			<artifactId>tomcat7-maven-plugin</artifactId>
-		</plugin>
 	</plugins>
   </build>
   
@@ -93,6 +89,19 @@
   	<dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+        <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-logging</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
         <scope>test</scope>
     </dependency>
   </dependencies>

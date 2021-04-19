@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 public interface JsonValue {
-	public enum Type {
+	enum Type {
 		NULL,
 		BOOLEAN,
 		NUMBER,
@@ -22,7 +22,7 @@ public interface JsonValue {
 	 * 
 	 * @return
 	 */
-	default public Type type() {
+	default Type type() {
 		Object value = value();
 		if(value == null) {
 			return Type.NULL;
@@ -46,5 +46,5 @@ public interface JsonValue {
 	 * 
 	 * @return
 	 */
-	public <T> T value();
+	<T> T value();
 }

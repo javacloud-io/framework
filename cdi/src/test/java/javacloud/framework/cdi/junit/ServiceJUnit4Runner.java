@@ -6,7 +6,7 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
 import javacloud.framework.cdi.ServiceRegistry;
-import javacloud.framework.cdi.ServiceRunlist;
+import javacloud.framework.cdi.ServiceBootstrapper;
 /**
  * Use to run anything test related to Guice using RunWith()
  * 
@@ -16,30 +16,31 @@ import javacloud.framework.cdi.ServiceRunlist;
 public class ServiceJUnit4Runner extends BlockJUnit4ClassRunner {
 	/**
 	 * 
-	 * @param klass
+	 * @param testClass
 	 * @throws InitializationError
 	 */
-	public ServiceJUnit4Runner(Class<?> klass) throws InitializationError {
-		super(klass);
+	public ServiceJUnit4Runner(Class<?> testClass) throws InitializationError {
+		super(testClass);
+		
 	}
 	
 	/**
-	 * Make sure to start/stop service after a RUN.
+	 * Make sure to start/stop services after a class RUN.
 	 */
 	@Override
 	public void run(RunNotifier notifier) {
 		try {
-			ServiceRunlist.get().startServices();
+			ServiceBootstrapper.get().startup();
 			try {
 				super.run(notifier);
 			} finally {
-				ServiceRunlist.get().stopServices();
+				ServiceBootstrapper.get().shutdown();
 			}
 		} catch(Exception ex) {
 			notifier.fireTestFailure(new Failure(getDescription(), ex));
 		}
 	}
-
+	
 	/**
 	 * Always inject the members to test instance
 	 */

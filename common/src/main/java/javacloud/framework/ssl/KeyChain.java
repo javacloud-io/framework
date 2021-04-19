@@ -38,8 +38,8 @@ public final class KeyChain {
 	}
 	
 	//Certificate chain always start with user certificate & end with trusted/self-signed
-	private	PrivateKey privateKey;
-	private	X509Certificate[] x509Certificates;
+	private	final PrivateKey privateKey;
+	private X509Certificate[] x509Certificates;
 	
 	/**
 	 * 
@@ -107,11 +107,11 @@ public final class KeyChain {
 		ks.load(null, cpassword);
 		
 		//SAVE KEY/CERTIFICATE
-		if(privateKey != null) {
+		if (privateKey != null) {
 			ks.setKeyEntry(ALIAS_NAME, privateKey, cpassword, (x509Certificates != null? x509Certificates : new X509Certificate[0]));
-		} else if(x509Certificates != null){
+		} else if (x509Certificates != null){
 			int index = 0;
-			for(X509Certificate cert: x509Certificates) {
+			for (X509Certificate cert: x509Certificates) {
 				ks.setCertificateEntry(ALIAS_NAME + "-" + (index ++), cert);
 			}
 		}
@@ -168,15 +168,15 @@ public final class KeyChain {
 		
 		//BUILDING SIGNERS MAP
 		Map<X509Certificate, X509Certificate> signers = new LinkedHashMap<X509Certificate, X509Certificate>();
-		for(X509Certificate c: x509Certificates) {
+		for (X509Certificate c: x509Certificates) {
 			signers.put(c, null);
 		}
 		
 		//ADD TO CHAIN LIST
-		if(chains != null && chains.length > 0) {
-			for(KeyChain chain: chains) {
-				if(chain.getCertificates() != null) {
-					for(X509Certificate c: chain.getCertificates()) {
+		if (chains != null && chains.length > 0) {
+			for (KeyChain chain: chains) {
+				if (chain.getCertificates() != null) {
+					for (X509Certificate c: chain.getCertificates()) {
 						signers.put(c, null);
 					}
 				}
@@ -184,13 +184,13 @@ public final class KeyChain {
 		}
 		
 		//OK, TRY COMPLETE SIGNER MAP
-		for(Map.Entry<X509Certificate, X509Certificate> c : signers.entrySet()) {
+		for (Map.Entry<X509Certificate, X509Certificate> c : signers.entrySet()) {
 			X509Certificate cert = c.getKey();
-			for(Map.Entry<X509Certificate, X509Certificate> cc : signers.entrySet()) {
+			for (Map.Entry<X509Certificate, X509Certificate> cc : signers.entrySet()) {
 				X509Certificate signer = cc.getKey();
 				
 				//ALWAYS EXCLUDE MYSELF
-				if(cert.equals(signer)) {
+				if (cert.equals(signer)) {
 					continue;
 				}
 				
@@ -199,7 +199,7 @@ public final class KeyChain {
 					cert.verify(signer.getPublicKey());
 					c.setValue(signer);
 					break;
-				}catch(Exception ex) {
+				} catch(Exception ex) {
 					//ASSUMING NOT
 				}
 			}
@@ -211,7 +211,7 @@ public final class KeyChain {
 		do {
 			certs.add(cert);
 			cert = signers.get(cert);
-		} while(cert != null);
+		} while (cert != null);
 		
 		//OK, MAKE NEW ONE.
 		this.x509Certificates = certs.toArray(new X509Certificate[certs.size()]);

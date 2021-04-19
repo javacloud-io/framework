@@ -12,5 +12,5 @@ public interface JwtVerifier {
 	 * @param signature
 	 * @return
 	 */
-	public boolean verify(String payload, String signature);
+	boolean verify(String payload, String signature);
 }

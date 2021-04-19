@@ -64,7 +64,7 @@ public abstract class ConfigInvocationHandler extends ProxyInvocationHandler {
 			return null;
 		}
 		
-		//ALWAYS RETURN STRING FORMATED ?
+		//ALWAYS RETURN STRING FORMATED?
 		if(args != null && args.length > 0) {
 			value = formatValue(value, args);
 		}

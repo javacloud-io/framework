@@ -11,25 +11,24 @@ public interface NamespaceContext {
 	 * 
 	 * @param namespace
 	 */
-	public void set(String namespace);
+	void set(String namespace);
 	
 	/**
-	 * return current NAMESPACE
 	 * 
-	 * @return
+	 * @return current NAMESPACE
 	 */
-	public String get();
+	String get();
 	
 	/**
-	 * return hash of the keys with namespace
+	 * 
 	 * @param keys
-	 * @return
-	 */
-	public String hash(Object... keys);
+	 * @return hash of the keys with namespace
+	 */ 
+	String hash(Object... keys);
 	
 	/**
 	 * Clean out any NAMESPACE currently set
 	 * 
 	 */
-	public void clear();
+	void clear();
 }

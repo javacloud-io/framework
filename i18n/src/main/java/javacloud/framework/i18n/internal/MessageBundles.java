@@ -27,7 +27,7 @@ public class MessageBundles extends ResourceBundle {
 	 */
 	@Override
 	protected Object handleGetObject(String key) {
-		for(ResourceBundle bundle: bundles) {
+		for (ResourceBundle bundle: bundles) {
 			try {
 				return bundle.getObject(key);
 			} catch (MissingResourceException ex) {
@@ -43,13 +43,13 @@ public class MessageBundles extends ResourceBundle {
 	@Override
 	public Enumeration<String> getKeys() {
 		return new Enumeration<String>() {
-            private final Iterator<ResourceBundle> iter = bundles.iterator();
-            private Enumeration<String> keys = null;
+            final Iterator<ResourceBundle> iter = bundles.iterator();
+            Enumeration<String> keys = null;
             
             //KEEP CHECK UNLESS HAS ONE ELEMENT
             public boolean hasMoreElements() {
-            	while(keys == null || !keys.hasMoreElements()) {
-            		if(!iter.hasNext()) {
+            	while (keys == null || !keys.hasMoreElements()) {
+            		if (!iter.hasNext()) {
             			return false;
             		}
             		keys = iter.next().getKeys();
@@ -59,7 +59,7 @@ public class MessageBundles extends ResourceBundle {
             
             //ADVANCE TO NEXT ELEMENT
             public String nextElement() {
-            	while(keys == null || !keys.hasMoreElements()) {
+            	while (keys == null || !keys.hasMoreElements()) {
             		keys = iter.next().getKeys();
             	}
                 return keys.nextElement();

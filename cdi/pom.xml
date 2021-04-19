@@ -26,13 +26,14 @@
                     <exclude>**/META-INF/javacloud.*</exclude>
                 </excludes>
             </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>test-jar</goal>
-                    </goals>
-                </execution>
-            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
         </plugin>
 	</plugins>
   </build>

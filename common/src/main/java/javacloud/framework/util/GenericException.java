@@ -37,7 +37,7 @@ public final class GenericException extends RuntimeException {
 	 * @return
 	 */
 	public static RuntimeException of(Throwable t) {
-		if(t instanceof RuntimeException) {
+		if (t instanceof RuntimeException) {
 			return (RuntimeException)t;
 		}
 		return new GenericException(t);
@@ -61,10 +61,10 @@ public final class GenericException extends RuntimeException {
 	 * @return
 	 */
 	static Throwable unwrap(Throwable t) {
-		if(t instanceof GenericException) {
+		if (t instanceof GenericException) {
 			return t.getCause();
 		}
-		if(t instanceof InvocationTargetException) {
+		if (t instanceof InvocationTargetException) {
 			return ((InvocationTargetException)t).getTargetException();
 		}
 		return t;
@@ -80,11 +80,11 @@ public final class GenericException extends RuntimeException {
 	public static <T extends Throwable> T getCause(Throwable t, Class<T> causedBy) {
 		do {
 			Throwable cause = (t != null ? unwrap(t) : null);
-			if(cause == null || causedBy.isInstance(cause)) {
+			if (cause == null || causedBy.isInstance(cause)) {
 				return Objects.cast(cause);
 			}
 			t = cause.getCause();
-		}while(t != null);
+		} while (t != null);
 		return null;
 	}
 	
@@ -97,10 +97,10 @@ public final class GenericException extends RuntimeException {
 	 */
 	public static boolean isCausedBy(Throwable t, Class<? extends Throwable> causedBy) {
 		//BASIC CHECK
-		if(t == null || causedBy == null) {
+		if (t == null || causedBy == null) {
 			return false;
 		}
-		if(causedBy.isInstance(t)) {
+		if (causedBy.isInstance(t)) {
 			return true;
 		}
 		//Hunt it down.
@@ -113,7 +113,7 @@ public final class GenericException extends RuntimeException {
 	 * @return the reason code for given exception.
 	 */
 	public static String getReason(Throwable cause) {
-		if(cause instanceof ValidationException) {
+		if (cause instanceof ValidationException) {
 			return ((ValidationException)cause).getReason();
 		}
 		//GENERIC AS CLASS NAME
@@ -129,12 +129,12 @@ public final class GenericException extends RuntimeException {
 	public static String getStackTrace(Throwable t, int depth) {
 		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
 		PrintWriter s = new PrintWriter(out);
-		if(depth < 0) {
+		if (depth < 0) {
 			t.printStackTrace(s);
 		} else {
 			s.println(t);
 			StackTraceElement[] stackTraces = t.getStackTrace();
-			for(int i = 0; i < depth && i < stackTraces.length; i ++) {
+			for (int i = 0; i < depth && i < stackTraces.length; i ++) {
 				s.println("\tat " + stackTraces[i]);
 			}
 		}

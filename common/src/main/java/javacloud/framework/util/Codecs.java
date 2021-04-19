@@ -19,6 +19,7 @@ import java.util.function.Function;
 public final class Codecs {
 	public static final String UTF8 	= "UTF-8";
 	private static final char[] DIGITS	= {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+	
 	private Codecs() {
 	}
 	
@@ -42,15 +43,15 @@ public final class Codecs {
 		 */
 		public static String apply(byte[] bytes, boolean safe, boolean pretty) {
 			String	base64 = Base64.getEncoder().encodeToString(bytes);
-			if(safe) {
+			if (safe) {
 				char[] chars = base64.toCharArray();
 				int count = 0;
-				for(; count < chars.length; count ++) {
-					if(chars[count] == '+') {
+				for (; count < chars.length; count ++) {
+					if (chars[count] == '+') {
 						chars[count] = '-';
-					} else if(chars[count] == '/') {
+					} else if (chars[count] == '/') {
 						chars[count] = '_';
-					} else if(chars[count] == '=') {
+					} else if (chars[count] == '=') {
 						break;
 					}
 				}
@@ -59,12 +60,12 @@ public final class Codecs {
 			}
 			
 			//PRETTY PRINT
-			if(pretty) {
+			if (pretty) {
 				char[] chars = base64.toCharArray();
 				StringBuilder buf = new StringBuilder(chars.length);
-				for(int i = 1; i <= chars.length; i ++) {
+				for (int i = 1; i <= chars.length; i ++) {
 					buf.append(chars[i - 1]);
-					if(i % 64 == 0) {
+					if (i % 64 == 0) {
 						buf.append('\n');
 					}
 				}
@@ -88,7 +89,7 @@ public final class Codecs {
 			//NEED TO MODIFY THE BUFF
 			if(safe) {
 				char[] chars = new char[(((base64.length() - 1) >> 2) + 1) << 2]; //round up to 4
-				for(int i = base64.length() - 1; i >=0; i --) {
+				for (int i = base64.length() - 1; i >=0; i --) {
 					char c = base64.charAt(i);
 					if(c == '-') {
 						c = '+';
@@ -99,7 +100,7 @@ public final class Codecs {
 				}
 				
 				//PADDING
-				for(int i = base64.length(); i < chars.length; i ++) {
+				for (int i = base64.length(); i < chars.length; i ++) {
 					chars[i] = '=';
 				}
 				base64 = new String(chars);
@@ -114,6 +115,7 @@ public final class Codecs {
 		public String apply(byte[] bytes) {
 			return apply(bytes, false);
 		}
+		
 		/**
 		 * Simple HEX encoding without using any library.
 		 * @param bytes
@@ -122,7 +124,7 @@ public final class Codecs {
 		 */
 		public static String apply(byte[] bytes, boolean upper) {
 			StringBuilder sb = new StringBuilder((bytes.length << 1));
-			for(int i = 0; i < bytes.length; i ++) {
+			for (int i = 0; i < bytes.length; i ++) {
 				byte hi = (byte) ((bytes[i] & 0xF0) >> 4);
 	            byte lo = (byte) (bytes[i] & 0x0F);
 	            sb.append(upper? Character.toUpperCase(DIGITS[hi]) : DIGITS[hi]);
@@ -137,9 +139,10 @@ public final class Codecs {
 		public byte[] apply(String digits) {
 			return apply(digits.toCharArray());
 		}
+		
 		public static byte[] apply(char[] cdigits) {
 			byte[] buf = new byte[(cdigits.length >> 1)];
-			for(int i = 0, j = 0; i < buf.length; i ++) {
+			for (int i = 0, j = 0; i < buf.length; i ++) {
 				int hi = Character.digit(cdigits[j ++], 16);
 				int lo = Character.digit(cdigits[j ++], 16);
 				buf[i] = (byte)(((hi << 4) | lo) & 0xFF);
@@ -168,7 +171,7 @@ public final class Codecs {
 		 */
 		public static String apply(Map<String, Object> params, boolean multiple) throws IOException {
 			StringBuilder sb = new StringBuilder();
-			for(String name: params.keySet()) {
+			for (String name: params.keySet()) {
 				Object value = params.get(name);
 				if(value == null) {
 					continue;
@@ -176,14 +179,14 @@ public final class Codecs {
 				
 				//CONVERT TO LIST
 				List<Object> list;
-				if(value instanceof Object[]) {
+				if (value instanceof Object[]) {
 					list =  Objects.asList((Object[])value);
-				} else if(value instanceof List) {
+				} else if (value instanceof List) {
 					list = Objects.cast(value);
 				} else {
 					list = Objects.asList(value);
 				}
-				for(Object val : list) {
+				for (Object val : list) {
 					//&NAME=VALUE
 					sb.append("&");
 					sb.append(URLEncoder.encode(name, UTF8));
@@ -193,7 +196,7 @@ public final class Codecs {
 			}
 			
 			//SKIP THE FIRST &
-			if(sb.length() > 0) {
+			if (sb.length() > 0) {
 				return sb.substring(1);
 			}
 			
@@ -228,7 +231,7 @@ public final class Codecs {
 			
 			//PARSE PROPERTIES
 			String[] list = params.split("&");
-			for(String p: list) {
+			for (String p: list) {
 				
 				//IGNORE EMPTY ONE
 				if(Objects.isEmpty(p)) {
@@ -239,7 +242,7 @@ public final class Codecs {
 				//TODO: need to support multiple value
 				int index = p.indexOf('=');
 				String name, value;
-				if(index > 0) {
+				if (index > 0) {
 					name = URLDecoder.decode(p.substring(0, index), UTF8);
 					value= URLDecoder.decode(p.substring(index + 1),UTF8);
 				} else {
@@ -248,8 +251,8 @@ public final class Codecs {
 				}
 				
 				//SET VALUE
-				if(multiple) {
-					if(props.containsKey(name)) {
+				if (multiple) {
+					if (props.containsKey(name)) {
 						List<Object> values = Objects.asList(props.get(name));
 						values.add(value);
 						props.put(name, values.toArray(new String[values.size()]));

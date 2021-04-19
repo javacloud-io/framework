@@ -18,7 +18,8 @@ import javacloud.framework.util.Objects;
  *
  */
 public class W3RequestWrapper extends HttpServletRequestWrapper {
-	private Map<String, String[]> parameterMap;
+	private final Map<String, String[]> parameterMap;
+	
 	public W3RequestWrapper(HttpServletRequest request) throws IOException {
 		super(request);
 		String queryString = request.getQueryString();

@@ -7,22 +7,20 @@ package javacloud.framework.security.jwt;
  *
  */
 public interface JwtSigner {
-	public static final String ALG_NONE  = "none";
-	public static final String ALG_HS256 = "HS256";
-	public static final String ALG_RS256 = "RS256";
+	String ALG_NONE  = "none";
+	String ALG_HS256 = "HS256";
+	String ALG_RS256 = "RS256";
 	
 	/**
-	 * return algorithm NAME
 	 * 
-	 * @return
+	 * @return algorithm NAME
 	 */
-	public String getAlgorithm();
+	String getAlgorithm();
 	
 	/**
-	 * return base64 URL encoded string
 	 * 
 	 * @param content
-	 * @return
+	 * @return base64 URL encoded string
 	 */
-	public String sign(String payload);
+	String sign(String payload);
 }

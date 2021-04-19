@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -30,9 +30,9 @@ public final class Converters {
 	public static final Function<Object, Boolean> BOOLEAN = new Function<Object, Boolean>() {
 		@Override
 		public Boolean apply(Object value) {
-			if(value instanceof Boolean) {
+			if (value instanceof Boolean) {
 				return (Boolean)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).intValue() > 0;
 			}
 			return (value != null ? Boolean.valueOf((String)value) : null);
@@ -43,9 +43,9 @@ public final class Converters {
 	public static final Function<Object, Byte> BYTE = new Function<Object, Byte>() {
 		@Override
 		public Byte apply(Object value) {
-			if(value instanceof Byte) {
+			if (value instanceof Byte) {
 				return (Byte)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).byteValue();
 			}
 			return (value != null ? Byte.valueOf((String)value) : null);
@@ -56,9 +56,9 @@ public final class Converters {
 	public static final Function<Object, Character> CHARACTER = new Function<Object, Character>() {
 		@Override
 		public Character apply(Object value) {
-			if(value instanceof Character) {
+			if (value instanceof Character) {
 				return (Character)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return (char)((Number)value).intValue();
 			}
 			return (value != null ? (((String)value).length() == 0? '\0' : ((String)value).charAt(0)) : null);
@@ -69,9 +69,9 @@ public final class Converters {
 	public static final Function<Object, Integer> INTEGER = new Function<Object, Integer>() {
 		@Override
 		public Integer apply(Object value) {
-			if(value instanceof Integer) {
+			if (value instanceof Integer) {
 				return (Integer)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).intValue();
 			}
 			return (value != null ? Integer.valueOf((String)value) : null);
@@ -82,9 +82,9 @@ public final class Converters {
 	public static final Function<Object, Short> SHORT = new Function<Object, Short>() {
 		@Override
 		public Short apply(Object value) {
-			if(value instanceof Short) {
+			if (value instanceof Short) {
 				return (Short)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).shortValue();
 			}
 			return (value != null ? Short.valueOf((String)value) : null);
@@ -95,11 +95,11 @@ public final class Converters {
 	public static final Function<Object, Long> LONG = new Function<Object, Long>() {
 		@Override
 		public Long apply(Object value) {
-			if(value instanceof Long) {
+			if (value instanceof Long) {
 				return (Long)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).longValue();
-			} else if(value instanceof java.util.Date) {
+			} else if (value instanceof java.util.Date) {
 				return ((java.util.Date)value).getTime();
 			}
 			return (value != null ? Long.valueOf((String)value) : null);
@@ -110,9 +110,9 @@ public final class Converters {
 	public static final Function<Object, Float> FLOAT = new Function<Object, Float>() {
 		@Override
 		public Float apply(Object value) {
-			if(value instanceof Float) {
+			if (value instanceof Float) {
 				return (Float)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).floatValue();
 			}
 			return (value != null ? Float.valueOf((String)value) : null);
@@ -123,9 +123,9 @@ public final class Converters {
 	public static final Function<Object, Double> DOUBLE = new Function<Object, Double>() {
 		@Override
 		public Double apply(Object value) {
-			if(value instanceof Double) {
+			if (value instanceof Double) {
 				return (Double)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return ((Number)value).doubleValue();
 			}
 			return (value != null ? Double.valueOf((String)value) : null);
@@ -136,9 +136,9 @@ public final class Converters {
 	public static final Function<Object, ByteBuffer> BYTEB = new Function<Object, ByteBuffer>() {
 		@Override
 		public ByteBuffer apply(Object value) {
-			if(value instanceof ByteBuffer) {
+			if (value instanceof ByteBuffer) {
 				return (ByteBuffer)value;
-			} else if(value instanceof byte[]) {
+			} else if (value instanceof byte[]) {
 				return ByteBuffer.wrap((byte[])value);
 			}
 			
@@ -151,12 +151,12 @@ public final class Converters {
 	public static final Function<Object, byte[]> BYTES = new Function<Object, byte[]>() {
 		@Override
 		public byte[] apply(Object value) {
-			if(value instanceof ByteBuffer) {
+			if (value instanceof ByteBuffer) {
 				ByteBuffer buf = (ByteBuffer)value;
 				byte[] dst = new byte[buf.remaining()];
 				buf.get(dst);
 				return dst;
-			} else if(value instanceof byte[]) {
+			} else if (value instanceof byte[]) {
 				return (byte[])value;
 			}
 			
@@ -169,9 +169,9 @@ public final class Converters {
 	public static final Function<Object, Date> DATE = new Function<Object, Date>() {
 		@Override
 		public Date apply(Object value) {
-			if(value instanceof Date) {
+			if (value instanceof Date) {
 				return	(Date)value;
-			} else if(value instanceof Number) {
+			} else if (value instanceof Number) {
 				return new Date(((Number)value).longValue());
 			}
 			//USING ISO DATE
@@ -187,14 +187,12 @@ public final class Converters {
 	public static final Function<Object, String> STRING = new Function<Object, String>() {
 		@Override
 		public String apply(Object value) {
-			if(value instanceof String) {
+			if (value instanceof String) {
 				return	(String)value;
-			} else if(value instanceof Date) {
+			} else if (value instanceof Date) {
 				return DateFormats.getUTC(DateFormats.ISO8601_S3).format((Date)value);
-			} else if(value instanceof byte[]) {
+			} else if (value instanceof byte[]) {
 				return Codecs.Base64Encoder.apply((byte[])value, false);
-			} else if(value instanceof Object[]) {
-				return	Arrays.asList((Object[])value).toString();
 			}
 			return (value != null? value.toString() : null);
 		}
@@ -231,8 +229,10 @@ public final class Converters {
 	 * @return
 	 */
 	public static String toString(Object value) {
-		if(value instanceof Object[]) {
+		if (value instanceof Object[]) {
 			return toString(",", (Object[])value);
+		} else if (value instanceof Collection) {
+			return toString(",", ((Collection<?>)value).toArray());
 		}
 		return STRING.apply(value);
 	}
@@ -251,10 +251,10 @@ public final class Converters {
 		
 		//Build the list with comma separated.
 		StringBuilder buf = new StringBuilder();
-		buf.append(STRING.apply(list[0]));
+		buf.append(toString(list[0]));
 		for(int i = 1; i < list.length; i ++) {
 			buf.append(sep)
-			   .append(STRING.apply(list[i]));
+			   .append(toString(list[i]));
 		}
 		return buf.toString();
 	}
@@ -269,13 +269,13 @@ public final class Converters {
 	 */
 	public static String[] toArray(String value, String sep, boolean trim) {
 		//MAKE SURE RETURN EMPTY LIST
-		if(Objects.isEmpty(value)) {
+		if (Objects.isEmpty(value)) {
 			return new String[0];
 		}
 		
 		//SPLIT IT UP
 		String[] list = value.split(sep);
-		if(trim) {
+		if (trim) {
 			for(int i = 0; i < list.length; i ++) {
 				list[i] = list[i].trim();
 			}
@@ -293,29 +293,29 @@ public final class Converters {
 	@SuppressWarnings("unchecked")
 	public static <T> T toObject(String value, Class<?> type) {
 		//STRING
-		if(type == String.class || type == Object.class) {
+		if (type == String.class || type == Object.class) {
 			return (T)value;
 		}
 		
 		//ENUM OBJECT
-		if(type.isEnum()) {
+		if (type.isEnum()) {
 			return	(T)Enum.valueOf(type.asSubclass(Enum.class), value);
 		}
 		
 		//ARRAY OF STRING/OBJECT
-		if(type == String[].class) {
+		if (type == String[].class) {
 			return Objects.cast(toArray(value, ",", true));
-		} else if(type.isArray()) {
+		} else if (type.isArray()) {
 			ArrayList<Object> list = new ArrayList<>();
-			for(String s: toArray(value, ",", true)) {
+			for (String s: toArray(value, ",", true)) {
 				list.add(toObject(s, type.getComponentType()));
 			}
 			Object arr = Array.newInstance(type.getComponentType(), list.size());
-			for(int i =0; i < list.size(); i ++) {
+			for (int i = 0; i < list.size(); i ++) {
 				Array.set(arr, i, list.get(i));
 			}
 			return (T)arr;
-		} else if(type.isAssignableFrom(ArrayList.class)) {
+		} else if (type.isAssignableFrom(ArrayList.class)) {
 			ArrayList<Object> list = new ArrayList<>();
 			for(String s: toArray(value, ",", true)) {
 				list.add(s);
@@ -325,7 +325,7 @@ public final class Converters {
 		
 		//PRIMITIVE OBJECT
 		Function<Object, ?> c = TYPES.get(type);
-		if(c != null) {
+		if (c != null) {
 			return (T)c.apply(value);
 		}
 		

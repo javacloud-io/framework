@@ -59,7 +59,7 @@ public class MessageManagerImpl implements MessageManager {
 		String message = bundle.getString(key);
 		
 		//RE-FORMAT THE MESSAGE
-		if(args != null && args.length > 0) {
+		if (args != null && args.length > 0) {
 			message = new MessageFormat(message).format(args);
 		}
 		return message;

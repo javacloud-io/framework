@@ -8,6 +8,7 @@ import javacloud.framework.util.ValidationException;
  */
 public class TxTransactionException extends ValidationException {
 	private static final long serialVersionUID = 7482734435469434117L;
+	
 	public TxTransactionException(String message) {
 		super(message);
 	}

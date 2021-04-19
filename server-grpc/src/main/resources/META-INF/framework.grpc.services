@@ -1,0 +1,3 @@
+# Default framework grpc registry
+#
+javacloud.framework.grpc.ServerLifecycle=javacloud.framework.grpc.impl.NettyServerLifecycleImpl

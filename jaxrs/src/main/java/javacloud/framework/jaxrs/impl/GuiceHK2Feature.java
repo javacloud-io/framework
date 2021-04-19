@@ -22,6 +22,7 @@ import javacloud.framework.cdi.internal.GuiceRegistry;
 public class GuiceHK2Feature implements Feature {
 	private static final Logger logger = Logger.getLogger(GuiceHK2Feature.class.getName());
 	private ServiceLocator serviceLocator;
+	
 	/**
 	 * 
 	 * @param serviceLocator

@@ -1,10 +1,10 @@
 package javacloud.framework.jaxrs.impl;
 
 import javacloud.framework.config.ConfigManager;
+import javacloud.framework.jaxrs.ClientApplication;
 import javacloud.framework.jaxrs.ClientSettings;
-import javacloud.framework.jaxrs.internal.ComponentBuilder;
 import javacloud.framework.ssl.BlindTrustProvider;
-import javacloud.framework.util.ResourceLoader;
+import javacloud.framework.util.LazySupplier;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -16,8 +16,6 @@ import javax.inject.Singleton;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
-import org.glassfish.jersey.client.ClientConfig;
-
 /**
  * Dynamically loading jersey client from META-INF/javacloud.client.components
  * 
@@ -25,42 +23,30 @@ import org.glassfish.jersey.client.ClientConfig;
  *
  */
 @Singleton
-public class HttpClientProvider implements Provider<Client> {
-	private static final String CLIENT_COMPONENTS = ResourceLoader.META_INF + "javacloud.client.components";
+public class HttpClientProvider extends LazySupplier<Client> implements Provider<Client> {
 	private static final Logger logger = Logger.getLogger(HttpClientProvider.class.getName());
 	
-	//DEFAULT CLIENT
-	private Client client;
+	private final ClientApplication application;
 	private final ClientSettings settings;
 	
 	@Inject
-	public HttpClientProvider(ConfigManager configManager) {
-		this.settings = configManager.getConfig(ClientSettings.class);
+	public HttpClientProvider(ClientApplication application, ConfigManager configManager) {
+		this(application, configManager.getConfig(ClientSettings.class));
 	}
 	
-	/**
-	 * FIXME: Enable custom trusted SSL validation
-	 */
+	protected HttpClientProvider(ClientApplication application, ClientSettings settings) {
+		this.application = application;
+		this.settings = settings;
+	}
+	
 	@Override
-	public Client get() {
-		if(client == null) {
-			this.client = newBuilder().build();
-		}
-		return client;
-	}
-	
-	/**
-	 * return default builder with configuration
-	 * 
-	 * @return
-	 */
-	protected ClientBuilder newBuilder(){
-		ClientConfig config = configure();
-		ClientBuilder builder = ClientBuilder.newBuilder().withConfig(config);
+	protected Client newInstance() {
+		ClientBuilder builder = ClientBuilder.newBuilder();
 		if(settings.ignoreHostnameVerification()) {
 			builder.hostnameVerifier(BlindTrustProvider.HOSTNAME_VERIFIER);
 		}
-		return builder;
+		configure(builder);
+		return builder.build();
 	}
 	
 	/**
@@ -68,18 +54,16 @@ public class HttpClientProvider implements Provider<Client> {
 	 * 
 	 * @return
 	 */
-	protected ClientConfig configure() {
-		List<?> components = new ComponentBuilder().build(CLIENT_COMPONENTS, ResourceLoader.getClassLoader());
+	protected void configure(ClientBuilder builder) {
+		List<?> components = application.clientComponents();
 		logger.log(Level.FINE, "Registering client components: {0}", components);
 		
-		ClientConfig config = new ClientConfig();
 		for(Object c: components) {
 			if(c instanceof Class) {
-				config.register((Class<?>)c);
+				builder.register((Class<?>)c);
 			} else {
-				config.register(c);
+				builder.register(c);
 			}
 		}
-		return config;
 	}
 }

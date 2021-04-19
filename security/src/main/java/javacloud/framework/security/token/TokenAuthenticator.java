@@ -30,7 +30,7 @@ public class TokenAuthenticator implements Authenticator {
 	@Override
 	public AccessGrant authenticate(Credentials credentials) throws AuthenticationException {
 		//NOT APPLICABLE
-		if(!(credentials instanceof TokenCredentials)) {
+		if (!(credentials instanceof TokenCredentials)) {
 			return null;
 		}
 		
@@ -39,7 +39,7 @@ public class TokenAuthenticator implements Authenticator {
 		TokenGrant token = tokenValidator.validateToken(tcredentials.getToken());
 		
 		//TOKEN TYPE MUST MATCH!!!
-		if(!token.getType().name().equals(tcredentials.getName())) {
+		if (!token.getType().name().equals(tcredentials.getName())) {
 			throw new InvalidCredentialsException();
 		}
 		return grantAccess(token);
@@ -56,7 +56,7 @@ public class TokenAuthenticator implements Authenticator {
 		Set<String> roles;
 		
 		//PASSING ALONE ROLES
-		if(Objects.isEmpty(token.getRoles())) {
+		if (Objects.isEmpty(token.getRoles())) {
 			roles = Permissions.EMPTY_ROLES;
 		} else {
 			roles = Objects.asSet(Converters.toArray(token.getRoles(), " ", true));

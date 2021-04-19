@@ -56,13 +56,13 @@ public class NamespaceContextImpl implements NamespaceContext {
 		
 		//HASHKEY IF ANY AVAILABLE
 		String hashKey = get();
-		if(hashKey != null) {
+		if (hashKey != null) {
 			md.update(Codecs.toBytes(hashKey));
 		}
 		
 		//ADD ALL KEYS WITHIN
-		if(keys != null && keys.length > 0) {
-			for(Object key: keys) {
+		if (keys != null && keys.length > 0) {
+			for (Object key: keys) {
 				md.update(SP);	//SP
 				if(key instanceof byte[]) {
 					md.update((byte[])key);

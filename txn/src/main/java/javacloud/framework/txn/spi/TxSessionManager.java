@@ -9,10 +9,10 @@ public interface TxSessionManager {
 	/**
 	 * 
 	 */
-	public void beginSession();
+	void beginSession();
 	
 	/**
 	 * 
 	 */
-	public void endSession();
+	void endSession();
 }

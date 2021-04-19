@@ -20,10 +20,10 @@ public abstract class BytesChannelWriter implements WritableByteChannel {
 	 */
 	public long transferFrom(ByteBuffer buf) throws IOException {
 		long tcount = 0;
-		while(buf.hasRemaining()) {
+		while (buf.hasRemaining()) {
 			//read & break if EOF
 			int write = write(buf);
-			if(write > 0) {
+			if (write > 0) {
 				tcount += write;
 			}
 		}
@@ -49,7 +49,7 @@ public abstract class BytesChannelWriter implements WritableByteChannel {
 	 * @return
 	 */
 	public static BytesChannelWriter wrap(final WritableByteChannel wbc) {
-		if(wbc instanceof BytesChannelWriter) {
+		if (wbc instanceof BytesChannelWriter) {
 			return (BytesChannelWriter)wbc;
 		}
 		

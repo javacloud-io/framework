@@ -21,8 +21,8 @@ public abstract class Condition<T> implements java.util.function.Predicate<T> {
 	    STARTS_WITH
 	}
 	
-	private Op	op;		//range key comparator
-	protected T[] values;//which range keys
+	private final Op op;		//range key comparator
+	protected final T[] values;	//which range keys
 	/**
 	 * 
 	 * @param operator

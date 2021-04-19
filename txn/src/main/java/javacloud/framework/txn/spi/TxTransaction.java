@@ -13,21 +13,21 @@ public interface TxTransaction {
 	 * 
 	 * @return
 	 */
-	public boolean isActive();
+	boolean isActive();
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public Transactional getTransactional();
+	Transactional getTransactional();
 	
 	/**
 	 * 
 	 */
-	public void commit();
+	void commit();
 	
 	/**
 	 * 
 	 */
-	public void rollback();
+	void rollback();
 }

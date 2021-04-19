@@ -19,8 +19,9 @@ import javacloud.framework.util.Converters;
  */
 @Singleton
 public class JwtTokenValidator implements TokenValidator {
-	private JwtCodecs  	jwtCodecs;
-	private JwtVerifier	jwtVerifier;
+	private final JwtCodecs  	jwtCodecs;
+	private final JwtVerifier	jwtVerifier;
+	
 	/**
 	 * 
 	 * @param externalizer

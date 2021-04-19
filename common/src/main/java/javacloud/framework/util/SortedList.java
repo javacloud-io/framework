@@ -66,7 +66,7 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	 */
 	@Override
 	public int compare(E o1, E o2) {
-		if(comparator != null) {
+		if (comparator != null) {
 			return comparator.compare(o1, o2);
 		}
 		Comparable<E> e = Objects.cast(o1);
@@ -87,7 +87,7 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	 */
 	@Override
 	public boolean add(E e) {
-		if(isEmpty()) {
+		if (isEmpty()) {
 			return super.add(e);
 		}
 		//insert at correct location
@@ -101,7 +101,7 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	@Override
 	public boolean remove(Object o) {
 		int index = indexOf(o);
-		if(index >= 0) {
+		if (index >= 0) {
 			remove(index);
 			return true;
 		}
@@ -117,16 +117,16 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 			return false;
 		}
 		int count = 0;
-		if(c instanceof SortedList) {
+		if (c instanceof SortedList) {
 			SortedList<E> sc = Objects.cast(c);
 			int i = 0, j = 0;
-			while(i < size() && j < sc.size()) {
+			while (i < size() && j < sc.size()) {
 				E e = sc.get(j);
 				int cmp = compare(get(i), e);
-				if(cmp < 0) {
+				if (cmp < 0) {
 					i ++;
 				} else {
-					if(cmp == 0) {
+					if (cmp == 0) {
 						if(insert(i, e)) {
 							count ++;
 						}
@@ -161,14 +161,14 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	 */
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		if(c == null || c.isEmpty()) {
+		if (c == null || c.isEmpty()) {
 			return false;
 		}
-		if(c instanceof SortedList) {
+		if (c instanceof SortedList) {
 			int count = 0;
 			SortedList<E> sc = Objects.cast(c);
 			int i = 0, j = 0;
-			while(i < size() && j < sc.size()) {
+			while (i < size() && j < sc.size()) {
 				E e = sc.get(j);
 				int cmp = compare(get(i), e);
 				if(cmp < 0) {
@@ -198,10 +198,10 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 	 */
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		if(c == null || c.isEmpty()) {
+		if (c == null || c.isEmpty()) {
 			return true;
 		}
-		if(c instanceof SortedList) {
+		if (c instanceof SortedList) {
 			SortedList<E> sc = Objects.cast(c);
 			int i = 0, j = 0;
 			while(i < size() && j < sc.size()) {
@@ -272,7 +272,7 @@ public class SortedList<E> extends ArrayList<E> implements Comparator<E> {
 		//ENSURE NOT DUPLICATION
 		@Override
 		protected boolean insert(int index, E e) {
-			if(index >= 0) {
+			if (index >= 0) {
 				return false;
 			}
 			return super.insert(index, e);

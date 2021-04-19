@@ -11,13 +11,14 @@ import java.io.OutputStream;
  */
 public class BytesRollingStream extends BytesOutputStream {
 	private boolean rolled = false;
+	
 	public BytesRollingStream(int size) {
 		super(size);
 	}
 	
 	@Override
 	public synchronized void write(int b) {
-		if(count >= buf.length) {
+		if (count >= buf.length) {
 			count  = 0;
 			rolled = true;
 		}
@@ -27,7 +28,7 @@ public class BytesRollingStream extends BytesOutputStream {
 
 	@Override
 	public synchronized void write(byte[] b, int off, int len) {
-		for(int i = 0; i < len; i ++) {
+		for (int i = 0; i < len; i ++) {
 			write(b[i]);
 		}
 	}
@@ -41,7 +42,7 @@ public class BytesRollingStream extends BytesOutputStream {
 	//CORRECTLY SHIFT THE COUNT
 	@Override
 	public void flush() throws IOException {
-		if(rolled && count < buf.length) {
+		if (rolled && count < buf.length) {
 			byte[] newbuf = new byte[buf.length];
 			System.arraycopy(buf, count, newbuf, 0, buf.length - count);
 			System.arraycopy(buf, 0, newbuf, buf.length - count, count);

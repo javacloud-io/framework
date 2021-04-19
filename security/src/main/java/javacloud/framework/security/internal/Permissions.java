@@ -33,6 +33,7 @@ public final class Permissions {
 	
 	//trusted server client with KEY
 	public static final String ROLE_TRUSTED_CLIENT	= "trusted_client";
+	
 	private Permissions() {
 	}
 	
@@ -46,7 +47,7 @@ public final class Permissions {
 	 */
 	public static String assertAny(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getSubject() == null || !hasAny(authz, permissions)) {
+		if (authz == null || authz.getSubject() == null || !hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getSubject().getName();
@@ -62,7 +63,7 @@ public final class Permissions {
 	 */
 	public static String assertNone(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getSubject() == null || hasAny(authz, permissions)) {
+		if (authz == null || authz.getSubject() == null || hasAny(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getSubject().getName();
@@ -78,7 +79,7 @@ public final class Permissions {
 	 */
 	public static String assertAll(AccessGrant authz, String... permissions)
 		throws AccessDeniedException {
-		if(authz == null || authz.getSubject() == null || !hasAll(authz, permissions)) {
+		if (authz == null || authz.getSubject() == null || !hasAll(authz, permissions)) {
 			throw new AccessDeniedException();
 		}
 		return authz.getSubject().getName();
@@ -93,17 +94,17 @@ public final class Permissions {
 	public static boolean hasAll(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONs
 		Set<String> claims = authz.getRoles();
-		if(claims == null || claims.isEmpty()) {
+		if (claims == null || claims.isEmpty()) {
 			return false;
 		}
 				
 		//HAS NOTHING
-		if(roles == null || roles.length == 0) {
+		if (roles == null || roles.length == 0) {
 			return true;
 		}
 		
 		//SCAN THEM ALL
-		for(String name: roles) {
+		for (String name: roles) {
 			if(!claims.contains(name)) {
 				return false;
 			}
@@ -120,17 +121,17 @@ public final class Permissions {
 	public static boolean hasAny(AccessGrant authz, String ...roles) {
 		//NOT ANY PERMISSIONS
 		Set<String> claims = authz.getRoles();
-		if(claims == null || claims.isEmpty()) {
+		if (claims == null || claims.isEmpty()) {
 			return false;
 		}
 				
 		//NOTHING AT ALL
-		if(roles == null || roles.length == 0) {
+		if (roles == null || roles.length == 0) {
 			return true;
 		}
 		
 		//FIND ONE IS ENOUGH
-		for(String name: roles) {
+		for (String name: roles) {
 			if(claims.contains(name)) {
 				return true;
 			}

@@ -19,25 +19,25 @@ public interface AccessGrant extends Principal {
 	 * 
 	 * @return
 	 */
-	public Principal getSubject();
+	Principal getSubject();
 	
 	/**
 	 * Client in which this is grant all
 	 * 
 	 * @return
 	 */
-	public String getAudience();
+	String getAudience();
 	
 	/**
 	 * Set of scope which grant might have access
 	 * 
 	 * @return
 	 */
-	public String getScope();
+	String getScope();
 	
 	/**
 	 * Set of static roles entitle to the grant
 	 * @return
 	 */
-	public Set<String> getRoles();
+	Set<String> getRoles();
 }

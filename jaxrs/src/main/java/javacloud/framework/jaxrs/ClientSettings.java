@@ -14,5 +14,5 @@ public interface ClientSettings {
 	 * @return
 	 */
 	@ConfigProperty(name="javacloud.jaxrs.ssl.ignoreHostnameVerification", value="false")
-	public boolean ignoreHostnameVerification();
+	boolean ignoreHostnameVerification();
 }

@@ -97,13 +97,13 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 		
 		//DETAILS MESSAGE LOCALE
 		String message;
-		if(exception instanceof JsonProcessingException) {
+		if (exception instanceof JsonProcessingException) {
 			message = ((JsonProcessingException)exception).getOriginalMessage();
 		} else {
 			message = exception.getMessage();
 		}
 		
-		if(Objects.isEmpty(message)) {
+		if (Objects.isEmpty(message)) {
 			message = exception.getClass().getName();
 		}
 		return Objects.asMap("error", error, "message", toLocalizedMessage(message));

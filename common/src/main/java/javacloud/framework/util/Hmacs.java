@@ -47,7 +47,7 @@ public final class Hmacs {
 	 */
 	public static byte[] digest(Key secret, byte[]... bytes) {
 		javax.crypto.Mac mac = get(secret);
-		for(byte[] bb: bytes) {
+		for (byte[] bb: bytes) {
 			mac.update(bb);
 		}
 		return mac.doFinal();

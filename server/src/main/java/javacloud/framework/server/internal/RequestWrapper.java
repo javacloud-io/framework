@@ -55,7 +55,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 * @return
 	 */
 	public static final HttpServletRequest wrap(HttpServletRequest request, AccessGrant authz) {
-		if(request instanceof RequestWrapper) {
+		if (request instanceof RequestWrapper) {
 			((RequestWrapper)request).authz = authz;
 		} else {
 			request = new RequestWrapper(request, authz);
@@ -74,7 +74,7 @@ public class RequestWrapper extends HttpServletRequestWrapper {
 	 */
 	public static final Cookie getCookie(HttpServletRequest req, String cookieName) {
 		Cookie[] cookies = req.getCookies();
-		if(cookies != null && cookies.length > 0) {
+		if (cookies != null && cookies.length > 0) {
 			for (Cookie cookie : cookies) {
 				if (cookieName.equals(cookie.getName())) {
 					return	cookie;

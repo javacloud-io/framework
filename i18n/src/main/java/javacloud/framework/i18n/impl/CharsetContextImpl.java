@@ -16,8 +16,8 @@ import javacloud.framework.util.Objects;
 @Singleton
 public class CharsetContextImpl implements CharsetContext {
 	private static final Logger logger = Logger.getLogger(CharsetContextImpl.class.getName());
-	
 	private static final ThreadLocal<Charset> CHARSET = new ThreadLocal<Charset>();
+	
 	public CharsetContextImpl() {
 	}
 	
@@ -35,7 +35,7 @@ public class CharsetContextImpl implements CharsetContext {
 	@Override
 	public void set(String charset) {
 		Charset cs = null;
-		if(!Objects.isEmpty(charset)) {
+		if (!Objects.isEmpty(charset)) {
 			try {
 				cs = Charset.forName(charset);
 			} catch(UnsupportedCharsetException ex) {

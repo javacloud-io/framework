@@ -71,13 +71,13 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 		
 		//LOGIN PAGE
 		this.loginPage = getInitParameter("login-page");
-		if(loginPage == null) {
+		if (loginPage == null) {
 			loginPage = IdParameters.LOGIN_REDIRECT_URI;
 		}
 		
 		//ROLES
 		String roles = getInitParameter("permissions");
-		if(roles != null) {
+		if (roles != null) {
 			this.permissions = Converters.toArray(roles, ",", true);
 		}
 	}
@@ -91,7 +91,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 			throws ServletException, IOException {
 		try {
 			AccessGrant authzGrant = doAuthenticate(req);
-			if(authzGrant == null) {
+			if (authzGrant == null) {
 				throw new InvalidCredentialsException();
 			}
 			
@@ -101,9 +101,9 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 			}
 			
 			chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
-		} catch(AuthenticationException ex) {
+		} catch (AuthenticationException ex) {
 			responseError(req, resp, ex);
-		} catch(ServletException ex) {
+		} catch (ServletException ex) {
 			AuthenticationException aex = GenericException.getCause(ex, AuthenticationException.class);
 			if(aex == null) {
 				throw ex;
@@ -128,7 +128,7 @@ public class WebAuthorizationFilter extends SecurityContextFilter {
 				IdParameters.PARAM_STATE, req.getParameter(IdParameters.PARAM_STATE));
 				
 		//ALWAYS ASSUMING REDIRECT
-		if(Objects.isEmpty(challengeScheme)) {
+		if (Objects.isEmpty(challengeScheme)) {
 			String redirectUri = loginPage + (loginPage.indexOf('#') > 0? "&" : "#") +  Codecs.UrlEncoder.apply(entity, true);
 			resp.sendRedirect(RequestWrapper.buildURI(req, redirectUri));
 		} else {

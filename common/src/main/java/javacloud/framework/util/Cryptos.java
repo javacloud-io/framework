@@ -18,7 +18,7 @@ import javax.crypto.spec.SecretKeySpec;
  * @author tobi
  *
  */
-public class Cryptos {
+public final class Cryptos {
 	//ALGORITHM & KEY SIZE
 	public static final String 	ALG_AES 	= "AES";
 	public static final int		AES_KEY128	= 16;
@@ -41,6 +41,7 @@ public class Cryptos {
 	public static final String RSA_EBC_PKCS1Padding = "RSA/ECB/PKCS1Padding";
 	public static final String RSA_EBC_OAEPWithSHA_1= "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 	public static final String RSA_EBC_OAEPWithSHA_2= "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+	
 	private Cryptos() {
 	}
 	

@@ -16,5 +16,5 @@ public interface TokenValidator {
 	 * @throw AuthenticationException
 	 * @return
 	 */
-	public	TokenGrant	validateToken(String token) throws AuthenticationException;
+	TokenGrant	validateToken(String token) throws AuthenticationException;
 }

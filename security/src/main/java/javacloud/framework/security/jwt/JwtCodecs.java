@@ -56,7 +56,7 @@ public final class JwtCodecs {
 							+ "." + Codecs.Base64Encoder.apply(claims, true);
 			
 			return payload + "." + signer.sign(payload);
-		} catch(IOException ex) {
+		} catch (IOException ex) {
 			logger.log(Level.WARNING, "Problem encode JWT token", ex);
 			throw new JwtInvalidException();
 		}
@@ -72,31 +72,31 @@ public final class JwtCodecs {
 	 * @throws JwtException
 	 */
 	public JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtInvalidException {
-		if(Objects.isEmpty(token)) {
+		if (Objects.isEmpty(token)) {
 			throw new JwtInvalidException();
 		}
 		int idot = token.lastIndexOf('.');
-		if(idot < 0) {
+		if (idot < 0) {
 			throw new JwtInvalidException();
 		}
 		
 		//VALIDATE THE PAYLOAD BEFORE CONTINUE
 		String payload  = token.substring(0, idot);
 		String signature= token.substring(idot + 1);
-		if(!verifier.verify(payload, signature)) {
+		if (!verifier.verify(payload, signature)) {
 			throw new JwtInvalidException();
 		}
 		
 		//DECODE PAYLOAD TO JSON
 		idot = payload.indexOf('.');
-		if(idot < 0) {
+		if (idot < 0) {
 			throw new JwtInvalidException();
 		}
 		try {
 			Map<String, Object> header = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(0, idot), true),  Map.class);
 			Map<String, Object> claims = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(idot + 1), true), Map.class);
 			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
-		} catch(IOException ex) {
+		} catch (IOException ex) {
 			logger.log(Level.WARNING, "Problem decode JWT token", ex);
 			throw new JwtInvalidException();
 		}
@@ -136,6 +136,7 @@ public final class JwtCodecs {
 		public String getAlgorithm() {
 			return ALG_HS256;
 		}
+		
 		@Override
 		public String sign(String payload) {
 			return Codecs.Base64Encoder.apply(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
@@ -143,8 +144,8 @@ public final class JwtCodecs {
 
 		@Override
 		public boolean verify(String payload, String signature) {
-			String sexpected = sign(payload);
-			return sexpected.equals(signature);
+			String expected = sign(payload);
+			return expected.equals(signature);
 		}
 	}
 	
@@ -170,7 +171,7 @@ public final class JwtCodecs {
 				sig.initSign(privateKey);
 				sig.update(Codecs.toBytes(payload));
 				return Codecs.Base64Encoder.apply(sig.sign(), true);
-			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
+			} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
 		}
@@ -185,6 +186,7 @@ public final class JwtCodecs {
 		public RS256V(PublicKey publicKey) {
 			this.publicKey = publicKey;
 		}
+		
 		@Override
 		public boolean verify(String payload, String signature) {
 			try {
@@ -192,7 +194,7 @@ public final class JwtCodecs {
 				sig.initVerify(publicKey);
 				sig.update(Codecs.toBytes(payload));
 				return sig.verify(Codecs.Base64Decoder.apply(signature, true));
-			} catch(InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
+			} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
 		}

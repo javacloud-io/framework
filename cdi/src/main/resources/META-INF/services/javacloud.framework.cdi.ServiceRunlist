@@ -1,2 +1,0 @@
-#Register the service runner implementation using Google Guice
-javacloud.framework.cdi.impl.GuiceRunlistImpl

@@ -24,6 +24,7 @@ import javax.inject.Inject;
 public class TestInject {
 	@Inject
 	TestService service;
+	
 	public TestService getService() {
 		return service;
 	}

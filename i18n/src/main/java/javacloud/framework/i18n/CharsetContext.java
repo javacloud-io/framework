@@ -12,23 +12,23 @@ public interface CharsetContext {
 	 * 
 	 * @param charset
 	 */
-	public void set(Charset charset);
+	void set(Charset charset);
 	
 	/**
 	 * 
 	 * @param charset
 	 */
-	public void set(String charset);
+	void set(String charset);
 	
 	/**
 	 * return the charset
 	 * 
 	 * @return
 	 */
-	public Charset get();
+	Charset get();
 	
 	/**
 	 * 
 	 */
-	public void clear();
+	void clear();
 }

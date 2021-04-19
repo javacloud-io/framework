@@ -14,6 +14,7 @@ import javacloud.framework.txn.spi.TxTransactionException;
 public abstract class SqlTransaction implements TxTransaction {
 	private final Transactional transactional;
 	private boolean active = true;
+	
 	public SqlTransaction(Transactional transactional) {
 		this.transactional = transactional;
 	}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package javacloud.sample.apis;
+option java_outer_classname = "SampleProto";
+option java_package = "javacloud.sample.apis";
+option java_multiple_files = true;
+
+
+service Sample {
+    rpc test(TestRequest) returns (TestResponse);
+}
+
+message TestRequest {
+
+}
+
+message TestResponse {
+}

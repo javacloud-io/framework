@@ -53,7 +53,7 @@ public final class BlindTrustProvider extends java.security.Provider {
 	 * Register and activate the BLIND TRUST. MAKE SURE CALL ONLY ONE TIME
 	 */
 	public static void register() {
-		if(Security.getProvider(TRUST_NAME) == null) {
+		if (Security.getProvider(TRUST_NAME) == null) {
 			Security.insertProviderAt(new BlindTrustProvider(), 2);
 			Security.setProperty("ssl.TrustManagerFactory.algorithm", TRUST_ALG);
 			

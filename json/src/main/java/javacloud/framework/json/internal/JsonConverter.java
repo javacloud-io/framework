@@ -82,11 +82,11 @@ public final class JsonConverter implements Externalizer {
 	 * @throws IOException
 	 */
 	public <T> T toObject(byte[] buf, Class<?> type) throws IOException {
-		if(buf == null) {
+		if (buf == null) {
 			return null;
 		}
 		//SUPPORT EMPTY ARRAY
-		if(buf.length == 0 && type.isArray()) {
+		if (buf.length == 0 && type.isArray()) {
 			return Objects.cast(Array.newInstance(type.getComponentType(), 0));
 		}
 		return unmarshal(new BytesInputStream(buf), type);
@@ -100,11 +100,11 @@ public final class JsonConverter implements Externalizer {
 	 * @throws IOException
 	 */
 	public <T> T toObject(String utf8, Class<?> type) throws IOException {
-		if(utf8 == null) {
+		if (utf8 == null) {
 			return null;
 		}
 		//SUPPORT EMPTY ARRAY
-		if(utf8.isEmpty() && type.isArray()) {
+		if (utf8.isEmpty() && type.isArray()) {
 			return Objects.cast(Array.newInstance(type.getComponentType(), 0));
 		}
 		return unmarshal(new BytesInputStream(utf8), type);
@@ -120,13 +120,13 @@ public final class JsonConverter implements Externalizer {
 			@Override
 			public T apply(Object value) {
 				try {
-					if(type.isInstance(value)) {
+					if (type.isInstance(value)) {
 						return Objects.cast(value);
 					}
-					if(value instanceof String) {
+					if (value instanceof String) {
 						return toObject((String)value, type);
 					}
-					if(value instanceof byte[]) {
+					if (value instanceof byte[]) {
 						return toObject((byte[])value, type);
 					}
 					return (toObject(toBytes(value), type));

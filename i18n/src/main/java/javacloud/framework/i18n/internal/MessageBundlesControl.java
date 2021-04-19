@@ -52,11 +52,11 @@ public class MessageBundlesControl extends ResourceBundle.Control {
 	public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
 			throws IllegalAccessException, InstantiationException, IOException {
 		//OK, request universal bundles
-		if(baseName == null || baseName.isEmpty()) {
+		if (baseName == null || baseName.isEmpty()) {
 			List<ResourceBundle> bundles = new ArrayList<>(bundleNames.size());
-			for(String bundleName: bundleNames) {
+			for (String bundleName: bundleNames) {
 				ResourceBundle bundle = super.newBundle(bundleName, locale, format, loader, reload);
-				if(bundle != null) {
+				if (bundle != null) {
 					bundles.add(bundle);
 				}
 			}
@@ -72,7 +72,7 @@ public class MessageBundlesControl extends ResourceBundle.Control {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public synchronized void discoverBundles(ClassLoader classLoader) throws IOException {
 		Enumeration<URL> resourceURLs = classLoader.getResources(I18N_BUNDLES);
-		while(resourceURLs.hasMoreElements()) {
+		while (resourceURLs.hasMoreElements()) {
 			Properties props = ResourceLoader.loadProperties(resourceURLs.nextElement());
 			bundleNames.addAll((Set)props.keySet());
 		}

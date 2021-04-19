@@ -83,15 +83,6 @@ public final class Jvms {
 	}
 	
 	/**
-	 * 
-	 * @return current local host address.
-	 * @throws UnknownHostException
-	 */
-	public static InetAddress getLocalAddress() throws UnknownHostException {
-			return	InetAddress.getLocalHost();
-	}
-	
-	/**
 	 * Validate to see if given address match the rangeIP definition.
 	 * 
 	 * 192.168.1.0/24 -> 192.168.1.0 - 192.168.1.255 (first 24 bits have to match)
@@ -104,7 +95,7 @@ public final class Jvms {
 	public static boolean isAddressInRange(String address, String range) throws UnknownHostException {
 		byte[] baddress = InetAddress.getByName(address).getAddress();
 		int bits, sep = range.lastIndexOf('/');
-		if(sep <= 0) {
+		if (sep <= 0) {
 			bits = baddress.length * 8;	//IP4-6
 		} else {
 			bits = Integer.valueOf(range.substring(sep + 1).trim());
@@ -112,7 +103,7 @@ public final class Jvms {
 		}
 		
 		//NO BIT NEED TO BE MATCH
-		if(bits <= 0) {
+		if (bits <= 0) {
 			return true;
 		}
 		
@@ -121,12 +112,12 @@ public final class Jvms {
 		int nb = bits / 8;
 		
 		//TOO MANY BYTES NEED TO MATCH
-		if(nb > baddress.length || nb > paddress.length) {
+		if (nb > baddress.length || nb > paddress.length) {
 			return false;
 		}
 		
 		//MATCH ALL THE BYTES
-		for(int i = 0; i < nb; i ++) {
+		for (int i = 0; i < nb; i ++) {
 			if(baddress[i] != paddress[i]) {
 				return false;
 			}
@@ -134,10 +125,10 @@ public final class Jvms {
 		
 		//MATCH REMAINING BITS IF ANY RIGHT TO LEFT
 		int mb = bits % 8;
-		if(mb > 0) {
+		if (mb > 0) {
 			byte bb = baddress[nb], bp = paddress[nb];
-			for(int i = 0; i < mb; i ++) {
-				if((bb & 0x01) != (bp & 0x01)) {
+			for (int i = 0; i < mb; i ++) {
+				if ((bb & 0x01) != (bp & 0x01)) {
 					return false;
 				}
 				

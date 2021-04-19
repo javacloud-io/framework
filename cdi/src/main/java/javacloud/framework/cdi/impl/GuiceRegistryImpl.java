@@ -2,6 +2,8 @@ package javacloud.framework.cdi.impl;
 
 import java.util.List;
 
+import javax.inject.Singleton;
+
 import javacloud.framework.cdi.internal.GuiceBuilder;
 import javacloud.framework.cdi.internal.GuiceRegistry;
 import javacloud.framework.util.ResourceLoader;
@@ -17,6 +19,7 @@ import com.google.inject.Stage;
  * @author ho
  *
  */
+@Singleton
 public class GuiceRegistryImpl extends GuiceRegistry {
 	static final String CDI_SERVICES = ResourceLoader.META_INF + "javacloud.cdi.services";
 	/**

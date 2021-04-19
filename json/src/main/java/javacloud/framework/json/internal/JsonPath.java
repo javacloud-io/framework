@@ -36,14 +36,14 @@ public class JsonPath {
 	 * @return
 	 */
 	public <T> T select(String path) {
-		if(isRoot(path)) {
+		if (isRoot(path)) {
 			return Objects.cast(this.root);
 		}
 		String[] segments = segments(path);
 		Object dict = this.root;
-		for(int i = 1; i < segments.length; i ++) {
+		for (int i = 1; i < segments.length; i ++) {
 			dict = resolveProperty(dict, segments[i]);
-			if(dict == null) {
+			if (dict == null) {
 				break;
 			}
 		}
@@ -58,7 +58,7 @@ public class JsonPath {
 	 */
 	public <T, V> T merge(String path, V value) {
 		//REPLACE ROOT
-		if(isRoot(path)) {
+		if (isRoot(path)) {
 			return Objects.cast(value);
 		}
 		
@@ -66,7 +66,7 @@ public class JsonPath {
 		Object dict = this.root;
 		Deque<Pair<Object, String>> stack = new ArrayDeque<>();
 		String[] segments = segments(path);
-		for(int i = 1; i < segments.length; i ++) {
+		for (int i = 1; i < segments.length; i ++) {
 			Object v = getProperty(dict, segments[i]);
 			if(v == null) {
 				v = Objects.asMap();
@@ -77,7 +77,7 @@ public class JsonPath {
 		
 		//START FROM BOTTOM TRY TO SET VALUE
 		dict = value;
-		while(!stack.isEmpty()) {
+		while (!stack.isEmpty()) {
 			Pair<Object, String> p = stack.pop();
 			//NOT ABLE TO SET => CONVERT TO DICT
 			if(!setProperty(p.getKey(), p.getValue(), dict)) {
@@ -108,39 +108,39 @@ public class JsonPath {
 	 */
 	private Object resolveProperty(Object json, String name) {
 		int s = name.indexOf('[');
-		if(s < 0) {
+		if (s < 0) {
 			return getProperty(json, name);
 		}
 		int e = name.indexOf(']', s);
-		if(e < 0) {
+		if (e < 0) {
 			throw new ArrayIndexOutOfBoundsException("Index not close with ]");
 		}
 		
 		//WHOLE OBJECT
 		Object v = getProperty(json, name.substring(0, s));
-		if(v == null) {
+		if (v == null) {
 			return v;
 		}
 		String index = name.substring(s + 1, e);
 		int d = index.indexOf(':');
-		if(d == 0 && index.length() <= 1) {
+		if (d == 0 && index.length() <= 1) {
 			return v;
 		}
 		
 		//PROCESS INDEX
 		boolean isArray = v.getClass().isArray();
 		List<Object> list = isArray? Objects.asList((Object[])v) : Objects.cast(v);
-		if(d < 0) {
+		if (d < 0) {
 			s = intValueOf(index, list.size());
 			return list.get(s);
 		}
 		
 		//PROCESS RANGE
-		if(d == 0) {
+		if (d == 0) {
 			//SUB[:e]
 			s = 0;
 			e = intValueOf(index.substring(1), list.size());
-		} else if(d == index.length() - 1) {
+		} else if (d == index.length() - 1) {
 			//SUB[s:]
 			s = intValueOf(index.substring(0, d), list.size());
 			e = list.size();
@@ -162,7 +162,7 @@ public class JsonPath {
 	 * @return
 	 */
 	private int intValueOf(String index, int len) {
-		if(Objects.isEmpty(index)) {
+		if (Objects.isEmpty(index)) {
 			return 0;
 		}
 		int i = Integer.valueOf(index);
@@ -177,7 +177,7 @@ public class JsonPath {
 	 */
 	protected Object getProperty(Object json, String name) {
 		//MAP
-		if(json instanceof Map<?,?>) {
+		if (json instanceof Map<?,?>) {
 			return ((Map<?,?>)json).get(name);
 		}
 		
@@ -185,7 +185,7 @@ public class JsonPath {
 		try {
 			PropertyDescriptor pd = new PropertyDescriptor(name, json.getClass());
 			return pd.getReadMethod().invoke(json);
-		}catch(Exception ex) {
+		}catch (Exception ex) {
 			logger.log(Level.WARNING, "Unable to get property: " + name, ex);
 			return null;
 		}
@@ -201,7 +201,7 @@ public class JsonPath {
 	@SuppressWarnings("unchecked")
 	protected boolean setProperty(Object json, String name, Object value) {
 		//MAP
-		if(json instanceof Map<?,?>) {
+		if (json instanceof Map<?,?>) {
 			((Map<String, Object>)json).put(name, value);
 			return true;
 		}
@@ -211,7 +211,7 @@ public class JsonPath {
 			PropertyDescriptor pd = new PropertyDescriptor(name, json.getClass());
 			pd.getWriteMethod().invoke(json, value);
 			return true;
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			logger.log(Level.WARNING, "Unable to set property: " + name, ex);
 			return false;
 		}

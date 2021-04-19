@@ -24,16 +24,16 @@ public final class Objects {
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static final Comparator<Object> COMPARATOR = (v1, v2) -> {
 		//OK, NULL OUT FIRST
-		if(v1 == null) {
+		if (v1 == null) {
 			return (v2 == null? 0 : -1);
-		} else if(v2 == null) {
+		} else if (v2 == null) {
 			return (v1 == null? 0 : 1);
 		}
 		
 		//USING NATIVE COMPARE
-		if(v1 instanceof Comparable) {
+		if (v1 instanceof Comparable) {
 			return ((Comparable)v1).compareTo(v2);
-		} else if(v2 instanceof Comparable) {
+		} else if (v2 instanceof Comparable) {
 			return -((Comparable)v2).compareTo(v1);
 		}
 		
@@ -57,13 +57,72 @@ public final class Objects {
 	}
 	
 	/**
+	 * If the string is empty or NOT.
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static boolean isEmpty(String value) {
+		return (value == null || value.isEmpty());
+	}
+	
+	/**
+	 * Check if collections is empty
+	 * 
+	 * @param collection
+	 * @return
+	 */
+	public static boolean isEmpty(Collection<?> collection) {
+		return (collection == null || collection.isEmpty());
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * @return true if list is empty
+	 */
+	public static boolean isEmpty(Object[] collection) {
+		return (collection == null || collection.length == 0);
+	}
+	
+	/**
+	 * 
+	 * @param collection
+	 * @return true if collection is empty
+	 */
+	public static boolean isEmpty(Map<?, ?> collection) {
+		return (collection == null || collection.isEmpty());
+	}
+	
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return true if a == b
+	 */
+	public static boolean equals(Object a, Object b) {
+		return (a == b) || (a != null && a.equals(b));
+	}
+	
+	/**
+	 * 
+	 * @param num
+	 * @return sign of the number
+	 */
+	public static int signum(long num) {
+		return (num > 0? 1: (num < 0? -1 : 0));
+	}
+	
+	/**
 	 * 
 	 * @param ta
 	 * @param tb
 	 * @return similarity between string with value [0,1] similar to string compare
 	 */
 	public static float similarity(String ta, String tb) {
-		int la = ta.length(), lb = tb.length();
+		int la = ta.length();
+		int lb = tb.length();
+		
 		//one characters can't match set of 2
 		if(la == 0 || lb == 0) {
 			return (la == lb? 1.0f : 0);
@@ -71,7 +130,7 @@ public final class Objects {
 		//count matches in both
 		int lm = Math.min(la, lb);
 		int nt = 0;
-		while(nt < lm && ta.charAt(nt) == tb.charAt(nt)) {
+		while (nt < lm && ta.charAt(nt) == tb.charAt(nt)) {
 			nt ++;
 		}
 		return (2.0f * nt) / (la + lb);
@@ -79,6 +138,7 @@ public final class Objects {
 	
 	/**
 	 * Generic cast the OBJECT without warning
+	 * 
 	 * @param v
 	 * @return
 	 */
@@ -89,6 +149,7 @@ public final class Objects {
 	
 	/**
 	 * Make sure to add them all UP.
+	 * 
 	 * @param values
 	 * @return
 	 */
@@ -107,6 +168,7 @@ public final class Objects {
 	
 	/**
 	 * Convert enumerated value to SET.
+	 * 
 	 * @param values
 	 * @return
 	 */
@@ -152,66 +214,17 @@ public final class Objects {
 	}
 	
 	/**
-	 * 
-	 * @param num
-	 * @return sign of the number
-	 */
-	public static int signum(long num) {
-		return (num > 0? 1: (num < 0? -1 : 0));
-	}
-	
-	/**
-	 * If the string is empty or NOT.
-	 * 
-	 * @param value
-	 * @return
-	 */
-	public static boolean isEmpty(String value) {
-		return value == null || value.isEmpty();
-	}
-	
-	/**
-	 * Check if collections is empty
-	 * 
-	 * @param collection
-	 * @return
-	 */
-	public static boolean isEmpty(Collection<?> collection) {
-		return collection == null || collection.isEmpty();
-	}
-	
-	/**
-	 * 
-	 * @param value
-	 * @return true if list is empty
-	 */
-	public static boolean isEmpty(Object[] value) {
-		return value == null || value.length == 0;
-	}
-	
-	/**
-	 * 
-	 * @param collection
-	 * @return true if collection is empty
-	 */
-	public static boolean isEmpty(Map<?, ?> collection) {
-		return collection == null || collection.isEmpty();
-	}
-	
-	/**
 	 * Quietly close the streams without any exception...
 	 * 
 	 * @param closable
 	 */
-	public static void closeQuietly(java.io.Closeable... closables) {
-		for(java.io.Closeable c: closables) {
-			if(c != null) {
-				try {
-					c.close();
-				}catch(Exception ex) {
-					//NOOP
-				}
-			}
+	public static boolean closeQuietly(AutoCloseable closable) {
+		if(closable != null) {
+			try {
+				closable.close();
+				return true;
+			}catch(Exception ex) {}
 		}
+		return false;
 	}
 }

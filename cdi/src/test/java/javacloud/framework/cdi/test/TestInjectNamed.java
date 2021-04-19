@@ -25,6 +25,7 @@ import javax.inject.Named;
 public class TestInjectNamed {
 	@Inject @Named("named")
 	TestService service;
+	
 	public TestService getService() {
 		return service;
 	}

@@ -29,7 +29,7 @@ public class AccessTokenAuthenticator extends TokenAuthenticator {
 	 */
 	@Override
 	protected AccessGrant grantAccess(TokenGrant token) throws AuthenticationException {
-		if(token.getType() != IdParameters.GrantType.access_token) {
+		if (token.getType() != IdParameters.GrantType.access_token) {
 			throw new AccessDeniedException();
 		}
 		return super.grantAccess(token);

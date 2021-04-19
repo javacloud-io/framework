@@ -77,7 +77,7 @@ public final class PKCSTool {
 		PrivateKey privateKey = null;
 		ArrayList<X509Certificate> x509Certificates = new ArrayList<X509Certificate>();
 		
-		for(Map.Entry<String, byte[]> kentry: encodedMap.entrySet()) {
+		for (Map.Entry<String, byte[]> kentry: encodedMap.entrySet()) {
 			//PROCESS PKCS8 KEY/CERT
 			if(PEM_PRIVATE_KEY.equals(kentry.getKey())) {
 				if(privateKey != null) {
@@ -133,9 +133,9 @@ public final class PKCSTool {
 		throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 		
 		//MAKE SURE HAS AT LEAST ONE 
-		if(aliasName == null) {
+		if (aliasName == null) {
 			Enumeration<String> aliasEnum = keyStore.aliases();
-			if(!aliasEnum.hasMoreElements()) {
+			if (!aliasEnum.hasMoreElements()) {
 				return new KeyChain(null);
 			} else {
 				//ALWAYS READ FIRST ONE ONLY
@@ -149,9 +149,9 @@ public final class PKCSTool {
 		
 		//CONVERT TO X505
 		X509Certificate[] x509Certificates = null;
-		if(certificates != null && certificates.length > 0) {
+		if (certificates != null && certificates.length > 0) {
 			x509Certificates = new X509Certificate[certificates.length];
-			for(int i = 0; i < certificates.length; i ++) {
+			for (int i = 0; i < certificates.length; i ++) {
 				x509Certificates[i] = (X509Certificate)certificates[i];
 			}
 		}
@@ -209,15 +209,15 @@ public final class PKCSTool {
 		
 		//PRIVATE
 		PrivateKey privateKey = keyChain.getPrivateKey();
-		if(privateKey != null) {
+		if (privateKey != null) {
 			storePEM(PEM_PRIVATE_KEY, privateKey.getEncoded(), writer);
 			writer.newLine();
 		}
 		
 		//X509 CERTs
 		X509Certificate[] x509Certificates = keyChain.getCertificates();
-		if(x509Certificates != null && x509Certificates.length > 0) {
-			for(X509Certificate cert: x509Certificates) {
+		if (x509Certificates != null && x509Certificates.length > 0) {
+			for (X509Certificate cert: x509Certificates) {
 				storePEM(PEM_CERTIFICATE, cert.getEncoded(), writer);
 				writer.newLine();
 			}
@@ -283,22 +283,22 @@ public final class PKCSTool {
 		Map<String, byte[]> encodedMap = new LinkedHashMap<String, byte[]>(); 
 		StringBuilder buff = null;
 		String sline = null;
-		while(true) {
+		while (true) {
 			String line = reader.readLine();
-			if(line == null) {
+			if (line == null) {
 				break;
 			} else if(line.isEmpty()) {
 				continue;
 			}
 			
 			//ACTUALLY BEGIN FROM HERE
-			if(line.startsWith("-----BEGIN ") && line.endsWith("-----")) {
+			if (line.startsWith("-----BEGIN ") && line.endsWith("-----")) {
 				sline = line;
 				buff = new StringBuilder();
-			} else if(line.startsWith("-----END ") && line.endsWith("-----")) {
+			} else if (line.startsWith("-----END ") && line.endsWith("-----")) {
 				//DECODE TYPE & BASE64
 				encodedMap.put(sline.substring(11, sline.length() - 5), Codecs.Base64Decoder.apply(buff.toString(), false));
-			} else if(buff != null) {
+			} else if (buff != null) {
 				//JUST APPEND TEXT LINE!
 				buff.append(line);
 			}

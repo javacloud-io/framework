@@ -8,45 +8,45 @@ package javacloud.framework.security;
  */
 public interface IdParameters extends Credentials {
 	//REQUEST PARAMETERs
-	public static final String PARAM_CLIENT_ID 		= "client_id";
-	public static final String PARAM_CLIENT_SECRET 	= "client_secret";
-	public static final String PARAM_REDIRECT_URI 	= "redirect_uri";
-	public static final String PARAM_GRANT_TYPE 	= "grant_type";
-	public static final String PARAM_RESPONSE_TYPE 	= "response_type";
+	String PARAM_CLIENT_ID 		= "client_id";
+	String PARAM_CLIENT_SECRET 	= "client_secret";
+	String PARAM_REDIRECT_URI 	= "redirect_uri";
+	String PARAM_GRANT_TYPE 	= "grant_type";
+	String PARAM_RESPONSE_TYPE 	= "response_type";
 	
-	public static final String PARAM_SCOPE 			= "scope";
-	public static final String PARAM_STATE 			= "state";
-	public static final String PARAM_ERROR 			= "error";
+	String PARAM_SCOPE 			= "scope";
+	String PARAM_STATE 			= "state";
+	String PARAM_ERROR 			= "error";
 	
-	public static final String PARAM_AUTHORIZATION_CODE 	= "code";
-	public static final String PARAM_ACCESS_TOKEN 	= "access_token";
-	public static final String PARAM_TOKEN_TYPE 	= "token_type";
-	public static final String PARAM_EXPIRES_IN 	= "expires_in"; //UTC seconds
-	public static final String PARAM_USERNAME 		= "username";
-	public static final String PARAM_PASSWORD 		= "password";
+	String PARAM_AUTHORIZATION_CODE = "code";
+	String PARAM_ACCESS_TOKEN 		= "access_token";
+	String PARAM_TOKEN_TYPE 		= "token_type";
+	String PARAM_EXPIRES_IN 		= "expires_in"; //UTC seconds
+	String PARAM_USERNAME 			= "username";
+	String PARAM_PASSWORD 			= "password";
 	
 	//SPECIAL REDIRECT URI INDICATE INSTALLED APPLICATION
-	public static final String OOB_REDIRECT_URI		= "urn:ietf:wg:oauth:2.0:oob";
-	public static final String LOGIN_REDIRECT_URI	= "/login";
+	String OOB_REDIRECT_URI		= "urn:ietf:wg:oauth:2.0:oob";
+	String LOGIN_REDIRECT_URI	= "/login";
 	
 	//ERROR CODEs
-	public static final String ERROR_SERVER_ERROR 	= "server_error";
-	public static final String ERROR_INVALID_REQUEST= "invalid_request";
+	String ERROR_SERVER_ERROR 	= "server_error";
+	String ERROR_INVALID_REQUEST= "invalid_request";
 	
 	//Schemes
-	public static enum SchemeType {
+	enum SchemeType {
 		Basic,	//Client Basic
 		Bearer;	//Oauth2 Bearer
 	}
 	
 	//type of response
-	public static enum ResponseType {
+	enum ResponseType {
 		token,
 		code
 	}
 	
 	//type of grant
-	public static enum GrantType {
+	enum GrantType {
 		password,
 		client_credentials,
 		
@@ -56,63 +56,62 @@ public interface IdParameters extends Credentials {
 	}
 	
 	/**
-	 * return requested client
-	 * @return
-	 */
-	public String getClientId();
-	
-	/**
-	 * return client requested secret
-	 * @return
-	 */
-	public String getClientSecret();
-	
-	/**
-	 * URI to handle the authorization token
-	 * @return
-	 */
-	public String getRedirectURI();
-	
-	/**
-	 * intended response type
 	 * 
-	 * @return
+	 * @return requested client
 	 */
-	public String getResponseType();
+	String getClientId();
 	
 	/**
-	 * space delimiter of scope of token, which service is asking for
-	 * @return
+	 * 
+	 * @return client requested secret
 	 */
-	public String getScope();
+	String getClientSecret();
 	
 	/**
-	 * return turn the state passing around
-	 * @return
+	 * 
+	 * @return URI to handle the authorization token
 	 */
-	public String getState();
+	String getRedirectURI();
 	
 	/**
-	 * return requested grant type
-	 * @return
+	 * 
+	 * @return intended response type
 	 */
-	public String getGrantType();
+	String getResponseType();
 	
 	/**
-	 * return authorization code if grant type is authorization_code
-	 * @return
+	 * 
+	 * @return space delimiter of scope of token, which service is asking for
 	 */
-	public String getCode();
+	String getScope();
 	
 	/**
-	 * return requested username if grant type is password
-	 * @return
+	 * 
+	 * @return turn the state passing around
 	 */
-	public String getUsername();
+	String getState();
 	
 	/**
-	 * requested password if grant type is password 
-	 * @return
+	 * 
+	 * @return requested grant type
 	 */
-	public String getPassword();
+	String getGrantType();
+	
+	/**
+	 * 
+	 * @return authorization code if grant type is authorization_code
+	 */
+	String getCode();
+	
+	/**
+	 * 
+	 * @return requested username if grant type is password
+	 */
+	String getUsername();
+	
+	/**
+	 * 
+	 * @return requested password if grant type is password 
+	 */
+	String getPassword();
 }

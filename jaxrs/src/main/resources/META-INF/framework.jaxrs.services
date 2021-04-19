@@ -1,5 +1,3 @@
 # Default services bindings
 #
-#
 javax.ws.rs.client.Client=javacloud.framework.jaxrs.impl.HttpClientProvider
-javacloud.framework.jaxrs.ClientManager=javacloud.framework.jaxrs.impl.ClientManagerImpl

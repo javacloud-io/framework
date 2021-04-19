@@ -12,6 +12,7 @@ import javacloud.framework.util.ResourceLoader;
  */
 public abstract class ServiceRegistry {
 	private static final ServiceRegistry REGISTRY = ResourceLoader.loadService(ServiceRegistry.class);
+	
 	protected ServiceRegistry() {
 	}
 	

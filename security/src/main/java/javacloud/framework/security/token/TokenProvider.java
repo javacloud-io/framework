@@ -17,5 +17,5 @@ public interface TokenProvider {
 	 * @param type
 	 * @return
 	 */
-	public	TokenGrant	issueToken(AccessGrant authzGrant, IdParameters.GrantType type);
+	TokenGrant	issueToken(AccessGrant authzGrant, IdParameters.GrantType type);
 }

@@ -65,7 +65,7 @@ public class SecurityContextFilter extends ServletFilter {
 		//SEARCH FOR AUTHENTICATORs
 		String authenticator = getInitParameter("authenticator");
 		List<Authenticator> authenticators;
-		if(Objects.isEmpty(authenticator)) {
+		if (Objects.isEmpty(authenticator)) {
 			authenticators = Objects.asList(ServiceRegistry.get().getInstance(Authenticator.class));
 		} else {
 			authenticators = ServiceRegistry.get().getInstances(Authenticator.class, Converters.toArray(authenticator, ",", true));
@@ -105,9 +105,7 @@ public class SecurityContextFilter extends ServletFilter {
 	 */
 	protected AccessGrant doAuthenticate(HttpServletRequest req) throws ServletException, IOException, AuthenticationException {
 		//MAKE SURE ACCESS TO PARAMETER NOT CAUSE PARSING THE REQUEST BODY
-		Credentials credentials = requestCredentials(new W3RequestWrapper(req) {
-			
-		});
+		Credentials credentials = requestCredentials(new W3RequestWrapper(req));
 		
 		//ASSUMING NULL GRANT
 		if(credentials == null) {

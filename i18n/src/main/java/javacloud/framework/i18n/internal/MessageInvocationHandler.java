@@ -28,6 +28,7 @@ import java.text.MessageFormat;
  */
 public abstract class MessageInvocationHandler extends ConfigInvocationHandler {
 	protected final LocaleContext contextLocale;
+	
 	protected MessageInvocationHandler(LocaleContext contextLocale) {
 		this.contextLocale = contextLocale;
 	}

@@ -1,0 +1,96 @@
+package javacloud.framework.cdi.internal;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+import javacloud.framework.cdi.ServiceRegistry;
+import javacloud.framework.cdi.ServiceBootstrapper;
+import javacloud.framework.util.Objects;
+/**
+ * Implement a runList using Guice.
+ * 
+ * @author ho
+ *
+ */
+public abstract class GuiceBootstrapper extends ServiceBootstrapper {
+	protected GuiceBootstrapper() {
+	}
+	
+	/**
+	 * Using IMPL class if requires dynamic lookup to ensure methods are available.
+	 * 
+	 * @param instance
+	 * @param methodName
+	 * @param args
+	 * @return
+	 * @throws Exception
+	 */
+	public final <T> T runMethod(Object instance, String methodName, Object...args) throws Exception {
+		Method method;
+		if(instance instanceof Class<?>) {
+			method = resolveMethod((Class<?>)instance, methodName, args);
+		} else {
+			method = resolveMethod(instance.getClass(), methodName, args);
+		}
+		
+		//INVOKE STATIC METHOD
+		if(Modifier.isStatic(method.getModifiers())) {
+			return	Objects.cast(method.invoke(null, args));
+		}
+		
+		//LOOK UP INSTANCE BY CLASS PRIOR TO INVOKE
+		if(instance instanceof Class<?>) {
+			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
+		}
+		return	Objects.cast(method.invoke(instance, args));
+	}
+	
+	/**
+	 * Resolve a method that best re-present the arguments
+	 */
+	protected Method resolveMethod(Class<?> zclass, String methodName, Object... args) throws NoSuchMethodException {
+		if(args == null || args.length == 0) {
+			return zclass.getMethod(methodName);
+		}
+		
+		//INPUT PARAMS
+		Class<?>[] types = new Class<?>[args.length];
+		for(int i = 0; i < args.length; i ++) {
+			types[i] = args[i].getClass();
+		}
+		
+		//DIRECT LOOKUP OR SEARCH FOR MATCHING
+		try {
+			return zclass.getMethod(methodName, types);
+		} catch(NoSuchMethodException ex) {
+			Method method = findMethod(zclass, methodName, types);
+			if(method != null) {
+				return method;
+			}
+			throw ex;
+		}
+	}
+	
+	/**
+	 * Find best method matchings number of arguments and assignable parameter types
+	 * 
+	 * @param zclass
+	 * @param methodName
+	 * @param types
+	 * @return
+	 */
+	protected Method findMethod(Class<?> zclass, String methodName, Class<?>[] types) {
+		for(Method m: zclass.getMethods()) {
+			//MATCH NAME
+			if(!m.getName().equals(methodName)) {
+				continue;
+			}
+			
+			//FIXME: BEST MATCHES IS NOT EXACT
+			if(m.getParameterCount() == types.length) {
+				return m;
+			}
+		}
+		return null;
+	}
+}

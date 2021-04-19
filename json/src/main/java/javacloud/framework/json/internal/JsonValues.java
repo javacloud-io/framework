@@ -19,7 +19,7 @@ public final class JsonValues {
 	 * @return
 	 */
 	public static JsonValue asValue(final Object value) {
-		if(value instanceof JsonValue) {
+		if (value instanceof JsonValue) {
 			return (JsonValue)value;
 		}
 		return new JsonValue() {

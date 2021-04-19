@@ -15,6 +15,7 @@ import javacloud.framework.util.ResourceLoader;
  */
 public class MessageInvocationHandlerImpl extends MessageInvocationHandler {
 	private final MessageBundlesControl bundlesControl;
+	
 	protected MessageInvocationHandlerImpl(LocaleContext contextLocale, MessageBundlesControl bundlesControl) {
 		super(contextLocale);
 		this.bundlesControl = bundlesControl;

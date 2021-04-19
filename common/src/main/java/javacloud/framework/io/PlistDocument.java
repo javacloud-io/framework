@@ -74,13 +74,13 @@ public final class PlistDocument {
 			
 			//FIRST ELEMENT ALWAYS A PLIST
 	        Node element = xmlDoc.getDocumentElement();
-	        if(!"plist".equals(element.getNodeName())) {
+	        if (!"plist".equals(element.getNodeName())) {
 	        	throw new IOException("Expected plist but was " + element.getNodeName());
 	        }
 	        
 	        //FIRST FIRST CHILD (HAVE TO BE a DICT)
 	        element = element.getFirstChild();
-	        while(element != null && element.getNodeType() != Node.ELEMENT_NODE) {
+	        while (element != null && element.getNodeType() != Node.ELEMENT_NODE) {
 	        	element = element.getNextSibling();
 	        }
 			return new PlistDocument(element == null? Objects.asMap() : Objects.cast(parseElement(element)));
@@ -101,21 +101,21 @@ public final class PlistDocument {
 	 */
 	private	static Object parseElement(Node element) throws ParseException {
 		String type = element.getNodeName();
-		if("true".equals(type)) {
+		if ("true".equals(type)) {
 			return	Boolean.TRUE;
-		} else if("false".equals(type)) {
+		} else if ("false".equals(type)) {
 			return	Boolean.FALSE;
-		} else if("integer".equals(type)) {
+		} else if ("integer".equals(type)) {
 			return Long.valueOf(element.getTextContent());
-		} else if("real".equals(type)) {
+		} else if ("real".equals(type)) {
 			return Double.valueOf(element.getTextContent());
-		} else if("string".equals(type)) {
+		} else if ("string".equals(type)) {
 			return	element.getTextContent();
-		} else if("date".equals(type)) {
+		} else if ("date".equals(type)) {
 			return DateFormats.getUTC().parse(element.getTextContent());
-		} else if("data".equals(type)) {
+		} else if ("data".equals(type)) {
 			return	Codecs.Base64Decoder.apply(element.getTextContent(), false);
-		} else if("array".equals(type)) {
+		} else if ("array".equals(type)) {
 			List<Object> list = new ArrayList<Object>();
 			NodeList elements = element.getChildNodes();
             for(int i = 0; i < elements.getLength(); i++) {
@@ -126,21 +126,21 @@ public final class PlistDocument {
                 list.add(parseElement(node));
             }
             return list;
-		} else if("dict".equals(type)) {
+		} else if ("dict".equals(type)) {
 			Map<String, Object> dict = Objects.asMap();
 			element = element.getFirstChild();
-			while(element != null) {
+			while (element != null) {
 				Node key = element;
-				if(key.getNodeType() != Node.ELEMENT_NODE) {
+				if (key.getNodeType() != Node.ELEMENT_NODE) {
 					element = element.getNextSibling();
 					continue;
 				}
-				if(!"key".equals(key.getNodeName())) {
+				if (!"key".equals(key.getNodeName())) {
 					throw new ParseException("Expected key but was: " + key.getNodeName(), -1);
 				}
 				
 				Node value = key.getNextSibling();
-				while(value.getNodeType() != Node.ELEMENT_NODE) {
+				while (value.getNodeType() != Node.ELEMENT_NODE) {
 					value = value.getNextSibling();
 				}
 				dict.put(key.getTextContent(), parseElement(value));
@@ -187,7 +187,7 @@ public final class PlistDocument {
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			
 			//FORMAT IF NON COMPACT MODE
-			if(!compact) {
+			if (!compact) {
 				transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "-//Apple//DTD PLIST 1.0//EN");
 				transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "http://www.apple.com/DTDs/PropertyList-1.0.dtd");
 				transformer.setOutputProperty(OutputKeys.INDENT, "yes");

@@ -173,7 +173,8 @@ public final class Files {
 		try {
 			return	copyFile(fis, fos, chunk);
 		} finally {
-			Objects.closeQuietly(fis, fos);
+			Objects.closeQuietly(fis);
+			Objects.closeQuietly(fos);
 		}
 	}
 }

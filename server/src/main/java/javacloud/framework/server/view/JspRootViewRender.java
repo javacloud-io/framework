@@ -29,20 +29,20 @@ public class JspRootViewRender extends JspViewRender {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String path = req.getPathInfo();
-		if(!Objects.isEmpty(path)) {
+		if (!Objects.isEmpty(path)) {
 			StringBuilder uriBuilder = new StringBuilder(req.getServletPath());
 			String query = req.getQueryString();
-			if(!Objects.isEmpty(query)) {
+			if (!Objects.isEmpty(query)) {
 				uriBuilder.append("?").append(query);
 			}
 			
 			//CHOP THE forward slash OFF
-			if(path.startsWith("/")) {
+			if (path.startsWith("/")) {
 				path = path.substring(1);
 			}
 			
 			//FLIP EVERY TO HASH
-			if(!Objects.isEmpty(path)) {
+			if (!Objects.isEmpty(path)) {
 				uriBuilder.append("#").append(path);
 			}
 			resp.sendRedirect(uriBuilder.toString());

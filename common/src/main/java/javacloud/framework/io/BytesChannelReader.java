@@ -41,28 +41,28 @@ public abstract class BytesChannelReader implements ReadableByteChannel {
 	 */
 	public long transferTo(WritableByteChannel channel, long count, int chunk) throws IOException {
 		//NO NEED TO TRANSFER AT THIS POINT
-		if(count == 0 || count < -1) {
+		if (count == 0 || count < -1) {
 			return 0;
 		}
 		
 		//ALLOCATE BUFFER & TRANSFER ALL.
 		ByteBuffer buf = ByteBuffer.allocate(chunk);
 		long tcount = 0;
-		while(true) {
+		while (true) {
 			
 			//Fixed count => ADJUST READ LIMIT
-			if(count > 0) {
+			if (count > 0) {
 				long remaining = count - tcount;
-				if(remaining == 0) {
+				if (remaining == 0) {
 					break;	//EOF
-				} else if(remaining < chunk) {
+				} else if (remaining < chunk) {
 					buf.limit((int)remaining);
 				}
 			}
 			
 			//read & break if EOF
 			int read = read(buf);
-			if(read < 0) {
+			if (read < 0) {
 				break;
 			}
 			//update transfer count
@@ -88,7 +88,7 @@ public abstract class BytesChannelReader implements ReadableByteChannel {
 	 */
 	public long transferTo(ByteBuffer buf) throws IOException {
 		long tcount = 0;
-		while(buf.hasRemaining()) {
+		while (buf.hasRemaining()) {
 			//read & break if EOF
 			int read = read(buf);
 			if(read < 0) {
@@ -106,7 +106,7 @@ public abstract class BytesChannelReader implements ReadableByteChannel {
 	 * @return
 	 */
 	public final static BytesChannelReader wrap(final ReadableByteChannel rbc) {
-		if(rbc instanceof BytesChannelReader) {
+		if (rbc instanceof BytesChannelReader) {
 			return	(BytesChannelReader)rbc;
 		}
 		

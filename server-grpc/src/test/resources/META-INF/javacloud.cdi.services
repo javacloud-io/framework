@@ -1,0 +1,7 @@
+######### List of modules or services binding ########
+
+framework.config.services
+framework.grpc.services
+
+# bindings
+javacloud.framework.grpc.ServerApplication=javacloud.framework.grpc.server.HelloApplication

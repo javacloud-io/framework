@@ -20,7 +20,7 @@ public class JsonTemplate {
 	 * @param root
 	 */
 	public JsonTemplate(Object root) {
-		if(root instanceof JsonPath) {
+		if (root instanceof JsonPath) {
 			this.jsonPath = (JsonPath)root;
 		} else {
 			this.jsonPath = new JsonPath(root);
@@ -33,7 +33,7 @@ public class JsonTemplate {
 	 * @return
 	 */
 	public <V, T> T compile(V value) {
-		if(value == null) {
+		if (value == null) {
 			return null;
 		}
 		return Objects.cast(eval(value));
@@ -47,11 +47,11 @@ public class JsonTemplate {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Object eval(Object expr) {
-		if(expr instanceof String) {
+		if (expr instanceof String) {
 			return evalString((String)expr);
-		} else if(expr instanceof Map) {
+		} else if (expr instanceof Map) {
 			return evalMap((Map<String, Object>)expr);
-		} else if(expr instanceof List) {
+		} else if (expr instanceof List) {
 			return evalList((List<Object>)expr);
 		}
 		return expr;
@@ -63,7 +63,7 @@ public class JsonTemplate {
 	 * @return
 	 */
 	protected Map<?, ?> evalMap(Map<String, Object> expr) {
-		for(String key: expr.keySet()) {
+		for (String key: expr.keySet()) {
 			expr.put(key, eval(expr.get(key)));
 		}
 		return expr;
@@ -75,7 +75,7 @@ public class JsonTemplate {
 	 * @return
 	 */
 	protected List<?> evalList(List<Object> expr) {
-		for(int i = 0; i < expr.size(); i ++) {
+		for (int i = 0; i < expr.size(); i ++) {
 			expr.set(i, eval(expr.get(i)));
 		}
 		return expr;
@@ -88,9 +88,9 @@ public class JsonTemplate {
 	 * @return
 	 */
 	protected Object evalString(String expr) {
-		if(Objects.isEmpty(expr)) {
+		if (Objects.isEmpty(expr)) {
 			return expr;
-		} else if(JsonPath.isRef(expr)) {
+		} else if (JsonPath.isRef(expr)) {
 			return jsonPath.select(expr);
 		}
 		
@@ -98,7 +98,7 @@ public class JsonTemplate {
 		StringBuilder sb = new StringBuilder();
 		int len = expr.length();
 		int i = 0;
-		while(i < len) {
+		while (i < len) {
 			int s = -1;
 			int j = i;
 			for(; j < len; j ++) {
@@ -110,13 +110,13 @@ public class JsonTemplate {
 				}
 			}
 			int k = j;
-			for(; k < len; k ++) {
+			for (; k < len; k ++) {
 				if(expr.charAt(k) == '}') {
 					break;
 				}
 			}
 			//NOT FOUND {$} => LEAVE AS IS
-			if(s < 0 || j >= len || k >= len) {
+			if (s < 0 || j >= len || k >= len) {
 				sb.append(expr.substring(i));
 				break;
 			} else {

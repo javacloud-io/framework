@@ -1,5 +1,7 @@
 package javacloud.framework.cdi.impl;
 
+import javax.inject.Singleton;
+
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 
@@ -11,6 +13,7 @@ import javacloud.framework.util.ResourceLoader;
  * @author ho
  *
  */
+@Singleton
 public class LazyRegistryImpl extends GuiceRegistryImpl {
 	@Override
 	protected Injector createInjector() {

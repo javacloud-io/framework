@@ -15,7 +15,7 @@ public abstract class ProxyInvocationHandler implements InvocationHandler {
 	//DEFAULT IMPLEMENTATION FOR THESE NATIVE METHODS WILL BE DELEGATED 
 	private static final Set<String> NATIVE_METHODS = Objects.asSet();
 	static {
-		for(Method m: Object.class.getMethods()) {
+		for (Method m: Object.class.getMethods()) {
 			NATIVE_METHODS.add(m.getName());
 		}
 	}
@@ -30,7 +30,7 @@ public abstract class ProxyInvocationHandler implements InvocationHandler {
 	@Override
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		//ENSURE CORRECT DEFAULT METHOD IMPLEMENTATION
-		if(NATIVE_METHODS.contains(method.getName())) {
+		if (NATIVE_METHODS.contains(method.getName())) {
 			return method.invoke(this, args);
 		}
 		return invoke(method, args);

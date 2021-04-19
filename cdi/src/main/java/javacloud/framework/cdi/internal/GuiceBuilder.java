@@ -27,6 +27,7 @@ import javacloud.framework.util.ResourceLoader;
  */
 public abstract class GuiceBuilder {
 	private static final Logger logger = Logger.getLogger(GuiceBuilder.class.getName());
+	
 	protected GuiceBuilder() {
 	}
 	
@@ -44,7 +45,7 @@ public abstract class GuiceBuilder {
 		List<Module> modules = loadModules(resource, loader);
 		
 		//ALWAYS MAKE SURE IT AT LEAST EMPTY
-		if(modules == null) {
+		if (modules == null) {
 			modules = Collections.emptyList();
 		}
 		return build(modules, null);
@@ -69,14 +70,14 @@ public abstract class GuiceBuilder {
 	protected List<Module> loadModules(String resource, ClassLoader loader) {
 		try {
 			List<ResourceLoader.Binding> bindings = ResourceLoader.loadBindings(resource, loader);
-			if(Objects.isEmpty(bindings)) {
+			if (Objects.isEmpty(bindings)) {
 				logger.fine("Not found modules or resource file: " + resource);
 				return Objects.asList();
 			}
 			
 			final List<Module> zmodules = new ArrayList<>();
 			final List<ResourceLoader.Binding> zservices = new ArrayList<>();
-			for(ResourceLoader.Binding binding: bindings) {
+			for (ResourceLoader.Binding binding: bindings) {
 				Class<?> typeClass = binding.typeClass();
 				
 				// EMPTY TYPE => ASSUMING THIS IS LINK TO OTHERS
@@ -97,23 +98,23 @@ public abstract class GuiceBuilder {
 			}
 			
 			//CONSTRUCT DYNAMIC MODULE AT THE END!!!
-			if(!zservices.isEmpty()) {
+			if (!zservices.isEmpty()) {
 				GuiceModule dynamicModule = new GuiceModule() {
 					@SuppressWarnings({ "rawtypes", "unchecked" })
 					@Override
 					protected void configure() {
-						for(ResourceLoader.Binding binding: zservices) {
+						for (ResourceLoader.Binding binding: zservices) {
 							LinkedBindingBuilder<?> bindingBuilder;
-							if(Objects.isEmpty(binding.name())) {
+							if (Objects.isEmpty(binding.name())) {
 								bindingBuilder = bind(binding.typeClass());
 							} else {
 								bindingBuilder = bindToName(binding.typeClass(), binding.name());
 							}
 							
-							//BIND TO IMPL IF VALID
+							//BIND TO IMPL/PROVIDER IF VALID
 							Class<?> implClass = binding.implClass();
-							if(implClass != null) {
-								if(Provider.class.isAssignableFrom(implClass)) {
+							if (implClass != null) {
+								if (Provider.class.isAssignableFrom(implClass)) {
 									bindingBuilder.toProvider((Class)implClass);
 								} else {
 									bindingBuilder.to((Class)implClass);
@@ -133,14 +134,15 @@ public abstract class GuiceBuilder {
 	//
 	//IMPLEMENT BUILDER BY STAGE
 	public static class StageBuilder extends GuiceBuilder {
-		private Stage stage;
+		private final Stage stage;
+		
 		public StageBuilder(Stage stage) {
 			this.stage = stage;
 		}
 		
 		@Override
 		public Injector build(List<Module> modules, List<Module> overrides) {
-			if(overrides == null || overrides.isEmpty()) {
+			if (overrides == null || overrides.isEmpty()) {
 				return Guice.createInjector(stage, modules);
 			}
 			return Guice.createInjector(stage, Modules.override(modules).with(overrides));
@@ -157,7 +159,7 @@ public abstract class GuiceBuilder {
 		
 		@Override
 		public Injector build(List<Module> modules, List<Module> overrides) {
-			if(overrides == null || overrides.isEmpty()) {
+			if (overrides == null || overrides.isEmpty()) {
 				return parent.createChildInjector(modules);
 			}
 			return parent.createChildInjector(Modules.override(modules).with(overrides));

@@ -14,21 +14,21 @@ public interface LocaleContext {
 	 * 
 	 * @param locales
 	 */
-	public void set(Locale... locales);
+	void set(Locale... locales);
 	
 	/**
 	 * for well-formed BCP 47 language tag separated by comma
 	 * 
 	 * @param tags
 	 */
-	public void set(String tags);
+	void set(String tags);
 	
 	/**
 	 * return the first locale
 	 * 
 	 * @return
 	 */
-	public Locale get();
+	Locale get();
 	
 	/**
 	 * return the next one from the current or NULL if nothing else
@@ -36,10 +36,10 @@ public interface LocaleContext {
 	 * @param local
 	 * @return
 	 */
-	public Locale next(Locale locale);
+	Locale next(Locale locale);
 	
 	/**
 	 * 
 	 */
-	public void clear();
+	void clear();
 }
