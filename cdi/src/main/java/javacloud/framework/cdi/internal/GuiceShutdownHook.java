@@ -3,8 +3,8 @@ package javacloud.framework.cdi.internal;
 import javacloud.framework.cdi.ServiceBootstrapper;
 import javacloud.framework.util.Objects;
 
-public final class ServiceShutdownHook extends Thread {
-	private ServiceShutdownHook() {
+public final class GuiceShutdownHook extends Thread {
+	private GuiceShutdownHook() {
 	}
 	
 	@Override
@@ -13,6 +13,6 @@ public final class ServiceShutdownHook extends Thread {
 	}
 	
 	public static void register() {
-		Runtime.getRuntime().addShutdownHook(new ServiceShutdownHook());
+		Runtime.getRuntime().addShutdownHook(new GuiceShutdownHook());
 	}
 }
