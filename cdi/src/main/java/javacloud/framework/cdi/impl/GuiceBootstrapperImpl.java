@@ -27,14 +27,6 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	private final List<ResourceLoader.Binding> runlist = new ArrayList<>();
 	
 	public GuiceBootstrapperImpl() {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				if (!runlist.isEmpty()) {
-					Objects.closeQuietly(() -> shutdown());
-				}
-			}
-		});
 	}
 	
 	/**
@@ -44,7 +36,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	public void startup() throws Exception {
 		synchronized (runlist) {
 			if (!runlist.isEmpty()) {
-				logger.fine("Runlist services already started!");
+				logger.fine("Bootstrap services already started!");
 				return;
 			}
 			
@@ -71,6 +63,11 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	@Override
 	public void shutdown() throws Exception {
 		synchronized (runlist) {
+			if (runlist.isEmpty()) {
+				logger.fine("Bootstrap services already stopped!");
+				return;
+			}
+			
 			//STOP IN REVERSED ORDER AS STARTED
 			Exception lastException = null;
 			for (int i = runlist.size() - 1; i >= 0; i --) {
