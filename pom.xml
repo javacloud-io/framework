@@ -53,10 +53,11 @@
     
     <module>grpc</module>
     <module>server-grpc</module>
-
     <module>jaxrs</module>
     <module>server-test</module>
     <module>server</module>
+
+    <module>standalone</module>
     <module>assembly</module>
   </modules>
   

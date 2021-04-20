@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javacloud.framework.config.ConfigSource;
@@ -57,6 +59,7 @@ public class StandardConfigSource implements ConfigSource {
 	
 	/**
 	 * Standard configuration from -name value pair
+	 * 
 	 * @param arguments
 	 */
 	public StandardConfigSource(String[] arguments) {
@@ -80,6 +83,14 @@ public class StandardConfigSource implements ConfigSource {
 	public String getProperty(String name, String defval) {
 		String val = getProperty(name);
 		return (val == null? defval: val);
+	}
+	
+	/**
+	 * 
+	 * @return all available keys
+	 */
+	public Set<String> keySet() {
+		return Collections.unmodifiableSet(properties.keySet());
 	}
 	
 	/**
@@ -123,28 +134,31 @@ public class StandardConfigSource implements ConfigSource {
 	 */
 	static final Properties parseProperties(String[] arguments) {
 		Properties props = new Properties();
-		if(arguments != null) {
-			List<String> operands = new ArrayList<>();
-			for(int i = 0; i < arguments.length;) {
-				String opt = arguments[i ++];
-				if(opt.startsWith("-")) {
-					String val = null;
-					//expected value after --
-					if(opt.startsWith("--")) {
-						opt = opt.substring(2);
-						if(i < arguments.length && !arguments[i].startsWith("-")) {
-							val = arguments[i ++];
-						}
-					} else {
-						opt = opt.substring(1);
-					}
-					props.put(opt, val == null? "" : val);
-				} else {
-					operands.add(opt);
-				}
-			}
-			props.put("", operands);
+		if(arguments == null || arguments.length == 0) {
+			return props;
 		}
+		
+		// parse command ARGS
+		List<String> operands = new ArrayList<>();
+		for(int i = 0; i < arguments.length;) {
+			String opt = arguments[i ++];
+			if(opt.startsWith("-")) {
+				String val = null;
+				//expected value after --
+				if(opt.startsWith("--")) {
+					opt = opt.substring(2);
+					if(i < arguments.length && !arguments[i].startsWith("-")) {
+						val = arguments[i ++];
+					}
+				} else {
+					opt = opt.substring(1);
+				}
+				props.put(opt, val == null? "" : val);
+			} else {
+				operands.add(opt);
+			}
+		}
+		props.put("", operands);
 		return props;
 	}
 }

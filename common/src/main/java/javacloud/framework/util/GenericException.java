@@ -116,8 +116,9 @@ public final class GenericException extends RuntimeException {
 		if (cause instanceof ValidationException) {
 			return ((ValidationException)cause).getReason();
 		}
+		
 		//GENERIC AS CLASS NAME
-		return (cause == null? null : cause.getClass().getName());
+		return (cause == null? Error.class.getName() : cause.getClass().getName());
 	}
 	
 	/**

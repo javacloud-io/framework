@@ -36,7 +36,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	public void startup() throws Exception {
 		synchronized (runlist) {
 			if (!runlist.isEmpty()) {
-				logger.fine("Bootstrap services already started!");
+				logger.fine("Runlist services already started!");
 				return;
 			}
 			
@@ -64,7 +64,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	public void shutdown() throws Exception {
 		synchronized (runlist) {
 			if (runlist.isEmpty()) {
-				logger.fine("Bootstrap services already stopped!");
+				logger.fine("Runlist services already stopped!");
 				return;
 			}
 			
@@ -77,7 +77,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 					
 					Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
 					runMethod(instance, "stop");
-				} catch(Exception ex) {
+				} catch (Exception ex) {
 					lastException = ex;
 				}
 			}
