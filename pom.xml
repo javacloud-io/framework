@@ -198,6 +198,13 @@
 		          </execution>
 		        </executions>
             </plugin>
+            
+            <!-- docker build -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
 		</plugins>
 	</pluginManagement>
   </build>
