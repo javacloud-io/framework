@@ -10,7 +10,7 @@ import javacloud.framework.util.Converters;
 public final class SystemConfigSource extends StandardConfigSource {
 	private static final SystemConfigSource SOURCE = new SystemConfigSource();
 	
-	public SystemConfigSource() {
+	SystemConfigSource() {
 		super(System.getProperties());
 	}
 	

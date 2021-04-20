@@ -58,15 +58,6 @@ public class StandardConfigSource implements ConfigSource {
 	}
 	
 	/**
-	 * Standard configuration from -name value pair
-	 * 
-	 * @param arguments
-	 */
-	public StandardConfigSource(String[] arguments) {
-		this(parseProperties(arguments));
-	}
-	
-	/**
 	 * 
 	 */
 	@Override
@@ -122,43 +113,5 @@ public class StandardConfigSource implements ConfigSource {
 		} catch (IOException ex) {
 			throw GenericException.of("Unable to load config resource: " + resource, ex);
 		}
-	}
-	
-	/**
-	 * Command line: CMD [options][operands]
-	 * options: -X -Y --xyz value...
-	 * operands: A B C
-	 * 
-	 * @param arguments
-	 * @return
-	 */
-	static final Properties parseProperties(String[] arguments) {
-		Properties props = new Properties();
-		if(arguments == null || arguments.length == 0) {
-			return props;
-		}
-		
-		// parse command ARGS
-		List<String> operands = new ArrayList<>();
-		for(int i = 0; i < arguments.length;) {
-			String opt = arguments[i ++];
-			if(opt.startsWith("-")) {
-				String val = null;
-				//expected value after --
-				if(opt.startsWith("--")) {
-					opt = opt.substring(2);
-					if(i < arguments.length && !arguments[i].startsWith("-")) {
-						val = arguments[i ++];
-					}
-				} else {
-					opt = opt.substring(1);
-				}
-				props.put(opt, val == null? "" : val);
-			} else {
-				operands.add(opt);
-			}
-		}
-		props.put("", operands);
-		return props;
 	}
 }

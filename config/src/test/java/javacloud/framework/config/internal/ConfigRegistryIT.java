@@ -1,8 +1,5 @@
 package javacloud.framework.config.internal;
 
-import java.util.Arrays;
-import java.util.Properties;
-
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -30,16 +27,5 @@ public class ConfigRegistryIT extends IntegrationTest {
 		
 		//test native implementation
 		Assert.assertNotEquals(0, config.hashCode());
-	}
-	
-	/**
-	 * 
-	 */
-	@Test
-	public void testCliArgs() {
-		Properties props = StandardConfigSource.parseProperties(new String[]{"-X", "-Y", "--xyz", "abc", "1", "2"});
-		Assert.assertEquals("", props.get("X"));
-		Assert.assertEquals("abc", props.get("xyz"));
-		Assert.assertEquals(Arrays.asList("1", "2"), props.get(""));
 	}
 }
