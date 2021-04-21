@@ -38,16 +38,6 @@ public class ObjectsTest extends TestCase {
 		Assert.assertEquals(0, Objects.signum(0));
 	}
 	
-	public void testToString() {
-		String s = Converters.toString(",", 1,2,3,4);
-		Assert.assertEquals("1,2,3,4", s);
-	}
-	
-	public void testToArray() {
-		String[] a = Converters.toArray("1,2,3,4", ",", true);
-		Assert.assertArrayEquals(new String[]{"1","2","3","4"}, a);
-	}
-	
 	public void testObjects() {
 		Object v = new String[] {"a", "b", "c"};
 		List<Object> list = Objects.asList((Object[])v);
@@ -60,5 +50,12 @@ public class ObjectsTest extends TestCase {
 		assertEquals(0.0f, Objects.similarity("abc", "bac"));
 		assertTrue(Objects.similarity("abc", "a") > 0.3333);
 		assertEquals(0.2f, Objects.similarity("night", "nacht"));
+	}
+	
+	public void testEquals() {
+		assertTrue(Objects.equals(null, null));
+		assertFalse(Objects.equals(null, "xxx"));
+		assertFalse(Objects.equals("", null));
+		assertFalse(Objects.equals(123, "123"));
 	}
 }

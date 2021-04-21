@@ -153,6 +153,7 @@ public abstract class GuiceBuilder {
 	//IMPLEMENT BUILDER BY PARENT
 	public static class InheritBuilder extends GuiceBuilder {
 		private Injector parent;
+		
 		public InheritBuilder(Injector parent) {
 			this.parent = parent;
 		}

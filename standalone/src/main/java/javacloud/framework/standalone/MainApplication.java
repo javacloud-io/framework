@@ -37,8 +37,8 @@ public class MainApplication implements Runnable {
 			Thread.yield();
 			
 			// terminate
-			logger.fine("Terminating application...");
 			terminateQuietly();
+			logger.fine("Terminated application!");
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, "Terminating application due to uncaught exception...", ex);
 			System.exit(1);
