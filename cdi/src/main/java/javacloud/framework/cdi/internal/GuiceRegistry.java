@@ -43,7 +43,7 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 	 */
 	@Override
 	public <T> T getInstance(Class<T> type, String name) {
-		if(Objects.isEmpty(name)) {
+		if (Objects.isEmpty(name)) {
 			return getInstance(type);
 		}
 		return injector.getInstance(Key.get(type, Names.named(name)));
@@ -54,19 +54,19 @@ public abstract class GuiceRegistry extends ServiceRegistry {
 	 */
 	@Override
 	public <T> List<T> getInstances(Class<T> type, String...names) {
-		if(names == null || names.length == 0) {
+		if (names == null || names.length == 0) {
 			List<Binding<T>> bindings = injector.findBindingsByType(TypeLiteral.get(type));
-			if(bindings == null || bindings.isEmpty()) {
+			if (bindings == null || bindings.isEmpty()) {
 				return Collections.emptyList();
 			}
 			List<T> instances = new ArrayList<>(bindings.size());
-			for(Binding<T> b: bindings) {
+			for (Binding<T> b: bindings) {
 				instances.add(b.getProvider().get());
 			}
 			return instances;
 		} else {
 			List<T> instances = new ArrayList<>();
-			for(String name: names) {
+			for (String name: names) {
 				instances.add(getInstance(type, name));
 			}
 			return instances;

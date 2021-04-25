@@ -27,19 +27,19 @@ public abstract class GuiceBootstrapper extends ServiceBootstrapper {
 	 */
 	public final <T> T runMethod(Object instance, String methodName, Object...args) throws Exception {
 		Method method;
-		if(instance instanceof Class<?>) {
+		if (instance instanceof Class<?>) {
 			method = resolveMethod((Class<?>)instance, methodName, args);
 		} else {
 			method = resolveMethod(instance.getClass(), methodName, args);
 		}
 		
 		//INVOKE STATIC METHOD
-		if(Modifier.isStatic(method.getModifiers())) {
+		if (Modifier.isStatic(method.getModifiers())) {
 			return	Objects.cast(method.invoke(null, args));
 		}
 		
 		//LOOK UP INSTANCE BY CLASS PRIOR TO INVOKE
-		if(instance instanceof Class<?>) {
+		if (instance instanceof Class<?>) {
 			instance = ServiceRegistry.get().getInstance((Class<?>)instance);
 		}
 		return	Objects.cast(method.invoke(instance, args));
@@ -55,16 +55,16 @@ public abstract class GuiceBootstrapper extends ServiceBootstrapper {
 		
 		//INPUT PARAMS
 		Class<?>[] types = new Class<?>[args.length];
-		for(int i = 0; i < args.length; i ++) {
+		for (int i = 0; i < args.length; i ++) {
 			types[i] = args[i].getClass();
 		}
 		
 		//DIRECT LOOKUP OR SEARCH FOR MATCHING
 		try {
 			return zclass.getMethod(methodName, types);
-		} catch(NoSuchMethodException ex) {
+		} catch (NoSuchMethodException ex) {
 			Method method = findMethod(zclass, methodName, types);
-			if(method != null) {
+			if (method != null) {
 				return method;
 			}
 			throw ex;
@@ -80,14 +80,14 @@ public abstract class GuiceBootstrapper extends ServiceBootstrapper {
 	 * @return
 	 */
 	protected Method findMethod(Class<?> zclass, String methodName, Class<?>[] types) {
-		for(Method m: zclass.getMethods()) {
+		for (Method m: zclass.getMethods()) {
 			//MATCH NAME
-			if(!m.getName().equals(methodName)) {
+			if (!m.getName().equals(methodName)) {
 				continue;
 			}
 			
 			//FIXME: BEST MATCHES IS NOT EXACT
-			if(m.getParameterCount() == types.length) {
+			if (m.getParameterCount() == types.length) {
 				return m;
 			}
 		}
