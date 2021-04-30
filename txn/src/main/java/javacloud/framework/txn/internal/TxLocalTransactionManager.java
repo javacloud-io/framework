@@ -15,13 +15,14 @@ import javacloud.framework.txn.spi.TxTransactionManager;
 public abstract class TxLocalTransactionManager implements TxTransactionManager, TxSessionManager {
 	private static final Logger logger = Logger.getLogger(TxLocalTransactionManager.class.getName());
 	private final TxLocalUnitOfWork unitOfWork = new TxLocalUnitOfWork();
+	
 	/**
 	 * BEGIN UNIT OF WORK
 	 */
 	@Override
 	public void beginSession() {
 		int size = unitOfWork.size();
-		if(size > 0) {
+		if (size > 0) {
 			logger.log(Level.WARNING, "Session starting but still have {0} active transaction", size);
 		}
 		closeSession();
@@ -33,7 +34,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	@Override
 	public void endSession() {
 		int size = unitOfWork.size();
-		if(size > 0) {
+		if (size > 0) {
 			logger.log(Level.WARNING, "Session ending but still have {0} active transaction", size);
 		}
 		closeSession();
@@ -44,7 +45,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * @param commit
 	 */
 	protected void closeSession() {
-		while(unitOfWork.size() > 0) {
+		while (unitOfWork.size() > 0) {
 			TxTransaction tx = unitOfWork.peek();
 			tx.rollback();
 		}
@@ -76,7 +77,7 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 */
 	protected void endTransaction(TxTransaction tx) {
 		logger.log(Level.FINE, "End transaction: {0}", tx);
-		if(unitOfWork.peek() != tx) {
+		if (unitOfWork.peek() != tx) {
 			logger.log(Level.WARNING, "Transaction: {0} doesn't belong to the session", tx);
 		} else {
 			unitOfWork.remove(tx);

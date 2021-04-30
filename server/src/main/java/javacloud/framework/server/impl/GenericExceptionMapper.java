@@ -1,7 +1,7 @@
 package javacloud.framework.server.impl;
 
 import javacloud.framework.i18n.MessageManager;
-import javacloud.framework.server.GenericExceptionMapper;
+import javacloud.framework.server.ServerExceptionMapper;
 
 import javax.inject.Inject;
 
@@ -11,14 +11,14 @@ import javax.inject.Inject;
  * @author ho
  *
  */
-public final class DefaultExceptionMapper extends GenericExceptionMapper<Throwable> {
+public final class GenericExceptionMapper extends ServerExceptionMapper<Throwable> {
 	private final MessageManager messageFactory;
 	/**
 	 * 
 	 * @param messageFactory
 	 */
 	@Inject
-	public DefaultExceptionMapper(MessageManager messageFactory) {
+	public GenericExceptionMapper(MessageManager messageFactory) {
 		this.messageFactory = messageFactory;
 	}
 	

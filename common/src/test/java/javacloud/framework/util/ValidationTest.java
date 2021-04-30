@@ -11,14 +11,14 @@ public class ValidationTest extends TestCase {
 	 * 
 	 */
 	public void testGoodID() {
-		GenericException.assertId("hO@ya8.com", "good id");
+		ValidationException.assertId("hO@ya8.com", "good id");
 	}
 	
 	/**
 	 * 
 	 */
 	public void testGoodEmail() {
-		GenericException.assertId("ho@ya8.com", "good email");
-		GenericException.assertEmail("administrator@jwt.issuer", "good email");
+		ValidationException.assertId("ho@ya8.com", "good email");
+		ValidationException.assertEmail("administrator@jwt.issuer", "good email");
 	}
 }

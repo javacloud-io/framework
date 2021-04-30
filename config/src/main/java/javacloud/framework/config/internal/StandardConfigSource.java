@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import javacloud.framework.config.ConfigSource;
 import javacloud.framework.util.Converters;
-import javacloud.framework.util.GenericException;
+import javacloud.framework.util.InternalException;
 import javacloud.framework.util.ResourceLoader;
 /**
  * 
@@ -94,7 +94,7 @@ public class StandardConfigSource implements ConfigSource {
 			Properties props = ResourceLoader.loadProperties(resource, loader);
 			return (props == null? new Properties() : props);
 		} catch (IOException ex) {
-			throw GenericException.of("Unable to load config resource: " + resource, ex);
+			throw InternalException.of("Unable to load config resource: " + resource, ex);
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class StandardConfigSource implements ConfigSource {
 			props.load(reader);
 			return props;
 		} catch (IOException ex) {
-			throw GenericException.of("Unable to load config resource: " + resource, ex);
+			throw InternalException.of("Unable to load config resource: " + resource, ex);
 		}
 	}
 }

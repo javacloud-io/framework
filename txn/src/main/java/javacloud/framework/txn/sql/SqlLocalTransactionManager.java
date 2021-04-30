@@ -57,7 +57,7 @@ public class SqlLocalTransactionManager extends TxLocalTransactionManager {
 			rawConnection.setAutoCommit(false);
 			rawConnection.setReadOnly(transactional.readOnly());
 			return new SqlTransactionImpl(rawConnection, transactional);
-		} catch(SQLException ex) {
+		} catch (SQLException ex) {
 			throw new TxTransactionException("Unable to obtain a connection", ex);
 		}
 	}
@@ -66,6 +66,7 @@ public class SqlLocalTransactionManager extends TxLocalTransactionManager {
 	//PROXY THE CONNECTION TO ENSURE CORRECTNESS
 	class SqlTransactionImpl extends SqlTransaction {
 		private final Connection connection;
+		
 		public SqlTransactionImpl(final Connection rawConnection, Transactional transactional) {
 			super(transactional);
 			this.connection = ProxyInvocationHandler.newInstance(new InvocationHandler() {

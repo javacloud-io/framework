@@ -13,7 +13,9 @@ import io.grpc.examples.helloworld.HelloRequest;
 import javacloud.framework.cdi.junit.IntegrationTest;
 import javacloud.framework.config.ConfigManager;
 import javacloud.framework.grpc.ServerSettings;
-import javacloud.framework.grpc.stub.StubSupplier;
+import javacloud.framework.grpc.client.StubInterceptor;
+import javacloud.framework.grpc.client.StubSupplier;
+import javacloud.framework.util.ValidationException;
 
 /**
  * GRPC server will automatically started as part of runlist
@@ -48,5 +50,20 @@ public class HelloIT extends IntegrationTest {
 		} catch(StatusRuntimeException ex) {
 			Assert.assertEquals(Status.Code.INVALID_ARGUMENT, ex.getStatus().getCode());
 		}
+	}
+	
+	@Test(expected = ValidationException.class)
+	public void testClientExceptionInterceptor() {
+		ServerSettings settings = configManager.getConfig(ServerSettings.class);
+		StubSupplier<GreeterGrpc.GreeterBlockingStub> stub = new StubSupplier<GreeterGrpc.GreeterBlockingStub>(
+				GreeterGrpc.newBlockingStub(
+						ManagedChannelBuilder.forAddress(settings.serverAddress(), settings.serverPort())
+						.usePlaintext()
+						.build()));
+		
+		// invoke with wrapper
+		new StubInterceptor<>().invoke(
+				t -> stub.get().sayHello(HelloRequest.newBuilder().setName("bad").build()),
+				null);
 	}
 }

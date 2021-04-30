@@ -32,8 +32,8 @@ public class TxTransactionalInvocation {
 		TxTransaction tx = tm.getTransaction();
 		
 		//THERE IS AN ACTIVE TRANSACTION
-		if(tx != null && tx.isActive()) {
-			if(propagation == Propagation.NEVER) {
+		if (tx != null && tx.isActive()) {
+			if (propagation == Propagation.NEVER) {
 				//DONT NEED ACTIVE TRANSACTION BUT HAVE ONE
 				throw new TxTransactionException.NotRequired("An active transaction already exists");
 			} else if(propagation == Propagation.NOT_SUPPORTED) {
@@ -48,10 +48,10 @@ public class TxTransactionalInvocation {
 				return invokeNewTx(callable, tm, transactional);
 			}
 			return callable.call();
-		} else if(propagation == Propagation.MANDATORY) {
+		} else if (propagation == Propagation.MANDATORY) {
 			//NEED AN ACTIVE TRANSACTION BUT NOT FOUND ONE
 			throw new TxTransactionException.Required("An active transaction does not exist");
-		} else if(propagation == Propagation.NEVER
+		} else if (propagation == Propagation.NEVER
 				|| propagation == Propagation.NOT_SUPPORTED
 				|| propagation == Propagation.SUPPORTS) {
 			//DON'T NEED A TRANSACTION
@@ -73,8 +73,8 @@ public class TxTransactionalInvocation {
 		V result;
 		try {
 			result = callable.call();
-		} catch(Exception ex) {
-			if(isRollbackOn(ex, transactional)) {
+		} catch (Exception ex) {
+			if (isRollbackOn(ex, transactional)) {
 				tx.rollback();
 			} else {
 				tx.commit();
@@ -93,15 +93,15 @@ public class TxTransactionalInvocation {
 	 */
 	protected boolean isRollbackOn(Exception ex, Transactional transactional) {
 		boolean rollback = false;
-		for(Class<? extends Exception> eclazz: transactional.rollbackOn()) {
-			if(eclazz.isInstance(ex)) {
+		for (Class<? extends Exception> eclazz: transactional.rollbackOn()) {
+			if (eclazz.isInstance(ex)) {
 				rollback = true;
 				break;
 			}
 		}
-		if(rollback) {
-			for(Class<? extends Exception> eclazz: transactional.noRollbackOn()) {
-				if(eclazz.isInstance(ex)) {
+		if (rollback) {
+			for (Class<? extends Exception> eclazz: transactional.noRollbackOn()) {
+				if (eclazz.isInstance(ex)) {
 					rollback = false;
 					break;
 				}

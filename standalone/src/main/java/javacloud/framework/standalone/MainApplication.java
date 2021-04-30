@@ -45,7 +45,7 @@ public class MainApplication implements Runnable {
 		}
 	}
 	
-	void terminateQuietly() {
+	protected void terminateQuietly() {
 		if (terminated.compareAndSet(false, true)) {
 			Objects.closeQuietly(() -> ServiceBootstrapper.get().shutdown());
 		}

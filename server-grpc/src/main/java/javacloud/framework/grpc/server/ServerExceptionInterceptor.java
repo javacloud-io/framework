@@ -6,7 +6,7 @@ import io.grpc.ServerCall.Listener;
 import javacloud.framework.grpc.internal.MetadataKeys;
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
-import javacloud.framework.util.GenericException;
+import javacloud.framework.util.InternalException;
 import javacloud.framework.util.Objects;
 import javacloud.framework.util.ValidationException;
 import io.grpc.ServerCallHandler;
@@ -15,7 +15,7 @@ import io.grpc.ServerInterceptor;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 
-public class GenericExceptionInterceptor implements ServerInterceptor {
+public class ServerExceptionInterceptor implements ServerInterceptor {
 	@Override
 	public <ReqT, RespT> Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers,
 			ServerCallHandler<ReqT, RespT> next) {
@@ -24,22 +24,22 @@ public class GenericExceptionInterceptor implements ServerInterceptor {
 			public void onHalfClose() {
 				try {
 					super.onHalfClose();
-				} catch (Throwable ex) {
+				} catch (RuntimeException ex) {
 					closeCall(call, ex);
 				}
 			}
 		};
 	}
 	
-	protected <ReqT, RespT> void closeCall(ServerCall<ReqT, RespT> call, Throwable exception) {
+	protected <ReqT, RespT> void closeCall(ServerCall<ReqT, RespT> call, Throwable cause) {
 		Status status;
 		Metadata trailers;
-		if (exception instanceof StatusRuntimeException) {
-			status = ((StatusRuntimeException)exception).getStatus();
-			trailers = toTrailers(exception.getCause(), status.getDescription());
+		if (cause instanceof StatusRuntimeException) {
+			status = ((StatusRuntimeException)cause).getStatus();
+			trailers = toTrailers(cause.getCause(), status.getDescription());
 		} else {
-			status = toStatus(exception).withCause(exception);
-			trailers = toTrailers(exception, null);
+			status = toStatus(cause).withCause(cause);
+			trailers = toTrailers(cause, null);
 		}
 		
 		// translate & localize
@@ -50,27 +50,30 @@ public class GenericExceptionInterceptor implements ServerInterceptor {
 		call.close(status.withDescription(message), trailers);
 	}
 	
-	protected Status toStatus(Throwable exception) {
+	protected Status toStatus(Throwable cause) {
 		//AUTHZ
-		if(exception instanceof AuthenticationException) {
-			if(exception instanceof AccessDeniedException) {
+		if (cause instanceof AuthenticationException) {
+			if (cause instanceof AccessDeniedException) {
 				return	Status.PERMISSION_DENIED;
 			} else {
 				return	Status.UNAUTHENTICATED;
 			}
 		}
 		//CLONFLICT
-		if(exception instanceof ValidationException.Conflict) {
+		if (cause instanceof ValidationException.AlreadyExists) {
 			return	Status.ALREADY_EXISTS;
 		}
+		if (cause instanceof ValidationException.Conflict) {
+			return	Status.FAILED_PRECONDITION;
+		}
 		//NOT FOUND
-		if(exception instanceof ValidationException.NotFound
-				|| exception instanceof java.io.FileNotFoundException) {
+		if (cause instanceof ValidationException.NotFound
+				|| cause instanceof java.io.FileNotFoundException) {
 			return	Status.NOT_FOUND;
 		}
 		//VALIDATION
-		if(exception instanceof ValidationException
-				|| exception instanceof IllegalArgumentException) {
+		if (cause instanceof ValidationException
+				|| cause instanceof IllegalArgumentException) {
 			return	Status.INVALID_ARGUMENT;
 		}
 		return	Status.INTERNAL;
@@ -78,7 +81,7 @@ public class GenericExceptionInterceptor implements ServerInterceptor {
 	
 	protected Metadata toTrailers(Throwable exception, String message) {
 		//REASON ERROR
-		String error = GenericException.getReason(exception);
+		String error = InternalException.getReason(exception);
 		
 		//DETAILS MESSAGE LOCALE
 		if (Objects.isEmpty(message)) {

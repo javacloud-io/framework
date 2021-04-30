@@ -157,7 +157,7 @@ public final class Codecs {
 			try {
 				return apply(params, true);
 			} catch (IOException ex) {
-				throw GenericException.of(ex);
+				throw InternalException.of(ex);
 			}
 		}
 		
@@ -212,7 +212,7 @@ public final class Codecs {
 			try {
 				return apply(params, true);
 			} catch (IOException ex) {
-				throw GenericException.of(ex);
+				throw InternalException.of(ex);
 			}
 		}
 		
@@ -287,7 +287,7 @@ public final class Codecs {
 		try {
 			return new String(bytes, offset, len, UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 	
@@ -300,7 +300,7 @@ public final class Codecs {
 		try {
 			return utf8.getBytes(UTF8);
 		} catch (UnsupportedEncodingException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 	

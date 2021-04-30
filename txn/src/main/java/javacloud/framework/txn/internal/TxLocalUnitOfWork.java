@@ -24,7 +24,7 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	@Override
 	public Iterator<TxTransaction> iterator() {
 		Deque<TxTransaction> stack = unitOfWork.get();
-		if(stack != null) {
+		if (stack != null) {
 			return stack.iterator();
 		}
 		return Collections.emptyIterator();
@@ -55,7 +55,7 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 */
 	public TxTransaction push(TxTransaction tx) {
 		Deque<TxTransaction> stack = unitOfWork.get();
-		if(stack == null) {
+		if (stack == null) {
 			stack = new ArrayDeque<>();
 			unitOfWork.set(stack);
 		}
@@ -70,7 +70,7 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 */
 	public void remove(TxTransaction tx) {
 		Deque<TxTransaction> stack = unitOfWork.get();
-		if(stack != null && !stack.isEmpty()) {
+		if (stack != null && !stack.isEmpty()) {
 			stack.remove(tx);
 		}
 	}

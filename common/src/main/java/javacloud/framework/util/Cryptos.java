@@ -57,7 +57,7 @@ public final class Cryptos {
 		try {
 			return cipher.doFinal();
 		}catch(BadPaddingException | IllegalBlockSizeException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 	
@@ -74,7 +74,7 @@ public final class Cryptos {
 		try {
 			return cipher.doFinal();
 		}catch(BadPaddingException | IllegalBlockSizeException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 	
@@ -126,7 +126,7 @@ public final class Cryptos {
 			cipher.init(opmode, key, ivSpec);
 			return cipher;
 		} catch (InvalidKeyException |  NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 }

@@ -178,7 +178,7 @@ public final class Converters {
 			try {
 				return (value != null? DateFormats.getUTC(DateFormats.ISO8601_S3).parse((String)value) : null);
 			}catch(ParseException ex) {
-				throw GenericException.of(ex);
+				throw InternalException.of(ex);
 			}
 		}
 	};

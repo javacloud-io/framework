@@ -28,7 +28,7 @@ public class TxTransactionalInterceptor implements MethodInterceptor {
 	@Override
 	public Object invoke(final MethodInvocation mi) throws Throwable {
 		Transactional transactional = resolveTransactional(mi);
-		if(transactional == null) {
+		if (transactional == null) {
 			return mi.proceed();
 		}
 		return invocation.invoke(new Callable<Object>() {
@@ -53,7 +53,7 @@ public class TxTransactionalInterceptor implements MethodInterceptor {
 	 */
 	protected Transactional resolveTransactional(MethodInvocation mi) {
 		Transactional transactional = mi.getMethod().getAnnotation(Transactional.class);
-		if(transactional == null) {
+		if (transactional == null) {
 			transactional = mi.getThis().getClass().getAnnotation(Transactional.class);
 		}
 		return transactional;

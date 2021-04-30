@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javacloud.framework.server.GenericExceptionMapper;
+import javacloud.framework.server.ServerExceptionMapper;
 
 /**
  * TODO: all the basic test of exception
@@ -14,7 +14,7 @@ import javacloud.framework.server.GenericExceptionMapper;
  *
  */
 public class ExceptionMapperTest {
-	private GenericExceptionMapper<Throwable> mapper = new GenericExceptionMapper<Throwable>(){};
+	private ServerExceptionMapper<Throwable> mapper = new ServerExceptionMapper<Throwable>(){};
 	
 	@Test
 	public void testEx() {

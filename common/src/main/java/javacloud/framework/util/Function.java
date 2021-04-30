@@ -15,7 +15,7 @@ public interface Function<T, R> extends java.util.function.Function<T, R> {
 		try {
 			return invoke(input);
 		}catch(Exception ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 	

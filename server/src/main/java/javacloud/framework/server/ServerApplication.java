@@ -77,7 +77,7 @@ public abstract class ServerApplication extends ResourceConfig {
 	/**
 	 * javacloud.framework.server.impl.GuiceHK2Feature
 	 * javacloud.framework.server.impl.JacksonFeature
-	 * javacloud.framework.server.impl.DefaultExceptionMapper
+	 * javacloud.framework.server.impl.GenericExceptionMapper
 	 * 
 	 * org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature
 	 * @return packages/objects/classes

@@ -11,7 +11,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
-import javacloud.framework.util.GenericException;
+import javacloud.framework.util.InternalException;
 import javacloud.framework.util.Objects;
 import javacloud.framework.util.ValidationException;
 
@@ -22,9 +22,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  * @author ho
  *
  */
-public class GenericExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
-	private static final Logger logger = Logger.getLogger(GenericExceptionMapper.class.getName());
-	public GenericExceptionMapper() {
+public class ServerExceptionMapper<E extends Throwable> implements ExceptionMapper<E> {
+	private static final Logger logger = Logger.getLogger(ServerExceptionMapper.class.getName());
+	
+	public ServerExceptionMapper() {
 	}
 	
 	/**
@@ -59,24 +60,29 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 */
 	protected int toStatus(Throwable exception) {
 		//AUTHZ
-		if(exception instanceof AuthenticationException) {
-			if(exception instanceof AccessDeniedException) {
+		if (exception instanceof AuthenticationException) {
+			if (exception instanceof AccessDeniedException) {
 				return	Status.FORBIDDEN.getStatusCode();
-			} else {
-				return	Status.UNAUTHORIZED.getStatusCode();
 			}
+			return	Status.UNAUTHORIZED.getStatusCode();
 		}
 		//CLONFLICT
-		if(exception instanceof ValidationException.Conflict) {
+		if (exception instanceof ValidationException.AlreadyExists) {
 			return	Status.CONFLICT.getStatusCode();
 		}
+		
+		if (exception instanceof ValidationException.Conflict) {
+			return	Status.PRECONDITION_FAILED.getStatusCode();
+		}
+		
 		//NOT FOUND
-		if(exception instanceof ValidationException.NotFound
+		if (exception instanceof ValidationException.NotFound
 				|| exception instanceof java.io.FileNotFoundException) {
 			return	Status.NOT_FOUND.getStatusCode();
 		}
+		
 		//VALIDATION
-		if(exception instanceof ValidationException
+		if (exception instanceof ValidationException
 				|| exception instanceof javax.validation.ValidationException
 				|| exception instanceof IllegalArgumentException
 				|| exception instanceof JsonProcessingException) {
@@ -93,7 +99,7 @@ public class GenericExceptionMapper<E extends Throwable> implements ExceptionMap
 	 */
 	protected Map<String, Object> toEntity(E exception) {
 		//REASON ERROR
-		String error = GenericException.getReason(exception);
+		String error = InternalException.getReason(exception);
 		
 		//DETAILS MESSAGE LOCALE
 		String message;

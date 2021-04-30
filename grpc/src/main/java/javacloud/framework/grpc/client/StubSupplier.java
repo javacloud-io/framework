@@ -1,4 +1,4 @@
-package javacloud.framework.grpc.stub;
+package javacloud.framework.grpc.client;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;

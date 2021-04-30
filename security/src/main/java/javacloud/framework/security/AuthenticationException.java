@@ -1,6 +1,5 @@
 package javacloud.framework.security;
 
-import javacloud.framework.util.Objects;
 import javacloud.framework.util.ValidationException;
 /**
  * 
@@ -16,28 +15,12 @@ public class AuthenticationException extends ValidationException {
 	public static final String EXPIRED_CREDENTIALS 	= "expired_credentials";
 	public static final String INVALID_SCOPE 		= "invalid_scope";
 	public static final String ACCESS_DENIED 		= "access_denied";
-	/**
-	 * 
-	 * @param cause
-	 */
-	public AuthenticationException(Throwable cause) {
-		super(cause);
-	}
 	
 	/**
 	 * 
 	 * @param message
 	 */
-	public AuthenticationException(String message) {
-		super(message);
-	}
-	
-	/**
-	 * ALWAYS USING MESSAGE AS REASON CODE
-	 */
-	@Override
-	public String getReason() {
-		String message = super.getMessage();
-		return Objects.isEmpty(message) ? super.getReason() : message;
+	public AuthenticationException(String reason) {
+		super(reason);
 	}
 }

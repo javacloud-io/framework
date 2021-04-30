@@ -143,7 +143,7 @@ public final class Digests {
 		try {
 			return	java.security.MessageDigest.getInstance(algorithm);
 		} catch (NoSuchAlgorithmException ex) {
-			throw GenericException.of(ex);
+			throw InternalException.of(ex);
 		}
 	}
 }

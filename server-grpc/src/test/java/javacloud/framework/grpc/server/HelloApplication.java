@@ -25,7 +25,7 @@ public class HelloApplication implements ServerApplication {
 	
 	@Override
 	public List<ServerInterceptor> serverInterceptors() {
-		return Collections.singletonList(new GenericExceptionInterceptor());
+		return Collections.singletonList(new ServerExceptionInterceptor());
 	}
 	
 	static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
