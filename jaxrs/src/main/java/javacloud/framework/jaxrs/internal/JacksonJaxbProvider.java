@@ -1,7 +1,5 @@
 package javacloud.framework.jaxrs.internal;
 
-import javax.inject.Inject;
-
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -16,7 +14,7 @@ public class JacksonJaxbProvider extends JacksonJaxbJsonProvider {
 	 * 
 	 * @param objectMapper
 	 */
-	@Inject
+	@jakarta.inject.Inject
 	public JacksonJaxbProvider(ObjectMapper objectMapper) {
 		super(objectMapper, DEFAULT_ANNOTATIONS);
 	}

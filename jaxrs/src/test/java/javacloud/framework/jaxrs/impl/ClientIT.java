@@ -3,7 +3,7 @@ package javacloud.framework.jaxrs.impl;
 import javacloud.framework.cdi.junit.IntegrationTest;
 
 import javax.inject.Inject;
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 
 import org.junit.Test;
 /**

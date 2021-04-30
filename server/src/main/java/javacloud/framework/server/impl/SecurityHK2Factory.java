@@ -2,8 +2,7 @@ package javacloud.framework.server.impl;
 
 import java.security.Principal;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.SecurityContext;
+import jakarta.ws.rs.core.SecurityContext;
 
 import org.glassfish.hk2.api.Factory;
 
@@ -17,7 +16,7 @@ import javacloud.framework.security.AccessGrant;
 public class SecurityHK2Factory implements Factory<AccessGrant> {
 	private SecurityContext securityContext;
 	
-	@Inject
+	@jakarta.inject.Inject
     public SecurityHK2Factory(SecurityContext securityContext) {
         this.securityContext = securityContext;
     }

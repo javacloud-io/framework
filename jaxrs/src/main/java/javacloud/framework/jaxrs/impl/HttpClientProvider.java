@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
 
 /**
  * Dynamically loading jersey client from META-INF/javacloud.client.components

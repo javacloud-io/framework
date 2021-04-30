@@ -2,8 +2,8 @@ package javacloud.framework.server.junit;
 
 import java.net.URI;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.test.DeploymentContext;

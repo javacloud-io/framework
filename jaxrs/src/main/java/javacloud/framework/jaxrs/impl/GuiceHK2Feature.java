@@ -2,9 +2,8 @@ package javacloud.framework.jaxrs.impl;
 
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.Feature;
-import javax.ws.rs.core.FeatureContext;
+import jakarta.ws.rs.core.Feature;
+import jakarta.ws.rs.core.FeatureContext;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.jvnet.hk2.guice.bridge.api.GuiceBridge;
@@ -27,7 +26,7 @@ public class GuiceHK2Feature implements Feature {
 	 * 
 	 * @param serviceLocator
 	 */
-	@Inject
+	@jakarta.inject.Inject
 	public GuiceHK2Feature(ServiceLocator serviceLocator) {
 		this.serviceLocator = serviceLocator;
 	}

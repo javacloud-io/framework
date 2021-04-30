@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.ext.ExceptionMapper;
 
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
@@ -83,7 +83,7 @@ public class ServerExceptionMapper<E extends Throwable> implements ExceptionMapp
 		
 		//VALIDATION
 		if (exception instanceof ValidationException
-				|| exception instanceof javax.validation.ValidationException
+				|| exception instanceof jakarta.validation.ValidationException
 				|| exception instanceof IllegalArgumentException
 				|| exception instanceof JsonProcessingException) {
 			return	Status.BAD_REQUEST.getStatusCode();

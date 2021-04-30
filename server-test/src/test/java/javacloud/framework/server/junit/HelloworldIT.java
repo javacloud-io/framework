@@ -15,7 +15,7 @@
  */
 package javacloud.framework.server.junit;
 
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.core.Application;
 
 import org.junit.Assert;
 import org.junit.Test;

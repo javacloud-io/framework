@@ -1,6 +1,6 @@
 package javacloud.framework.server.junit;
 
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.core.Application;
 
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;

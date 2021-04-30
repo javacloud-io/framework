@@ -19,7 +19,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.HttpHeaders;
 
 /**
  * Simplest as possible security filter, we protect the WHOLE URL using FIX ROLES. Granularity will be enforce directly

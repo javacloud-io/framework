@@ -1,7 +1,6 @@
 package javacloud.framework.server.impl;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.FeatureContext;
+import jakarta.ws.rs.core.FeatureContext;
 
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
@@ -23,7 +22,7 @@ public class GuiceHK2Feature extends javacloud.framework.jaxrs.impl.GuiceHK2Feat
 	 * 
 	 * @param serviceLocator
 	 */
-	@Inject
+	@jakarta.inject.Inject
 	public GuiceHK2Feature(ServiceLocator serviceLocator) {
 		super(serviceLocator);
 	}
