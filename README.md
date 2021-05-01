@@ -1,4 +1,4 @@
-## APPE framework
+## Java framework
 
 [![Build Status](https://travis-ci.com/javacloud-io/framework.svg?branch=master)](https://travis-ci.com/github/javacloud-io/framework)
 
