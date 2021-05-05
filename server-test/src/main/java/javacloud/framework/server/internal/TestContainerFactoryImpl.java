@@ -1,4 +1,4 @@
-package javacloud.framework.server.junit;
+package javacloud.framework.server.internal;
 
 import java.net.URI;
 

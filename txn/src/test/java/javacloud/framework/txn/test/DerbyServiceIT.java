@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import javacloud.framework.txn.Propagation;
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.junit.TxIntegrationTest;
+import javacloud.framework.txn.internal.TxIntegrationTest;
 import javacloud.framework.txn.spi.TxTransactionManager;
 import javacloud.framework.txn.sql.SqlTransaction;
 import javacloud.framework.txn.spi.TxTransactionException;

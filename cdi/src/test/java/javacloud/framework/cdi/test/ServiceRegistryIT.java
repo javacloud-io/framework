@@ -3,7 +3,7 @@ package javacloud.framework.cdi.test;
 import javacloud.framework.cdi.ServiceRegistry;
 import javacloud.framework.cdi.internal.GuiceBuilder;
 import javacloud.framework.cdi.internal.GuiceRegistry;
-import javacloud.framework.cdi.junit.IntegrationTest;
+import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.cdi.test.TestModule.TestServiceImpl;
 
 import java.util.Collections;

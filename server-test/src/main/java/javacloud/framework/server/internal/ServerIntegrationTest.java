@@ -1,4 +1,4 @@
-package javacloud.framework.server.junit;
+package javacloud.framework.server.internal;
 
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;

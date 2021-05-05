@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javacloud.framework.cdi.junit.IntegrationTest;
+import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Objects;

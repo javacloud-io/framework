@@ -1,4 +1,4 @@
-package javacloud.framework.cdi.junit;
+package javacloud.framework.cdi.internal;
 
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunNotifier;

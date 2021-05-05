@@ -1,11 +1,11 @@
-package javacloud.framework.txn.junit;
+package javacloud.framework.txn.internal;
 
 import javax.inject.Inject;
 
 import org.junit.After;
 import org.junit.Before;
 
-import javacloud.framework.cdi.junit.IntegrationTest;
+import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.txn.spi.TxSessionManager;
 /**
  * 

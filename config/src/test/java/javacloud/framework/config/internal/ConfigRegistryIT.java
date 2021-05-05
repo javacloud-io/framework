@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javacloud.framework.cdi.junit.IntegrationTest;
+import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.config.ConfigManager;
 /**
  * 

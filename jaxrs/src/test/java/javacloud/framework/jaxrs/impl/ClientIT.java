@@ -1,9 +1,8 @@
 package javacloud.framework.jaxrs.impl;
 
-import javacloud.framework.cdi.junit.IntegrationTest;
-
 import javax.inject.Inject;
 import jakarta.ws.rs.client.Client;
+import javacloud.framework.cdi.internal.IntegrationTest;
 
 import org.junit.Test;
 /**

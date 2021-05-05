@@ -10,7 +10,7 @@ import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import io.grpc.examples.helloworld.GreeterGrpc;
 import io.grpc.examples.helloworld.HelloRequest;
-import javacloud.framework.cdi.junit.IntegrationTest;
+import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.config.ConfigManager;
 import javacloud.framework.grpc.ServerSettings;
 import javacloud.framework.grpc.client.StubInterceptor;
