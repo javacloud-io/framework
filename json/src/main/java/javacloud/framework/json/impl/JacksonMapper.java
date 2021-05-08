@@ -2,7 +2,7 @@ package javacloud.framework.json.impl;
 
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.JsonValue;
-import javacloud.framework.json.internal.JsonValues;
+import javacloud.framework.json.internal.JsonObject;
 import javacloud.framework.util.DateFormats;
 import javacloud.framework.util.Objects;
 
@@ -41,20 +41,6 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 * DEFAULT FEATURES
 	 */
 	public JacksonMapper() {
-		configure();
-		
-		//CONFIGURE CUSTOM MODULE
-		SimpleModule module = new SimpleModule("javacloud.json");
-		configure(module);
-		
-		//REGISTER CUSTOM MODULE
-		registerModule(module);
-	}
-	
-	/**
-	 * configure default feature
-	 */
-	protected void configure() {
 		//ONLY FIELDS
 		setVisibility(PropertyAccessor.FIELD, 	 Visibility.ANY);
 		setVisibility(PropertyAccessor.GETTER, 	 Visibility.NONE);
@@ -70,6 +56,11 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		//DEFAULT DATE FORMAT
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601));
+		
+		// custom module
+		SimpleModule module = new SimpleModule("javacloud.json");
+		configure(module);
+		registerModule(module);
 	}
 	
 	/**
@@ -77,7 +68,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 * @param module
 	 */
 	@SuppressWarnings("serial")
-	protected void configure(SimpleModule module) {
+	protected void configure(SimpleModule module ) {
 		//JSON VALUE
 		module.addSerializer(JsonValue.class, new StdSerializer<JsonValue>(JsonValue.class) {
 			@Override
@@ -85,11 +76,12 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 				gen.writeObject(json.value());
 			}
 		});
+		
 		module.addDeserializer(JsonValue.class, new StdDeserializer<JsonValue>(JsonValue.class) {
 			@Override
 			public JsonValue deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 				Object value = p.readValueAs(Object.class);
-				return JsonValues.asValue(value);
+				return JsonObject.of(value);
 			}
 		});
 	}

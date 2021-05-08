@@ -7,9 +7,9 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>javacloud-json</artifactId>
+  <artifactId>javacloud-gson</artifactId>
   <packaging>jar</packaging>
-  <name>Framework json</name>
+  <name>Framework gson</name>
   
   <build>
 	<plugins>
@@ -33,22 +33,21 @@
   </build>
   
   <dependencies>
+     <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java-util</artifactId>
+    </dependency>
+    
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>
-   		<artifactId>javacloud-common</artifactId>
+   		<artifactId>javacloud-json</artifactId>
    		<version>${project.version}</version>
   	</dependency>
-    
-  	<!-- JACKSON -->
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-    </dependency>
     
     <!-- Tests -->
     <dependency>
@@ -73,6 +72,11 @@
         <artifactId>javacloud-cdi</artifactId>
         <type>test-jar</type>
         <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.grpc</groupId>
+        <artifactId>grpc-examples</artifactId>
         <scope>test</scope>
     </dependency>
   </dependencies>

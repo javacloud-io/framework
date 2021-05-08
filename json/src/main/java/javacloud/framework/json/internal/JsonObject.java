@@ -9,8 +9,21 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
-public final class JsonValues {
-	private JsonValues() {
+public final class JsonObject implements JsonValue {
+	private final Object value;
+	
+	private JsonObject(Object value) {
+		this.value = value;
+	}
+	
+	@Override
+	public <T> T value() {
+		return Objects.cast(value);
+	}
+	
+	@Override
+	public String toString() {
+		return String.valueOf(value);
 	}
 	
 	/**
@@ -18,20 +31,11 @@ public final class JsonValues {
 	 * @param value
 	 * @return
 	 */
-	public static JsonValue asValue(final Object value) {
+	public static JsonValue of(final Object value) {
 		if (value instanceof JsonValue) {
 			return (JsonValue)value;
 		}
-		return new JsonValue() {
-			@Override
-			public <T> T value() {
-				return Objects.cast(value);
-			}
-			@Override
-			public String toString() {
-				return String.valueOf(value);
-			}
-		};
+		return new JsonObject(value);
 	}
 	
 	/**

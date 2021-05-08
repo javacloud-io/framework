@@ -39,6 +39,7 @@
     <derby.version>10.14.2.0</derby.version>
     <gremlin.version>3.4.8</gremlin.version>
     <grpc.version>1.36.0</grpc.version>
+    <protobuf.version>3.15.8</protobuf.version>
   </properties>
   
   <modules>
@@ -52,6 +53,7 @@
     <module>txn</module>
     
     <module>grpc</module>
+    <module>gson</module>
     <module>server-grpc</module>
     <module>jaxrs</module>
     <module>server-test</module>
@@ -706,10 +708,34 @@
             <version>${grpc.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-examples</artifactId>
             <version>0.15.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-stub</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.grpc</groupId>
+                    <artifactId>grpc-netty</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>

@@ -1,4 +1,4 @@
-package javacloud.framework.json;
+package javacloud.framework.gson;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,30 +9,16 @@ import javax.inject.Named;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.io.Externalizer;
+import javacloud.framework.json.JsonValue;
 import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Objects;
 
-/**
- * 
- * @author ho
- *
- */
-public class JacksonMapperIT extends IntegrationTest {
-	@Inject
-	private ObjectMapper objectMapper;
+public class GsonMapperIT extends IntegrationTest {
 	
 	@Inject @Named(Externalizer.JSON)
 	private Externalizer externalizer;
-	
-	@Test
-	public void testNull() throws IOException {
-		Map<String, Object> m = Objects.asMap("a", "1", "b", null, "c", "3");
-		objectMapper.writeValue(System.out, m);
-	}
 	
 	@Test
 	public void testDict() throws IOException {
@@ -40,8 +26,9 @@ public class JacksonMapperIT extends IntegrationTest {
 		Map<String, Object> dict = Objects.asMap();
 		Assert.assertEquals("{}", converter.toUTF8(dict));
 		
+		// GSON convert INT to double?
 		dict = converter.toObject("{\"a\":123}", Map.class);
-		Assert.assertEquals(123, dict.get("a"));
+		Assert.assertEquals(123.0, dict.get("a"));
 		
 		Object obj = converter.toObject("true", Object.class);
 		Assert.assertEquals(Boolean.class, obj.getClass());
