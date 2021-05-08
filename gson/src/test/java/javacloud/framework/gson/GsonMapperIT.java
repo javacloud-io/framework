@@ -1,6 +1,7 @@
 package javacloud.framework.gson;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -39,5 +40,13 @@ public class GsonMapperIT extends IntegrationTest {
 		JsonConverter converter = new JsonConverter(externalizer);
 		JsonValue jvalue = converter.toObject("{\"a\":123}", JsonValue.class);
 		Assert.assertEquals(JsonValue.Type.OBJECT, jvalue.type());
+	}
+	
+	@Test
+	public void testTime() throws IOException {
+		JsonConverter converter = new JsonConverter(externalizer);
+		Date now = new Date();
+		Date later = converter.toObject(converter.toUTF8(now), Date.class);
+		Assert.assertEquals(now.getTime() / 1000, later.getTime() / 1000);
 	}
 }
