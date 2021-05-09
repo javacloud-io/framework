@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 
 import com.google.protobuf.Message;
@@ -11,7 +12,6 @@ import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
 
 import javacloud.framework.io.Externalizer;
-import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Objects;
 
 public class JsonExternalizer implements Externalizer {
@@ -30,9 +30,9 @@ public class JsonExternalizer implements Externalizer {
 
 	@Override
 	public void marshal(Object v, OutputStream dst) throws IOException {
-		String json = toUTF8((MessageOrBuilder)v);
-		dst.write(json.getBytes(Codecs.UTF8));
-		dst.flush();
+		OutputStreamWriter writer = new OutputStreamWriter(dst);
+		printer.appendTo((MessageOrBuilder)v, writer);
+		writer.flush();
 	}
 
 	@Override
