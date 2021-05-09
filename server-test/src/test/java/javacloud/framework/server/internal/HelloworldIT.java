@@ -16,7 +16,6 @@
 package javacloud.framework.server.internal;
 
 import jakarta.ws.rs.core.Application;
-import javacloud.framework.server.internal.ServerIntegrationTest;
 
 import org.junit.Assert;
 import org.junit.Test;
