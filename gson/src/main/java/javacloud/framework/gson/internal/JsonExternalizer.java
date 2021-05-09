@@ -20,7 +20,7 @@ public class JsonExternalizer implements Externalizer {
 	
 	public JsonExternalizer() {
 		this.parser  = JsonFormat.parser();
-		this.printer = JsonFormat.printer();
+		this.printer = JsonFormat.printer().omittingInsignificantWhitespace();
 	}
 	
 	@Override
