@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -18,9 +19,15 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 
@@ -45,6 +52,20 @@ public class GsonMapper extends JsonExternalizer {
 	
 	protected void configure(GsonBuilder builder) {
 		builder.registerTypeAdapter(Date.class, new UTCDateAdapter());
+		builder.registerTypeHierarchyAdapter(JsonValue.class, new JsonValueAdapter());
+		
+		// dynamic adapters
+		builder.registerTypeAdapterFactory(new TypeAdapterFactory() {
+			@Override
+			public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+				Class<?> rawType = type.getRawType();
+				if (MessageOrBuilder.class.isAssignableFrom(rawType)) {
+					return Objects.cast(new ProtoAdapter(rawType));
+				}
+				// NOT APPLICABLE
+				return null;
+			}
+		});
 	}
 	
 	@Override
@@ -52,12 +73,8 @@ public class GsonMapper extends JsonExternalizer {
 		if (v instanceof MessageOrBuilder) {
 			super.marshal(v, dst);
 		} else {
-			if (v instanceof JsonValue) {
-				v = ((JsonValue)v).value();
-			}
-			
 			OutputStreamWriter writer = new OutputStreamWriter(dst);
-			gson.toJson((Object)v, writer);
+			gson.toJson(v, writer);
 			writer.flush();
 		}
 	}
@@ -66,12 +83,45 @@ public class GsonMapper extends JsonExternalizer {
 	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
 		if (Message.class.isAssignableFrom(type)) {
 			return super.unmarshal(src, type);
-		} else if (JsonValue.class.isAssignableFrom(type)) {
-			return Objects.cast(JsonObject.of(gson.fromJson(new InputStreamReader(src), Object.class)));
 		}
 		return Objects.cast(gson.fromJson(new InputStreamReader(src), type));
 	}
 	
+	// GSON will cache the adapter
+	class JsonValueAdapter implements JsonSerializer<JsonValue>, JsonDeserializer<JsonValue> {
+		@Override
+		public JsonValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+				throws JsonParseException {
+			return JsonObject.of(gson.fromJson(json, Object.class));
+		}
+
+		@Override
+		public JsonElement serialize(JsonValue src, Type typeOfSrc, JsonSerializationContext context) {
+			Object value = src.value();
+			return gson.toJsonTree(value);
+		}
+	}
+	
+	// FIXME: slow on READ
+	class ProtoAdapter extends TypeAdapter<MessageOrBuilder> {
+		final Class<?> type;
+		public ProtoAdapter(Class<?> type) {
+			this.type = type;
+		}
+		
+		@Override
+		public void write(JsonWriter out, MessageOrBuilder src) throws IOException {
+			out.jsonValue(toUTF8(src));
+		}
+
+		@Override
+		public MessageOrBuilder read(JsonReader in) throws IOException {
+			JsonElement json = JsonParser.parseReader(in);
+			return toMessage(new StringReader(json.toString()), type);
+		}
+	}
+	
+	// UTC
 	static class UTCDateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
 		private final DateFormat dateFormat = DateFormats.getUTC(DateFormats.ISO8601);
 

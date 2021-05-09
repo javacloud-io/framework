@@ -1,13 +1,17 @@
 package javacloud.framework.gson.impl;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.inject.Singleton;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -69,7 +73,7 @@ public class GacksonMapper extends JacksonMapper {
 			deserializer = new StdDeserializer<Message>(type) {
 				@Override
 				public Message deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-					// FIXME: need efficient conversion
+					// FIXME: slow on READ
 					String json = p.readValueAsTree().toString();
 					return externalizer.toMessage(new StringReader(json), handledType());
 				}
@@ -77,5 +81,24 @@ public class GacksonMapper extends JacksonMapper {
 			protoDeserializers.putIfAbsent(type, deserializer);
 		}
 		return deserializer;
+	}
+	
+	@Override
+	public void writeValue(OutputStream out, Object value)
+			throws IOException, JsonGenerationException, JsonMappingException {
+		if (value instanceof MessageOrBuilder) {
+			externalizer.marshal(value, out);
+		} else {
+			super.writeValue(out, value);
+		}
+	}
+
+	@Override
+	public <T> T readValue(InputStream src, Class<T> valueType)
+			throws IOException, JsonParseException, JsonMappingException {
+		if (Message.class.isAssignableFrom(valueType)) {
+			return externalizer.unmarshal(src, valueType);
+		}
+		return super.readValue(src, valueType);
 	}
 }

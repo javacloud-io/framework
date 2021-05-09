@@ -10,6 +10,7 @@ import javax.inject.Named;
 import org.junit.Assert;
 import org.junit.Test;
 
+import io.grpc.examples.helloworld.HelloRequest;
 import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.JsonValue;
@@ -48,5 +49,13 @@ public class GsonMapperIT extends IntegrationTest {
 		Date now = new Date();
 		Date later = converter.toObject(converter.toUTF8(now), Date.class);
 		Assert.assertEquals(now.getTime() / 1000, later.getTime() / 1000);
+	}
+	
+	@Test
+	public void testGson() throws IOException {
+		JsonConverter converter = new JsonConverter(externalizer);
+		String s = converter.toUTF8(HelloRequest.newBuilder().setName("xxxx"));
+		HelloRequest request = converter.toObject(s, HelloRequest.class);
+		Assert.assertEquals("xxxx", request.getName());
 	}
 }
