@@ -2,12 +2,12 @@ package javacloud.framework.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -311,8 +311,7 @@ public final class Codecs {
 	 * @return RANDOM ID 16 bytes
 	 */
 	public static String randomID() {
-		BigInteger id = PRNG.nextBInteger(16);
-		return id.toString(36);
+		return UUID.randomUUID().toString();
 	}
 }
 
