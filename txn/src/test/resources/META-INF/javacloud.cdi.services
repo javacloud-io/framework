@@ -4,4 +4,4 @@
 javax.sql.DataSource=javacloud.framework.txn.test.DerbyDataSourceProvider
 
 #Sql module
-framework.txnsql.services
+framework.txn.sql.services
