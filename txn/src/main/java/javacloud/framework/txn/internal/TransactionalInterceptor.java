@@ -6,7 +6,7 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.spi.TxTransactionManager;
+import javacloud.framework.txn.spi.TransactionManager;
 
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
@@ -16,12 +16,12 @@ import org.aopalliance.intercept.MethodInvocation;
  * @author ho
  * 
  */
-public class TxTransactionalInterceptor implements MethodInterceptor {
+public class TransactionalInterceptor implements MethodInterceptor {
 	@Inject
-	private TxTransactionManager transactionManager;
+	private TransactionManager transactionManager;
 	
-	private final TxTransactionalInvocation invocation;
-	public TxTransactionalInterceptor(TxTransactionalInvocation invocation) {
+	private final TransactionalInvocation invocation;
+	public TransactionalInterceptor(TransactionalInvocation invocation) {
 		this.invocation = invocation;
 	}
 	

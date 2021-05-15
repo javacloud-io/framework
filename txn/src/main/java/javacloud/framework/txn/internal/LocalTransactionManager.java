@@ -4,17 +4,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.spi.TxSessionManager;
-import javacloud.framework.txn.spi.TxTransaction;
-import javacloud.framework.txn.spi.TxTransactionManager;
+import javacloud.framework.txn.spi.SessionManager;
+import javacloud.framework.txn.spi.Transaction;
+import javacloud.framework.txn.spi.TransactionManager;
+import javacloud.framework.util.Objects;
 /**
  * 
  * @author ho
  *
  */
-public abstract class TxLocalTransactionManager implements TxTransactionManager, TxSessionManager {
-	private static final Logger logger = Logger.getLogger(TxLocalTransactionManager.class.getName());
-	private final TxLocalUnitOfWork unitOfWork = new TxLocalUnitOfWork();
+public abstract class LocalTransactionManager implements TransactionManager, SessionManager {
+	private static final Logger logger = Logger.getLogger(LocalTransactionManager.class.getName());
+	private final LocalUnitOfWork unitOfWork = new LocalUnitOfWork();
 	
 	/**
 	 * BEGIN UNIT OF WORK
@@ -25,7 +26,6 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 		if (size > 0) {
 			logger.log(Level.WARNING, "Session starting but still have {0} active transaction", size);
 		}
-		closeSession();
 	}
 	
 	/**
@@ -36,27 +36,19 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 		int size = unitOfWork.size();
 		if (size > 0) {
 			logger.log(Level.WARNING, "Session ending but still have {0} active transaction", size);
+			for (Transaction tx: unitOfWork) {
+				Objects.closeQuietly(() -> tx.rollback());
+			}
 		}
-		closeSession();
-	}
-	
-	/**
-	 * CLEAN UP, ROLLBACK EVERYTHING !!!
-	 * @param commit
-	 */
-	protected void closeSession() {
-		while (unitOfWork.size() > 0) {
-			TxTransaction tx = unitOfWork.peek();
-			tx.rollback();
-		}
+		unitOfWork.clear();
 	}
 	
 	/**
 	 * FIXME: SUPPORTS SUSPENDED TRANSACTION
 	 */
 	@Override
-	public TxTransaction getTransaction() {
-		TxTransaction tx = unitOfWork.peek();
+	public Transaction getTransaction() {
+		Transaction tx = unitOfWork.peek();
 		return tx;
 	}
 
@@ -64,8 +56,8 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	 * ASSUMING THE TRANSACTION CORRECTLY ENHANCED on ROLLBACK/COMMIT by calling endTransaction()
 	 */
 	@Override
-	public TxTransaction beginTransaction(Transactional transactional) {
-		TxTransaction tx = newTransaction(transactional);
+	public Transaction beginTransaction(Transactional transactional) {
+		Transaction tx = newTransaction(transactional);
 		logger.log(Level.FINE, "Begin transaction: {0}", tx);
 		
 		return unitOfWork.push(tx);
@@ -73,22 +65,21 @@ public abstract class TxLocalTransactionManager implements TxTransactionManager,
 	
 	/**
 	 * Ensure the transaction is totally off the MAP.
+	 * 
 	 * @param tx
 	 */
-	protected void endTransaction(TxTransaction tx) {
+	protected boolean endTransaction(Transaction tx) {
 		logger.log(Level.FINE, "End transaction: {0}", tx);
 		if (unitOfWork.peek() != tx) {
 			logger.log(Level.WARNING, "Transaction: {0} doesn't belong to the session", tx);
-		} else {
-			unitOfWork.remove(tx);
 		}
+		return unitOfWork.remove(tx);
 	}
 	
 	/**
-	 * return a transaction which commit & rollback should always invoke endTransaction!!!
 	 * 
 	 * @param transactional
-	 * @return
+	 * @return a transaction which commit & rollback should always invoke endTransaction!!!
 	 */
-	protected abstract TxTransaction newTransaction(Transactional transactional);
+	protected abstract Transaction newTransaction(Transactional transactional);
 }

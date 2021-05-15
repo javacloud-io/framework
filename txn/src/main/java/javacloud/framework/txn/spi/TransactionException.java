@@ -6,19 +6,19 @@ import javacloud.framework.util.ValidationException;
  * @author ho
  *
  */
-public class TxTransactionException extends ValidationException {
+public class TransactionException extends ValidationException {
 	private static final long serialVersionUID = 7482734435469434117L;
 	
-	public TxTransactionException(String message) {
+	public TransactionException(String message) {
 		super(message);
 	}
 	
-	public TxTransactionException(String message, Throwable cause) {
+	public TransactionException(String message, Throwable cause) {
 		super(message, cause);
 	}
 	
 	//REQUIRED A TRANSACTION
-	public static class Required extends TxTransactionException {
+	public static class Required extends TransactionException {
 		private static final long serialVersionUID = 1799723808551192399L;
 
 		public Required(String message) {
@@ -27,7 +27,7 @@ public class TxTransactionException extends ValidationException {
 	}
 	
 	//NOT REQUIRED A TRANSACTION
-	public static class NotRequired extends TxTransactionException {
+	public static class NotRequired extends TransactionException {
 		private static final long serialVersionUID = 1799723808551192399L;
 
 		public NotRequired(String message) {

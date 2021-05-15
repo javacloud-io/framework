@@ -219,12 +219,12 @@ public final class Objects {
 	 * @param closable
 	 */
 	public static boolean closeQuietly(AutoCloseable closable) {
-		if(closable != null) {
-			try {
+		try {
+			if(closable != null) {
 				closable.close();
 				return true;
-			}catch(Exception ex) {}
-		}
+			}
+		} catch(Exception ex) {}
 		return false;
 	}
 }

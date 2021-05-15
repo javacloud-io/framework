@@ -1,18 +1,18 @@
 package javacloud.framework.txn.sql;
 
-import javacloud.framework.txn.internal.TxTransactionalModule;
-import javacloud.framework.txn.spi.TxSessionManager;
-import javacloud.framework.txn.spi.TxTransactionManager;
+import javacloud.framework.txn.internal.TransactionalModule;
+import javacloud.framework.txn.spi.SessionManager;
+import javacloud.framework.txn.spi.TransactionManager;
 /**
  * 
  * @author ho
  *
  */
-public class SqlTransactionalModule extends TxTransactionalModule {
+public class SqlTransactionalModule extends TransactionalModule {
 	@Override
 	protected void configure() {
-		bind(TxSessionManager.class).to(SqlLocalTransactionManager.class);
-		bind(TxTransactionManager.class).to(SqlLocalTransactionManager.class);
+		bind(SessionManager.class).to(SqlLocalTransactionManager.class);
+		bind(TransactionManager.class).to(SqlLocalTransactionManager.class);
 		
 		super.configure();
 	}

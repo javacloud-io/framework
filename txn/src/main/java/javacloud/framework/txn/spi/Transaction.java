@@ -8,7 +8,7 @@ import javacloud.framework.txn.Transactional;
  * @author ho
  * 
  */
-public interface TxTransaction {
+public interface Transaction {
 	/**
 	 * 
 	 * @return

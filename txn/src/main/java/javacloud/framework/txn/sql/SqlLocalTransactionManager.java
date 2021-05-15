@@ -10,9 +10,10 @@ import javax.inject.Singleton;
 import javax.sql.DataSource;
 
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.internal.TxLocalTransactionManager;
-import javacloud.framework.txn.spi.TxTransaction;
-import javacloud.framework.txn.spi.TxTransactionException;
+import javacloud.framework.txn.internal.LocalTransactionManager;
+import javacloud.framework.txn.spi.Transaction;
+import javacloud.framework.txn.spi.TransactionException;
+import javacloud.framework.util.Objects;
 import javacloud.framework.util.ProxyInvocationHandler;
 /**
  * 
@@ -20,7 +21,7 @@ import javacloud.framework.util.ProxyInvocationHandler;
  *
  */
 @Singleton
-public class SqlLocalTransactionManager extends TxLocalTransactionManager {
+public class SqlLocalTransactionManager extends LocalTransactionManager {
 	private final DataSource dataSource;
 	
 	/**
@@ -31,39 +32,34 @@ public class SqlLocalTransactionManager extends TxLocalTransactionManager {
 	public SqlLocalTransactionManager(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
-	/**
-	 * ENSURE CONNECTION IS CLOSE AFTER COMMIT.
-	 */
-	@Override
-	protected void endTransaction(TxTransaction tx) {
-		Connection connection = ((SqlTransaction)tx).getConnection();
-		try {
-			connection.close();
-		} catch(SQLException ex) {
-			//WARN ABOUT CONNECTION CLOSING
-		} finally {
-			super.endTransaction(tx);
-		}
-	}
 
 	/**
 	 * FIXME: ENSURE native CONNECTION commit() or rollback() should behave same TX.
 	 */
 	@Override
-	protected TxTransaction newTransaction(Transactional transactional) {
+	protected Transaction newTransaction(Transactional transactional) {
 		try {
 			Connection rawConnection = dataSource.getConnection();
 			rawConnection.setAutoCommit(false);
 			rawConnection.setReadOnly(transactional.readOnly());
 			return new SqlTransactionImpl(rawConnection, transactional);
 		} catch (SQLException ex) {
-			throw new TxTransactionException("Unable to obtain a connection", ex);
+			throw new TransactionException("Unable to obtain a connection", ex);
 		}
 	}
 	
+	/**
+	 * ENSURE CONNECTION IS CLOSE AFTER COMMIT.
+	 */
+	@Override
+	protected boolean endTransaction(Transaction tx) {
+		Connection connection = ((SqlTransaction)tx).getConnection();
+		Objects.closeQuietly(connection);
+		return super.endTransaction(tx);
+	}
+	
 	//
-	//PROXY THE CONNECTION TO ENSURE CORRECTNESS
+	// PROXY THE CONNECTION TO ENSURE CORRECTNESS WHEN CLOSE RAW CONNECTION!
 	class SqlTransactionImpl extends SqlTransaction {
 		private final Connection connection;
 		

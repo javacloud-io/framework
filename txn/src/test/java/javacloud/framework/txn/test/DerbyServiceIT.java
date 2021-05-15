@@ -10,34 +10,37 @@ import org.junit.Test;
 
 import javacloud.framework.txn.Propagation;
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.internal.TxIntegrationTest;
-import javacloud.framework.txn.spi.TxTransactionManager;
+import javacloud.framework.txn.internal.TransactionalIntegrationTest;
+import javacloud.framework.txn.spi.TransactionManager;
 import javacloud.framework.txn.sql.SqlTransaction;
-import javacloud.framework.txn.spi.TxTransactionException;
+import javacloud.framework.txn.spi.TransactionException;
 /**
  * 
  * @author ho
  *
  */
-public class DerbyServiceIT extends TxIntegrationTest {
+public class DerbyServiceIT extends TransactionalIntegrationTest {
 	@Inject
-	TxTransactionManager transactionManager;
+	TransactionManager transactionManager;
 	
 	@Test
 	@Transactional()
 	public void testTx() throws SQLException {
 		Connection connection = ((SqlTransaction)transactionManager.getTransaction()).getConnection();
 		Assert.assertNotNull(connection);
+		System.out.println("tx");
 		
+		// call new tx
 		testNewTx();
 	}
 	
 	/**
 	 * An exception will throw without any transaction
 	 */
-	@Test(expected=TxTransactionException.Required.class)
+	@Test(expected=TransactionException.Required.class)
 	@Transactional(propagation=Propagation.MANDATORY)
 	public void testNoTx(){
+		System.out.println("noTx");
 	}
 	
 	/**
@@ -46,5 +49,6 @@ public class DerbyServiceIT extends TxIntegrationTest {
 	@Test
 	@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void testNewTx(){
+		System.out.println("newTx");
 	}
 }

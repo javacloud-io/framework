@@ -58,7 +58,7 @@ public interface CharStream {
 	 */
 	public static CharStream build(Reader source) {
 		return new CharStream() {
-			int cchar	= Integer.MIN_VALUE;	//NOT YET READ
+			int cchar = Integer.MIN_VALUE;	//NOT YET READ
 			@Override
 			public boolean nextChar() {
 				try {

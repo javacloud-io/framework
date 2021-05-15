@@ -4,14 +4,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import javacloud.framework.txn.Transactional;
-import javacloud.framework.txn.spi.TxTransaction;
-import javacloud.framework.txn.spi.TxTransactionException;
+import javacloud.framework.txn.spi.Transaction;
+import javacloud.framework.txn.spi.TransactionException;
 /**
  * 
  * @author ho
  *
  */
-public abstract class SqlTransaction implements TxTransaction {
+public abstract class SqlTransaction implements Transaction {
 	private final Transactional transactional;
 	private boolean active = true;
 	
@@ -20,8 +20,8 @@ public abstract class SqlTransaction implements TxTransaction {
 	}
 	
 	/**
-	 * return current active connection for WORK.
-	 * @return
+	 * 
+	 * @return current active connection for WORK.
 	 */
 	public abstract Connection getConnection();
 	
@@ -48,10 +48,9 @@ public abstract class SqlTransaction implements TxTransaction {
 	public void commit() {
 		try {
 			getConnection().commit();
-		} catch(SQLException ex) {
-			throw new TxTransactionException(ex.getMessage(), ex);
-		} finally {
 			active = false;
+		} catch(SQLException ex) {
+			throw new TransactionException(ex.getMessage(), ex);
 		}
 	}
 	
@@ -62,10 +61,9 @@ public abstract class SqlTransaction implements TxTransaction {
 	public void rollback() {
 		try {
 			getConnection().rollback();
-		}catch(SQLException ex) {
-			throw new TxTransactionException(ex.getMessage(), ex);
-		} finally {
 			active = false;
+		} catch(SQLException ex) {
+			throw new TransactionException(ex.getMessage(), ex);
 		}
 	}
 }

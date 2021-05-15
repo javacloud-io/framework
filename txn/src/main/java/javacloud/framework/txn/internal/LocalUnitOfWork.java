@@ -5,16 +5,17 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 
-import javacloud.framework.txn.spi.TxTransaction;
+import javacloud.framework.txn.spi.Transaction;
 
 /**
  * 
  * @author ho
  *
  */
-public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
-	private static final ThreadLocal<Deque<TxTransaction>> unitOfWork = new ThreadLocal<Deque<TxTransaction>>();
-	public TxLocalUnitOfWork() {
+public class LocalUnitOfWork implements Iterable<Transaction> {
+	private static final ThreadLocal<Deque<Transaction>> unitOfWork = new ThreadLocal<Deque<Transaction>>();
+	
+	public LocalUnitOfWork() {
 	}
 	
 	/**
@@ -22,8 +23,8 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 * @return
 	 */
 	@Override
-	public Iterator<TxTransaction> iterator() {
-		Deque<TxTransaction> stack = unitOfWork.get();
+	public Iterator<Transaction> iterator() {
+		Deque<Transaction> stack = unitOfWork.get();
 		if (stack != null) {
 			return stack.iterator();
 		}
@@ -35,7 +36,7 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 * @return
 	 */
 	public int size() {
-		Deque<TxTransaction> stack = unitOfWork.get();
+		Deque<Transaction> stack = unitOfWork.get();
 		return (stack ==null? 0: stack.size());
 	}
 	
@@ -43,8 +44,8 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 * Peek top transaction, NULL if NONE EXIST
 	 * @return
 	 */
-	public TxTransaction peek() {
-		Deque<TxTransaction> stack = unitOfWork.get();
+	public Transaction peek() {
+		Deque<Transaction> stack = unitOfWork.get();
 		return (stack == null || stack.isEmpty()? null: stack.peek());
 	}
 	
@@ -53,8 +54,8 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 * @param tx
 	 * @return
 	 */
-	public TxTransaction push(TxTransaction tx) {
-		Deque<TxTransaction> stack = unitOfWork.get();
+	public Transaction push(Transaction tx) {
+		Deque<Transaction> stack = unitOfWork.get();
 		if (stack == null) {
 			stack = new ArrayDeque<>();
 			unitOfWork.set(stack);
@@ -68,11 +69,12 @@ public class TxLocalUnitOfWork implements Iterable<TxTransaction> {
 	 * @param tx
 	 * @return
 	 */
-	public void remove(TxTransaction tx) {
-		Deque<TxTransaction> stack = unitOfWork.get();
+	public boolean remove(Transaction tx) {
+		Deque<Transaction> stack = unitOfWork.get();
 		if (stack != null && !stack.isEmpty()) {
-			stack.remove(tx);
+			return	stack.remove(tx);
 		}
+		return false;
 	}
 	
 	/**

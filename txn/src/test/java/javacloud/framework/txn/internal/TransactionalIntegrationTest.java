@@ -6,14 +6,14 @@ import org.junit.After;
 import org.junit.Before;
 
 import javacloud.framework.cdi.internal.IntegrationTest;
-import javacloud.framework.txn.spi.TxSessionManager;
+import javacloud.framework.txn.spi.SessionManager;
 /**
  * 
  * @author ho
  *
  */
-public abstract class TxIntegrationTest extends IntegrationTest {
-	@Inject TxSessionManager sessionManager;
+public abstract class TransactionalIntegrationTest extends IntegrationTest {
+	@Inject SessionManager sessionManager;
 	
 	@Before
 	public void beginSession() {
