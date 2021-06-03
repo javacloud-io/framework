@@ -22,6 +22,9 @@ public class GsonMapperIT extends IntegrationTest {
 	@Inject @Named(Externalizer.JSON)
 	private Externalizer externalizer;
 	
+	@Inject @Named("proto")
+	private Externalizer protonizer;
+	
 	@Test
 	public void testDict() throws IOException {
 		JsonConverter converter = new JsonConverter(externalizer);
@@ -56,6 +59,14 @@ public class GsonMapperIT extends IntegrationTest {
 		JsonConverter converter = new JsonConverter(externalizer);
 		String s = converter.toUTF8(HelloRequest.newBuilder().setName("xxxx"));
 		HelloRequest request = converter.toObject(s, HelloRequest.class);
+		Assert.assertEquals("xxxx", request.getName());
+	}
+	
+	@Test
+	public void testProto() throws IOException {
+		JsonConverter converter = new JsonConverter(protonizer);
+		byte[] b = converter.toBytes(HelloRequest.newBuilder().setName("xxxx"));
+		HelloRequest request = converter.toObject(b, HelloRequest.class);
 		Assert.assertEquals("xxxx", request.getName());
 	}
 }

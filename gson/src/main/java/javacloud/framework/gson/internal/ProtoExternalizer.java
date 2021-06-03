@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.inject.Singleton;
 import com.google.protobuf.Message;
 
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Objects;
 
+@Singleton
 public class ProtoExternalizer implements Externalizer {
-	static final String PROTO = "PROTO";
+	static final String PROTO = "proto";
 	
 	@Override
 	public String type() {
@@ -19,7 +21,12 @@ public class ProtoExternalizer implements Externalizer {
 
 	@Override
 	public void marshal(Object v, OutputStream dst) throws IOException {
-		Message message = Objects.cast(v);
+		Message message;
+		if (v instanceof Message.Builder) {
+			message = ((Message.Builder)v).build();
+		} else {
+			message = (Message)v;
+		}
 		dst.write(message.toByteArray());
 	}
 	

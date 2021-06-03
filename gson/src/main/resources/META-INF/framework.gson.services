@@ -2,4 +2,5 @@
 #
 javacloud.framework.io.Externalizer=javacloud.framework.gson.impl.GsonMapper
 javacloud.framework.io.Externalizer#json=javacloud.framework.gson.impl.GsonMapper
+javacloud.framework.io.Externalizer#proto=javacloud.framework.gson.internal.ProtoExternalizer
 
