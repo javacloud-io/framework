@@ -22,5 +22,4 @@ public interface ServerApplication {
 	 * @return service definitions
 	 */
 	List<ServerServiceDefinition> serverServices();
-
 }
