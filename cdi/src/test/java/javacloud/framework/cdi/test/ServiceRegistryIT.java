@@ -29,9 +29,6 @@ public class ServiceRegistryIT extends IntegrationTest {
 	@Inject
 	TestService testService;
 	
-	@Inject
-	TestLazyService lazyService;
-	
 	@Inject @Named("named")
 	TestService namedService;
 	

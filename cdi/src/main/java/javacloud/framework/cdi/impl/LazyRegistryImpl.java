@@ -8,7 +8,7 @@ import com.google.inject.Stage;
 import javacloud.framework.util.ResourceLoader;
 /**
  * Fast startup times at the expense of runtime performance and some up front error checking.
- * Suitable for DEVELOPMENT or SERVERLESS environment to reduce boot code startup time.
+ * Suitable for DEVELOPMENT or SERVERLESS environment to reduce startup time.
  * 
  * @author ho
  *

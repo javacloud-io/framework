@@ -15,6 +15,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 public class TestContainerFactoryImpl implements TestContainerFactory {
 	private TestContainerFactory delegate;
 	private TestContainer container;
+	
 	public TestContainerFactoryImpl(TestContainerFactory delegate) {
 		this.delegate = delegate;
 	}

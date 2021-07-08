@@ -2,9 +2,9 @@ package javacloud.framework.server.internal;
 
 import java.security.Principal;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 
 import javacloud.framework.security.AccessGrant;
 import javacloud.framework.security.internal.Permissions;

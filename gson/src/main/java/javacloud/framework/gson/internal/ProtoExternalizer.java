@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import javax.inject.Singleton;
 import com.google.protobuf.Message;
 
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Objects;
 
-@Singleton
 public class ProtoExternalizer implements Externalizer {
 	static final String PROTO = "proto";
 	

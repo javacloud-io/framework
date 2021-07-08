@@ -50,7 +50,6 @@ public class GuiceRegistryImpl extends GuiceRegistry {
 		return new GuiceBuilder.StageBuilder(stage) {
 			@Override
 			public Injector build(List<Module> modules, List<Module> overrides) {
-				modules.add(0, new GuiceModuleImpl());
 				return super.build(modules, overrides);
 			}
 		}.build(CDI_SERVICES , classLoader);

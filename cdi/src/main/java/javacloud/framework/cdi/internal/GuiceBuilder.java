@@ -12,6 +12,7 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Scopes;
 import com.google.inject.Stage;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.spi.Message;
@@ -105,6 +106,7 @@ public abstract class GuiceBuilder {
 					protected void configure() {
 						for (ResourceLoader.Binding binding: zservices) {
 							LinkedBindingBuilder<?> bindingBuilder;
+							
 							if (Objects.isEmpty(binding.name())) {
 								bindingBuilder = bind(binding.typeClass());
 							} else {
@@ -120,6 +122,9 @@ public abstract class GuiceBuilder {
 									bindingBuilder.to((Class)implClass);
 								}
 							}
+							
+							//always using singleton
+							bindingBuilder.in(Scopes.SINGLETON);
 						}
 					}
 				};

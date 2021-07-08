@@ -18,9 +18,10 @@ import javax.inject.Singleton;
  *
  */
 @Singleton
-public class AccessTokenAuthenticator extends TokenAuthenticator {
+public class AccessTokenAuthenticatorImpl extends TokenAuthenticator {
+	
 	@Inject
-	public AccessTokenAuthenticator(TokenValidator tokenValidator) {
+	public AccessTokenAuthenticatorImpl(TokenValidator tokenValidator) {
 		super(tokenValidator);
 	}
 

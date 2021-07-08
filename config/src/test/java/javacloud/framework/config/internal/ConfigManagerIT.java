@@ -12,13 +12,13 @@ import javacloud.framework.config.ConfigManager;
  * @author ho
  *
  */
-public class ConfigRegistryIT extends IntegrationTest {
+public class ConfigManagerIT extends IntegrationTest {
 	@Inject
-	ConfigManager configRegistry;
+	ConfigManager configManager;
 	
 	@Test
 	public void testProperties() {
-		SimpleConfig config = configRegistry.getConfig(SimpleConfig.class);
+		SimpleConfig config = configManager.getConfig(SimpleConfig.class);
 		Assert.assertNull(config.getAutoName());
 		
 		Assert.assertEquals("123", config.getNiceName());

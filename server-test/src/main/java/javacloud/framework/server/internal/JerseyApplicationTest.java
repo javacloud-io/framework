@@ -27,7 +27,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  *
  */
 public abstract class JerseyApplicationTest extends JerseyTest {
-	public static final String CONTAINER_PATH 		= "jersey.config.test.container.path";
+	public static final String CONTAINER_PATH = "jersey.config.test.container.path";
 	
 	/**
 	 * Enable the container debug by default. Turn off if needed to.
@@ -78,9 +78,8 @@ public abstract class JerseyApplicationTest extends JerseyTest {
 	}
 	
 	/**
-	 * return the root context path, by default just using ROOT.
 	 * 
-	 * @return
+	 * @return the root context path, by default just using ROOT.
 	 */
 	protected String getContainerPath() {
 		return	System.getProperty(CONTAINER_PATH, "");

@@ -3,8 +3,6 @@ package javacloud.framework.grpc.client;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
-import javax.inject.Provider;
-
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.stub.AbstractStub;
@@ -14,7 +12,7 @@ import io.grpc.stub.AbstractStub;
  *
  * @param <S>
  */
-public class StubSupplier<S extends AbstractStub<S>> implements Provider<S>, Supplier<S>, AutoCloseable {
+public class StubSupplier<S extends AbstractStub<S>> implements Supplier<S>, AutoCloseable {
 	private final S stub;
 	
 	public StubSupplier(S stub) {

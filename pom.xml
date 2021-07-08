@@ -26,6 +26,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
+    <jetty.version>11.0.4</jetty.version>
     <tomcat.version>10.0.4</tomcat.version>
     <httpclient.version>4.5.12</httpclient.version>
     <guice.version>5.0.1</guice.version>
@@ -298,18 +299,16 @@
 		  	<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-core</artifactId>
-            <version>${tomcat.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>${tomcat.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 			<version>1.4.7</version>
@@ -319,7 +318,7 @@
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
 		</dependency>
-        <dependency>
+		<dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
@@ -376,17 +375,12 @@
 			<version>${httpclient.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>5.0.0</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
-        
+		
         <!-- gremlin -->
         <dependency>
             <groupId>org.apache.tinkerpop</groupId>
@@ -424,16 +418,19 @@
                 </exclusion>
     		</exclusions>
 		</dependency>
+		
+		<!-- TODO: javax.inject vs jakarta.inject -->
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
             <version>${guice.version}</version>
+            <exclusions>
+	           <exclusion>
+	               <groupId>javax.inject</groupId>
+	               <artifactId>javax.inject</artifactId>
+	           </exclusion>
+        	</exclusions>
 		</dependency>
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-servlet</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
         
 		<!-- Using slf4j & Logback instead of Common Logging & Log4j-->
 		<dependency>
@@ -539,7 +536,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -562,7 +559,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -573,7 +570,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -583,7 +580,7 @@
             <version>${jersey.version}</version>
     		<exclusions>
     			<exclusion>
-    				<groupId>javax.servlet</groupId>
+    				<groupId>jakarta.servlet</groupId>
     				<artifactId>servlet-api</artifactId>
     			</exclusion>
     		</exclusions>
@@ -595,7 +592,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -611,7 +608,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -647,7 +644,7 @@
                 </exclusion>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>org.javassist</groupId>
@@ -763,7 +760,7 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.hk2.external</groupId>
-                    <artifactId>javax.inject</artifactId>
+                    <artifactId>jakarta.inject</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

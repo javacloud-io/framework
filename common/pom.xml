@@ -33,11 +33,6 @@
   </build>
   
   <dependencies>
-    <dependency>
-        <groupId>javax.inject</groupId>
-        <artifactId>javax.inject</artifactId>
-    </dependency>
-    
     <!-- Tests -->
     <dependency>
       	<groupId>junit</groupId>

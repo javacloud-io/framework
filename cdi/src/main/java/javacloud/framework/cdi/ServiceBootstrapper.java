@@ -11,9 +11,6 @@ import javacloud.framework.util.ResourceLoader;
 public abstract class ServiceBootstrapper {
 	private static final ServiceBootstrapper BOOTSTRAP = ResourceLoader.loadService(ServiceBootstrapper.class);
 	
-	protected ServiceBootstrapper() {
-	}
-	
 	/**
 	 * return the only instance available
 	 * 

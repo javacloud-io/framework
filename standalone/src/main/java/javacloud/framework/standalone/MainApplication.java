@@ -52,6 +52,7 @@ public class MainApplication implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		new MainApplication().run();
+		MainApplication runner = new MainApplication();
+		runner.run();
 	}
 }

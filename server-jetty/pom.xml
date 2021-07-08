@@ -7,9 +7,9 @@
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>javacloud-config</artifactId>
+  <artifactId>javacloud-server-jetty</artifactId>
   <packaging>jar</packaging>
-  <name>Framework config</name>
+  <name>Framework jetty server</name>
   
   <build>
 	<plugins>
@@ -33,31 +33,58 @@
   </build>
   
   <dependencies>
-    <dependency>
-        <groupId>javax.inject</groupId>
-        <artifactId>javax.inject</artifactId>
-    </dependency>
-    
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>
    		<artifactId>javacloud-common</artifactId>
    		<version>${project.version}</version>
   	</dependency>
-    
-    <!-- Tests -->
-    <dependency>
+  	<dependency>
         <groupId>io.javacloud.framework</groupId>
         <artifactId>javacloud-cdi</artifactId>
         <version>${project.version}</version>
-        <scope>test</scope>
+    </dependency>
+  	<dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-config</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
+	<!-- Jersey -->
+	<dependency>
+    	<groupId>org.glassfish.jersey.containers</groupId>
+    	<artifactId>jersey-container-servlet</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>org.glassfish.jersey.media</groupId>
+		<artifactId>jersey-media-json-jackson</artifactId>
+	</dependency>
+	<dependency>
+        <groupId>org.glassfish.jersey.inject</groupId>
+        <artifactId>jersey-hk2</artifactId>
+    </dependency>
+	<dependency>
+    	<groupId>org.glassfish.hk2</groupId>
+      	<artifactId>guice-bridge</artifactId>
+  	</dependency>
+  	
+  	<!-- Jetty -->
+  	<dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
     </dependency>
     <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+    </dependency>
+        
+  	<!-- Tests -->
+  	<dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <scope>test</scope>
     </dependency>
-    <dependency>
+        <dependency>
         <groupId>io.javacloud.framework</groupId>
         <artifactId>javacloud-logging</artifactId>
         <version>${project.version}</version>

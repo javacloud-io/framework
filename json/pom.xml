@@ -33,6 +33,10 @@
   </build>
   
   <dependencies>
+    <dependency>
+        <groupId>javax.inject</groupId>
+        <artifactId>javax.inject</artifactId>
+    </dependency>
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>

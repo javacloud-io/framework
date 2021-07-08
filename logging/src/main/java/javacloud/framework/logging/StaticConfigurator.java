@@ -4,8 +4,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.logging.LogManager;
 
-import javax.inject.Singleton;
-
 import org.slf4j.LoggerFactory;
 
 import javacloud.framework.util.ResourceLoader;
@@ -17,67 +15,53 @@ import javacloud.framework.util.ResourceLoader;
  * @author ho
  *
  */
-@Singleton
 public final class StaticConfigurator {
-	private static volatile Boolean configured = false;
+	private static final String loggingConfig = configureJUL();
+	
 	/**
-	 * JUL configure using constructor
+	 * FOR RUNLIST LCM
 	 */
-	public StaticConfigurator() {
-		start();
+	public void start() {
+		log("JUL configured using: {}", loggingConfig);
 	}
 	
 	/**
 	 * FOR RUNLIST LCM
 	 */
-	public static void start() {
-		if(!configured) {
-			synchronized(configured) {
-				if(!configured) {
-					configureJUL();
-					configured = true;
-				}
-			}
-		}
-	}
-	
-	/**
-	 * FOR RUNLIST LCM
-	 */
-	public static void stop() {
+	public void stop() {
 	}
 	
 	/**
 	 * 
 	 * @return true if success configure logger
 	 */
-	static boolean configureJUL() {
+	static String configureJUL() {
 		String configClass = System.getProperty("java.util.logging.config.class");
-		if(configClass != null && !configClass.equals(StaticConfigurator.class.getName())) {
-			log("JUL already configured using class: {}", configClass);
-			return false;
+		if (configClass != null && !configClass.equals(StaticConfigurator.class.getName())) {
+			return configClass;
 		}
+		
 		String configFile = System.getProperty("java.util.logging.config.file");
-		if(configFile != null) {
-			log("JUL already configured using file: {}", configFile);
-			return false;
+		if (configFile != null) {
+			return configFile;
 		}
 		
 		//READ FROM RESOURCE PROPERTIES
 		try {
 			URL url = ResourceLoader.getClassLoader().getResource("logging.properties");
-			if(url == null) {
+			if (url == null) {
 				log("Not found JUL resource logging.properties");
-				return false;
+				return null;
 			}
-			try(InputStream ins = url.openStream()) {
+			try (InputStream ins = url.openStream()) {
 				LogManager.getLogManager().readConfiguration(ins);
 			}
-			return true;
-		} catch(Exception ex) {
+			
+			return url.toString();
+		} catch (Exception ex) {
 			log("Unable to load JUL resource logging.properties");
 		}
-		return false;
+		return null;
 	}
 	
 	/**

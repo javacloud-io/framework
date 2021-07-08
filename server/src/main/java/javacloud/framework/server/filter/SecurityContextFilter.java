@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.core.HttpHeaders;
 
 /**
@@ -49,6 +49,7 @@ public class SecurityContextFilter extends ServletFilter {
 	
 	private boolean 	allowsCookie;		//allows access cookie
 	private Authenticator authenticator;	//an authenticator
+	
 	public SecurityContextFilter() {
 	}
 	
@@ -60,7 +61,7 @@ public class SecurityContextFilter extends ServletFilter {
 	@Override
 	protected void init() throws ServletException {
 		//OPTIONALS TOKEN PARAM
-		this.allowsCookie= Boolean.valueOf(getInitParameter("allows-cookie"));
+		this.allowsCookie = Boolean.valueOf(getInitParameter("allows-cookie"));
 		
 		//SEARCH FOR AUTHENTICATORs
 		String authenticator = getInitParameter("authenticator");
@@ -82,7 +83,7 @@ public class SecurityContextFilter extends ServletFilter {
 			throws ServletException, IOException {
 		try {
 			AccessGrant authzGrant = doAuthenticate(req);
-			if(authzGrant != null) {
+			if (authzGrant != null) {
 				chain.doFilter(RequestWrapper.wrap(req, authzGrant), resp);
 			} else {
 				chain.doFilter(req, resp);
@@ -108,7 +109,7 @@ public class SecurityContextFilter extends ServletFilter {
 		Credentials credentials = requestCredentials(new W3RequestWrapper(req));
 		
 		//ASSUMING NULL GRANT
-		if(credentials == null) {
+		if (credentials == null) {
 			return null;
 		}
 		
@@ -131,11 +132,11 @@ public class SecurityContextFilter extends ServletFilter {
 		String authorization = req.getHeader(HttpHeaders.AUTHORIZATION);
 		
 		//1. CHECK AUTHORIZATION HEADER SCHEME XXX (+1 to exclude space)
-		if(authorization != null) {
-			if(authorization.startsWith(IdParameters.SchemeType.Bearer.name())) {
+		if (authorization != null) {
+			if (authorization.startsWith(IdParameters.SchemeType.Bearer.name())) {
 				return	new TokenCredentials(IdParameters.GrantType.access_token,
 									authorization.substring(IdParameters.SchemeType.Bearer.name().length() + 1));
-			} else if(authorization.startsWith(IdParameters.SchemeType.Basic.name())) {
+			} else if (authorization.startsWith(IdParameters.SchemeType.Basic.name())) {
 				return new ClientCredentials(authorization.substring(IdParameters.SchemeType.Basic.name().length() + 1));
 			}
 			
@@ -145,12 +146,12 @@ public class SecurityContextFilter extends ServletFilter {
 		
 		//2. DOUBLE CHECK for access token (AUTHZ, PARAM, HEADER, COOKIE...)
 		String token = req.getParameter(IdParameters.PARAM_ACCESS_TOKEN);
-		if(token == null && this.allowsCookie) {
+		if (token == null && this.allowsCookie) {
 			Cookie cookie = RequestWrapper.getCookie(req, IdParameters.PARAM_ACCESS_TOKEN);
-			if(cookie != null) {
+			if (cookie != null) {
 				token = cookie.getValue();
 			}
 		}
-		return	(token == null? null : new TokenCredentials(IdParameters.GrantType.access_token, token));
+		return (token == null? null : new TokenCredentials(IdParameters.GrantType.access_token, token));
 	}
 }

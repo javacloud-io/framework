@@ -19,6 +19,7 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
  */
 public class JerseyTestContainerFactory implements TestContainerFactory {
 	private TestContainerFactory delegate;
+	
 	public JerseyTestContainerFactory(TestContainerFactory delegate) {
 		this.delegate = delegate;
 	}
@@ -42,6 +43,7 @@ public class JerseyTestContainerFactory implements TestContainerFactory {
 	static class TestContainerImpl implements TestContainer {
 		private URI baseUri;
 		private TestContainer delegate;
+		
 		public TestContainerImpl(URI baseUri, TestContainer delegate) {
 			this.baseUri  = baseUri;
 			this.delegate = delegate;

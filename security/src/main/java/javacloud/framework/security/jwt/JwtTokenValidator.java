@@ -1,9 +1,5 @@
 package javacloud.framework.security.jwt;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
@@ -17,7 +13,6 @@ import javacloud.framework.util.Converters;
  * @author ho
  *
  */
-@Singleton
 public class JwtTokenValidator implements TokenValidator {
 	private final JwtCodecs  	jwtCodecs;
 	private final JwtVerifier	jwtVerifier;
@@ -27,8 +22,7 @@ public class JwtTokenValidator implements TokenValidator {
 	 * @param externalizer
 	 * @param jwtVerifier
 	 */
-	@Inject
-	public JwtTokenValidator(@Named(Externalizer.JSON) Externalizer externalizer, JwtVerifier jwtVerifier) {
+	public JwtTokenValidator(Externalizer externalizer, JwtVerifier jwtVerifier) {
 		this.jwtCodecs = new JwtCodecs(externalizer);
 		this.jwtVerifier  = jwtVerifier;
 	}

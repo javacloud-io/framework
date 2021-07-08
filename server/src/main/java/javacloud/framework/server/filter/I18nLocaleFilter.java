@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import javacloud.framework.cdi.ServiceRegistry;
 import javacloud.framework.i18n.CharsetContext;
@@ -22,6 +22,7 @@ import javacloud.framework.i18n.LocaleContext;
 public class I18nLocaleFilter extends ServletFilter {
 	private LocaleContext localeContext;
 	private CharsetContext charsetContext;
+	
 	public I18nLocaleFilter() {
 	}
 	

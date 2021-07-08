@@ -2,7 +2,7 @@ package javacloud.framework.standalone;
 
 import org.junit.Test;
 
-public class ApplicationIT {
+public class MainApplicationIT {
 	@Test
 	public void testMain() {
 		MainApplication.main(null);

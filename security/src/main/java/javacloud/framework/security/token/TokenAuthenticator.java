@@ -24,6 +24,7 @@ public class TokenAuthenticator implements Authenticator {
 	public TokenAuthenticator(TokenValidator tokenValidator) {
 		this.tokenValidator = tokenValidator;
 	}
+	
 	/**
 	 * 
 	 */

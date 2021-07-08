@@ -15,7 +15,6 @@
  */
 package javacloud.framework.cdi.test;
 
-import javacloud.framework.cdi.LazySingleton;
 import javacloud.framework.cdi.internal.GuiceModule;
 
 import javax.inject.Singleton;
@@ -31,18 +30,10 @@ public class TestModule extends GuiceModule {
 		
 		bindToName(TestService.class, "named").to(TestServiceImpl.class);
 		bind(TestInjectNamed.class);
-		
-		//Lazy
-		bind(TestLazyService.class).to(TestLazyServiceImpl.class);
 	}
 	
 	//TEST
 	@Singleton
 	public static class TestServiceImpl implements TestService {
-	}
-	
-	//
-	@LazySingleton
-	public static class TestLazyServiceImpl implements TestLazyService {
 	}
 }

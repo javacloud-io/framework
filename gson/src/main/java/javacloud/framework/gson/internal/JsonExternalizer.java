@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
 
-import javax.inject.Singleton;
-
 import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 import com.google.protobuf.util.JsonFormat;
@@ -16,7 +14,6 @@ import com.google.protobuf.util.JsonFormat;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.util.Objects;
 
-@Singleton
 public class JsonExternalizer implements Externalizer {
 	private final JsonFormat.Parser  parser;
 	private final JsonFormat.Printer printer;

@@ -33,6 +33,11 @@
   </build>
   
   <dependencies>
+    <dependency>
+        <groupId>javax.inject</groupId>
+        <artifactId>javax.inject</artifactId>
+    </dependency>
+    
     <!-- JavaCloud -->
     <dependency>
     	<groupId>io.javacloud.framework</groupId>
@@ -44,14 +49,14 @@
         <artifactId>javacloud-config</artifactId>
         <version>${project.version}</version>
     </dependency>
+    
+    <!-- Tests -->
     <dependency>
         <groupId>io.javacloud.framework</groupId>
         <artifactId>javacloud-cdi</artifactId>
         <version>${project.version}</version>
         <scope>test</scope>
     </dependency>
-    
-    <!-- Tests -->
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
