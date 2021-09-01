@@ -26,7 +26,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
-    <netty.version>4.1.52.Final</netty.version>
+    <netty.version>4.1.61.Final</netty.version>
     <jetty.version>11.0.4</jetty.version>
     <tomcat.version>10.0.4</tomcat.version>
     <httpclient.version>4.5.12</httpclient.version>
