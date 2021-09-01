@@ -48,7 +48,7 @@ public class GuiceHK2Feature extends javacloud.framework.jaxrs.impl.GuiceHK2Feat
 			@Override
 			public void onStartup(Container container) {
 				try {
-					ServiceBootstrapper.get().startup();
+					ServiceBootstrapper.get().startup(false);
 				}catch(Exception ex) {
 					throw new ContainerException(ex);
 				}

@@ -23,9 +23,10 @@ public abstract class ServiceBootstrapper {
 	/**
 	 * Start managed services registered to run-list. It's safe to be call multiple times.
 	 * 
+	 * @param awaitTermination
 	 * @throws Exception
 	 */
-	public abstract void startup() throws Exception;
+	public abstract void startup(boolean awaitTermination) throws Exception;
 	
 	/**
 	 * Stop managed services registered to run-list

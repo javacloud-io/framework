@@ -1,0 +1,7 @@
+######### List of modules or services binding ########
+
+framework.config.services
+framework.netty.services
+
+# bindings
+javacloud.framework.netty.ServerApplication=javacloud.framework.netty.TestApplication

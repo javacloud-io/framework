@@ -26,6 +26,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
+    <netty.version>4.1.52.Final</netty.version>
     <jetty.version>11.0.4</jetty.version>
     <tomcat.version>10.0.4</tomcat.version>
     <httpclient.version>4.5.12</httpclient.version>
@@ -53,10 +54,11 @@
     <module>security</module>
     <module>txn</module>
     
+    <module>jaxrs</module>
     <module>grpc</module>
     <module>gson</module>
     <module>server-grpc</module>
-    <module>jaxrs</module>
+    <module>server-netty</module>
     <module>server-test</module>
     <module>server</module>
 
@@ -671,6 +673,43 @@
                     <artifactId>javassist</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        
+        <!-- netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-common</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-buffer</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>${netty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http2</artifactId>
+            <version>${netty.version}</version>
         </dependency>
         
         <!-- grpc/netty -->

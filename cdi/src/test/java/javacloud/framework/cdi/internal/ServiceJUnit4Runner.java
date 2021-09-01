@@ -30,7 +30,7 @@ public class ServiceJUnit4Runner extends BlockJUnit4ClassRunner {
 	@Override
 	public void run(RunNotifier notifier) {
 		try {
-			ServiceBootstrapper.get().startup();
+			ServiceBootstrapper.get().startup(false);
 			try {
 				super.run(notifier);
 			} finally {

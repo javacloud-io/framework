@@ -2,12 +2,14 @@ package javacloud.framework.grpc.impl;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.grpc.Server;
+import io.grpc.ServerInterceptor;
 import io.grpc.netty.NettyServerBuilder;
 import javacloud.framework.config.ConfigManager;
 import javacloud.framework.grpc.ServerSettings;
@@ -47,9 +49,19 @@ public class NettyServerLifecycleImpl extends ServerLifecycle {
 		return serverBuilder.build();
 	}
 	
+	public void awaitTermination() throws Exception {
+		Server server = get();
+		server.awaitTermination();
+	}
+	
 	protected void configure(NettyServerBuilder serverBuilder) {
-		application.serverInterceptors()
-			.forEach(i -> serverBuilder.intercept(i));
+		// reverse the interceptors to ensure FIFO
+		List<ServerInterceptor> interceptors = application.serverInterceptors();
+		for (int i = interceptors.size() - 1; i >= 0; i --) {
+			serverBuilder.intercept(interceptors.get(i));
+		}
+		
+		// add all services
 		application.serverServices()
 			.forEach(s -> serverBuilder.addService(s));
 	}

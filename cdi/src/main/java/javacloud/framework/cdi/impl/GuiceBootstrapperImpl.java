@@ -33,7 +33,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 	 * FAIL FAST IF CAN'T START A SERVICE
 	 */
 	@Override
-	public void startup() throws Exception {
+	public void startup(boolean awaitTermination) throws Exception {
 		synchronized (runlist) {
 			if (!runlist.isEmpty()) {
 				logger.fine("Runlist services already started!");
@@ -46,7 +46,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 				return;
 			}
 			
-			//START & ADD TO RUNING LIST
+			// START & ADD TO RUNING LIST
 			for (ResourceLoader.Binding binding: bindings) {
 				logger.fine("Starting service: " + binding.typeClass());
 				
@@ -54,6 +54,12 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 				runMethod(instance, "start");
 				runlist.add(binding);
 			}
+		}
+		
+		// auto await for termination
+		if (awaitTermination) {
+			Thread.yield();
+			awaitTermination();
 		}
 	}
 	
@@ -86,6 +92,25 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 			runlist.clear();
 			if (lastException != null) {
 				throw lastException;
+			}
+		}
+	}
+	
+	/**
+	 * Find a last service having awaitTermination method to invoke!!!
+	 * 
+	 */
+	private void awaitTermination() {
+		for (int i = runlist.size() - 1; i >= 0; i --) {
+			try {
+				ResourceLoader.Binding binding = runlist.get(i);
+				Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
+				runMethod(instance, "awaitTermination");
+				
+				logger.fine("Await for termination service: " + binding.typeClass());
+				break;
+			} catch (Exception ex) {
+				// assuming awaitTermination not available
 			}
 		}
 	}

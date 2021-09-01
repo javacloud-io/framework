@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+  	<groupId>io.javacloud.framework</groupId>
+  	<artifactId>framework</artifactId>
+  	<version>0.6.0</version>
+  </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>javacloud-server-netty</artifactId>
+  <packaging>jar</packaging>
+  <name>Framework netty server</name>
+  
+  <build>
+	<plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+		</plugin>
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+        </plugin>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+        </plugin>
+	</plugins>
+  </build>
+  
+  <dependencies>
+    <!-- JavaCloud -->
+    <dependency>
+    	<groupId>io.javacloud.framework</groupId>
+   		<artifactId>javacloud-common</artifactId>
+   		<version>${project.version}</version>
+  	</dependency>
+  	<dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+  	<dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-config</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    
+	<!-- Netty -->
+	<dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-common</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-buffer</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-handler</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-resolver</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.netty</groupId>
+        <artifactId>netty-codec</artifactId>
+    </dependency>
+        
+  	<!-- Tests -->
+  	<dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <scope>test</scope>
+    </dependency>
+        <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-logging</artifactId>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>io.javacloud.framework</groupId>
+        <artifactId>javacloud-cdi</artifactId>
+        <type>test-jar</type>
+        <version>${project.version}</version>
+        <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

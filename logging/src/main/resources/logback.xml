@@ -16,8 +16,8 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 	
-	<!-- The level of the root level is set to WARN by default.-->
-  	<root level="WARN">
+	<!-- The level of the root level is set to INFO by default.-->
+  	<root level="INFO">
     	<appender-ref ref="STDOUT" />
 	</root>
 </configuration>

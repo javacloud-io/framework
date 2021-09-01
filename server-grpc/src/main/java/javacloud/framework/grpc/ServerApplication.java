@@ -8,7 +8,7 @@ import io.grpc.ServerServiceDefinition;
 
 public interface ServerApplication {	
 	/**
-	 * Interceptors run in the reverse order in which they are added
+	 * Interceptors run in the order in which they are added to list
 	 * 
 	 * @return global interceptors for all services
 	 */

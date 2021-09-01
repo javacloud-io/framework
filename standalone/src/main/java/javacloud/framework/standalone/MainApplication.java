@@ -15,6 +15,11 @@ import javacloud.framework.util.Objects;
 public class MainApplication implements Runnable {
 	private static final Logger logger = Logger.getLogger(MainApplication.class.getName());
 	private final AtomicBoolean terminated = new AtomicBoolean(false);
+	private final boolean awaitTermination;
+	
+	protected MainApplication(boolean awaitTermination) {
+		this.awaitTermination = awaitTermination;
+	}
 	
 	@Override
 	public void run() {
@@ -31,12 +36,9 @@ public class MainApplication implements Runnable {
 		terminated.set(false);
 		try {
 			logger.fine("Starting application...");
-			ServiceBootstrapper.get().startup();
+			ServiceBootstrapper.get().startup(awaitTermination);
 			
 			// wait until finish then shutdown
-			Thread.yield();
-			
-			// terminate
 			terminateQuietly();
 			logger.fine("Terminated application!");
 		} catch (Exception ex) {
@@ -52,7 +54,7 @@ public class MainApplication implements Runnable {
 	}
 	
 	public static void main(String[] args) {
-		MainApplication runner = new MainApplication();
+		MainApplication runner = new MainApplication(true);
 		runner.run();
 	}
 }
