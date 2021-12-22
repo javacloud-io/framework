@@ -36,8 +36,8 @@
     <jersey.version>3.0.2</jersey.version>
     <hk2.version>3.0.1</hk2.version>
     <grizzly.version>3.0.0</grizzly.version>
-    <slf4j.version>1.7.30</slf4j.version>
-    <logback.version>1.2.3</logback.version>
+    <slf4j.version>1.7.32</slf4j.version>
+    <logback.version>1.2.9</logback.version>
     <derby.version>10.14.2.0</derby.version>
     <gremlin.version>3.4.8</gremlin.version>
     <grpc.version>1.36.0</grpc.version>
@@ -445,11 +445,6 @@
            	<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
        	</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
