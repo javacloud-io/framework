@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - mvn clean install
+  build:
+    commands:
+      - mvn clean test
+artifacts:
+  files:
+    - target/*
