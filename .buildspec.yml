@@ -9,4 +9,4 @@ phases:
       - mvn clean test
 artifacts:
   files:
-    - **/target/*
+    - '**/target/*'
