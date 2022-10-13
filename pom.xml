@@ -26,22 +26,22 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
-    <netty.version>4.1.52.Final</netty.version>
-    <jetty.version>11.0.4</jetty.version>
-    <tomcat.version>10.0.4</tomcat.version>
+    <netty.version>4.1.84.Final</netty.version>
+    <jetty.version>11.0.12</jetty.version>
+    <tomcat.version>10.1.1</tomcat.version>
     <httpclient.version>4.5.13</httpclient.version>
-    <guice.version>5.0.1</guice.version>
-    <guava.version>30.0-jre</guava.version>
-    <jackson.version>2.11.3</jackson.version>
+    <guice.version>5.1.0</guice.version>
+    <guava.version>31.1-jre</guava.version>
+    <jackson.version>2.13.4</jackson.version>
     <jersey.version>3.0.2</jersey.version>
     <hk2.version>3.0.1</hk2.version>
     <grizzly.version>3.0.0</grizzly.version>
-    <slf4j.version>1.7.32</slf4j.version>
-    <logback.version>1.2.9</logback.version>
+    <slf4j.version>2.0.3</slf4j.version>
+    <logback.version>1.4.4</logback.version>
     <derby.version>10.14.2.0</derby.version>
-    <gremlin.version>3.4.8</gremlin.version>
-    <grpc.version>1.36.0</grpc.version>
-    <protobuf.version>3.15.8</protobuf.version>
+    <gremlin.version>3.6.1</gremlin.version>
+    <grpc.version>1.50.0</grpc.version>
+    <protobuf.version>3.21.7</protobuf.version>
   </properties>
   
   <modules>
@@ -71,7 +71,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.1</version>
 				<configuration>
 				    <source>1.8</source>
                     <release>${java.version}</release>
@@ -81,7 +81,7 @@
 	        <plugin>
 	        	<groupId>org.apache.maven.plugins</groupId>
 	        	<artifactId>maven-source-plugin</artifactId>
-	        	<version>3.0.1</version>
+	        	<version>3.2.1</version>
 	        	<executions>
 	              	<execution>
 	                	<id>attach-sources</id>
@@ -95,7 +95,7 @@
     		<plugin>
 	        	<groupId>org.apache.maven.plugins</groupId>
 	        	<artifactId>maven-jar-plugin</artifactId>
-	        	<version>3.2.0</version>
+	        	<version>3.3.0</version>
 	        	<configuration>
 	        	    <archive>
 	        	          <manifest>
@@ -127,7 +127,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.2</version>
 				<executions>
 			         <execution>
 						 <id>assembly</id>
@@ -150,7 +150,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>3.0.0-M7</version>
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
@@ -170,7 +170,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>0.8.8</version>
                 <executions>
                     <execution>
                         <id>prepare-unit-test</id>
@@ -248,7 +248,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-			    <version>3.2.4</version>
+			    <version>3.4.0</version>
         		<configuration>
           			<createDependencyReducedPom>false</createDependencyReducedPom>
         		</configuration>
@@ -264,7 +264,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
             </plugin>
             
             <!-- proto compiling -->
@@ -286,7 +286,7 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.3.0</version>
             </plugin>
 		</plugins>
 	</pluginManagement>
@@ -297,7 +297,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 		  	<artifactId>junit</artifactId>
-		  	<version>4.13.1</version>
+		  	<version>4.13.2</version>
 		  	<scope>test</scope>
 		</dependency>
 		<dependency>
