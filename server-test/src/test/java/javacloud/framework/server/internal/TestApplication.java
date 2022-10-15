@@ -23,7 +23,7 @@ import org.glassfish.jersey.server.ResourceConfig;
  * @author ho
  *
  */
-@ApplicationPath("/v1/*")
+@ApplicationPath("/v1")
 public class TestApplication extends ResourceConfig {
 	public TestApplication() {
 		packages("javacloud.framework.server.rest");

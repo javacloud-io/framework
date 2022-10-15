@@ -2,7 +2,6 @@ package javacloud.framework.server.internal;
 
 import java.net.URI;
 
-import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.UriBuilder;
 
 import org.glassfish.jersey.client.ClientConfig;
@@ -26,17 +25,7 @@ public class JerseyTestContainerFactory implements TestContainerFactory {
 	
 	@Override
 	public TestContainer create(URI baseUri, DeploymentContext context) {
-		//JerseyTest always build URI with ROOT context path as default, so we can just re-struct full server annotation
-		UriBuilder uriBuilder = UriBuilder.fromUri(baseUri);
-		ApplicationPath path = context.getResourceConfig().getClass().getAnnotation(ApplicationPath.class);
-		if(path != null) {
-			String base = path.value();
-			if(base.endsWith("/*")) {
-				base = base.substring(0, base.length() - 2);
-			}
-			uriBuilder.path(base);
-		}
-		return new TestContainerImpl(baseUri, delegate.create(uriBuilder.build(), context));
+		return new TestContainerImpl(baseUri, delegate.create(baseUri, context));
 	}
 	
 	//Make sure to USE the client URI after server is started
@@ -65,7 +54,8 @@ public class JerseyTestContainerFactory implements TestContainerFactory {
 			
 			//FIX DYNAMIC PORT AFTER START
 			if(baseUri.getPort() <= 0) {
-				baseUri = UriBuilder.fromUri(baseUri).port(delegate.getBaseUri().getPort()).build();
+				baseUri = UriBuilder.fromUri(baseUri)
+									.port(delegate.getBaseUri().getPort()).build();
 			}
 		}
 
