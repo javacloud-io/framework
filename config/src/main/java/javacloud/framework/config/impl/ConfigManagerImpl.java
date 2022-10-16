@@ -20,7 +20,8 @@ import javacloud.framework.util.ResourceLoader;
  */
 @Singleton
 public class ConfigManagerImpl implements ConfigManager {
-	private static final String MAIN_CONFIG = "META-INF/javacloud.config.properties";
+	private static final String MAIN_CONFIG = ResourceLoader.META_INF + "javacloud.config.properties";
+	
 	private final ConfigSourceResolver sourceResolver;
 	
 	public ConfigManagerImpl() {

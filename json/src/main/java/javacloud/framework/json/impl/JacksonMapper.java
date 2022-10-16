@@ -4,11 +4,16 @@ import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.JsonValue;
 import javacloud.framework.json.internal.JsonObject;
 import javacloud.framework.util.DateFormats;
+import javacloud.framework.util.InternalException;
 import javacloud.framework.util.Objects;
+import javacloud.framework.util.ResourceLoader;
+import javacloud.framework.util.ResourceLoader.Binding;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.logging.Logger;
 
 import javax.inject.Singleton;
 
@@ -36,6 +41,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 @Singleton
 public class JacksonMapper extends ObjectMapper implements Externalizer {
 	private static final long serialVersionUID = -6439745503024511184L;
+	private static final Logger logger = Logger.getLogger(JacksonMapper.class.getName());
+	
+	private static final String SERDES_CONFIG = ResourceLoader.META_INF + "javacloud.json.serdes";
 	
 	/**
 	 * DEFAULT FEATURES
@@ -87,6 +95,24 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 				return JsonObject.of(value);
 			}
 		});
+		
+		// LOAD and register custom JACKSON SERDES!
+		try {
+			List<Binding> serdes = ResourceLoader.loadBindings(SERDES_CONFIG, ResourceLoader.getClassLoader());
+			if (!Objects.isEmpty(serdes)) {
+				logger.fine("Registering [" + serdes.size() + "] custom jackson serdes from: " + SERDES_CONFIG);
+				for (Binding b: serdes) {
+					Object serde = b.typeClass().getConstructor().newInstance();
+					if (serde instanceof JacksonSerde) {
+						((JacksonSerde)serde).configure(module);
+					} else {
+						throw new IllegalArgumentException("Not applicable jackson serde class: " + b.typeClass().getName());
+					}
+				}
+			}
+		} catch (Exception ex) {
+			throw InternalException.of("Failed register custom jackson serdes", ex);
+		}
 	}
 	
 	/**
