@@ -1,6 +1,7 @@
 package javacloud.framework.json;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -30,7 +31,7 @@ public class JacksonMapperIT extends IntegrationTest {
 	
 	@Test
 	public void testNull() throws IOException {
-		Map<String, Object> m = Objects.asMap("a", "1", "b", null, "c", "3");
+		Map<String, Object> m = Objects.asMap("a", "1", "b", null, "c", "3", "t", new Date());
 		objectMapper.writeValue(System.out, m);
 	}
 	

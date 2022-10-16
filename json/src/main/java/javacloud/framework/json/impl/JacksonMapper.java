@@ -66,7 +66,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		
 		//DEFAULT DATE FORMAT
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601));
+		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601_S3));
 		
 		// custom module
 		SimpleModule module = new SimpleModule("javacloud.json");
