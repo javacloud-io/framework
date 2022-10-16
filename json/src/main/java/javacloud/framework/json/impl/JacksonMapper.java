@@ -12,7 +12,10 @@ import javacloud.framework.util.ResourceLoader.Binding;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.inject.Singleton;
@@ -80,6 +83,25 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	 */
 	@SuppressWarnings("serial")
 	protected void configure(SimpleModule module ) {
+		// deserialize
+		module.addDeserializer(Date.class, new StdDeserializer<Date>(Date.class) {
+			@Override
+			public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+				String sdate = p.getText();
+				try {
+					if (sdate.endsWith("Z") && sdate.length() >= 10) {
+						if (sdate.charAt(sdate.length() - 5) == '.') {
+							return DateFormats.getUTC(DateFormats.ISO8601_S3).parse(sdate);
+						}
+						return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
+					}
+					return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
+				} catch (ParseException ex) {
+					throw new JsonProcessingException("Not support date format " + sdate, ex) {};
+				}
+			}
+		});
+		
 		//JSON VALUE
 		module.addSerializer(JsonValue.class, new StdSerializer<JsonValue>(JsonValue.class) {
 			@Override

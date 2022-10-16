@@ -12,8 +12,9 @@ import java.util.TimeZone;
  */
 public final class DateFormats {
 	//UTC ISO8601?
-	public static final String	ISO8601    = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-	public static final String	ISO8601_S3 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	public static final String ISO8601    = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	public static final String ISO8601_S3 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+	public static final String LOCAL	  = "yyyy-MM-dd HH:mm:ss"; 
 	private DateFormats() {
 	}
 	
