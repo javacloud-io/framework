@@ -89,13 +89,7 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 			public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 				String sdate = p.getText();
 				try {
-					if (sdate.endsWith("Z") && sdate.length() >= 10) {
-						if (sdate.charAt(sdate.length() - 5) == '.') {
-							return DateFormats.getUTC(DateFormats.ISO8601_S3).parse(sdate);
-						}
-						return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
-					}
-					return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
+					return parseDate(sdate);
 				} catch (ParseException ex) {
 					throw new JsonProcessingException("Not support date format " + sdate, ex) {};
 				}
@@ -135,6 +129,22 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		} catch (Exception ex) {
 			throw InternalException.of("Failed register custom jackson serdes", ex);
 		}
+	}
+	
+	/**
+	 * 
+	 * @param sdate
+	 * @return
+	 * @throws ParseException
+	 */
+	protected Date parseDate(String sdate) throws ParseException {
+		if (sdate.endsWith("Z") && sdate.length() >= 10) {
+			if (sdate.charAt(sdate.length() - 5) == '.') {
+				return DateFormats.getUTC(DateFormats.ISO8601_S3).parse(sdate);
+			}
+			return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
+		}
+		return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
 	}
 	
 	/**
