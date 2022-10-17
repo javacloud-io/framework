@@ -1,10 +1,14 @@
-package javacloud.framework.json.internal;
+package javacloud.framework.json;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.util.function.Function;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import javacloud.framework.io.BytesInputStream;
 import javacloud.framework.io.BytesOutputStream;
@@ -19,10 +23,12 @@ import javacloud.framework.util.Objects;
  * @author ho
  *
  */
+@Singleton
 public final class JsonConverter implements Externalizer {
 	private final Externalizer externalizer;
 	
-	public JsonConverter(Externalizer externalizer) {
+	@Inject
+	public JsonConverter(@Named(Externalizer.JSON) Externalizer externalizer) {
 		this.externalizer = externalizer;
 	}
 	
@@ -43,7 +49,7 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * return object from stream 
+	 * @return object from stream 
 	 */
 	@Override
 	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
@@ -51,9 +57,9 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * return byte from object
+	 * 
 	 * @param v
-	 * @return
+	 * @return byte from object
 	 * @throws IOException
 	 */
 	public byte[] toBytes(Object v) throws IOException {
@@ -63,9 +69,9 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * return string from object
+	 * 
 	 * @param v
-	 * @return
+	 * @return string from object
 	 * @throws IOException
 	 */
 	public String toUTF8(Object v) throws IOException {
@@ -75,10 +81,10 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * return object from byte buffer
+	 * 
 	 * @param buf
 	 * @param type
-	 * @return
+	 * @return object from byte buffer
 	 * @throws IOException
 	 */
 	public <T> T toObject(byte[] buf, Class<?> type) throws IOException {
@@ -111,9 +117,9 @@ public final class JsonConverter implements Externalizer {
 	}
 	
 	/**
-	 * return converter for TYPE
+	 * 
 	 * @param type
-	 * @return
+	 * @return converter for TYPE
 	 */
 	public <T> Function<Object, T> to(final Class<T> type) {
 		return new Function<Object, T>() {

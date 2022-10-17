@@ -10,8 +10,8 @@ import io.grpc.examples.helloworld.HelloRequest;
 import javacloud.framework.gson.impl.GacksonMapper;
 import javacloud.framework.gson.impl.GsonMapper;
 import javacloud.framework.gson.internal.JsonExternalizer;
+import javacloud.framework.json.JsonConverter;
 import javacloud.framework.json.JsonValue;
-import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.json.internal.JsonObject;
 
 import org.junit.Assert;

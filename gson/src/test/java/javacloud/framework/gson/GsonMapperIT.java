@@ -13,8 +13,8 @@ import org.junit.Test;
 import io.grpc.examples.helloworld.HelloRequest;
 import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.io.Externalizer;
+import javacloud.framework.json.JsonConverter;
 import javacloud.framework.json.JsonValue;
-import javacloud.framework.json.internal.JsonConverter;
 import javacloud.framework.util.Objects;
 
 public class GsonMapperIT extends IntegrationTest {

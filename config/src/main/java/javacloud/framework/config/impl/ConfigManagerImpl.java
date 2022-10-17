@@ -29,7 +29,7 @@ public class ConfigManagerImpl implements ConfigManager {
 		this.sourceResolver = new ConfigSourceResolver(new StandardConfigSource(MAIN_CONFIG, ResourceLoader.getClassLoader()))
 			.overrideBy(SystemConfigSource.get());
 		
-		//DYNAMIC DISCOVER SOURCES from class path
+		//DYNAMIC DISCOVER SOURCES from classpath META-INF/services/javacloud.framework.config.ConfigSource
 		for(ConfigSource source: ResourceLoader.loadServices(ConfigSource.class)) {
 			this.sourceResolver.overrideBy(source);
 		}

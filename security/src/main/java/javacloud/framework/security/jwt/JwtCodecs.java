@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.crypto.spec.SecretKeySpec;
 
 import javacloud.framework.io.Externalizer;
-import javacloud.framework.json.internal.JsonConverter;
+import javacloud.framework.json.JsonConverter;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Hmacs;
 import javacloud.framework.util.Objects;
