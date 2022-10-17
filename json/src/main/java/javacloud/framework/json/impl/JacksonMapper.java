@@ -1,7 +1,6 @@
 package javacloud.framework.json.impl;
 
 import javacloud.framework.io.Externalizer;
-import javacloud.framework.json.JacksonSerde;
 import javacloud.framework.json.JsonValue;
 import javacloud.framework.json.internal.JsonObject;
 import javacloud.framework.util.DateFormats;
@@ -67,68 +66,8 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 		setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		setDateFormat(DateFormats.getUTC(DateFormats.ISO8601_S3));
 		
-		// register custom module
-		SimpleModule module = new SimpleModule("javacloud.json");
-		configure(module);
-		registerModule(module);
-	}
-	
-	/**
-	 * 
-	 * @param module
-	 */
-	@SuppressWarnings("serial")
-	protected void configure(SimpleModule module ) {
-		// deserialize
-		module.addDeserializer(Date.class, new StdDeserializer<Date>(Date.class) {
-			@Override
-			public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-				String sdate = p.getText();
-				try {
-					return parseDate(sdate);
-				} catch (ParseException ex) {
-					throw new JsonProcessingException("Not support date format " + sdate, ex) {};
-				}
-			}
-		});
-		
-		//JSON VALUE
-		module.addSerializer(JsonValue.class, new StdSerializer<JsonValue>(JsonValue.class) {
-			@Override
-			public void serialize(JsonValue json, JsonGenerator gen, SerializerProvider provider) throws IOException {
-				gen.writeObject(json.value());
-			}
-		});
-		
-		module.addDeserializer(JsonValue.class, new StdDeserializer<JsonValue>(JsonValue.class) {
-			@Override
-			public JsonValue deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-				Object value = p.readValueAs(Object.class);
-				return JsonObject.of(value);
-			}
-		});
-		
-		// LOAD and register custom JACKSON SERDES, classpath META-INF/services/javacloud.framework.json.JacksonSerde
-		for(JacksonSerde serde: ResourceLoader.loadServices(JacksonSerde.class)) {
-			logger.fine("Register custom jackson serde " + serde.getClass().getName());
-			serde.configure(module);
-		}
-	}
-	
-	/**
-	 * 
-	 * @param sdate
-	 * @return
-	 * @throws ParseException
-	 */
-	protected Date parseDate(String sdate) throws ParseException {
-		if (sdate.endsWith("Z") && sdate.length() >= 10) {
-			if (sdate.charAt(sdate.length() - 5) == '.') {
-				return DateFormats.getUTC(DateFormats.ISO8601_S3).parse(sdate);
-			}
-			return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
-		}
-		return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
+		// register default module
+		configure(new SimpleSerde());
 	}
 	
 	/**
@@ -137,6 +76,21 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	@Override
 	public String type() {
 		return JSON;
+	}
+	
+	/**
+	 * Allows simple extension module
+	 * 
+	 * @param module
+	 */
+	protected void configure(SimpleModule module ) {
+		registerModule(module);
+		
+		// LOAD and register custom JACKSON SERDES, classpath META-INF/services/com.fasterxml.jackson.databind.Module
+		for(com.fasterxml.jackson.databind.Module serde: ResourceLoader.loadServices(com.fasterxml.jackson.databind.Module.class)) {
+			logger.fine("Register custom jackson module " + serde.getClass().getName());
+			registerModule(serde);
+		}
 	}
 	
 	/**
@@ -153,5 +107,59 @@ public class JacksonMapper extends ObjectMapper implements Externalizer {
 	@Override
 	public <T> T unmarshal(InputStream src, Class<?> type) throws IOException {
 		return Objects.cast(readValue(src, type));
+	}
+	
+	
+	static class SimpleSerde extends SimpleModule {
+		private static final long serialVersionUID = 1204273612914943898L;
+		
+		@SuppressWarnings("serial")
+		public SimpleSerde() {
+			super("javacloud.json");
+			// deserialize date
+			addDeserializer(Date.class, new StdDeserializer<Date>(Date.class) {
+				@Override
+				public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+					String sdate = p.getText();
+					try {
+						return parseDate(sdate);
+					} catch (ParseException ex) {
+						throw new JsonProcessingException("Not support date format " + sdate, ex) {};
+					}
+				}
+			});
+			
+			//JSON VALUE
+			addSerializer(JsonValue.class, new StdSerializer<JsonValue>(JsonValue.class) {
+				@Override
+				public void serialize(JsonValue json, JsonGenerator gen, SerializerProvider provider) throws IOException {
+					gen.writeObject(json.value());
+				}
+			});
+			
+			addDeserializer(JsonValue.class, new StdDeserializer<JsonValue>(JsonValue.class) {
+				@Override
+				public JsonValue deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+					Object value = p.readValueAs(Object.class);
+					return JsonObject.of(value);
+				}
+			});
+		}
+		
+		/**
+		 * 
+		 * @param sdate
+		 * @return
+		 * @throws ParseException
+		 */
+		static Date parseDate(String sdate) throws ParseException {
+			if (sdate.endsWith("Z") && sdate.length() >= 10) {
+				if (sdate.charAt(sdate.length() - 5) == '.') {
+					return DateFormats.getUTC(DateFormats.ISO8601_S3).parse(sdate);
+				}
+				return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
+			}
+			return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
+		}
 	}
 }
