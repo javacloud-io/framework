@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 
@@ -32,9 +31,7 @@ import com.google.protobuf.Message;
 import com.google.protobuf.MessageOrBuilder;
 
 import javacloud.framework.gson.internal.JsonExternalizer;
-import javacloud.framework.json.JsonValue;
-import javacloud.framework.json.internal.JsonObject;
-import javacloud.framework.util.DateFormats;
+import javacloud.framework.json.impl.JacksonSerde;
 import javacloud.framework.util.Objects;
 
 @Singleton
@@ -52,7 +49,6 @@ public class GsonMapper extends JsonExternalizer {
 	
 	protected void configure(GsonBuilder builder) {
 		builder.registerTypeAdapter(Date.class, new UTCDateAdapter());
-		builder.registerTypeHierarchyAdapter(JsonValue.class, new JsonValueAdapter());
 		
 		// dynamic adapters
 		builder.registerTypeAdapterFactory(new TypeAdapterFactory() {
@@ -87,21 +83,6 @@ public class GsonMapper extends JsonExternalizer {
 		return Objects.cast(gson.fromJson(new InputStreamReader(src), type));
 	}
 	
-	// GSON will cache the adapter
-	class JsonValueAdapter implements JsonSerializer<JsonValue>, JsonDeserializer<JsonValue> {
-		@Override
-		public JsonValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-				throws JsonParseException {
-			return JsonObject.of(gson.fromJson(json, Object.class));
-		}
-
-		@Override
-		public JsonElement serialize(JsonValue src, Type typeOfSrc, JsonSerializationContext context) {
-			Object value = src.value();
-			return gson.toJsonTree(value);
-		}
-	}
-	
 	// FIXME: slow on READ
 	class ProtoAdapter extends TypeAdapter<MessageOrBuilder> {
 		final Class<?> type;
@@ -123,22 +104,16 @@ public class GsonMapper extends JsonExternalizer {
 	
 	// UTC
 	static class UTCDateAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
-		private final DateFormat dateFormat = DateFormats.getUTC(DateFormats.ISO8601);
-
 		@Override
 		public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
-			synchronized (dateFormat) {
-				return new JsonPrimitive(dateFormat.format(src));
-			}
+			return new JsonPrimitive(JacksonSerde.formatDate(src));
 		}
 		
 		@Override
 		public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 				throws JsonParseException {
 			try {
-				synchronized (dateFormat) {
-					return dateFormat.parse(json.getAsString());
-				}
+				return JacksonSerde.parseDate(json.getAsString());
 			} catch (ParseException ex) {
 				throw new JsonParseException(ex);
 			}

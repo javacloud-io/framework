@@ -14,7 +14,6 @@ import io.grpc.examples.helloworld.HelloRequest;
 import javacloud.framework.cdi.internal.IntegrationTest;
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.json.JsonConverter;
-import javacloud.framework.json.JsonValue;
 import javacloud.framework.util.Objects;
 
 public class GsonMapperIT extends IntegrationTest {
@@ -40,13 +39,6 @@ public class GsonMapperIT extends IntegrationTest {
 	}
 	
 	@Test
-	public void testJson() throws IOException {
-		JsonConverter converter = new JsonConverter(externalizer);
-		JsonValue jvalue = converter.toObject("{\"a\":123}", JsonValue.class);
-		Assert.assertEquals(JsonValue.Type.OBJECT, jvalue.type());
-	}
-	
-	@Test
 	public void testTime() throws IOException {
 		JsonConverter converter = new JsonConverter(externalizer);
 		Date now = new Date();
@@ -68,5 +60,13 @@ public class GsonMapperIT extends IntegrationTest {
 		byte[] b = converter.toBytes(HelloRequest.newBuilder().setName("xxxx"));
 		HelloRequest request = converter.toObject(b, HelloRequest.class);
 		Assert.assertEquals("xxxx", request.getName());
+	}
+	
+	@Test
+	public void testDate() throws IOException {
+		JsonConverter converter = new JsonConverter(externalizer);
+		converter.toObject("\"2022-10-16T06:56:50.515Z\"", Date.class);
+		converter.toObject("\"2022-10-16T06:56:50Z\"", Date.class);
+		converter.toObject("\"2022-10-16 06:56:50\"", Date.class);
 	}
 }

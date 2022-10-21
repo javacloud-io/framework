@@ -45,12 +45,6 @@ public class JacksonMapperIT extends IntegrationTest {
 	}
 	
 	@Test
-	public void testJson() throws IOException {
-		JsonValue jvalue = converter.toObject("{\"a\":123}", JsonValue.class);
-		Assert.assertEquals(JsonValue.Type.OBJECT, jvalue.type());
-	}
-	
-	@Test
 	public void testDate() throws IOException {
 		converter.toObject("\"2022-10-16T06:56:50.515Z\"", Date.class);
 		converter.toObject("\"2022-10-16T06:56:50Z\"", Date.class);

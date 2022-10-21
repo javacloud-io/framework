@@ -1,0 +1,11 @@
+{
+    "id": "abc{/app/id}",
+    "nullable": "{/app/zzz}",
+    "ages": [
+        "{/age}",
+        "{$.age}",
+        "{/age2}"
+    ],
+    "subs": "{$.subs[0:]}",
+    "constant": 60
+}
