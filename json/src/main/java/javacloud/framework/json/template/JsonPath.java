@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 /**
  * Simple implements JsonPath specification : https://goessner.net/articles/JsonPath
  * 
- * -DOT access: $.books
- * -INDEX access: $.books[0]
- * -RANGE access: $.books[0:5]
+ * - DOT access: $.books
+ * - INDEX access: $.books[0]
+ * - RANGE access: $.books[0:5]
  *
  */
 public class JsonPath implements JsonExpr {
@@ -19,7 +19,7 @@ public class JsonPath implements JsonExpr {
 	 * @param path
 	 */
 	public JsonPath(String path) {
-		String[] tokens = path.split("\\.");	//segments[0] = $
+		String[] tokens = path.split("\\.");	// segments[0] = $
 		this.segments = new Segment[tokens.length];
 		for (int i = 0; i < tokens.length; i ++) {
 			this.segments[i] = compileExpr(tokens[i]);
@@ -27,12 +27,12 @@ public class JsonPath implements JsonExpr {
 	}
 	
 	@Override
-	public JsonNode apply(JsonNode t) {
+	public JsonNode apply(JsonNode input) {
 		if (segments.length <= 1) {
-			return t;
+			return input;
 		}
-		
-		JsonNode out = t;
+		// descending from ROOT
+		JsonNode out = input;
 		for (int i = 1; i < segments.length; i ++) {
 			out = resolve(out, segments[i]);
 			if (out == null) {
@@ -42,16 +42,38 @@ public class JsonPath implements JsonExpr {
 		return (out == null? JsonNodeFactory.instance.missingNode() : out);
 	}
 	
+	// $.[index] | $.name[index] | $.name[index:].property
 	protected JsonNode resolve(JsonNode node, Segment segment) {
-		JsonNode v = node.get(segment.name);
-		if (segment.index == null) {
-			return v;
-		} else if (segment.end == null) {
-			return segment.indexAt(v);
+		// $.name[index:].property
+		if (node.isArray()) {
+			if (!segment.isEmpty()) {
+				ArrayNode subs = JsonNodeFactory.instance.arrayNode();
+				node.forEach(n -> {
+					JsonNode o = resolve(n, segment);
+					if (!isNullOrMissing(node)) {
+						subs.add(o);
+					}
+				});
+				return subs;
+			}
+			// $.[index]
+			return resolveSub(node, segment);
+		} else if (node.isObject()) {
+			// object.name[index] | object.[index]
+			JsonNode v = segment.isEmpty() ? node : node.get(segment.name);
+			return resolveSub(v, segment);
 		}
-		return segment.subList(v);
+		return null;
 	}
 	
+	protected JsonNode resolveSub(JsonNode node, Segment segment) {
+		if (node == null || segment.index == null) {
+			return node;
+		} else if (segment.end == null) {
+			return segment.indexAt(node);
+		}
+		return segment.subList(node);
+	}
 	
 	protected Segment compileExpr(String segment) {
 		int s = segment.indexOf('[');
@@ -68,10 +90,9 @@ public class JsonPath implements JsonExpr {
 			int d = index.indexOf(':');
 			if (d == 0 && index.length() <= 1) {
 				return new Segment(name, null, null);
-			}
-			// single index
-			if (d < 0) {
-				return new Segment(name, Integer.valueOf(index), null);
+			} else if (d < 0) {
+				// same as [:] if missing index
+				return new Segment(name, index.isEmpty()? null : Integer.valueOf(index), null);
 			} else if (d == 0) {	// range index
 				// sub[:e]
 				return new Segment(name, 0, Integer.valueOf(index.substring(1).trim()));
@@ -86,6 +107,15 @@ public class JsonPath implements JsonExpr {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param node
+	 * @return true if not valid
+	 */
+	public static final boolean isNullOrMissing(JsonNode node) {
+		return node == null || node.isMissingNode() || node.isNull();
+	}
+	
 	// object segment + range index
 	static class Segment {
 		final String name;
@@ -95,6 +125,10 @@ public class JsonPath implements JsonExpr {
 			this.name = name;
 			this.index = index;
 			this.end = end;
+		}
+		
+		boolean isEmpty() {
+			return name.isEmpty();
 		}
 		
 		JsonNode indexAt(JsonNode node) {

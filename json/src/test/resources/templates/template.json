@@ -1,0 +1,24 @@
+{
+    "id": "abc{/app/id}-{/age}",
+    "nullable": "{/app/zzz}",
+    "displayName": "{/app/name}",
+    "ages": [
+        "{/age}",
+        "{$.age}",
+        "{/age2}"
+    ],
+    "subs": "{$.subs[1:]}",
+    "constant": 60,
+    "zlist": {
+        "@": "{/list}",
+        "aa": "{/a}",
+        "bb": "{/b}"
+    },
+    "vlist": "{$.list[:].a}",
+    "vobject": {
+        "a": "{/list/0/a}",
+        "b": "{/list/1/b}",
+        "c": "{$.subs[0]}",
+        "age": "{$.age}"
+    }
+}

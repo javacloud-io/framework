@@ -1,5 +1,7 @@
 package javacloud.framework.json.template;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -16,13 +18,20 @@ public class JsonTemplateIT extends IntegrationTest {
 	ObjectMapper mapper;
 	
 	@Test
-	public void testNullable() throws Exception {
-		JsonNode template = mapper.readTree(ResourceLoader.getClassLoader().getResourceAsStream("template.json"));
-		JsonNode input = mapper.readTree(ResourceLoader.getClassLoader().getResourceAsStream("input.json"));
+	public void testResolve() throws Exception {
+		JsonNode template = jsonNode("template");
+		JsonNode input = jsonNode("input");
 		JsonNode output = new JsonTemplate(template).apply(input);
-		
 		System.out.println(mapper.writeValueAsString(output));
-		Assert.assertEquals("abcu123", output.at("/id").asText());
-		Assert.assertTrue(output.at("/nullable").isMissingNode());
+		
+		Assert.assertEquals("abcu123-60", output.at("/id").asText());
+		Assert.assertTrue(JsonPath.isNullOrMissing(output.at("/nullable")));
+		Assert.assertTrue(output.at("/zlist").isArray());
+		Assert.assertTrue(output.at("/vlist").isArray());
+		Assert.assertTrue(output.at("/vobject").isObject());
+	}
+	
+	JsonNode jsonNode(String name) throws IOException {
+		return mapper.readTree(ResourceLoader.getClassLoader().getResourceAsStream("templates/" + name + ".json"));
 	}
 }

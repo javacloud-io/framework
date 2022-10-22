@@ -14,7 +14,7 @@ public final class DateFormats {
 	//UTC ISO8601?
 	public static final String ISO8601    = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 	public static final String ISO8601_S3 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
-	public static final String LOCAL	  = "yyyy-MM-dd HH:mm:ss"; 
+	public static final String DEFAULT	  = "yyyy-MM-dd HH:mm:ss"; 
 	private DateFormats() {
 	}
 	
@@ -24,6 +24,14 @@ public final class DateFormats {
 	 */
 	public static DateFormat getUTC() {
 		return getUTC(ISO8601);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static DateFormat getDefault() {
+		return get(DEFAULT, TimeZone.getDefault());
 	}
 	
 	/**

@@ -19,7 +19,7 @@ public interface JsonExpr extends Function<JsonNode, JsonNode> {
 		}
 		
 		@Override
-		public JsonNode apply(JsonNode t) {
+		public JsonNode apply(JsonNode input) {
 			return value;
 		}
 	}
@@ -36,8 +36,8 @@ public interface JsonExpr extends Function<JsonNode, JsonNode> {
 		}
 		
 		@Override
-		public JsonNode apply(JsonNode t) {
-			return t.at(ptr);
+		public JsonNode apply(JsonNode input) {
+			return input.at(ptr);
 		}
 	}
 }

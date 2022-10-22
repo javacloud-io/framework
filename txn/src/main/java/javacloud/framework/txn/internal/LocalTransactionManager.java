@@ -24,7 +24,7 @@ public abstract class LocalTransactionManager implements TransactionManager, Ses
 	public void beginSession() {
 		int size = unitOfWork.size();
 		if (size > 0) {
-			logger.log(Level.WARNING, "Session starting but still have {0} active transaction", size);
+			logger.log(Level.WARNING, "Session started but still have {0} active transaction", size);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public abstract class LocalTransactionManager implements TransactionManager, Ses
 	public void endSession() {
 		int size = unitOfWork.size();
 		if (size > 0) {
-			logger.log(Level.WARNING, "Session ending but still have {0} active transaction", size);
+			logger.log(Level.WARNING, "Session ended but still have {0} active transaction", size);
 			for (Transaction tx: unitOfWork) {
 				Objects.closeQuietly(() -> tx.rollback());
 			}

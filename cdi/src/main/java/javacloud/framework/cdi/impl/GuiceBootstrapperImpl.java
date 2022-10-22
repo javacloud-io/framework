@@ -48,7 +48,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 			
 			// START & ADD TO RUNING LIST
 			for (ResourceLoader.Binding binding: bindings) {
-				logger.fine("Starting service: " + binding.typeClass());
+				logger.fine("Start service: " + binding.typeClass());
 				
 				Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
 				runMethod(instance, "start");
@@ -79,7 +79,7 @@ public class GuiceBootstrapperImpl extends GuiceBootstrapper {
 			for (int i = runlist.size() - 1; i >= 0; i --) {
 				try {
 					ResourceLoader.Binding binding = runlist.get(i);
-					logger.fine("Stopping service: " + binding.typeClass());
+					logger.fine("Stop service: " + binding.typeClass());
 					
 					Object instance = ServiceRegistry.get().getInstance(binding.typeClass(),  binding.name());
 					runMethod(instance, "stop");

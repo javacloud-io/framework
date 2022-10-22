@@ -22,7 +22,7 @@ public final class StaticConfigurator {
 	 * FOR RUNLIST LCM
 	 */
 	public void start() {
-		log("JUL configured using: {}", loggingConfig);
+		log("Configure JUL logger: {}", loggingConfig);
 	}
 	
 	/**

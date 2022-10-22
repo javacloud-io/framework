@@ -24,7 +24,7 @@ public class MainApplication implements Runnable {
 	@Override
 	public void run() {
 		// ADD shutdown hook
-		logger.fine("Registering shutdown hook...");
+		logger.fine("Register shutdown hook...");
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -35,14 +35,14 @@ public class MainApplication implements Runnable {
 		// start/shutdown
 		terminated.set(false);
 		try {
-			logger.fine("Starting application...");
+			logger.fine("Start application...");
 			ServiceBootstrapper.get().startup(awaitTermination);
 			
 			// wait until finish then shutdown
 			terminateQuietly();
-			logger.fine("Terminated application!!!");
+			logger.fine("Application terminated!!!");
 		} catch (Exception ex) {
-			logger.log(Level.SEVERE, "Terminating application due to uncaught exception...", ex);
+			logger.log(Level.SEVERE, "Terminate application due to uncaught exception...", ex);
 			System.exit(1);
 		}
 	}

@@ -37,7 +37,9 @@ public class JsonTemplate implements JsonExpr {
 	 * @return
 	 */
 	protected JsonNode compile(JsonNode node) {
-		if (node.isTextual() && !node.isNull()) {
+		if (JsonPath.isNullOrMissing(node)) {
+			return node;
+		} else if (node.isTextual()) {
 			List<JsonExpr> segments = compileText(node.textValue());
 			if (!segments.isEmpty()) {
 				cache.put(node, segments.toArray(new JsonExpr[segments.size()]));
@@ -55,27 +57,51 @@ public class JsonTemplate implements JsonExpr {
 	 * @return
 	 */
 	protected JsonNode resolve(JsonNode node, JsonNode input) {
-		if (node.isObject()) {
-			ObjectNode out = JsonNodeFactory.instance.objectNode();
-			node.fields().forEachRemaining(e -> {
-				JsonNode o = resolve(e.getValue(), input);
-				if (o != null && !o.isMissingNode()) {
-					out.set(e.getKey(), o);
-				}
-			});
-			return out;
-		} else if (node.isArray()) {
+		if (node.isArray()) {
 			ArrayNode out = JsonNodeFactory.instance.arrayNode();
 			node.forEach(n -> {
 				JsonNode o = resolve(n, input);
-				if (o != null && !o.isMissingNode()) {
+				if (!JsonPath.isNullOrMissing(o)) {
 					out.add(o);
 				}
 			});
 			return out;
+		} else if (node.isObject()) {
+			// check for context switching scope
+			if (node.hasNonNull("@")) {
+				ArrayNode out = JsonNodeFactory.instance.arrayNode();
+				JsonNode context = resolvePrimitive(node.get("@"), input);
+				context.forEach(n -> {
+					// using child node
+					JsonNode o = resolveNode(node, n);
+					if (!JsonPath.isNullOrMissing(o)) {
+						out.add(o);
+					}
+				});
+				return out;
+			}
+			return resolveNode(node, input);
 		}
-		
-		// other types
+		return resolvePrimitive(node, input);
+	}
+	
+	// object node excluding scope context
+	protected JsonNode resolveNode(JsonNode node, JsonNode input) {
+		ObjectNode out = JsonNodeFactory.instance.objectNode();
+		node.fields().forEachRemaining(e -> {
+			String key = e.getKey();
+			if (!"@".equals(key)) {
+				JsonNode o = resolve(e.getValue(), input);
+				if (o != null && !o.isMissingNode()) {
+					out.set(key, o);
+				}
+			}
+		});
+		return out;
+	}
+	
+	// primitive node
+	protected JsonNode resolvePrimitive(JsonNode node, JsonNode input) {
 		JsonExpr[] segments = cache.get(node);
 		if (segments == null || segments.length == 0) {
 			return node;
@@ -87,44 +113,50 @@ public class JsonTemplate implements JsonExpr {
 		// text node
 		StringBuilder sb = new StringBuilder();
 		for (JsonExpr segment: segments) {
-			String text = segment.apply(input).textValue();
-			if (text != null) {
-				sb.append(text);
+			JsonNode o = segment.apply(input);
+			if (!JsonPath.isNullOrMissing(o) && o.isValueNode()) {
+				sb.append(o.asText());
 			}
 		}
 		return JsonNodeFactory.instance.textNode(sb.toString());
 	}
 	
+	/**
+	 * BREAK UP IN [....i j{ /a/b/c}k  ] to evaluate the expression
+	 * BREAK UP IN [....i j{ $.a.b.c}k ] to evaluate the expression
+	 * 
+	 * @param text
+	 * @return
+	 */
 	protected List<JsonExpr> compileText(String text) {
 		List<JsonExpr> segments = new ArrayList<>();
 		int len = text.length();
 		int i = 0;
 		while (i < len) {
-			int s = -1;
 			int j = i;
 			for(; j < len; j ++) {
 				char c = text.charAt(j);
 				if(c == '{') {
-					s = j;
-				} else if(c == '/' || c == '$') {
 					break;
 				}
 			}
-			int k = j;
+			int k = j + 1;
 			for (; k < len; k ++) {
 				if(text.charAt(k) == '}') {
 					break;
 				}
 			}
-			//NOT FOUND {/} => LEAVE AS IS
-			if (s < 0 || j >= len || k >= len) {
+			
+			// NOT FOUND {/} => LEAVE AS IS
+			if (j >= len || k >= len) {
 				segments.add(new JsonExpr.Constant(text.substring(i)));
 				break;
 			} else {
-				String expr = text.substring(j, k).trim();
-				if (s > i) {	//padding
-					segments.add(new JsonExpr.Constant(text.substring(i, s)));
+				// has padding
+				if (j > i) {
+					segments.add(new JsonExpr.Constant(text.substring(i, j)));
 				}
+				String expr = text.substring(j + 1, k).trim();
 				segments.add(compileExpr(expr));
 				
 				//NEXT
@@ -135,8 +167,6 @@ public class JsonTemplate implements JsonExpr {
 	}
 	
 	/**
-	 * BREAK UP IN [....i s{ j/a/b/c}k  ] to evaluate the expression
-	 * BREAK UP IN [....i s{ j$.a.b.c}k ] to evaluate the expression
 	 * 
 	 * @param expr
 	 * @return

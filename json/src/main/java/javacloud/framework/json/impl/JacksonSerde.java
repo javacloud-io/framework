@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.TimeZone;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -47,17 +46,17 @@ public class JacksonSerde extends SimpleModule {
 	public static final Date parseDate(String sdate) throws ParseException {
 		if (sdate.endsWith("Z") && sdate.length() >= 10) {
 			if (sdate.charAt(sdate.length() - 5) == '.') {
-				synchronized(DF_ISO8601_S3) {
+				synchronized (DF_ISO8601_S3) {
 					return DF_ISO8601_S3.parse(sdate);
 				}
 			}
-			return DateFormats.getUTC(DateFormats.ISO8601).parse(sdate);
+			return DateFormats.getUTC().parse(sdate);
 		}
-		return DateFormats.get(DateFormats.LOCAL, TimeZone.getDefault()).parse(sdate);
+		return DateFormats.getDefault().parse(sdate);
 	}
 	
 	public static final String formatDate(Date date) {
-		synchronized(DF_ISO8601_S3) {
+		synchronized (DF_ISO8601_S3) {
 			return DF_ISO8601_S3.format(date);
 		}
 	}
