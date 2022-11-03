@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 /**
  * loop through input using expression and child template
  */
-public class LoopExpr implements JsonExpr {
+public class JsonLoop implements JsonExpr {
 	private final JsonExpr expr;
 	private final JsonTemplate template;
 	
-	public LoopExpr(JsonExpr expr, JsonTemplate template) {
+	public JsonLoop(JsonExpr expr, JsonTemplate template) {
 		this.expr = expr;
 		this.template = template;
 	}
