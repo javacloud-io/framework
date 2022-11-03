@@ -49,7 +49,7 @@ public class JsonTemplate implements JsonExpr {
 			List<JsonExpr> segments = compileText(((ObjectNode)node).remove("@").textValue());
 			JsonTemplate texpr = new JsonTemplate(node);
 			cache.put(node, segments.stream()
-									.map(e -> new LoopExpr(e, texpr))
+									.map(e -> new JsonLoop(e, texpr))
 									.toArray(JsonExpr[]::new));
 		} else {
 			node.forEach(n -> compile(n));
@@ -69,7 +69,12 @@ public class JsonTemplate implements JsonExpr {
 			node.forEach(n -> {
 				JsonNode o = resolve(n, input);
 				if (!JsonPath.isNullOrMissing(o)) {
-					out.add(o);
+					// flat out the array
+					if (o.isArray() && !out.isEmpty() && !out.get(0).isArray()) {
+						o.forEach(e -> out.add(e));
+					} else {
+						out.add(o);
+					}
 				}
 			});
 			return out;
