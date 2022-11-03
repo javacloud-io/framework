@@ -29,6 +29,7 @@ public class JsonTemplateIT extends IntegrationTest {
 		Assert.assertTrue(output.at("/zlist").isArray());
 		Assert.assertTrue(output.at("/vlist").isArray());
 		Assert.assertTrue(output.at("/vobject").isObject());
+		Assert.assertTrue(output.at("/zapp").isObject());
 	}
 	
 	JsonNode jsonNode(String name) throws IOException {

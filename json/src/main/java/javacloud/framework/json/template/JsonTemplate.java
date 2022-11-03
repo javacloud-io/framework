@@ -44,6 +44,13 @@ public class JsonTemplate implements JsonExpr {
 			if (!segments.isEmpty()) {
 				cache.put(node, segments.toArray(new JsonExpr[segments.size()]));
 			}
+		} else if (node.isObject() && node.hasNonNull("@")) {
+			// loop context with @ element
+			List<JsonExpr> segments = compileText(((ObjectNode)node).remove("@").textValue());
+			JsonTemplate texpr = new JsonTemplate(node);
+			cache.put(node, segments.stream()
+									.map(e -> new LoopExpr(e, texpr))
+									.toArray(JsonExpr[]::new));
 		} else {
 			node.forEach(n -> compile(n));
 		}
@@ -67,37 +74,31 @@ public class JsonTemplate implements JsonExpr {
 			});
 			return out;
 		} else if (node.isObject()) {
-			// check for context switching scope
-			if (node.hasNonNull("@")) {
-				ArrayNode out = JsonNodeFactory.instance.arrayNode();
-				JsonNode context = resolvePrimitive(node.get("@"), input);
-				context.forEach(n -> {
-					// using child node
-					JsonNode o = resolveNode(node, n);
-					if (!JsonPath.isNullOrMissing(o)) {
-						out.add(o);
-					}
-				});
-				return out;
-			}
 			return resolveNode(node, input);
 		}
 		return resolvePrimitive(node, input);
 	}
 	
-	// object node excluding scope context
+	/**
+	 * 
+	 * @param node
+	 * @param input
+	 * @return
+	 */
 	protected JsonNode resolveNode(JsonNode node, JsonNode input) {
-		ObjectNode out = JsonNodeFactory.instance.objectNode();
-		node.fields().forEachRemaining(e -> {
-			String key = e.getKey();
-			if (!"@".equals(key)) {
+		JsonExpr[] segments = cache.get(node);
+		if (segments == null || segments.length == 0) {
+			ObjectNode out = JsonNodeFactory.instance.objectNode();
+			node.fields().forEachRemaining(e -> {
 				JsonNode o = resolve(e.getValue(), input);
 				if (o != null && !o.isMissingNode()) {
-					out.set(key, o);
+					out.set(e.getKey(), o);
 				}
-			}
-		});
-		return out;
+			});
+			return out;
+		}
+		// special loop
+		return segments[0].apply(input);
 	}
 	
 	// primitive node
