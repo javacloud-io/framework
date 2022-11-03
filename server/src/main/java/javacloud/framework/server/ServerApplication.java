@@ -52,7 +52,7 @@ public abstract class ServerApplication extends ResourceConfig {
 		
 		//AUTO LOAD THE COMPONENTS
 		List<?> components = serverComponents();
-		logger.log(Level.FINE, "Registering jersey server components: {0}", components);
+		logger.log(Level.FINE, "Register jersey server components: {0}", components);
 		
 		for(Object c: components) {
 			if(c instanceof Class) {

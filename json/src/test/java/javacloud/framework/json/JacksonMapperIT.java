@@ -47,6 +47,8 @@ public class JacksonMapperIT extends IntegrationTest {
 	@Test
 	public void testDate() throws IOException {
 		converter.toObject("\"2022-10-16T06:56:50.515Z\"", Date.class);
+		converter.toObject("\"2022-10-16T06:56:50.5150000Z\"", Date.class);
+		converter.toObject("\"2022-10-16T06:56:50.50Z\"", Date.class);
 		converter.toObject("\"2022-10-16T06:56:50Z\"", Date.class);
 		converter.toObject("\"2022-10-16 06:56:50\"", Date.class);
 	}

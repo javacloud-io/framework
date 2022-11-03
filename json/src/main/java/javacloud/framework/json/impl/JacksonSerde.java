@@ -44,8 +44,13 @@ public class JacksonSerde extends SimpleModule {
 	}
 	
 	public static final Date parseDate(String sdate) throws ParseException {
-		if (sdate.endsWith("Z") && sdate.length() >= 10) {
-			if (sdate.charAt(sdate.length() - 5) == '.') {
+		if (sdate.endsWith("Z") && sdate.length() >= 20) {
+			int idot = sdate.lastIndexOf('.');	// .SSSZ, .SSSSSSSSZ
+			if (idot > 0) {
+				// truncate to .SSSZ
+				if (sdate.length() > idot + 5) {
+					sdate = sdate.substring(0, idot + 4) + 'Z';
+				}
 				synchronized (DF_ISO8601_S3) {
 					return DF_ISO8601_S3.parse(sdate);
 				}

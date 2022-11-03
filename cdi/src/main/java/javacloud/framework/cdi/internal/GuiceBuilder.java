@@ -90,7 +90,7 @@ public abstract class GuiceBuilder {
 				} else {
 					//LOAD ALL MODULES/SERVICES
 					if(Module.class.isAssignableFrom(typeClass)) {
-						logger.fine("Registering module: " + typeClass);
+						logger.fine("Register module: " + typeClass);
 						zmodules.add((Module)typeClass.getConstructor().newInstance());
 					} else {
 						zservices.add(binding);
