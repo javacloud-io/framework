@@ -50,7 +50,7 @@ public class JsonPath implements JsonExpr {
 				ArrayNode subs = JsonNodeFactory.instance.arrayNode();
 				node.forEach(n -> {
 					JsonNode o = resolve(n, segment);
-					if (!isNullOrMissing(node)) {
+					if (!JsonExpr.Constant.isNullOrMissing(node)) {
 						subs.add(o);
 					}
 				});
@@ -105,15 +105,6 @@ public class JsonPath implements JsonExpr {
 										 Integer.valueOf(index.substring(d + 1).trim()));
 			}
 		}
-	}
-	
-	/**
-	 * 
-	 * @param node
-	 * @return true if not valid
-	 */
-	public static final boolean isNullOrMissing(JsonNode node) {
-		return node == null || node.isMissingNode() || node.isNull();
 	}
 	
 	// object segment + range index

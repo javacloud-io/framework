@@ -5,13 +5,14 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 /**
- * loop through input using expression and child template
+ * 1. branch or loop through input using expression and template
+ * 2. resolve only if valid context
  */
-public class JsonLoop implements JsonExpr {
+public class JsonBranch implements JsonExpr {
 	private final JsonExpr expr;
 	private final JsonTemplate template;
 	
-	public JsonLoop(JsonExpr expr, JsonTemplate template) {
+	public JsonBranch(JsonExpr expr, JsonTemplate template) {
 		this.expr = expr;
 		this.template = template;
 	}
@@ -19,12 +20,14 @@ public class JsonLoop implements JsonExpr {
 	@Override
 	public JsonNode apply(JsonNode input) {
 		JsonNode context = expr.apply(input);
-		if (context.isArray()) {
+		if (JsonExpr.Constant.isNullOrMissing(context)) {
+			return context;
+		} else if (context.isArray()) {
 			ArrayNode out = JsonNodeFactory.instance.arrayNode();
 			context.forEach(n -> {
 				// using child node
 				JsonNode o = template.apply(n);
-				if (!JsonPath.isNullOrMissing(o)) {
+				if (!JsonExpr.Constant.isNullOrMissing(o)) {
 					out.add(o);
 				}
 			});

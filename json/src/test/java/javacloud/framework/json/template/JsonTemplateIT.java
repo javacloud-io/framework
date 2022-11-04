@@ -25,7 +25,7 @@ public class JsonTemplateIT extends IntegrationTest {
 		System.out.println(mapper.writeValueAsString(output));
 		
 		Assert.assertEquals("abcu123-60", output.at("/id").asText());
-		Assert.assertTrue(JsonPath.isNullOrMissing(output.at("/nullable")));
+		Assert.assertTrue(JsonExpr.Constant.isNullOrMissing(output.at("/nullable")));
 		Assert.assertTrue(output.at("/zlist").isArray());
 		Assert.assertTrue(output.at("/vlist").isArray());
 		Assert.assertTrue(output.at("/vobject").isObject());

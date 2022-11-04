@@ -22,6 +22,10 @@ public interface JsonExpr extends Function<JsonNode, JsonNode> {
 		public JsonNode apply(JsonNode input) {
 			return value;
 		}
+		
+		public static final boolean isNullOrMissing(JsonNode node) {
+			return node == null || node.isMissingNode() || node.isNull();
+		}
 	}
 	
 	class Pointer implements JsonExpr {
