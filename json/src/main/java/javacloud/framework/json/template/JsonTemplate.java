@@ -37,7 +37,7 @@ public class JsonTemplate implements JsonExpr {
 	 * @return
 	 */
 	protected JsonNode compile(JsonNode node) {
-		if (JsonPath.isNullOrMissing(node)) {
+		if (JsonExpr.Constant.isNullOrMissing(node)) {
 			return node;
 		} else if (node.isTextual()) {
 			List<JsonExpr> segments = compileText(node.textValue());
@@ -49,7 +49,7 @@ public class JsonTemplate implements JsonExpr {
 			List<JsonExpr> segments = compileText(((ObjectNode)node).remove("@").textValue());
 			JsonTemplate texpr = new JsonTemplate(node);
 			cache.put(node, segments.stream()
-									.map(e -> new JsonLoop(e, texpr))
+									.map(e -> new JsonBranch(e, texpr))
 									.toArray(JsonExpr[]::new));
 		} else {
 			node.forEach(n -> compile(n));
@@ -68,7 +68,7 @@ public class JsonTemplate implements JsonExpr {
 			ArrayNode out = JsonNodeFactory.instance.arrayNode();
 			node.forEach(n -> {
 				JsonNode o = resolve(n, input);
-				if (!JsonPath.isNullOrMissing(o)) {
+				if (!JsonExpr.Constant.isNullOrMissing(o)) {
 					// flat out the array
 					if (o.isArray() && !out.isEmpty() && !out.get(0).isArray()) {
 						o.forEach(e -> out.add(e));
@@ -120,7 +120,7 @@ public class JsonTemplate implements JsonExpr {
 		StringBuilder sb = new StringBuilder();
 		for (JsonExpr segment: segments) {
 			JsonNode o = segment.apply(input);
-			if (!JsonPath.isNullOrMissing(o) && o.isValueNode()) {
+			if (!JsonExpr.Constant.isNullOrMissing(o) && o.isValueNode()) {
 				sb.append(o.asText());
 			}
 		}
