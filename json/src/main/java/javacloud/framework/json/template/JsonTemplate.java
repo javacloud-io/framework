@@ -120,8 +120,13 @@ public class JsonTemplate implements JsonExpr {
 		StringBuilder sb = new StringBuilder();
 		for (JsonExpr segment: segments) {
 			JsonNode o = segment.apply(input);
-			if (!JsonExpr.Constant.isNullOrMissing(o) && o.isValueNode()) {
-				sb.append(o.asText());
+			if (!JsonExpr.Constant.isNullOrMissing(o)) {
+				if (o.isValueNode()) {
+					sb.append(o.asText());
+				} else {
+					// JSON -> string
+					sb.append(o.toString());
+				}
 			}
 		}
 		return JsonNodeFactory.instance.textNode(sb.toString());
