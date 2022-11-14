@@ -1,7 +1,6 @@
 package javacloud.framework.netty.impl;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,7 +64,7 @@ public class NettyServerLifecycleImpl extends ServerLifecycle {
 	public void start() throws Exception {
 		ServerBootstrap server = get();
 		try {
-			SocketAddress socketAddress = new InetSocketAddress(
+			InetSocketAddress socketAddress = new InetSocketAddress(
 					settings.serverAddress(),
 					settings.serverPort());
 			

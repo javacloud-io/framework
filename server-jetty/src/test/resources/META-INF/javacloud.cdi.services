@@ -1,0 +1,8 @@
+######### List of modules or services binding ########
+
+framework.config.services
+framework.server.services
+
+# bindings
+javacloud.framework.server.ServerApplication=javacloud.framework.jetty.impl.HelloApplication
+javacloud.framework.jetty.ServerLifecycle=javacloud.framework.jetty.impl.JettyServerLifecycleImpl

@@ -1,7 +1,6 @@
 package javacloud.framework.grpc.impl;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +32,7 @@ public class NettyServerLifecycleImpl extends ServerLifecycle {
 	
 	@Override
 	protected Server newInstance() {
-		SocketAddress socketAddress = new InetSocketAddress(
+		InetSocketAddress socketAddress = new InetSocketAddress(
 				settings.serverAddress(),
 				settings.serverPort());
 		

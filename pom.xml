@@ -4,7 +4,7 @@
 
   <groupId>io.javacloud.framework</groupId>
   <artifactId>framework</artifactId>
-  <version>0.7.2</version>
+  <version>0.7.3</version>
   <packaging>pom</packaging>
   
   <name>JavaCloud project</name>
@@ -60,6 +60,7 @@
     <module>gson</module>
     <module>server-grpc</module>
     <module>server-netty</module>
+    <module>server-jetty</module>
     <module>server-test</module>
     <module>server</module>
 
@@ -518,6 +519,17 @@
 		</dependency>
 		
 		<!-- Jersey rest-->
+		<dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-jetty-http</artifactId>
+            <version>${jersey.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-util</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
     		<groupId>org.glassfish.jersey.containers</groupId>
     		<artifactId>jersey-container-servlet</artifactId>
