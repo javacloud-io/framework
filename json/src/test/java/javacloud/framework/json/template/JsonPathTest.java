@@ -53,6 +53,12 @@ public class JsonPathTest extends TestCase {
 		Assert.assertEquals("2", path.apply(input).textValue());
 	}
 	
+	public void testFlatList() {
+		JsonPath path = new JsonPath("$.llist.a");
+		ObjectNode input = jsonObject();
+		Assert.assertEquals(6, path.apply(input).size());
+	}
+	
 	static JsonNode jsonArray(String...values) {
 		ArrayNode node = JsonNodeFactory.instance.arrayNode();
 		for( String v: values) {
@@ -76,6 +82,12 @@ public class JsonPathTest extends TestCase {
 		olist.add(jsonKv("a", "2"));
 		olist.add(jsonKv("a", "3"));
 		input.set("olist", olist);
+		
+		// [[]]
+		ArrayNode llist = JsonNodeFactory.instance.arrayNode();
+		llist.add(olist);
+		llist.add(olist);
+		input.set("llist", llist);
 		return input;
 	}
 }

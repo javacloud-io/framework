@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 /**
- * Simple implements JsonPath specification : https://goessner.net/articles/JsonPath
+ * Convenience implements JsonPath specification : https://goessner.net/articles/JsonPath
  * 
  * - DOT access: $.books
  * - INDEX access: $.books[0]
  * - RANGE access: $.books[0:5]
- *
+ * - AUTO flat out nested array
  */
 public class JsonPath implements JsonExpr {
 	private final Segment[] segments;
@@ -47,14 +47,19 @@ public class JsonPath implements JsonExpr {
 		// $.name[index:].property
 		if (node.isArray()) {
 			if (!segment.isEmpty()) {
-				ArrayNode subs = JsonNodeFactory.instance.arrayNode();
+				ArrayNode out = JsonNodeFactory.instance.arrayNode();
 				node.forEach(n -> {
 					JsonNode o = resolve(n, segment);
-					if (!JsonExpr.Constant.isNullOrMissing(node)) {
-						subs.add(o);
+					if (!JsonExpr.Constant.isNullOrMissing(o)) {
+						// flat out the array
+						if (o.isArray() && (out.isEmpty() || !out.get(0).isArray())) {
+							o.forEach(e -> out.add(e));
+						} else {
+							out.add(o);
+						}
 					}
 				});
-				return subs;
+				return out;
 			}
 			// $.[index]
 			return resolveSub(node, segment);
