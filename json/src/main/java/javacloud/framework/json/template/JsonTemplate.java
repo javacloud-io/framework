@@ -70,7 +70,7 @@ public class JsonTemplate implements JsonExpr {
 				JsonNode o = resolve(n, input);
 				if (!JsonExpr.Constant.isNullOrMissing(o)) {
 					// flat out the array
-					if (o.isArray() && !out.isEmpty() && !out.get(0).isArray()) {
+					if (o.isArray() && (out.isEmpty() || !out.get(0).isArray())) {
 						o.forEach(e -> out.add(e));
 					} else {
 						out.add(o);
