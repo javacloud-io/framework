@@ -1,0 +1,3 @@
+# Default framework jetty registry
+#
+javacloud.framework.jetty.ServerLifecycle=javacloud.framework.jetty.impl.JettyServerLifecycleImpl

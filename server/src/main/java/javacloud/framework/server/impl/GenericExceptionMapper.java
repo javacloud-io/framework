@@ -3,8 +3,6 @@ package javacloud.framework.server.impl;
 import javacloud.framework.i18n.MessageManager;
 import javacloud.framework.server.ServerExceptionMapper;
 
-import javax.inject.Inject;
-
 /**
  * The least caught exception handler, in case of the application doesn't have any better way to handler them.
  * 
@@ -17,7 +15,7 @@ public final class GenericExceptionMapper extends ServerExceptionMapper<Throwabl
 	 * 
 	 * @param messageFactory
 	 */
-	@Inject
+	@jakarta.inject.Inject
 	public GenericExceptionMapper(MessageManager messageFactory) {
 		this.messageFactory = messageFactory;
 	}

@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+
 /**
  * Auto discover message bundles from META-INF/javacloud.i18n.bundles from all class path
  * 
@@ -60,6 +61,7 @@ public class MessageBundlesControl extends ResourceBundle.Control {
 					bundles.add(bundle);
 				}
 			}
+			// let base throws MissingResourceException if null
 			return (bundles.isEmpty()? null : new MessageBundles(bundles));
 		}
 		return super.newBundle(baseName, locale, format, loader, reload);
@@ -84,5 +86,15 @@ public class MessageBundlesControl extends ResourceBundle.Control {
 	 */
 	public Set<String> getBundleNames() {
 		return bundleNames;
+	}
+	
+	/**
+	 * 
+	 * @param locale
+	 * @param loader
+	 * @return universal bundle
+	 */
+	public final ResourceBundle getBundle(Locale locale, ClassLoader loader) {
+		return ResourceBundle.getBundle("", locale, loader, this);
 	}
 }

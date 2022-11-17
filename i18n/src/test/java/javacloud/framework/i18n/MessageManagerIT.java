@@ -24,6 +24,12 @@ public class MessageManagerIT extends IntegrationTest {
 	}
 	
 	@Test
+	public void testMissing() {
+		String message = messageFactory.getString("i18n.test.missing");
+		Assert.assertEquals("i18n.test.missing", message);
+	}
+	
+	@Test
 	public void testBundles() {
 		localeContext.set("en-US");
 		Assert.assertEquals("en_US", localeContext.get().toString());

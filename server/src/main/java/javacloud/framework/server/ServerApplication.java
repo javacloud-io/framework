@@ -12,9 +12,9 @@ import javacloud.framework.util.Objects;
 /**
  * Basic jersey application configuration, providing basic features...
  * 
- * 1. Setup Guice integration
- * 2. Setup Jackson binder
- * 3. Default exception mapping
+ * 1. Register GuiceHK2Feature
+ * 2. Register JacksonFeature
+ * 3. Register GenericExceptionMapper
  * 
  * The default components is located under: META-INF/javacloud.server.components
  * 

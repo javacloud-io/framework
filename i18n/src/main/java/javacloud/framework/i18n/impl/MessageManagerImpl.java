@@ -2,6 +2,7 @@ package javacloud.framework.i18n.impl;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +45,7 @@ public class MessageManagerImpl implements MessageManager {
 	protected void discoverBundles() {
 		try {
 			bundlesControl.discoverBundles(ResourceLoader.getClassLoader());
-			logger.log(Level.FINE, "Discovered i18n resource bundles: {}", bundlesControl.getBundleNames());
+			logger.log(Level.FINE, "Discover i18n resource bundles: {}", bundlesControl.getBundleNames());
 		}catch(IOException ex) {
 			throw InternalException.of(ex);
 		}
@@ -55,14 +56,18 @@ public class MessageManagerImpl implements MessageManager {
 	 */
 	@Override
 	public String getString(String key, Object... args) {
-		ResourceBundle bundle = ResourceBundle.getBundle("", contextLocale.get(), ResourceLoader.getClassLoader(), bundlesControl);
-		String message = bundle.getString(key);
-		
-		//RE-FORMAT THE MESSAGE
-		if (args != null && args.length > 0) {
-			message = new MessageFormat(message).format(args);
+		try {
+			ResourceBundle bundle = bundlesControl.getBundle(contextLocale.get(), ResourceLoader.getClassLoader());
+			String message = bundle.getString(key);
+			
+			//RE-FORMAT THE MESSAGE
+			if (args != null && args.length > 0) {
+				message = new MessageFormat(message).format(args);
+			}
+			return message;
+		} catch (MissingResourceException ex) {
+			return key;
 		}
-		return message;
 	}
 	
 	/**

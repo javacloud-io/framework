@@ -34,6 +34,7 @@ public class MessageBundles extends ResourceBundle {
 				//ASSUMING NOT FOUND
 			}
 		}
+		// let base throws MissingResourceException if null
 		return null;
 	}
 	
