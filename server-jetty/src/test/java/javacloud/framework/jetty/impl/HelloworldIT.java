@@ -18,7 +18,7 @@ public class HelloworldIT extends IntegrationTest {
 	@Test
 	public void testGreetings() throws Exception {
 		Client client = ClientBuilder.newBuilder().build();
-		String greetings = client.target("http://localhost:8081/v1/greetings")
+		String greetings = client.target("http://localhost:8188/v1/greetings")
 				.request()
 				.get(String.class);
 		Assert.assertEquals("Hello world!", greetings);

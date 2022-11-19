@@ -17,4 +17,5 @@ public abstract class ServerLifecycle extends LazySupplier<Server> {
 			server.stop();
 		}
 	}
+	
 }
