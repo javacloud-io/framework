@@ -61,10 +61,10 @@ public class JsonTemplateFactory {
 		}
 	}
 	
-	public String nodeToPrettyString(JsonNode node) {
+	public String valueToPrettyString(Object value) {
 		try {
 			return objectMapper.writerWithDefaultPrettyPrinter()
-					.writeValueAsString(node);
+					.writeValueAsString(value);
 		} catch (IOException ex) {
 			throw InternalException.of(ex);
 		}
