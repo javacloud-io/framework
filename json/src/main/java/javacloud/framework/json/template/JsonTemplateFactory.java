@@ -61,6 +61,15 @@ public class JsonTemplateFactory {
 		}
 	}
 	
+	public String nodeToPrettyString(JsonNode node) {
+		try {
+			return objectMapper.writerWithDefaultPrettyPrinter()
+					.writeValueAsString(node);
+		} catch (IOException ex) {
+			throw InternalException.of(ex);
+		}
+	}
+	
 	public JsonNode getNode(String classpath) {
 		return nodes.computeIfAbsent(classpath, (key) -> {
 			try {
