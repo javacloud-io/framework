@@ -1,5 +1,8 @@
 package javacloud.framework.json.template;
 
+import java.io.InputStream;
+import java.io.Reader;
+
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -38,5 +41,10 @@ public class JsonTemplateIT extends IntegrationTest {
 		JsonNode input = factory.getNode("templates/input.json");
 		byte[] s = factory.nodeToValue(input, byte[].class);
 		input = factory.valueToNode(s);
+		Assert.assertNotNull(input);
+		Assert.assertTrue(factory.valueToNode(null).isNull());
+		Assert.assertNull(factory.nodeToValue(null, Object.class));
+		Assert.assertNotNull(factory.nodeToValue(input, Reader.class));
+		Assert.assertNotNull(factory.nodeToValue(input, InputStream.class));
 	}
 }

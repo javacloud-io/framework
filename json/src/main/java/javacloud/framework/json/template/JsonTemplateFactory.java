@@ -2,6 +2,8 @@ package javacloud.framework.json.template;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -33,12 +35,16 @@ public class JsonTemplateFactory {
 	@SuppressWarnings("unchecked")
 	public <T> T nodeToValue(JsonNode node, Class<T> type) {
 		try {
-			if (type.isAssignableFrom(String.class)) {
+			if (JsonExpr.Constant.isNullOrMissing(node)) {
+				return null;
+			} else if (type.isAssignableFrom(String.class)) {
 				return (T)objectMapper.writeValueAsString(node);
 			} else if (type.isAssignableFrom(byte[].class)) {
 				return (T)objectMapper.writeValueAsBytes(node);
 			} else if (type.isAssignableFrom(InputStream.class)) {
 				return (T)new BytesInputStream(objectMapper.writeValueAsBytes(node));
+			} else if (type.isAssignableFrom(Reader.class)) {
+				return (T)new StringReader(objectMapper.writeValueAsString(node));
 			}
 			return objectMapper.treeToValue(node, type);
 		} catch (IOException ex) {
@@ -54,6 +60,8 @@ public class JsonTemplateFactory {
 				return objectMapper.readTree((byte[])value);
 			} else if (value instanceof InputStream) {
 				return objectMapper.readTree((InputStream)value);
+			} else if (value instanceof Reader) {
+				return objectMapper.readTree((Reader)value);
 			}
 			return objectMapper.valueToTree(value);
 		} catch (IOException ex) {
