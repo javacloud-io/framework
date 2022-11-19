@@ -1,7 +1,5 @@
 package javacloud.framework.json.template;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
 
 import org.junit.Assert;
@@ -11,18 +9,19 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javacloud.framework.cdi.internal.IntegrationTest;
-import javacloud.framework.util.ResourceLoader;
 
 public class JsonTemplateIT extends IntegrationTest {
 	@Inject
 	ObjectMapper mapper;
 	
 	@Test
-	public void testResolve() throws Exception {
-		JsonNode template = jsonNode("template");
-		JsonNode input = jsonNode("input");
-		JsonNode output = new JsonTemplate(template).apply(input);
-		System.out.println(mapper.writeValueAsString(output));
+	public void testResolve() {
+		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
+		
+		JsonTemplate template = factory.getTemplate("templates/template.json");
+		JsonNode input = factory.getNode("templates/input.json");
+		JsonNode output = template.apply(input);
+		System.out.println(factory.nodeToValue(output, String.class));
 		
 		Assert.assertEquals("abcu123-60", output.at("/id").asText());
 		Assert.assertTrue(JsonExpr.Constant.isNullOrMissing(output.at("/nullable")));
@@ -33,7 +32,11 @@ public class JsonTemplateIT extends IntegrationTest {
 		Assert.assertTrue(output.at("/zinput").isTextual());
 	}
 	
-	JsonNode jsonNode(String name) throws IOException {
-		return mapper.readTree(ResourceLoader.getClassLoader().getResourceAsStream("templates/" + name + ".json"));
+	@Test
+	public void testConversion() {
+		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
+		JsonNode input = factory.getNode("templates/input.json");
+		byte[] s = factory.nodeToValue(input, byte[].class);
+		input = factory.valueToNode(s);
 	}
 }
