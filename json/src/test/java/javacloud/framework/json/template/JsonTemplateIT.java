@@ -2,6 +2,7 @@ package javacloud.framework.json.template;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.MissingResourceException;
 
 import javax.inject.Inject;
 
@@ -22,7 +23,7 @@ public class JsonTemplateIT extends IntegrationTest {
 		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
 		
 		JsonTemplate template = factory.getTemplate("templates/template.json");
-		JsonNode input = factory.getNode("templates/input.json");
+		JsonNode input = factory.getResource("templates/input.json");
 		JsonNode output = template.apply(input);
 		System.out.println(factory.valueToPrettyString(output));
 		
@@ -38,7 +39,7 @@ public class JsonTemplateIT extends IntegrationTest {
 	@Test
 	public void testConversion() {
 		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
-		JsonNode input = factory.getNode("templates/input.json");
+		JsonNode input = factory.getResource("templates/input.json");
 		byte[] s = factory.nodeToValue(input, byte[].class);
 		input = factory.valueToNode(s);
 		Assert.assertNotNull(input);
@@ -46,5 +47,17 @@ public class JsonTemplateIT extends IntegrationTest {
 		Assert.assertNull(factory.nodeToValue(null, Object.class));
 		Assert.assertNotNull(factory.nodeToValue(input, Reader.class));
 		Assert.assertNotNull(factory.nodeToValue(input, InputStream.class));
+	}
+	
+	@Test
+	public void tesNullResource() {
+		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
+		Assert.assertNull(factory.getResource("not-exist-resource"));
+	}
+	
+	@Test(expected = MissingResourceException.class)
+	public void tesMissingTemplate() {
+		JsonTemplateFactory factory = new JsonTemplateFactory(mapper);
+		Assert.assertNull(factory.getTemplate("not-exist-resource"));
 	}
 }

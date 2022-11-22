@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.MissingResourceException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -78,11 +79,11 @@ public class JsonTemplateFactory {
 		}
 	}
 	
-	public JsonNode getNode(String classpath) {
+	public JsonNode getResource(String classpath) {
 		return nodes.computeIfAbsent(classpath, (key) -> {
 			try {
 				InputStream ins = ResourceLoader.getClassLoader().getResourceAsStream(key);
-				return objectMapper.readTree(ins);
+				return (ins == null ? null : objectMapper.readTree(ins));
 			} catch (IOException ex) {
 				throw InternalException.of(ex);
 			}
@@ -90,6 +91,12 @@ public class JsonTemplateFactory {
 	}
 	
 	public JsonTemplate getTemplate(String classpath) {
-		return templates.computeIfAbsent(classpath, (key) -> new JsonTemplate(getNode(key)));
+		return templates.computeIfAbsent(classpath, (key) -> {
+			JsonNode node = getResource(key);
+			if (JsonExpr.Constant.isNullOrMissing(node)) {
+				throw new MissingResourceException("Not found template", JsonTemplateFactory.class.getName(), key);
+			}
+			return new JsonTemplate(node);
+		});
 	}
 }
