@@ -25,7 +25,6 @@ import javacloud.framework.util.ResourceLoader;
 @Singleton
 public class JsonTemplateFactory {
 	private final ConcurrentMap<String, JsonTemplate> templates = new ConcurrentHashMap<>();
-	private final ConcurrentMap<String, JsonNode> nodes = new ConcurrentHashMap<>();
 	private final ObjectMapper objectMapper;
 	
 	@Inject
@@ -80,14 +79,12 @@ public class JsonTemplateFactory {
 	}
 	
 	public JsonNode getResource(String classpath) {
-		return nodes.computeIfAbsent(classpath, (key) -> {
-			try {
-				InputStream ins = ResourceLoader.getClassLoader().getResourceAsStream(key);
-				return (ins == null ? null : objectMapper.readTree(ins));
-			} catch (IOException ex) {
-				throw InternalException.of(ex);
-			}
-		});
+		try {
+			InputStream ins = ResourceLoader.getClassLoader().getResourceAsStream(classpath);
+			return (ins == null ? null : objectMapper.readTree(ins));
+		} catch (IOException ex) {
+			throw InternalException.of(ex);
+		}
 	}
 	
 	public JsonTemplate getTemplate(String classpath) {
