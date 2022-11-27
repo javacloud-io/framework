@@ -37,5 +37,10 @@
             "aa": "1234"
         }
     ],
-    "zinput": "{}{$}"
+    "zinput": "{}{$}",
+    "unionage": "{/age}{+}{$.age}{+}{/age}{+}{$.age}",
+    "optionage": "{/age2}{?}{$.age}",
+    
+    "unionarray1": "{/list}{+}{$.subs}",
+     "unionarray2": "{/list}{+}{$.app}"
 }

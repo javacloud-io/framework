@@ -44,4 +44,19 @@ public interface JsonExpr extends Function<JsonNode, JsonNode> {
 			return input.at(ptr);
 		}
 	}
+	
+	// operator marker
+	interface Operator extends JsonExpr {
+		@Override
+		default public JsonNode apply(JsonNode t) {
+			return null;
+		}
+	}
+	
+	// a + b (number/string/object/array)
+	class OpUnion implements Operator {
+	}
+	// a?b?c
+	class OpOptional implements Operator {
+	}
 }

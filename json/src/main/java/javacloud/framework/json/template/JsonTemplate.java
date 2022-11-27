@@ -81,7 +81,7 @@ public class JsonTemplate implements JsonExpr {
 		} else if (node.isObject()) {
 			return resolveNode(node, input);
 		}
-		return resolvePrimitive(node, input);
+		return resolveValue(node, input);
 	}
 	
 	/**
@@ -103,33 +103,57 @@ public class JsonTemplate implements JsonExpr {
 			return out;
 		}
 		// special loop
-		return segments[0].apply(input);
+		return resolveExpr(0, segments, input);
 	}
 	
-	// primitive node
-	protected JsonNode resolvePrimitive(JsonNode node, JsonNode input) {
+	// value -> value | object | array
+	protected JsonNode resolveValue(JsonNode node, JsonNode input) {
 		JsonExpr[] segments = cache.get(node);
 		if (segments == null || segments.length == 0) {
 			return node;
-		} else if (segments.length == 1) {
-			// single pointer
-			return segments[0].apply(input);
+		}
+		return resolveExpr(0, segments, input);
+	}
+	
+	// evaluation simple expression {/123}{?|+}{/zzzz}
+	protected JsonNode resolveExpr(int index, JsonExpr[] segments, JsonNode input) {
+		if (index >= segments.length) {
+			return null;
 		}
 		
-		// text node
-		StringBuilder sb = new StringBuilder();
-		for (JsonExpr segment: segments) {
-			JsonNode o = segment.apply(input);
-			if (!JsonExpr.Constant.isNullOrMissing(o)) {
-				if (o.isValueNode()) {
-					sb.append(o.asText());
-				} else {
-					// JSON -> string
-					sb.append(o.toString());
-				}
+		// just ignore operator
+		JsonExpr expr = segments[index ++];
+		if (expr instanceof JsonExpr.Operator) {
+			return resolveExpr(index, segments, input);
+		}
+		
+		// {left} {op} {right}
+		JsonNode left = expr.apply(input);
+		if (JsonExpr.Constant.isNullOrMissing(left)) {
+			return resolveExpr(index, segments, input);
+		}
+		
+		// look ahead & combine expression
+		if (index < segments.length) {
+			JsonExpr op = segments[index];
+			if (op instanceof JsonExpr.OpOptional) {
+				return left;
+			}
+			// recursive to remaining expr
+			JsonNode right = resolveExpr(index, segments, input);
+			if (JsonExpr.Constant.isNullOrMissing(right)) {
+				return left;
+			} else if (op instanceof JsonExpr.OpOptional) {
+				return right;
+			} else if (op instanceof JsonExpr.OpUnion) {
+				// object/array/string/number union
+				return unionExpr(left, right);
+			} else {
+				return concatExpr(left, right);
 			}
 		}
-		return JsonNodeFactory.instance.textNode(sb.toString());
+		// end of expression
+		return left;
 	}
 	
 	/**
@@ -187,8 +211,61 @@ public class JsonTemplate implements JsonExpr {
 			return new JsonExpr.Pointer(expr);
 		} else if (expr.startsWith("$")) {
 			return new JsonPath(expr);
+		} else if (expr.equals("+")) {
+			return new JsonExpr.OpUnion();
+		} else if (expr.equals("?")) {
+			return new JsonExpr.OpOptional();
 		} else {
 			return new JsonExpr.Constant(expr);
 		}
+	}
+	
+	protected JsonNode concatExpr(JsonNode left, JsonNode right) {
+		StringBuilder sb = new StringBuilder();
+		if (left.isValueNode()) {
+			sb.append(left.asText());
+		} else {
+			// JSON -> string
+			sb.append(left.toString());
+		}
+		if (right.isValueNode()) {
+			sb.append(right.asText());
+		} else {
+			// JSON -> string
+			sb.append(right.toString());
+		}
+		return JsonNodeFactory.instance.textNode(sb.toString());
+	}
+	
+	protected JsonNode unionExpr(JsonNode left, JsonNode right) {
+		if (left.isArray() || right.isArray()) {
+			ArrayNode out = JsonNodeFactory.instance.arrayNode();
+			if (left.isArray()) {
+				left.forEach(e -> out.add(e));
+			} else {
+				out.add(left);
+			}
+			if (right.isArray()) {
+				right.forEach(e -> out.add(e));
+			} else {
+				out.add(right);
+			}
+			return out;
+		} else if (left.isObject() && right.isObject()) {
+			ObjectNode out = JsonNodeFactory.instance.objectNode();
+			left.fields().forEachRemaining(e -> {
+				out.set(e.getKey(), e.getValue());
+			});
+			right.fields().forEachRemaining(e -> {
+				out.set(e.getKey(), e.getValue());
+			});
+			return out;
+		} else if (left.isNumber() && right.isNumber()) {
+			if (left.isIntegralNumber() && right.isIntegralNumber()) {
+				return JsonNodeFactory.instance.numberNode(left.intValue() + right.intValue());
+			}
+			return JsonNodeFactory.instance.numberNode(left.doubleValue() + right.doubleValue());
+		}
+		return concatExpr(left, right);
 	}
 }
