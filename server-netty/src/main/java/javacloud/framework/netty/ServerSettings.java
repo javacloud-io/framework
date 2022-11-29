@@ -3,7 +3,7 @@ package javacloud.framework.netty;
 import javacloud.framework.config.ConfigProperty;
 
 public interface ServerSettings {
-	@ConfigProperty(name = "javacloud.netty.server.address", value = "0.0.0.0")
+	@ConfigProperty(name = "javacloud.netty.server.address", value = "localhost")
 	String serverAddress();
 	
 	@ConfigProperty(name = "javacloud.netty.server.port", value = "8888")

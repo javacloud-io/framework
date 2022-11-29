@@ -3,7 +3,7 @@ package javacloud.framework.grpc;
 import javacloud.framework.config.ConfigProperty;
 
 public interface ServerSettings {
-	@ConfigProperty(name = "javacloud.grpc.server.address", value = "0.0.0.0")
+	@ConfigProperty(name = "javacloud.grpc.server.address", value = "localhost")
 	String serverAddress();
 	
 	@ConfigProperty(name = "javacloud.grpc.server.port", value = "8090")
