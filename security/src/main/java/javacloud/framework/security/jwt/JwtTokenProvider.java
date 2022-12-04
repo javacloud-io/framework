@@ -22,9 +22,9 @@ import java.util.UUID;
 public abstract class JwtTokenProvider implements TokenProvider {
 	private final String jwtType;
 	private final JwtCodecs	jwtCodecs;
-	private final JwtSigner	jwtSigner;
+	private final JwtSigner.Supplier jwtSigner;
 	
-	protected JwtTokenProvider(Externalizer externalizer, JwtSigner jwtSigner) {
+	protected JwtTokenProvider(Externalizer externalizer, JwtSigner.Supplier jwtSigner) {
 		this("JWT", externalizer, jwtSigner);
 	}
 	
@@ -33,7 +33,7 @@ public abstract class JwtTokenProvider implements TokenProvider {
 	 * @param externalizer
 	 * @param jwtSigner
 	 */
-	protected JwtTokenProvider(String jwtType, Externalizer externalizer, JwtSigner jwtSigner) {
+	protected JwtTokenProvider(String jwtType, Externalizer externalizer, JwtSigner.Supplier jwtSigner) {
 		this.jwtType = jwtType;
 		this.jwtCodecs = new JwtCodecs(externalizer);
 		this.jwtSigner  = jwtSigner;

@@ -1,6 +1,4 @@
 # Default framework security registry
-#
-javacloud.framework.security.NamespaceContext=javacloud.framework.security.impl.NamespaceContextImpl
 
 # SP only need JWT AccessToken authenticator
 javacloud.framework.security.token.TokenValidator=javacloud.framework.security.impl.JwtTokenValidatorImpl

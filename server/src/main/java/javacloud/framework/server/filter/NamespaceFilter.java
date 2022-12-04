@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import javacloud.framework.cdi.ServiceRegistry;
-import javacloud.framework.security.NamespaceContext;
+import javacloud.framework.server.NamespaceContext;
 import javacloud.framework.server.internal.W3RequestWrapper;
 import javacloud.framework.util.Objects;
 /**
@@ -50,7 +50,7 @@ public class NamespaceFilter extends ServletFilter {
 
 	/**
 	 * IF ANY NAMESPACE => MAKE SURE TO PREPARE THEM... for testing by default we just lookup from QUERY PARAMETER or HEADER
-	 * BY DEFAULT APPEspace will be figured out automatically using CLIENT KEY however if a space allows application to run
+	 * BY DEFAULT namespace will be figured out automatically using CLIENT KEY however if a space allows application to run
 	 * it also can be access as well.
 	 * 
 	 * @param req

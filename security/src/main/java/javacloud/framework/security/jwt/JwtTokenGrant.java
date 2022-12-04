@@ -7,12 +7,11 @@ import javacloud.framework.security.token.TokenGrant;
 import javacloud.framework.util.Converters;
 
 // custom token grant to expose claim
-final class JwtTokenGrant extends TokenGrant {
+public final class JwtTokenGrant extends TokenGrant {
 	private final JwtToken jwt;
 	
 	JwtTokenGrant(String raw, JwtToken jwt) {
-		super(raw, jwt.getClaim(JwtToken.CLAIM_ID),
-				   IdParameters.GrantType.valueOf(jwt.getClaim(JwtToken.CLAIM_TYPE)),
+		super(raw, claimId(jwt), claimType(jwt),
 				   jwt.getClaim(JwtToken.CLAIM_SUBJECT),
 				   jwt.getClaim(JwtToken.CLAIM_AUDIENCE));
 		this.jwt = jwt;
@@ -41,5 +40,30 @@ final class JwtTokenGrant extends TokenGrant {
 	@Override
 	public Date getIssuedAt() {
 		return new Date(Converters.LONG.apply(jwt.getClaim(JwtToken.CLAIM_ISSUEDAT)));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	static String claimId(JwtToken jwt) {
+		String id = jwt.getClaim(JwtToken.CLAIM_ID);
+		if (id == null) {
+			id = jwt.getClaim("tid");	//azure
+		}
+		return id;
+	}
+	
+	/**
+	 * 
+	 * @param jwt
+	 * @return
+	 */
+	static IdParameters.GrantType claimType(JwtToken jwt) {
+		String type = jwt.getClaim(JwtToken.CLAIM_TYPE);
+		if (type == null) {
+			return IdParameters.GrantType.access_token;
+		}
+		return IdParameters.GrantType.valueOf(type);
 	}
 }

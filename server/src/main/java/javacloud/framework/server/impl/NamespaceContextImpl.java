@@ -1,6 +1,6 @@
-package javacloud.framework.security.impl;
+package javacloud.framework.server.impl;
 
-import javacloud.framework.security.NamespaceContext;
+import javacloud.framework.server.NamespaceContext;
 import javacloud.framework.util.Codecs;
 import javacloud.framework.util.Digests;
 

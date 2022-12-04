@@ -15,12 +15,25 @@ public interface JwtSigner {
 	 * 
 	 * @return algorithm NAME
 	 */
-	String getAlgorithm();
+	String algorithm();
+	
+	/**
+	 * 
+	 * @return keyId
+	 */
+	default String keyId() {
+		return null;
+	}
 	
 	/**
 	 * 
 	 * @param content
 	 * @return base64 URL encoded string
 	 */
-	String sign(String payload);
+	byte[] sign(byte[] payload);
+	
+	
+	interface Supplier {
+		JwtSigner get();
+	}
 }

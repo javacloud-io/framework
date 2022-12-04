@@ -1,7 +1,7 @@
-package javacloud.framework.security;
+package javacloud.framework.server;
 
 /**
- * The NAMESPACE in which each APPE is running, to help isolation & SANDBOX.
+ * The NAMESPACE in which each application is running, to help isolation & SANDBOX.
  * 
  * @author tobi
  */

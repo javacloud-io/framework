@@ -1,13 +1,18 @@
 package javacloud.framework.security.jwt;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +26,8 @@ import javacloud.framework.util.Hmacs;
 import javacloud.framework.util.Objects;
 
 /**
- * Encode/decode JWT token with signer support
+ * Encode/decode JWT token with signer support:
+ * https://www.rfc-editor.org/rfc/rfc7519
  * 
  * @author ho
  *
@@ -33,29 +39,39 @@ public final class JwtCodecs {
 	private final JsonConverter converter;
 	
 	public JwtCodecs(Externalizer externalizer) {
-		this.converter = new JsonConverter(externalizer);
+		if (externalizer instanceof JsonConverter) {
+			this.converter = (JsonConverter)externalizer;
+		} else {
+			this.converter = new JsonConverter(externalizer);
+		}
 	}
 	
 	/**
 	 * <base64 header>.<base64 payload>.<base64 signature>
 	 * 
 	 * @param token
-	 * @param signer
+	 * @param supplier
 	 * 
 	 * @return
 	 * @throws JwtException
 	 */
-	public String encodeJWT(JwtToken token, JwtSigner signer) throws JwtInvalidException {
+	public String encodeJWT(JwtToken token, JwtSigner.Supplier supplier) throws JwtInvalidException {
 		try {
+			JwtSigner signer = supplier.get();
+			if (signer == null) {
+				logger.warning("Not found signer");
+				throw new JwtInvalidException();
+			}
 			byte[] header = converter.toBytes(
-					Objects.asMap("typ", token.getType(), "alg", signer.getAlgorithm())
-				);
+				Objects.asMap(JwtToken.HEADER_TYPE, token.getType(),
+							  JwtToken.HEADER_ALGO, signer.algorithm(),
+							  JwtToken.HEADER_KEYID, signer.keyId())
+			);
 			
 			byte[] claims = converter.toBytes(token.getClaims());
-			String payload = Codecs.Base64Encoder.apply(header, true)
-							+ "." + Codecs.Base64Encoder.apply(claims, true);
-			
-			return payload + "." + signer.sign(payload);
+			String payload = Codecs.Base64Encoder.apply(header, true) + "." + Codecs.Base64Encoder.apply(claims, true);
+			String signature = Codecs.Base64Encoder.apply(signer.sign(Codecs.toBytes(payload)), true);
+			return payload + "." + signature;
 		} catch (IOException ex) {
 			logger.log(Level.WARNING, "Problem encode JWT token", ex);
 			throw new JwtInvalidException();
@@ -66,12 +82,12 @@ public final class JwtCodecs {
 	 * Given a token in format above, parse the token and validate correct signature
 	 * 
 	 * @param token
-	 * @param signer
+	 * @param supplier
 	 * @return
 	 * 
 	 * @throws JwtException
 	 */
-	public JwtToken decodeJWT(String token, JwtVerifier verifier) throws JwtInvalidException {
+	public JwtToken decodeJWT(String token, JwtVerifier.Supplier supplier) throws JwtInvalidException {
 		if (Objects.isEmpty(token)) {
 			throw new JwtInvalidException();
 		}
@@ -83,19 +99,31 @@ public final class JwtCodecs {
 		//VALIDATE THE PAYLOAD BEFORE CONTINUE
 		String payload  = token.substring(0, idot);
 		String signature= token.substring(idot + 1);
-		if (!verifier.verify(payload, signature)) {
-			throw new JwtInvalidException();
-		}
 		
-		//DECODE PAYLOAD TO JSON
+		// header.claims
 		idot = payload.indexOf('.');
 		if (idot < 0) {
 			throw new JwtInvalidException();
 		}
+		String pheader = payload.substring(0, idot);
+		String pclaims = payload.substring(idot + 1);
 		try {
-			Map<String, Object> header = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(0, idot), true),  Map.class);
-			Map<String, Object> claims = converter.toObject(Codecs.Base64Decoder.apply(payload.substring(idot + 1), true), Map.class);
-			return new JwtToken((String)header.get("typ"), (String)header.get("alg"), claims);
+			Map<String, Object> header = converter.toObject(Codecs.Base64Decoder.apply(pheader, true),  Map.class);
+			String kid = (String)header.get(JwtToken.HEADER_KEYID);
+			JwtVerifier verifier = supplier.get(kid);
+			if (verifier == null) {
+				logger.warning("Not found verifier for key: " + kid);
+				throw new JwtInvalidException();
+			}
+			
+			// verify signature
+			if (!verifier.verify(Codecs.toBytes(payload), Codecs.Base64Decoder.apply(signature, true))) {
+				throw new JwtInvalidException();
+			}
+			
+			// decode claims
+			Map<String, Object> claims = converter.toObject(Codecs.Base64Decoder.apply(pclaims, true), Map.class);
+			return new JwtToken((String)header.get(JwtToken.HEADER_TYPE), (String)header.get(JwtToken.HEADER_ALGO), claims);
 		} catch (IOException ex) {
 			logger.log(Level.WARNING, "Problem decode JWT token", ex);
 			throw new JwtInvalidException();
@@ -107,18 +135,18 @@ public final class JwtCodecs {
 	 */
 	public static class NONE implements JwtSigner, JwtVerifier {
 		@Override
-		public String getAlgorithm() {
+		public String algorithm() {
 			return ALG_NONE;
 		}
 
 		@Override
-		public String sign(String payload) {
+		public byte[] sign(byte[] payload) {
 			return payload;
 		}
 		
 		@Override
-		public boolean verify(String payload, String signature) {
-			return (signature != null && signature.isEmpty());
+		public boolean verify(byte[] payload, byte[] signature) {
+			return Arrays.equals(payload, signature);
 		}
 	}
 	
@@ -129,23 +157,27 @@ public final class JwtCodecs {
 		private final Key secret;
 		
 		public HS256(byte[] secret) {
-			this.secret = new SecretKeySpec(secret, Hmacs.HmacSHA2);
+			this(new SecretKeySpec(secret, Hmacs.HmacSHA2));
 		}
-
+		
+		public HS256(Key secret) {
+			this.secret = secret;
+		}
+		
 		@Override
-		public String getAlgorithm() {
+		public String algorithm() {
 			return ALG_HS256;
 		}
 		
 		@Override
-		public String sign(String payload) {
-			return Codecs.Base64Encoder.apply(Hmacs.digest(secret, Codecs.toBytes(payload)), true);
+		public byte[] sign(byte[] payload) {
+			return Hmacs.digest(secret, payload);
 		}
 
 		@Override
-		public boolean verify(String payload, String signature) {
-			String expected = sign(payload);
-			return expected.equals(signature);
+		public boolean verify(byte[] payload, byte[] signature) {
+			byte[] expected = sign(payload);
+			return Arrays.equals(expected, signature);
 		}
 	}
 	
@@ -160,17 +192,17 @@ public final class JwtCodecs {
 		}
 		
 		@Override
-		public String getAlgorithm() {
+		public String algorithm() {
 			return ALG_RS256;
 		}
 
 		@Override
-		public String sign(String payload) {
+		public byte[] sign(byte[] payload) {
 			try {
 				Signature sig = Signature.getInstance(SHA256withRSA);
 				sig.initSign(privateKey);
-				sig.update(Codecs.toBytes(payload));
-				return Codecs.Base64Encoder.apply(sig.sign(), true);
+				sig.update(payload);
+				return sig.sign();
 			} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
@@ -188,15 +220,27 @@ public final class JwtCodecs {
 		}
 		
 		@Override
-		public boolean verify(String payload, String signature) {
+		public boolean verify(byte[] payload, byte[] signature) {
 			try {
 				Signature sig = Signature.getInstance(SHA256withRSA);
 				sig.initVerify(publicKey);
-				sig.update(Codecs.toBytes(payload));
-				return sig.verify(Codecs.Base64Decoder.apply(signature, true));
+				sig.update(payload);
+				return sig.verify(signature);
 			} catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException ex) {
 				throw new JwtInvalidException();
 			}
+		}
+		
+		// instance of modulus & exponent
+		public static RS256V of(String n, String e) throws InvalidKeySpecException, NoSuchAlgorithmException {
+			return of(Codecs.Base64Decoder.apply(n, true), Codecs.Base64Decoder.apply(e, true));
+		}
+		
+		public static RS256V of(byte[] n, byte[] e) throws InvalidKeySpecException, NoSuchAlgorithmException {
+			BigInteger modulus = new BigInteger(1, n);
+			BigInteger exponent = new BigInteger(1, e);
+			RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(modulus, exponent);
+			return new RS256V(KeyFactory.getInstance("RSA").generatePublic(publicKeySpec));
 		}
 	}
 }

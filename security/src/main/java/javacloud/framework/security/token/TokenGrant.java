@@ -23,7 +23,7 @@ public abstract class TokenGrant implements Principal {
 	private final String audience;	// aud
 	
 	public TokenGrant(String raw, String id, IdParameters.GrantType type, String subject, String audience) {
-		this.raw= raw;
+		this.raw = raw;
 		this.id = id;
 		this.type = type;
 		this.subject = subject;

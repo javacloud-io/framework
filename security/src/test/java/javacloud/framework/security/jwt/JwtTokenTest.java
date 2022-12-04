@@ -51,11 +51,11 @@ public class JwtTokenTest extends TestCase {
 	private void doTest(JwtSigner jwtSigner, JwtVerifier jwtVerifier) {
 		JwtCodecs jwtCodecs = new JwtCodecs(new JacksonMapper());
 		JwtToken token = new JwtToken("JWT", Objects.asMap("a", "a", "b", "b"));
-		String stoken = jwtCodecs.encodeJWT(token, jwtSigner);
+		String stoken = jwtCodecs.encodeJWT(token, () -> jwtSigner);
 		
-		System.out.println(jwtSigner.getAlgorithm() + " JWT: " + stoken);
-		JwtToken tt = jwtCodecs.decodeJWT(stoken, jwtVerifier);
+		System.out.println(jwtSigner.algorithm() + " JWT: " + stoken);
+		JwtToken tt = jwtCodecs.decodeJWT(stoken, (kid) -> jwtVerifier);
 		assertEquals(token.getType(), tt.getType());
-		assertEquals(jwtSigner.getAlgorithm(), tt.getAlgorithm());
+		assertEquals(jwtSigner.algorithm(), tt.getAlgorithm());
 	}
 }

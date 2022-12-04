@@ -15,14 +15,14 @@ import javacloud.framework.util.Converters;
  */
 public class JwtTokenValidator implements TokenValidator {
 	private final JwtCodecs  	jwtCodecs;
-	private final JwtVerifier	jwtVerifier;
+	private final JwtVerifier.Supplier	jwtVerifier;
 	
 	/**
 	 * 
 	 * @param externalizer
 	 * @param jwtVerifier
 	 */
-	public JwtTokenValidator(Externalizer externalizer, JwtVerifier jwtVerifier) {
+	public JwtTokenValidator(Externalizer externalizer, JwtVerifier.Supplier jwtVerifier) {
 		this.jwtCodecs = new JwtCodecs(externalizer);
 		this.jwtVerifier  = jwtVerifier;
 	}
@@ -40,7 +40,13 @@ public class JwtTokenValidator implements TokenValidator {
 			throw new AccessDeniedException(AccessDeniedException.EXPIRED_CREDENTIALS);
 		}
 		
+		// advance validation for iss/aud/scope
+		validateScope(jwt);
+		
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
 		return new JwtTokenGrant(token, jwt);
+	}
+	
+	protected void validateScope(JwtToken jwt) throws AuthenticationException {
 	}
 }

@@ -11,6 +11,10 @@ import javacloud.framework.util.Objects;
  *
  */
 public final class JwtToken {
+	public static final String HEADER_TYPE 		= "typ";
+	public static final String HEADER_ALGO 		= "alg";
+	public static final String HEADER_KEYID 	= "kid";
+	
 	public static final String CLAIM_ISSUER 		= "iss";
 	public static final String CLAIM_SUBJECT 		= "sub";
 	public static final String CLAIM_AUDIENCE		= "aud";

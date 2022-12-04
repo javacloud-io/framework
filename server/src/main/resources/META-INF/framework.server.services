@@ -4,3 +4,6 @@
 framework.json.services
 framework.config.services
 framework.client.services
+
+#
+javacloud.framework.server.NamespaceContext=javacloud.framework.server.impl.NamespaceContextImpl

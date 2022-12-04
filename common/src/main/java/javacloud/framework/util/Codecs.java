@@ -42,21 +42,11 @@ public final class Codecs {
 		 * @return
 		 */
 		public static String apply(byte[] bytes, boolean safe, boolean pretty) {
-			String	base64 = Base64.getEncoder().encodeToString(bytes);
+			String	base64;
 			if (safe) {
-				char[] chars = base64.toCharArray();
-				int count = 0;
-				for (; count < chars.length; count ++) {
-					if (chars[count] == '+') {
-						chars[count] = '-';
-					} else if (chars[count] == '/') {
-						chars[count] = '_';
-					} else if (chars[count] == '=') {
-						break;
-					}
-				}
-				//NEW BASE64
-				base64 = new String(chars, 0, count);
+				base64 = Base64.getUrlEncoder().encodeToString(bytes);
+			} else {
+				base64 = Base64.getEncoder().encodeToString(bytes);
 			}
 			
 			//PRETTY PRINT
@@ -79,6 +69,7 @@ public final class Codecs {
 		public byte[] apply(String base64) {
 			return apply(base64, false);
 		}
+		
 		/**
 		 * Return byte from BASE 64. It doesn't broke to PEM
 		 * @param base64
@@ -86,24 +77,8 @@ public final class Codecs {
 		 * @return
 		 */
 		public static byte[] apply(String base64, boolean safe) {
-			//NEED TO MODIFY THE BUFF
 			if(safe) {
-				char[] chars = new char[(((base64.length() - 1) >> 2) + 1) << 2]; //round up to 4
-				for (int i = base64.length() - 1; i >=0; i --) {
-					char c = base64.charAt(i);
-					if(c == '-') {
-						c = '+';
-					}else if(c == '_') {
-						c = '/';
-					}
-					chars[i] = c;
-				}
-				
-				//PADDING
-				for (int i = base64.length(); i < chars.length; i ++) {
-					chars[i] = '=';
-				}
-				base64 = new String(chars);
+				return Base64.getUrlDecoder().decode(base64);
 			}
 			return	Base64.getDecoder().decode(base64);
 		}
