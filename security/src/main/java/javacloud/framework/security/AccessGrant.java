@@ -1,6 +1,7 @@
 package javacloud.framework.security;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,22 +23,15 @@ public interface AccessGrant extends Principal {
 	Principal getSubject();
 	
 	/**
-	 * Client in which this is grant all
-	 * 
-	 * @return
-	 */
-	String getAudience();
-	
-	/**
-	 * Set of scope which grant might have access
-	 * 
-	 * @return
-	 */
-	String getScope();
-	
-	/**
 	 * Set of static roles entitle to the grant
+	 * 
 	 * @return
 	 */
 	Set<String> getRoles();
+	
+	/**
+	 * 
+	 * @return custom claims
+	 */
+	Map<String, Object> getClaims();
 }

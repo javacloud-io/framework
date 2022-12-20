@@ -1,6 +1,7 @@
 package javacloud.framework.security.internal;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.Set;
 
 import javacloud.framework.security.AccessGrant;
@@ -12,9 +13,7 @@ import javacloud.framework.security.AccessGrant;
 public class AuthorizationGrant implements AccessGrant {
 	private Principal	subject;
 	private	Set<String>	roles;
-	
-	private String audience;
-	private String scope;
+	private	Map<String, Object>	claims;
 	
 	/**
 	 * Grant authentication with permission set associated with.
@@ -50,33 +49,13 @@ public class AuthorizationGrant implements AccessGrant {
 		return roles;
 	}
 	
-	/**
-	 * 
-	 */
 	@Override
-	public String getAudience() {
-		return audience;
+	public Map<String, Object> getClaims() {
+		return claims;
 	}
-	
-	public AuthorizationGrant withAudience(String audience) {
-		this.audience = audience;
-		return this;
-	}
-	
-	/**
-	 * 
-	 */
-	@Override
-	public String getScope() {
-		return scope;
-	}
-	
-	/**
-	 * 
-	 * @param scope
-	 */
-	public AuthorizationGrant withScope(String scope) {
-		this.scope = scope;
+
+	public AuthorizationGrant withClaims(Map<String, Object> claims) {
+		this.claims = claims;
 		return this;
 	}
 }

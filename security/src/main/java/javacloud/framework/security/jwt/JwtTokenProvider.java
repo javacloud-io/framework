@@ -9,6 +9,7 @@ import javacloud.framework.util.Converters;
 import javacloud.framework.util.Objects;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ import java.util.UUID;
  * @author ho
  *
  */
-public abstract class JwtTokenProvider implements TokenProvider {
+public class JwtTokenProvider implements TokenProvider {
 	private final String jwtType;
 	private final JwtCodecs	jwtCodecs;
 	private final JwtSigner.Supplier jwtSigner;
@@ -62,34 +63,39 @@ public abstract class JwtTokenProvider implements TokenProvider {
 	/**
 	 * 
 	 * @param authzGrant
-	 * @return
+	 * @return claims for current grant
 	 */
 	protected Map<String, Object> jwtClaims(AccessGrant authzGrant) {
-		//SCOPE/ROLES
-		String roles = null;
-		if(!Objects.isEmpty(authzGrant.getRoles())) {
-			roles = Converters.toString(" ", authzGrant.getRoles().toArray());
+		Map<String, Object> claims = authzGrant.getClaims();
+		if (claims == null) {
+			claims = new HashMap<>();
+		} else {
+			claims = new HashMap<>(claims);
 		}
-		return	Objects.asMap(
-					JwtToken.CLAIM_ID,			UUID.randomUUID().toString(),
-					JwtToken.CLAIM_ISSUER, 		jwtIssuer(authzGrant),
-					JwtToken.CLAIM_SUBJECT, 	authzGrant.getName(),
-					JwtToken.CLAIM_AUDIENCE, 	authzGrant.getAudience(),
-					JwtToken.CLAIM_SCOPE, 		authzGrant.getScope(),
-					JwtToken.CLAIM_ROLES, 		roles
-				);
+		
+		// default roles
+		if (!Objects.isEmpty(authzGrant.getRoles())) {
+			claims.put(JwtToken.CLAIM_ROLES, Converters.toString(" ", authzGrant.getRoles().toArray()));
+		}
+		claims.put(JwtToken.CLAIM_ID, 		UUID.randomUUID().toString());
+		claims.put(JwtToken.CLAIM_SUBJECT, 	authzGrant.getName());
+		//claims.put(JwtToken.CLAIM_ISSUER,   authzGrant);
+		//claims.put(JwtToken.CLAIM_AUDIENCE, authzGrant);
+		//claims.put(JwtToken.CLAIM_SCOPE, 	  authzGrant);
+		return claims;
 	}
-	
-	/**
-	 * 
-	 * @return the actual issuer/null
-	 */
-	protected abstract String jwtIssuer(AccessGrant authzGrant);
 	
 	/**
 	 * 
 	 * @param type
 	 * @return token TTL in seconds
 	 */
-	protected abstract int jwtTtls(IdParameters.GrantType type);
+	protected int jwtTtls(IdParameters.GrantType type) {
+		if (type == IdParameters.GrantType.authorization_code) {
+			return 10 * 60;
+		} else if (type == IdParameters.GrantType.refresh_token) {
+			return 24 * 60 * 60;
+		}
+		return 3 * 60 * 60;
+	}
 }

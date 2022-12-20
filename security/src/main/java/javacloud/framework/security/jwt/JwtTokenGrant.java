@@ -1,6 +1,7 @@
 package javacloud.framework.security.jwt;
 
 import java.util.Date;
+import java.util.Map;
 
 import javacloud.framework.security.IdParameters;
 import javacloud.framework.security.token.TokenGrant;
@@ -11,22 +12,25 @@ public final class JwtTokenGrant extends TokenGrant {
 	private final JwtToken jwt;
 	
 	JwtTokenGrant(String raw, JwtToken jwt) {
-		super(raw, claimId(jwt), claimType(jwt),
-				   jwt.getClaim(JwtToken.CLAIM_SUBJECT),
-				   jwt.getClaim(JwtToken.CLAIM_AUDIENCE));
+		super(raw, claimId(jwt), claimType(jwt));
 		this.jwt = jwt;
 	}
 	
 	@Override
-	public <T> T getClaim(String name) {
-		return jwt.getClaim(name);
+	public String getName() {
+		return jwt.getClaim(JwtToken.CLAIM_SUBJECT);
 	}
-
+	
+	@Override
+	public String getAudience() {
+		return jwt.getClaim(JwtToken.CLAIM_AUDIENCE);
+	}
+	
 	@Override
 	public String getScope() {
 		return jwt.getClaim(JwtToken.CLAIM_SCOPE);
 	}
-
+	
 	@Override
 	public String getRoles() {
 		return jwt.getClaim(JwtToken.CLAIM_ROLES);
@@ -41,7 +45,12 @@ public final class JwtTokenGrant extends TokenGrant {
 	public Date getIssuedAt() {
 		return new Date(Converters.LONG.apply(jwt.getClaim(JwtToken.CLAIM_ISSUEDAT)));
 	}
-	
+
+	@Override
+	public Map<String, Object> getClaims() {
+		return jwt.getClaims();
+	}
+
 	/**
 	 * 
 	 * @return

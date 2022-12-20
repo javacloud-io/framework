@@ -54,18 +54,20 @@ public class TokenAuthenticator implements Authenticator {
 	 * @throws AuthenticationException
 	 */
 	protected AccessGrant grantAccess(TokenGrant token) throws AuthenticationException {
-		Set<String> roles;
-		
-		//PASSING ALONE ROLES
-		if (Objects.isEmpty(token.getRoles())) {
-			roles = Permissions.EMPTY_ROLES;
-		} else {
-			roles = Objects.asSet(Converters.toArray(token.getRoles(), " ", true));
+		return new AuthorizationGrant(token, grantRoles(token))
+						.withClaims(token.getClaims());
+	}
+	
+	/**
+	 * 
+	 * @param token
+	 * @return
+	 */
+	protected Set<String> grantRoles(TokenGrant token) {
+		String roles = token.getRoles();
+		if (!Objects.isEmpty(roles)) {
+			return Objects.asSet(Converters.toArray(token.getRoles(), " ", true));
 		}
-		
-		//SIMPLE GRANT TO CARRY SCOPE
-		return new AuthorizationGrant(token, roles)
-						.withAudience(token.getAudience())
-						.withScope(token.getScope());
+		return Permissions.EMPTY_ROLES;
 	}
 }
