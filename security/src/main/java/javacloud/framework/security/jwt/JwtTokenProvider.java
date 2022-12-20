@@ -8,7 +8,7 @@ import javacloud.framework.security.token.TokenProvider;
 import javacloud.framework.util.Converters;
 import javacloud.framework.util.Objects;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -46,14 +46,14 @@ public class JwtTokenProvider implements TokenProvider {
 	@Override
 	public TokenGrant issueToken(AccessGrant authzGrant, IdParameters.GrantType type) {
 		//EXPIRATION
-		Date issuedAt = new Date();
-		Date expireAt = new Date(issuedAt.getTime() + jwtTtls(type) * 1000L);
+		Instant issuedAt = Instant.now();
+		Instant expireAt = issuedAt.plusSeconds(jwtTtls(type));
 		
 		//Compose JWT TOKEN
 		Map<String, Object> claims = jwtClaims(authzGrant);
 		claims.put(JwtToken.CLAIM_TYPE, 		type.name());
-		claims.put(JwtToken.CLAIM_ISSUEDAT, 	issuedAt.getTime());
-		claims.put(JwtToken.CLAIM_EXPIRATION,	expireAt.getTime());
+		claims.put(JwtToken.CLAIM_ISSUEDAT, 	issuedAt.getEpochSecond());
+		claims.put(JwtToken.CLAIM_EXPIRATION,	expireAt.getEpochSecond());
 		
 		//TOKEN details
 		JwtToken jwt = new JwtToken(jwtType, claims);

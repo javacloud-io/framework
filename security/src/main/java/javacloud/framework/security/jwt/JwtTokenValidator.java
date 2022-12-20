@@ -1,5 +1,7 @@
 package javacloud.framework.security.jwt;
 
+import java.time.Instant;
+
 import javacloud.framework.io.Externalizer;
 import javacloud.framework.security.AccessDeniedException;
 import javacloud.framework.security.AuthenticationException;
@@ -35,8 +37,9 @@ public class JwtTokenValidator implements TokenValidator {
 	public TokenGrant validateToken(String token) throws AuthenticationException {
 		JwtToken jwt = jwtCodecs.decodeJWT(token, jwtVerifier);
 		
-		long expireAt = Converters.LONG.apply(jwt.getClaim(JwtToken.CLAIM_EXPIRATION));
-		if (expireAt > System.currentTimeMillis()) {
+		// epoch milliseconds expireAt > now
+		Instant expireAt = Instant.ofEpochSecond(Converters.LONG.apply(jwt.getClaim(JwtToken.CLAIM_EXPIRATION)));
+		if (!expireAt.isAfter(Instant.now())) {
 			throw new AccessDeniedException(AccessDeniedException.EXPIRED_CREDENTIALS);
 		}
 		

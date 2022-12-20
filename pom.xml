@@ -4,7 +4,7 @@
 
   <groupId>io.javacloud.framework</groupId>
   <artifactId>javacloud-framework</artifactId>
-  <version>0.7.8</version>
+  <version>0.7.9</version>
   <packaging>pom</packaging>
   
   <name>JavaCloud project</name>
