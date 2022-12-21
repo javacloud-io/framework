@@ -26,14 +26,14 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
-    <netty.version>4.1.84.Final</netty.version>
+    <netty.version>4.1.86.Final</netty.version>
     <jetty.version>11.0.12</jetty.version>
     <tomcat.version>10.1.1</tomcat.version>
     <httpclient.version>4.5.13</httpclient.version>
     <httpcore.version>4.4.15</httpcore.version>
     <guice.version>5.1.0</guice.version>
     <guava.version>31.1-jre</guava.version>
-    <jackson.version>2.13.4</jackson.version>
+    <jackson.version>2.14.1</jackson.version>
     <jersey.version>3.0.8</jersey.version>
     <hk2.version>3.0.3</hk2.version>
     <grizzly.version>4.0.0</grizzly.version>
@@ -41,8 +41,8 @@
     <logback.version>1.4.4</logback.version>
     <derby.version>10.14.2.0</derby.version>
     <gremlin.version>3.6.1</gremlin.version>
-    <grpc.version>1.50.0</grpc.version>
-    <protobuf.version>3.21.7</protobuf.version>
+    <grpc.version>1.51.1</grpc.version>
+    <protobuf.version>3.21.12</protobuf.version>
   </properties>
   
   <modules>
