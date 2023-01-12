@@ -25,7 +25,7 @@ public class JsonTemplateIT extends IntegrationTest {
 		JsonTemplate template = factory.getTemplate("templates/template.json");
 		JsonNode input = factory.getResource("templates/input.json");
 		JsonNode output = template.apply(input);
-		System.out.println(factory.valueToPrettyString(output));
+		System.out.println(factory.valueToString(output, true));
 		
 		Assert.assertEquals("abcu123-60", output.at("/id").asText());
 		Assert.assertTrue(JsonExpr.Constant.isNullOrMissing(output.at("/nullable")));

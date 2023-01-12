@@ -44,7 +44,7 @@ public final class Codecs {
 		public static String apply(byte[] bytes, boolean safe, boolean pretty) {
 			String	base64;
 			if (safe) {
-				base64 = Base64.getUrlEncoder().encodeToString(bytes);
+				base64 = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
 			} else {
 				base64 = Base64.getEncoder().encodeToString(bytes);
 			}
