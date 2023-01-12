@@ -69,10 +69,13 @@ public class JsonTemplateFactory {
 		}
 	}
 	
-	public String valueToPrettyString(Object value) {
+	public String valueToString(Object value, boolean pretty) {
 		try {
-			return objectMapper.writerWithDefaultPrettyPrinter()
-					.writeValueAsString(value);
+			if (pretty) {
+				return objectMapper.writerWithDefaultPrettyPrinter()
+						.writeValueAsString(value);
+			}
+			return objectMapper.writeValueAsString(value);
 		} catch (IOException ex) {
 			throw InternalException.of(ex);
 		}
