@@ -898,8 +898,14 @@
   <distributionManagement>
     <repository>
         <id>${env.CODE_ARTIFACT}</id>
-        <name>${env.CODE_ARTIFACT}</name>
         <url>${env.CODE_ARTIFACT_URL}</url>
+        
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
     </repository>
   </distributionManagement>
 </project>
