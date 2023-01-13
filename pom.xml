@@ -4,14 +4,15 @@
 
   <groupId>io.javacloud.framework</groupId>
   <artifactId>javacloud-framework</artifactId>
-  <version>0.7.9</version>
+  <version>${revision}</version>
   <packaging>pom</packaging>
   
   <name>JavaCloud project</name>
   <url>www.javacloud.io</url>
   
   <scm>
-    <url>scm:git:https://github.com/javacloud-io/framework.git</url>
+    <url>https://github.com/javacloud-io/framework.git</url>
+    <developerConnection>scm:git:https://github.com/javacloud-io/framework.git</developerConnection>
   </scm>
 
   <licenses>
@@ -23,6 +24,7 @@
   </licenses>
   
   <properties>
+    <revision>0.8.0-SNAPSHOT</revision>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>11</java.version>
     
@@ -860,9 +862,9 @@
   <!-- mvn deploy with custom code artifact URL -->
   <distributionManagement>
     <repository>
-        <id>codeartifact</id>
-        <name>codeartifact</name>
-        <url>${env.CODEARTIFACT_URL}</url>
+        <id>${env.CODE_ARTIFACT}</id>
+        <name>${env.CODE_ARTIFACT}</name>
+        <url>${env.CODE_ARTIFACT_URL}</url>
     </repository>
   </distributionManagement>
 </project>
