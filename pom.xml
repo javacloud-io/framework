@@ -897,8 +897,8 @@
   <!-- mvn deploy with custom code artifact URL -->
   <distributionManagement>
     <repository>
-        <id>${env.CODE_ARTIFACT}</id>
-        <url>${env.CODE_ARTIFACT_URL}</url>
+        <id>${env.MAVEN_REPO_ID}</id>
+        <url>${env.MAVEN_REPO_URL}</url>
         
         <releases>
             <enabled>true</enabled>
