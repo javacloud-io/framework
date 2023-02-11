@@ -41,8 +41,8 @@ public class MainApplication implements Runnable {
 			ServiceBootstrapper.get().startup(awaitTermination);
 			
 			// wait until finish then shutdown
-			terminateQuietly();
 			terminated.set(true);
+			terminateQuietly();
 			
 			logger.fine("Application terminated!!!");
 			System.exit(0);
