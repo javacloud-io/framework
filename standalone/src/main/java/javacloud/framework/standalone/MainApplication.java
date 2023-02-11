@@ -41,6 +41,7 @@ public class MainApplication implements Runnable {
 			// wait until finish then shutdown
 			terminateQuietly();
 			logger.fine("Application terminated!!!");
+			System.exit(0);
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, "Terminate application due to uncaught exception...", ex);
 			System.exit(1);
