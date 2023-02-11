@@ -28,7 +28,9 @@ public class MainApplication implements Runnable {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				terminateQuietly();
+				if (terminated.compareAndSet(false, true)) {
+					terminateQuietly();
+				}
 			}
 		});
 				
@@ -40,6 +42,8 @@ public class MainApplication implements Runnable {
 			
 			// wait until finish then shutdown
 			terminateQuietly();
+			terminated.set(true);
+			
 			logger.fine("Application terminated!!!");
 			System.exit(0);
 		} catch (Exception ex) {
@@ -49,9 +53,7 @@ public class MainApplication implements Runnable {
 	}
 	
 	protected void terminateQuietly() {
-		if (terminated.compareAndSet(false, true)) {
-			Objects.closeQuietly(() -> ServiceBootstrapper.get().shutdown());
-		}
+		Objects.closeQuietly(() -> ServiceBootstrapper.get().shutdown());
 	}
 	
 	public static void main(String[] args) {
