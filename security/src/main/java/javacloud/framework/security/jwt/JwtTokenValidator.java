@@ -44,12 +44,12 @@ public class JwtTokenValidator implements TokenValidator {
 		}
 		
 		// advance validation for iss/aud/scope
-		validateScope(jwt);
+		validateClaims(jwt);
 		
 		//PARSE TOKEN & MAKE SURE IT's STILL GOOD
 		return new JwtTokenGrant(token, jwt);
 	}
 	
-	protected void validateScope(JwtToken jwt) throws AuthenticationException {
+	protected void validateClaims(JwtToken jwt) throws AuthenticationException {
 	}
 }

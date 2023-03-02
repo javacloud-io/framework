@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import javacloud.framework.security.IdParameters;
+import javacloud.framework.util.Objects;
 /**
  * User access token, use on behalf of user credentials. System always lookup the user when such one is provided.
  * Trying to use JWT format with basic simple validation.
@@ -33,10 +34,19 @@ public abstract class TokenGrant implements Principal {
 		return type;
 	}
 	
+	/**
+	 * 
+	 * @param <T>
+	 * @param name
+	 * @return
+	 */
+	public <T> T getClaim(String name) {
+		Map<String, Object> claims = getClaims();
+		return	Objects.cast(claims == null? null : claims.get(name));
+	}
+	
 	// abstract claims
 	public abstract String getAudience();
-	public abstract String getScope();
-	public abstract String getRoles();
 	public abstract Date getExpireAt();
 	public abstract Date getIssuedAt();
 	

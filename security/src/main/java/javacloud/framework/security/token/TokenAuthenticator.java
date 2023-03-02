@@ -11,6 +11,8 @@ import javacloud.framework.security.internal.TokenCredentials;
 import javacloud.framework.util.Converters;
 import javacloud.framework.util.Objects;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 /**
  * Keeping the JWT token within processing to be able to access other services on behalf of a principal if need.
@@ -59,15 +61,19 @@ public class TokenAuthenticator implements Authenticator {
 	}
 	
 	/**
+	 * Assuming roles from roles claims
 	 * 
 	 * @param token
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected Set<String> grantRoles(TokenGrant token) {
-		String roles = token.getRoles();
-		if (!Objects.isEmpty(roles)) {
-			return Objects.asSet(Converters.toArray(token.getRoles(), " ", true));
+		Object roles = token.getClaim("roles");
+		if (roles == null) {
+			return Permissions.EMPTY_ROLES;
+		} else if (roles instanceof Collection) {
+			return new HashSet<String>((Collection<String>)roles);
 		}
-		return Permissions.EMPTY_ROLES;
+		return Objects.asSet(Converters.toArray(roles.toString(), " ", true));
 	}
 }

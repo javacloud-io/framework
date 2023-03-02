@@ -11,7 +11,7 @@ import javacloud.framework.util.Converters;
 public final class JwtTokenGrant extends TokenGrant {
 	private final JwtToken jwt;
 	
-	JwtTokenGrant(String raw, JwtToken jwt) {
+	public JwtTokenGrant(String raw, JwtToken jwt) {
 		super(raw, claimId(jwt), claimType(jwt));
 		this.jwt = jwt;
 	}
@@ -24,16 +24,6 @@ public final class JwtTokenGrant extends TokenGrant {
 	@Override
 	public String getAudience() {
 		return jwt.getClaim(JwtToken.CLAIM_AUDIENCE);
-	}
-	
-	@Override
-	public String getScope() {
-		return jwt.getClaim(JwtToken.CLAIM_SCOPE);
-	}
-	
-	@Override
-	public String getRoles() {
-		return jwt.getClaim(JwtToken.CLAIM_ROLES);
 	}
 
 	@Override

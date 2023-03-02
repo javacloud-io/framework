@@ -11,6 +11,7 @@ import javacloud.framework.util.Objects;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -74,8 +75,9 @@ public class JwtTokenProvider implements TokenProvider {
 		}
 		
 		// default roles
-		if (!Objects.isEmpty(authzGrant.getRoles())) {
-			claims.put(JwtToken.CLAIM_ROLES, Converters.toString(" ", authzGrant.getRoles().toArray()));
+		Set<String> roles = authzGrant.getRoles();
+		if (!Objects.isEmpty(roles)) {
+			claims.put("roles", Converters.toString(" ", roles));
 		}
 		claims.put(JwtToken.CLAIM_ID, 		UUID.randomUUID().toString());
 		claims.put(JwtToken.CLAIM_SUBJECT, 	authzGrant.getName());
