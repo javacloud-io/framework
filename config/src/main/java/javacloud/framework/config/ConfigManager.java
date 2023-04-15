@@ -16,8 +16,19 @@ public interface ConfigManager {
 	
 	/**
 	 * 
+	 * @param <T>
+	 * @param type
+	 * @param cacheable
+	 * @return
+	 */
+	public <T> T getConfig(Class<T> type, boolean cacheable);
+	
+	/**
+	 * 
 	 * @param type
 	 * @return config in class, type is any type-safe interface with method annotate with @ConfigProperty
 	 */
-	public <T> T getConfig(Class<T> type);
+	default public <T> T getConfig(Class<T> type) {
+		return getConfig(type, true);
+	}
 }

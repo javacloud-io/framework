@@ -21,7 +21,6 @@ import javacloud.framework.util.ResourceLoader;
 @Singleton
 public class ConfigManagerImpl implements ConfigManager {
 	private static final String MAIN_CONFIG = ResourceLoader.META_INF + "javacloud.config.properties";
-	
 	private final ConfigSourceResolver sourceResolver;
 	
 	public ConfigManagerImpl() {
@@ -51,8 +50,8 @@ public class ConfigManagerImpl implements ConfigManager {
 	 * @return safe config bundle
 	 */
 	@Override
-	public <T> T getConfig(Class<T> type) {
-		ProxyInvocationHandler configHandler = new ConfigInvocationHandlerImpl(sourceResolver);
+	public <T> T getConfig(Class<T> type, boolean cachable) {
+		ProxyInvocationHandler configHandler = new ConfigInvocationHandlerImpl(cachable? sourceResolver.cacheResolver : sourceResolver);
 		return ProxyInvocationHandler.newInstance(configHandler, type);
 	}
 }

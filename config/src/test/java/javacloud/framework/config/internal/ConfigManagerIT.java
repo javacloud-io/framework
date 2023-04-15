@@ -28,4 +28,9 @@ public class ConfigManagerIT extends IntegrationTest {
 		//test native implementation
 		Assert.assertNotEquals(0, config.hashCode());
 	}
+	
+	@Test
+	public void testEnv() {
+		Assert.assertNull(SystemConfigSource.get().getProperty("test.abc"));
+	}
 }

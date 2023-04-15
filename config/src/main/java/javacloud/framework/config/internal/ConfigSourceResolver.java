@@ -2,6 +2,8 @@ package javacloud.framework.config.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import javacloud.framework.config.ConfigSource;
 /**
@@ -13,8 +15,22 @@ import javacloud.framework.config.ConfigSource;
 public class ConfigSourceResolver implements ConfigSource {
 	private final List<ConfigSource> sources = new ArrayList<>();
 	
-	public ConfigSourceResolver() {
-	}
+	public final ConfigSource cacheResolver = new ConfigSource() {
+		final Map<String, String> cache = new WeakHashMap<>();
+		
+		@Override
+		public synchronized String getProperty(String name) {
+			String value = cache.get(name);
+			if (value != null) {
+				return value.isEmpty() ? null : value;
+			}
+			
+			// get value from cache
+			value = ConfigSourceResolver.this.getProperty(name);
+			cache.putIfAbsent(name, value == null ? "" : value);
+			return value;
+		}
+	};
 	
 	/**
 	 * 
@@ -29,14 +45,13 @@ public class ConfigSourceResolver implements ConfigSource {
 	 */
 	@Override
 	public String getProperty(String name) {
-		String value = null;
 		for(ConfigSource source: sources) {
-			value = source.getProperty(name);
+			String value = source.getProperty(name);
 			if(value != null) {
-				break;
+				return value;
 			}
 		}
-		return value;
+		return null;
 	}
 	
 	/**
